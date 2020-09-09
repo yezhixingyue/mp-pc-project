@@ -23,14 +23,14 @@ Validator.prototype.strategies = {
   },
   minLength(value, length, errorMsg) {
     // 最小长度
-    if (value !== '' && value.length < length) {
+    if (value !== '' && value.length < +length) {
       return errorMsg;
     }
     return true;
   },
   shouldLength(value, length, errorMsg) {
     // 应该有的长度
-    if (value !== '' && value.length !== length) {
+    if (value !== '' && value.length !== +length) {
       return errorMsg;
     }
     return true;

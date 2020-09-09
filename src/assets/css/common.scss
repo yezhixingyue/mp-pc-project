@@ -1,0 +1,10 @@
+@import "@/assets/css/var.scss";
+// 蓝色字体标题样式
+.span-title-blue {
+  color: $--color-primary;
+  cursor: pointer;
+  &:hover {
+    color: #26bcf9;
+  }
+  transition: 0.15s;
+}

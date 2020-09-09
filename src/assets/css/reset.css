@@ -56,9 +56,25 @@ table {
 /* .order-message-box{
 	vertical-align: 660% !important;
 } */
-.el-table--striped .el-table__body tr.el-table__row--striped td{
+/* .el-table--striped .el-table__body tr.el-table__row--striped td{
   background-color: rgb(245,245,245) !important;
 }
 .el-table--striped .el-table__body tr.el-table__row--striped:hover td{
 	background-color: #d8effc !important;
-  }
+  } */
+ 
+.float:after{
+  content:"";display:block; clear:both; height:0;overflow:hidden; visibility:hidden; 
+}
+
+* {
+	font-family:MicrosoftYaHei,'微软雅黑' , Avenir, Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	font-family:MicrosoftYaHei,'微软雅黑' , Avenir, Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}

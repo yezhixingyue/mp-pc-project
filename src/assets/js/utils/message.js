@@ -9,7 +9,7 @@ import Vue from 'vue';
  * @param {*} successFunc
  * @param {*} failFunc
  */
-function failSingle(msg, successFunc, failFunc) {
+function failSingle({ msg, successFunc, failFunc }) {
   MessageBox({
     showClose: true,
     confirmButtonText: '确定',
@@ -26,7 +26,9 @@ function failSingle(msg, successFunc, failFunc) {
  * @param {*} successFunc
  * @param {*} failFunc
  */
-function failSingleError(title = '出错啦 ！', msg, successFunc, failFunc) {
+function failSingleError({
+  title = '出错啦 ！', msg, successFunc, failFunc,
+}) {
   MessageBox({
     showClose: true,
     message: msg,
@@ -46,7 +48,9 @@ function failSingleError(title = '出错啦 ！', msg, successFunc, failFunc) {
  * @param {string} [title='注意']
  * @param {string} [text='关闭']
  */
-function warnSingleError(msg, successFunc, failFunc, title = '注意', text = '关闭') {
+function warnSingleError({
+  msg, successFunc, failFunc, title = '注意', text = '关闭',
+}) {
   MessageBox({
     showClose: true,
     message: msg,
@@ -65,7 +69,9 @@ function warnSingleError(msg, successFunc, failFunc, title = '注意', text = '�
  * @param {*} successFunc
  * @param {*} failFunc
  */
-function warnCancelBox(title = '确定取消此订单吗 ?', msg, successFunc, failFunc) {
+function warnCancelBox({
+  title = '确定取消此订单吗 ?', msg, successFunc, failFunc,
+}) {
   MessageBox({
     showClose: true,
     message: msg,
@@ -85,7 +91,7 @@ function warnCancelBox(title = '确定取消此订单吗 ?', msg, successFunc, f
  * @param {*} successFunc
  * @param {*} failFunc
  */
-function warnCancelNullMsg(title, successFunc, failFunc) {
+function warnCancelNullMsg({ title, successFunc, failFunc }) {
   MessageBox({
     showClose: true,
     confirmButtonText: '确定',
@@ -104,7 +110,9 @@ function warnCancelNullMsg(title, successFunc, failFunc) {
  * @param {*} failFunc
  * @param {boolean} [canCloseOnPressEscape=true]
  */
-function successSingle(title, successFunc, failFunc, canCloseOnPressEscape = true, msg = '') {
+function successSingle({
+  title, successFunc, failFunc, canCloseOnPressEscape = true, msg = '',
+}) {
   MessageBox({
     showClose: true,
     confirmButtonText: '确定',
@@ -122,7 +130,7 @@ function successSingle(title, successFunc, failFunc, canCloseOnPressEscape = tru
  * @param {*} successFunc
  * @param {*} failFunc
  */
-function warnCancelMsgSM(title, successFunc, failFunc) {
+function warnCancelMsgSM({ title, successFunc, failFunc }) {
   MessageBox({
     showClose: true,
     confirmButtonText: '确定',
@@ -131,22 +139,23 @@ function warnCancelMsgSM(title, successFunc, failFunc) {
     // dangerouslyUseHTMLString: true,
     title,
     customClass: 'mp-del-pop-reverse-warn-wrap-sm',
-  }).then(() => successFunc && successFunc()).catch(() => failFunc && failFunc());
+  // eslint-disable-next-line no-nested-ternary
+  }).then(() => successFunc && successFunc()).catch(() => (failFunc ? failFunc() : successFunc ? successFunc() : ''));
 }
 
 /**
  * 处理使用isLoading状态时的错误处理回调函数
  *
  * @param {*} error
- * @param {*} trueFunc
+ * @param {*} successFunc
  * @param {*} failFunc
  */
-function handleLoadingError(error, trueFunc, failFunc) {
+function handleLoadingError({ error, successFunc, failFunc }) {
   let msg = error;
   if (error.response && error.response.data && error.response.data.Message) {
     msg = error.response.data.Message;
   }
-  failSingleError(undefined, msg, trueFunc, failFunc);
+  failSingleError(undefined, msg, successFunc, failFunc);
 }
 
 const obj = {
