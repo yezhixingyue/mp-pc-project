@@ -7,7 +7,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/Api': {
-        target: 'http://192.168.3.68:8055', // 要访问的接口域名 'http://192.168.1.50:8050'
+        target: 'http://192.168.1.92:8055', // 要访问的接口域名 'http://192.168.1.50:8050'
         ws: true, // 开启websockets
         changeOrigin: true, // 开启代理
       },

@@ -6,5 +6,64 @@
   &:hover {
     color: #26bcf9;
   }
+  &:active {
+    color: #35dff9;
+  }
+  user-select: none;
   transition: 0.15s;
+  &.disabled {
+    color: #cbcbcb;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+.is-origin{
+  color: $--color-text-orgin;
+}
+.is-gray{
+  color: $--color-text-table-time !important;
+}
+.is-red{
+  color: $--color-text-table-pending !important;
+}
+.is-cancel{
+  color: $--color-text-secondary !important;
+}
+.is-pink{
+  color: $--color-pink !important;
+}
+.is-primary{
+  color: $--color-text-primary !important;
+}
+.is-primary-blue{
+  color: $--color-primary !important;
+}
+.is-success{
+  color: $--color-text-table-completed !important;
+}
+.is-blue{
+  color: $--color-primary !important;
+}
+.is-bold {
+  font-weight: 600;
+}
+
+.is-thick-line { // 粗体
+  font-weight: 600;
+}
+.is-font-18 {
+  font-size: 18px !important;
+}
+.is-font-16 {
+  font-size: 16px !important;
+}
+.is-font-14 {
+  font-size: 14px !important;
+}
+.is-font-13 {
+  font-size: 13px !important;
+}
+.is-font-12 {
+  font-size: 12px !important;
 }

@@ -2,7 +2,7 @@
   <section class="mp-pc-login-page-wrap">
     <header>
       <div class="header-content float">
-        <img src="../assets/images/logo-white.png" alt="">
+        <img src="../../assets/images/logo-white.png" alt="">
         <ul>
           <li>
             <a href="http://www.mpzj.cn/">首页</a>
@@ -21,10 +21,10 @@
         </el-tabs>
         <div class="panel-content">
           <keep-alive>
-            <LoginComp v-if="activeName === 'first'" />
+            <LoginComp v-if="activeName === 'first'" @changePanel='setActiveName' />
           </keep-alive>
           <keep-alive>
-            <RegisterComp v-if="activeName === 'second'" />
+            <RegisterComp v-if="activeName === 'second'" @changePanel='setActiveName' />
           </keep-alive>
         </div>
       </div>
@@ -46,6 +46,11 @@ export default {
       activeName: 'first',
     };
   },
+  methods: {
+    setActiveName(val) {
+      if (['first', 'second'].includes(val)) this.activeName = val;
+    },
+  },
 };
 </script>
 
@@ -53,9 +58,10 @@ export default {
 .mp-pc-login-page-wrap {
   height: 100%;
   width: 100%;
+  overflow: hidden;
   // padding-top: 25px;
   box-sizing: border-box;
-  background: url('../assets/images/login-bg.png') no-repeat center center/cover;
+  background: url('../../assets/images/login-bg.png') no-repeat center center/cover;
   > header {
     height: 80px;
     width: 100%;
@@ -124,7 +130,7 @@ export default {
       min-height: 460px;
       position: absolute;
       top: 50%;
-      transform: translateY(-55%);
+      transform: translateY(-53.5%);
       background-color: #fff;
       border-radius: 5px;
       box-sizing: border-box;
@@ -143,6 +149,30 @@ export default {
             }
             .el-tabs__active-bar {
               height: 1px;
+              // position: relative;
+              &::after {
+                content: '';
+                width: 10px;
+                height: 10px;
+                display: block;
+                position: relative;
+                left: 75px;
+                top: -13px;
+                transform: rotateZ(45deg);
+                background-color: #428DFA;
+              }
+              &::before {
+                content: '';
+                width: 8px;
+                height: 9px;
+                display: block;
+                position: relative;
+                top: -3px;
+                left: 76px;
+                transform: rotateZ(45deg);
+                background-color: #fff;
+                z-index: 99;
+              }
             }
             &::after {
               height: 1px;
@@ -201,6 +231,29 @@ export default {
           &.rememberPwd-box {
             margin-top: -13px;
             margin-bottom: 39px;
+          }
+          &.code-box {
+            > .el-form-item__content {
+              font-size: 13px;
+
+              .el-input__inner {
+                padding-right: 130px;
+              }
+              .el-input__suffix {
+                width: 120px;
+                text-align: center;
+                &::before {
+                  height: 25px;
+                  width: 1px;
+                  position: absolute;
+                  left: -1px;
+                  top: 8px;
+                  content: '';
+                  background-color: #e5e5e5;
+                }
+              }
+            }
+            margin-bottom: 60px;
           }
         }
       }

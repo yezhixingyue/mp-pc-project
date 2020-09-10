@@ -9,12 +9,14 @@ let closeTip = false;
 axios.interceptors.request.use(
   (config) => {
     const curConfig = config;
-    console.log(curConfig);
+    // console.log(curConfig);
     const token = sessionStorage.getItem('token');
     closeTip = curConfig.closeTip;
     const url = curConfig.url.split('?')[0];
-    const arrWithOutToken = ['/Api/Customer/Login'];
-    if (token && !arrWithOutToken.includes(url)) curConfig.headers.common.Authorization = `Bearer ${JSON.parse(token)}`;
+    const arrWithOutToken = ['/Api/Sms/Send', '/Api/Customer/Reg', '/Api/Customer/Login'];
+    // console.log(curConfig, `Bearer ${token}`);
+    if (token && !arrWithOutToken.includes(url)) curConfig.headers.common.Authorization = `Bearer ${token}`;
+    // console.log(curConfig);
     let key = true;
     const arr = []; // 不需要展示loading的api地址
     for (let i = 0; i < arr.length; i += 1) {
@@ -111,7 +113,7 @@ axios.interceptors.response.use(
         if (error.response && error.response.data && error.response.data.Message) {
           msg = error.response.data.Message;
         }
-        console.log(error, error.response);
+        // console.log(error, error.response);
         Message({
           showClose: true,
           message: msg,

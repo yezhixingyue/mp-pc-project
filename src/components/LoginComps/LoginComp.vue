@@ -1,26 +1,27 @@
 <template>
-  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item prop="Mobile">
-    <el-input placeholder="请输入手机号码" clearable v-model.trim="Mobile">
-        <i slot="prefix" class="iconfont icon-shouji"></i>
-    </el-input>
-  </el-form-item>
-  <el-form-item prop="Password">
-    <el-input placeholder="请输入密码" type="password" clearable v-model.trim="Password">
-        <i slot="prefix" class="iconfont icon-mima"></i>
-    </el-input>
-  </el-form-item>
-  <el-form-item prop="rememberPwd" class="rememberPwd-box">
-    <el-checkbox-group v-model="ruleForm.rememberPwd">
-      <el-checkbox label="记住密码" name="rememberPwd"></el-checkbox>
-    </el-checkbox-group>
-    <span class="span-title-blue">找回密码</span>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-    <p><span class="span-title-blue">新用户注册</span></p>
-  </el-form-item>
-</el-form>
+  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
+    <el-form-item prop="Mobile">
+      <el-input placeholder="请输入手机号码" clearable v-model.trim="Mobile">
+          <i slot="prefix" class="iconfont icon-shouji"></i>
+      </el-input>
+    </el-form-item>
+    <el-form-item prop="Password">
+      <el-input placeholder="请输入密码" type="password" clearable v-model.trim="Password" @focus="onPwdFocus">
+          <i slot="prefix" class="iconfont icon-mima"></i>
+      </el-input>
+    </el-form-item>
+    <el-form-item prop="rememberPwd" class="rememberPwd-box">
+      <el-checkbox-group v-model="ruleForm.rememberPwd">
+        <el-checkbox label="记住密码" name="rememberPwd"></el-checkbox>
+      </el-checkbox-group>
+      <span class="span-title-blue" @click="go2FundPwd">找回密码</span>
+    </el-form-item>
+    <!-- <p>{{ msg }}</p> -->
+    <el-form-item>
+      <el-button type="primary" :disabled='!disableLogin' @click="submitForm('ruleForm')">登录</el-button>
+      <p><span class="span-title-blue" @click="() => this.$emit('changePanel', 'second')">新用户注册</span></p>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script>
@@ -65,6 +66,7 @@ export default {
         timeStamp: '',
       },
       isRemember: false,
+      // msg: '123',
     };
   },
   computed: {
@@ -86,6 +88,10 @@ export default {
         if (this.isRemember) this.isRemember = false;
       },
     },
+    disableLogin() {
+      if (this.Mobile && this.Mobile.length === 11 && this.Password && this.Password.length >= 6) return true;
+      return false;
+    },
   },
   methods: {
     handleSuccessLogin(token, rememberPwd, pwd) {
@@ -103,7 +109,7 @@ export default {
     },
     handleFailLogin() {
       localStorage.removeItem('info');
-      this.ruleForm.Password = '';
+      // this.ruleForm.Password = '';
       if (this.isRemember) this.isRemember = false;
     },
     async submitForm(formName) {
@@ -134,6 +140,15 @@ export default {
           }
           return false;
         });
+      }
+    },
+    go2FundPwd() {
+      this.$router.push('/findPassword');
+    },
+    onPwdFocus() {
+      if (this.isRemember) {
+        this.ruleForm.Password = '';
+        this.isRemember = false;
       }
     },
   },

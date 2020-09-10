@@ -90,6 +90,11 @@ Validator.prototype.strategies = {
     if (!/(^[1-9]\d*$)/.test(value)) return errorMsg;
     return true;
   },
+  equalValue(value, equalValue, errorMsg) {
+    console.log(equalValue);
+    if (`${value}` !== `${equalValue}`) return errorMsg;
+    return true;
+  },
 };
 
 Validator.prototype.add = function (value, rules) {

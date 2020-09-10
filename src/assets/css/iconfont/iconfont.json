@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1824155",
+      "name": "双箭头",
+      "font_class": "Double-Arrow-R",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    },
+    {
+      "icon_id": "9525669",
+      "name": "双箭头",
+      "font_class": "Double-Arrow-L",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
       "icon_id": "17045522",
       "name": "完成",
       "font_class": "wancheng",

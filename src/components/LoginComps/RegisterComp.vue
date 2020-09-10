@@ -1,12 +1,186 @@
 <template>
-  <div>
-    注册组件
-  </div>
+  <el-form :model="regForm" :rules="rules" ref="regForm" label-width="0px">
+    <el-form-item prop="Name">
+      <el-input placeholder="请输入企业简称" clearable v-model.trim="regForm.Name">
+          <i slot="prefix" class="iconfont icon-yonghu"></i>
+      </el-input>
+    </el-form-item>
+    <el-form-item prop="Mobile">
+      <el-input placeholder="请输入手机号码" clearable v-model.trim="Mobile">
+          <i slot="prefix" class="iconfont icon-shouji"></i>
+      </el-input>
+    </el-form-item>
+    <el-form-item prop="Password">
+      <el-input placeholder="请输入密码" type="password" clearable v-model.trim="regForm.Password">
+          <i slot="prefix" class="iconfont icon-mima"></i>
+      </el-input>
+    </el-form-item>
+    <el-form-item prop="rePassword">
+      <el-input placeholder="请再次输入密码" type="password" clearable v-model.trim="regForm.rePassword">
+          <i slot="prefix" class="iconfont icon-mima"></i>
+      </el-input>
+    </el-form-item>
+    <el-form-item prop="VertifyCode" class="code-box">
+      <el-input placeholder="请输入短信验证码" v-model.trim="VertifyCode">
+          <i slot="prefix" class="iconfont icon-xinxi"></i>
+          <i slot="suffix"
+           class="span-title-blue" :class="canGetCode?'':'disabled'" @click="getVertifyCode">{{ codeTitle }}</i>
+      </el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="submitForm('regForm')" :disabled="!canGoToReg">注册</el-button>
+      <p><span class="span-title-blue" @click="() => this.$emit('changePanel', 'first')">已有账号请登录</span></p>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script>
 export default {
-
+  data() {
+    const validateMobile = (rule, value, callback) => {
+      if (this.validateCheck(value, this.defineRules.Mobile, callback)) callback();
+    };
+    const validatePassword = (rule, value, callback) => {
+      if (this.validateCheck(value, this.defineRules.Password, callback)) {
+        if (this.regForm.rePassword !== '') this.$refs.regForm.validateField('rePassword');
+        callback();
+      }
+    };
+    const validateRePassword = (rule, value, callback) => {
+      if (this.validateCheck(value, this.defineRules.Password, callback)) {
+        if (this.regForm.rePassword !== this.regForm.Password) callback(new Error('两次密码输入不一致'));
+        else callback();
+      }
+    };
+    const validateName = (rule, value, callback) => {
+      if (this.validateCheck(value, this.defineRules.nameRules, callback)) callback();
+    };
+    const validateVertifyCode = (rule, value, callback) => {
+      if (this.validateCheck(value, this.defineRules.VertifyCodeRules, callback)) callback();
+    };
+    return {
+      rules: {
+        Mobile: [
+          { validator: validateMobile, trigger: 'blur' },
+        ],
+        Password: [
+          { validator: validatePassword, trigger: 'blur' },
+        ],
+        rePassword: [
+          { validator: validateRePassword, trigger: 'blur' },
+        ],
+        Name: [
+          { validator: validateName, trigger: 'blur' },
+        ],
+        VertifyCode: [
+          { validator: validateVertifyCode, trigger: 'blur' },
+        ],
+      },
+      defineRules: {
+        Mobile: [
+          { strategy: 'isNotEmpty', errorMsg: '请输入手机号!' },
+          { strategy: 'shouldLength:11', errorMsg: '请输入11位手机号码' },
+          { strategy: 'isPhone', errorMsg: '手机号码格式不正确' },
+        ],
+        Password: [
+          { strategy: 'isNotEmpty', errorMsg: '请输入密码!' },
+          { strategy: 'minLength:6', errorMsg: '密码最小长度为6位' },
+          { strategy: 'maxLength:16', errorMsg: '密码最大长度为16位' },
+        ],
+        nameRules: [{ strategy: 'isNotEmpty', errorMsg: '请输入企业简称' }],
+        VertifyCodeRules: [
+          { strategy: 'isNotEmpty', errorMsg: '请输入短信验证码' },
+          { strategy: 'shouldLength:6', errorMsg: '短信验证码长度为6位' },
+        ],
+      },
+      regForm: {
+        Name: '',
+        Mobile: '',
+        Password: '',
+        rePassword: '',
+        VertifyCode: '',
+      },
+      codeTitle: '获取验证码',
+      timer: null,
+      canGetCode: true,
+    };
+  },
+  computed: {
+    Mobile: {
+      get() {
+        return this.regForm.Mobile;
+      },
+      set(newVal) {
+        this.regForm.Mobile = newVal.replace(/[^\d.]/g, '');
+      },
+    },
+    VertifyCode: {
+      get() {
+        return this.regForm.VertifyCode;
+      },
+      set(newVal) {
+        this.regForm.VertifyCode = newVal.replace(/[^\d.]/g, '');
+      },
+    },
+    canGoToReg() {
+      return this.regForm.Name && this.regForm.Mobile
+        && this.regForm.Password && this.regForm.rePassword && this.regForm.VertifyCode;
+    },
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          // 成功
+          const {
+            Name, Password, Mobile, VertifyCode,
+          } = this.regForm;
+          const _obj = {
+            CustomerName: Name,
+            Password,
+            Mobile,
+            VertifyCode,
+            Terminal: 1,
+          };
+          const res = await this.api.getReg(_obj);
+          if (res.data.Status === 1000) {
+            this.messageBox.successSingle({
+              title: '注册成功,请登录',
+              successFunc: () => this.$emit('changePanel', 'first'),
+            });
+          }
+        }
+        return false;
+      });
+    },
+    async getVertifyCode() {
+      if (!this.canGetCode) return;
+      if (this.validateCheck(this.Mobile, this.defineRules.Mobile, msg => {
+        this.messageBox.failSingle({ msg });
+      })) {
+        // can
+        const res = await this.api.getSmsCode(this.Mobile);
+        if (res.data.Status === 1000) {
+          this.changeCodeTitleAtSecond();
+        }
+      }
+    },
+    changeCodeTitleAtSecond() {
+      let _second = 60;
+      this.canGetCode = false;
+      this.codeTitle = `${_second}秒后重新获取`;
+      if (this.timer) clearInterval(this.timer);
+      this.timer = setInterval(() => {
+        _second -= 1;
+        this.codeTitle = `${_second}秒后重新获取`;
+        if (_second === 0) {
+          this.codeTitle = '重新获取验证码';
+          clearInterval(this.timer);
+          this.canGetCode = true;
+        }
+      }, 1000);
+    },
+  },
 };
 </script>
 
