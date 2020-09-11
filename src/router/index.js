@@ -26,6 +26,23 @@ const routes = [
     name: 'FindPassword',
     component: () => import('../views/Login/FindPasswordPage.vue'),
   },
+  {
+    path: '/common',
+    name: 'common',
+    component: () => import('../views/Common/CommonPage.vue'),
+    redirect: 'placeOrder',
+    children: [
+      {
+        path: '/placeOrder',
+        name: 'placeOrder',
+        meta: {
+          requiresAuth: true,
+          title: '名片之家下单',
+        },
+        component: () => import('../views/PlaceOrder/PlaceOrderPage.vue'),
+      },
+    ],
+  },
 ];
 
 const router = new VueRouter({

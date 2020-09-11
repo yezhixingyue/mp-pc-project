@@ -6,18 +6,102 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "1824155",
-      "name": "双箭头",
-      "font_class": "Double-Arrow-R",
-      "unicode": "e66a",
-      "unicode_decimal": 58986
+      "icon_id": "3141394",
+      "name": "右箭头",
+      "font_class": "iconfontyoujiantou",
+      "unicode": "e601",
+      "unicode_decimal": 58881
     },
     {
-      "icon_id": "9525669",
-      "name": "双箭头",
-      "font_class": "Double-Arrow-L",
-      "unicode": "e66b",
-      "unicode_decimal": 58987
+      "icon_id": "3102825",
+      "name": "下箭头",
+      "font_class": "xiala",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "17109809",
+      "name": "向上收缩",
+      "font_class": "xiangshangshousuo",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "17108199",
+      "name": "向下_1",
+      "font_class": "xiangxia_1",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "17108200",
+      "name": "电话",
+      "font_class": "dianhua",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "17108179",
+      "name": "删除",
+      "font_class": "shanchu",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "17108180",
+      "name": "加入购物车",
+      "font_class": "jiarugouwuche",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "17108181",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "17108143",
+      "name": "订单",
+      "font_class": "dingdan",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "17108144",
+      "name": "下单",
+      "font_class": "xiadan",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "17108145",
+      "name": "未付款",
+      "font_class": "weifukuan",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "17108146",
+      "name": "购物车",
+      "font_class": "gouwuche",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "17108147",
+      "name": "账单",
+      "font_class": "zhangdan",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "17108148",
+      "name": "售后单",
+      "font_class": "shouhoudan",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
     },
     {
       "icon_id": "17045522",

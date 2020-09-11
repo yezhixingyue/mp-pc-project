@@ -16,6 +16,7 @@ module.exports = {
     'linebreak-style': [0, 'error', 'window'],
     'no-underscore-dangle': 'off',
     "arrow-parens": 'off',
-    'max-len': ['error', { code: 120 }]
+    'max-len': ['error', { code: 120 }],
+    "import/no-cycle": 'off',
   },
 };

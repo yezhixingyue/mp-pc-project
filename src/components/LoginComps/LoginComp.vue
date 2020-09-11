@@ -106,10 +106,11 @@ export default {
       } else {
         localStorage.removeItem('info');
       }
+      this.$router.push('/placeOrder');
     },
-    handleFailLogin() {
+    handleFailLogin(status) {
       localStorage.removeItem('info');
-      // this.ruleForm.Password = '';
+      if (status === 8017) this.ruleForm.Password = '';
       if (this.isRemember) this.isRemember = false;
     },
     async submitForm(formName) {
@@ -135,7 +136,7 @@ export default {
             if (res.data.Status === 1000) {
               this.handleSuccessLogin(res.data.Data, rememberPwd, _obj.Password);
             } else {
-              this.handleFailLogin();
+              this.handleFailLogin(res.data.Status);
             }
           }
           return false;

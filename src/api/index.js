@@ -20,6 +20,28 @@ const api = {
   getResetPassword(data) { // 重置密码
     return instance.post('/Api/FindPassword/ResetPassword', data);
   },
+  /* 产品报价部分api
+  ----------------------------------------------------------------------------------- */
+  getProductClassify() { // 获取产品分类
+    return instance.post('/Api/Constant/VersionValid', { Key: 6 });
+  },
+  getProductLists() { // 获取列表头部产品第三级列表
+    return instance.post('/Api/Product/ProductList', {
+      FieldType: 1,
+      TakeOrderWay: 1,
+    });
+  },
+  getProductDetail(productID) { // 根据产品ID获取到产品详细信息  GET /Api/Product/GetProductDetail  productID
+    return instance.get(
+      `/Api/Product/GetProductDetail?productID=${productID}&placeOrder=${true}`,
+    );
+  },
+  getProductPrice(data) { // 价格信息计算  POST /Api/Calculate/ProductPrice
+    return instance.post('/Api/Calculate/ProductPrice', data);
+  },
+  getCraftRelationList() { // GET /Api/Craft/GetCraftRelationList 获取工艺关系列表
+    return instance.get('/Api/Craft/GetCraftRelationList');
+  },
 };
 
 export default api;

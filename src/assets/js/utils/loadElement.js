@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
 import {
-  Dialog, Dropdown, DropdownMenu, DropdownItem, Select, Option, Steps, Step,
+  Dialog, Dropdown, DropdownMenu, DropdownItem, Select, Option, Steps, Step, Popover, Link,
   Tabs, TabPane, Message, Input, Form, FormItem, Button, CheckboxGroup, Checkbox,
 } from 'element-ui';
 
@@ -21,6 +21,8 @@ Vue.use(CheckboxGroup);
 Vue.use(Checkbox);
 Vue.use(Steps);
 Vue.use(Step);
+Vue.use(Popover);
+Vue.use(Link);
 
 Vue.prototype.$message = Message;
 
