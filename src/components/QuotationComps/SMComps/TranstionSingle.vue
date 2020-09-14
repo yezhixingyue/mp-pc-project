@@ -13,7 +13,7 @@ export default {
         {slots().default}
       </transition>
     );
-  }
+  },
 };
 </script>
 

@@ -29,37 +29,37 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-import PartSingleComp from "@/components/QuotationComps/ProductQuotationContentComps/Sections/PartSingleComp.vue";
+import { mapMutations } from 'vuex';
+import PartSingleComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/PartSingleComp.vue';
 
 export default {
   props: {
     PartData: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     // 代表当前部件数据在整个数据中的位置，从而可定位到
     index: {
-      type: Number
-    }
+      type: Number,
+    },
   },
   components: {
-    PartSingleComp
+    PartSingleComp,
   },
   methods: {
-    ...mapMutations("Quotation", ["addPartProductParamsPartList"]),
+    ...mapMutations('Quotation', ['addPartProductParamsPartList']),
     handleAddPart() {
       this.addPartProductParamsPartList([this.index, this.localPartData]);
-    }
+    },
   },
   data() {
     return {
-      localPartData: null
+      localPartData: null,
     };
   },
   mounted() {
     this.localPartData = JSON.parse(JSON.stringify(this.PartData.PartList[0]));
-  }
+  },
 };
 </script>
 

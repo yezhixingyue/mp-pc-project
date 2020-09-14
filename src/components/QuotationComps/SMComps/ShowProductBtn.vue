@@ -12,22 +12,22 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     isActive: {
       type: Boolean,
-      default: false
+      default: false,
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-show-product-btn-wrap {
   min-width: calc(24vw - 14px);
   height: 28px;
@@ -39,15 +39,15 @@ export default {
   line-height: 31px;
   padding: 0 7px;
   font-size: 13px;
-  color: $--color-text-primary;
+  // color: $--color-text-primary;
 
   &.active {
-    color: $--color-blue;
-    border-color: $--color-blue;
+    // color: $--color-blue;
+    // border-color: $--color-blue;
   }
   &.disabled {
-    color: $--color-text-light;
-    border-color: $--color-text-light;
+    // color: $--color-text-light;
+    // border-color: $--color-text-light;
     pointer-events: none;
   }
 }

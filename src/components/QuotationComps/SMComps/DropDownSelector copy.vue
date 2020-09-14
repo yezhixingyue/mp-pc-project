@@ -19,22 +19,22 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { DropdownMenu, DropdownItem } from "vant";
-import MpCollapseComp from "@/components/QuotationComps/SMComps/MpCollapseComp.vue";
+import Vue from 'vue';
+import { DropdownMenu, DropdownItem } from 'vant';
+import MpCollapseComp from '@/components/QuotationComps/SMComps/MpCollapseComp.vue';
 
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
 export default {
   model: {
-    prop: "inpValue",
-    event: "handleInput"
+    prop: 'inpValue',
+    event: 'handleInput',
   },
   props: {
-    inpValue: {}
+    inpValue: {},
   },
   components: {
-    MpCollapseComp
+    MpCollapseComp,
   },
   data() {
     return {
@@ -42,9 +42,9 @@ export default {
       option: [
         { text: 10, value: 10 },
         { text: 20, value: 20 },
-        { text: 30, value: 30 }
+        { text: 30, value: 30 },
       ],
-      show: false
+      show: false,
     };
   },
   computed: {
@@ -53,10 +53,10 @@ export default {
         return this.inpValue;
       },
       set(newVal) {
-        this.$emit("handleInput", newVal); // newVal为option中对应value值
-      }
-    }
-  }
+        this.$emit('handleInput', newVal); // newVal为option中对应value值
+      },
+    },
+  },
 };
 </script>
 

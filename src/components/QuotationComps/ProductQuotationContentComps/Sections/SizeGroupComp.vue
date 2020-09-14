@@ -54,14 +54,14 @@
 </template>
 
 <script>
-import CheckBoxSingle from "@/components/QuotationComps/SMComps/CheckBoxSingle.vue";
+import CheckBoxSingle from '@/components/QuotationComps/SMComps/CheckBoxSingle.vue';
 // import BaseNumInput from "@/components/QuotationComps/SMComps/BaseNumInput.vue";
-import DropDownSelector from "@/components/QuotationComps/SMComps/DropDownSelector.vue";
-import SectionCompHeader from "@/components/QuotationComps/SMComps/SectionCompHeader.vue";
-import SizeGroupSingleInputComp from "./SizeGroupSingleInputComp.vue";
-import { getRelevanceInTargetValue } from "@/store/module/Quotation/QuotationClassType.js";
-import { mapState } from "vuex";
-import { Toast } from "vant";
+import DropDownSelector from '@/components/QuotationComps/SMComps/DropDownSelector.vue';
+import SectionCompHeader from '@/components/QuotationComps/SMComps/SectionCompHeader.vue';
+import { getRelevanceInTargetValue } from '@/store/module/Quotation/QuotationClassType.js';
+import { mapState } from 'vuex';
+import { Toast } from 'vant';
+import SizeGroupSingleInputComp from './SizeGroupSingleInputComp.vue';
 
 export default {
   components: {
@@ -69,11 +69,11 @@ export default {
     // BaseNumInput,
     DropDownSelector,
     SectionCompHeader,
-    SizeGroupSingleInputComp
+    SizeGroupSingleInputComp,
   },
   model: {
-    prop: "value",
-    event: "changeFunc"
+    prop: 'value',
+    event: 'changeFunc',
   },
   props: {
     /**
@@ -81,13 +81,13 @@ export default {
      */
     defaultSelect: {
       type: Boolean,
-      default: false
+      default: false,
     },
     /**
      * 该组件负责处理的值
      */
     value: {
-      required: true
+      required: true,
     },
     // /**
     //  * 处理方法
@@ -101,61 +101,61 @@ export default {
      */
     title: {
       type: String,
-      default: "数量"
+      default: '数量',
     },
     /**
      * 备注信息
      */
     remark: {
       type: String,
-      default: "张"
+      default: '张',
     },
     /**
      * 是否展示复选框
      */
     showCheckBox: {
       type: Boolean,
-      default: true
+      default: true,
     },
     SizeGroup: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     SizeList: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     /**
      * 已选择的值列表
      */
     SizePropertyList: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
-    disabled: {}
+    disabled: {},
   },
   data() {
     return {
       isSelectedInp: false,
       sizeInputValueList: [],
-      curSelectedSize: ""
+      curSelectedSize: '',
     };
   },
   computed: {
-    ...mapState("Quotation", ["obj2GetProductPrice"]),
+    ...mapState('Quotation', ['obj2GetProductPrice']),
     inpValue: {
       get() {
         return this.value;
       },
       set(newVal) {
         const _target = this.SizeList.find(it => it.SizeID === newVal);
-        if (!_target) return Toast("系统异常，请刷新重试!");
+        if (!_target) return Toast('系统异常，请刷新重试!');
         const _list = _target.ValueList.map(it => ({
           PropertyID: it.First,
-          CustomerInputValue: it.Second
+          CustomerInputValue: it.Second,
         }));
-        this.$emit("changeFunc", [newVal, _list]);
-      }
+        this.$emit('changeFunc', [newVal, _list]);
+      },
     },
     watchTarget() {
       // if (!this.sizeData.RelevanceInformation) return null;
@@ -164,7 +164,7 @@ export default {
         if (!it.RelevanceInformation) return;
         const _t = getRelevanceInTargetValue(
           this.obj2GetProductPrice.ProductParams,
-          it.RelevanceInformation
+          it.RelevanceInformation,
         );
         if (_t.length === 0) return;
         const obj = {};
@@ -177,20 +177,20 @@ export default {
     },
     isShowComp() {
       if (
-        !this.watchTarget ||
-        this.watchTarget.length !== this.SizeGroup.PropertyList.length
+        !this.watchTarget
+        || this.watchTarget.length !== this.SizeGroup.PropertyList.length
       ) {
         return true;
       }
       // 一个watchTarget中的项代表了一个需要等同于另外一个部件中的尺寸属性，如果其长度等于该尺寸组中的总数量，说明其每个尺寸属性都受控于外部某一个属性，此时该组件可隐藏,当返回false
       return false;
-    }
+    },
   },
   methods: {
     handleInputChange([data, index]) {
-      console.log(data, index, "handleInputChange");
+      console.log(data, index, 'handleInputChange');
       this.sizeInputValueList[index] = data;
-      this.$emit("changeFunc", ["", [...this.sizeInputValueList]]);
+      this.$emit('changeFunc', ['', [...this.sizeInputValueList]]);
     },
     handleCheckChange(e) {
       this.isSelectedInp = e;
@@ -204,39 +204,39 @@ export default {
         if (_t) {
           this.sizeInputValueList = _t.ValueList.map(it => ({
             CustomerInputValue: it.Second,
-            PropertyID: it.First
+            PropertyID: it.First,
           }));
-          this.$emit("changeFunc", ["", [...this.sizeInputValueList]]);
+          this.$emit('changeFunc', ['', [...this.sizeInputValueList]]);
         }
       } else {
         let _target = this.SizeList[0];
         if (this.curSelectedSize) {
           _target = this.SizeList.find(
-            it => it.SizeID === this.curSelectedSize
+            it => it.SizeID === this.curSelectedSize,
           );
         }
         const _list = _target.ValueList.map(it => ({
           PropertyID: it.First,
-          CustomerInputValue: it.Second
+          CustomerInputValue: it.Second,
         }));
-        this.$emit("changeFunc", [_target.SizeID, _list]);
+        this.$emit('changeFunc', [_target.SizeID, _list]);
       }
     },
     init() {
       if (this.SizePropertyList.length > 0) {
         this.sizeInputValueList = this.SizePropertyList;
-        if (this.value === "") this.isSelectedInp = true;
+        if (this.value === '') this.isSelectedInp = true;
       } else {
         if (this.SizeList.length === 0) return;
         const _target = this.SizeList[0];
         const _list = _target.ValueList.map(it => ({
           PropertyID: it.First,
-          CustomerInputValue: it.Second
+          CustomerInputValue: it.Second,
         }));
-        this.$emit("changeFunc", [_target.SizeID, _list]);
+        this.$emit('changeFunc', [_target.SizeID, _list]);
         this.sizeInputValueList = _list;
       }
-    }
+    },
   },
   watch: {
     watchTarget: {
@@ -248,18 +248,18 @@ export default {
           newVal.forEach(it => {
             const itemData = {
               CustomerInputValue: it.value[0].val,
-              PropertyID: it.PropertyID
+              PropertyID: it.PropertyID,
             };
             _list.push(itemData);
           });
           const arr = [..._list];
           // console.log(arr, this.sizeInputValueList);
-          this.$emit("changeFunc", ["", arr]);
+          this.$emit('changeFunc', ['', arr]);
           this.sizeInputValueList = arr;
         });
       },
-      immediate: true
-    }
+      immediate: true,
+    },
     // SizePropertyList: {
     //   handler(newVal) {
     //     this.sizeInputValueList = newVal;
@@ -269,7 +269,7 @@ export default {
   },
   mounted() {
     this.init();
-  }
+  },
 };
 </script>
 

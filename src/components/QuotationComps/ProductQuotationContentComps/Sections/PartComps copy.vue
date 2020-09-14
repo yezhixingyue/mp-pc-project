@@ -66,8 +66,8 @@
 </template>
 
 <script>
-import PartSingleComp from "@/components/QuotationComps/ProductQuotationContentComps/Sections/PartSingleComp.vue";
-import MpCollapseComp from "@/components/QuotationComps/SMComps/MpCollapseComp.vue";
+import PartSingleComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/PartSingleComp.vue';
+import MpCollapseComp from '@/components/QuotationComps/SMComps/MpCollapseComp.vue';
 // import Vue from "vue";
 // import { Collapse, CollapseItem } from "vant";
 
@@ -77,7 +77,7 @@ import MpCollapseComp from "@/components/QuotationComps/SMComps/MpCollapseComp.v
 export default {
   components: {
     PartSingleComp,
-    MpCollapseComp
+    MpCollapseComp,
   },
   data() {
     return {
@@ -88,8 +88,8 @@ export default {
   methods: {
     handleDelClick(e) {
       console.log(e);
-    }
-  }
+    },
+  },
 };
 </script>
 

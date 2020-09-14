@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import TypeBtnSelector from "@/components/QuotationComps/SMComps/TypeBtnSelector.vue";
+import TypeBtnSelector from '@/components/QuotationComps/SMComps/TypeBtnSelector.vue';
 
 export default {
   props: {
@@ -23,29 +23,29 @@ export default {
     // }
     value: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   model: {
-    prop: "value",
-    event: "change"
+    prop: 'value',
+    event: 'change',
   },
   components: {
-    TypeBtnSelector
+    TypeBtnSelector,
   },
   computed: {
     PrintTypeList: {
       get() {
         return this.value;
-      }
-    }
+      },
+    },
   },
   methods: {
     handleItemChange([i, item]) {
       // console.log(i, item);
-      this.$emit("change", [i, item]);
-    }
-  }
+      this.$emit('change', [i, item]);
+    },
+  },
 };
 </script>
 

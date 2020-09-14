@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import Vue from "vue";
-import { Checkbox } from "vant";
-const imgSrc = require("@/assets/images/selected.png");
+import Vue from 'vue';
+import { Checkbox } from 'vant';
+// const imgSrc = require("@/assets/images/selected.png");
 
 Vue.use(Checkbox);
 
@@ -31,7 +31,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: "自定义"
+      default: '自定义',
     },
     /**
      * 初始默认状态
@@ -39,19 +39,19 @@ export default {
     default: {
       type: Boolean,
       default: false,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       imgSrc,
-      checked: false
+      checked: false,
     };
   },
   methods: {
     handleChange(e) {
-      this.$emit("change", e);
-    }
+      this.$emit('change', e);
+    },
   },
   mounted() {
     this.checked = this.default;
@@ -59,13 +59,13 @@ export default {
   computed: {
     watchValue() {
       return this.default;
-    }
+    },
   },
   watch: {
     watchValue(newVal) {
       this.checked = newVal;
-    }
-  }
+    },
+  },
 };
 </script>
 

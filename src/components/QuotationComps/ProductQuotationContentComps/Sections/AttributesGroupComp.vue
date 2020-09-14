@@ -51,54 +51,52 @@
 </template>
 
 <script>
-import AttributesComp from "@/components/QuotationComps/ProductQuotationContentComps/Sections/AttributesComp.vue";
-import { Toast } from "vant";
+import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/AttributesComp.vue';
+import { Toast } from 'vant';
 
 export default {
   components: {
-    AttributesComp
+    AttributesComp,
   },
   model: {
-    prop: "value",
-    event: "change"
+    prop: 'value',
+    event: 'change',
   },
   props: {
     value: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   computed: {
     PropertyGroupList: {
       get() {
         return this.value;
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      propertyGroupTemplateList: []
+      propertyGroupTemplateList: [],
     };
   },
   methods: {
     handlePropertyChange([value, index3, type], index1, index2) {
-      this.$emit("change", [[value, index3, type], index1, index2]);
+      this.$emit('change', [[value, index3, type], index1, index2]);
     },
     addPropertyGroup(index1) {
       const _item = this.propertyGroupTemplateList[index1];
-      this.$emit("addPropertyGroup", [index1, _item]);
+      this.$emit('addPropertyGroup', [index1, _item]);
     },
     handleAttributeDel(index1, index2, len, groupName) {
       if (len < 2) Toast(`至少需要一个${groupName}信息!`);
-      else this.$emit("delPropertyGroup", [index1, index2]);
-    }
+      else this.$emit('delPropertyGroup', [index1, index2]);
+    },
   },
   mounted() {
-    const _list = this.value.map(it =>
-      JSON.parse(JSON.stringify(it.PropertyList[0]))
-    );
+    const _list = this.value.map(it => JSON.parse(JSON.stringify(it.PropertyList[0])));
     this.propertyGroupTemplateList = _list;
-  }
+  },
 };
 </script>
 

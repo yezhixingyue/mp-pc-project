@@ -13,21 +13,22 @@
 </template>
 
 <script>
-import Velocity from "velocity-animate";
+import Velocity from 'velocity-animate';
+
 export default {
   props: {
     h: {
       type: Number,
-      default: null
+      default: null,
     },
     duration: {
       type: Number,
-      default: 300
-    }
+      default: 300,
+    },
   },
   data() {
     return {
-      height: 0
+      height: 0,
     };
   },
   methods: {
@@ -44,22 +45,22 @@ export default {
           complete: () => {
             el.style.height = null;
             done();
-          }
-        }
+          },
+        },
       );
     },
     leave(el, done) {
       this.height = el.offsetHeight;
       Velocity(
         el,
-        { opacity: 0, height: "0px" },
+        { opacity: 0, height: '0px' },
         {
           duration: this.duration,
-          complete: done
-        }
+          complete: done,
+        },
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -16,18 +16,18 @@
 </template>
 
 <script>
-import SectionCompHeader from "@/components/QuotationComps/SMComps/SectionCompHeader.vue";
-import BaseNumInput from "@/components/QuotationComps/SMComps/BaseNumInput.vue";
-import { mapState, mapMutations } from "vuex";
+import SectionCompHeader from '@/components/QuotationComps/SMComps/SectionCompHeader.vue';
+import BaseNumInput from '@/components/QuotationComps/SMComps/BaseNumInput.vue';
+import { mapState, mapMutations } from 'vuex';
 
 export default {
   components: {
     SectionCompHeader,
-    BaseNumInput
+    BaseNumInput,
   },
   model: {
-    prop: "value",
-    event: "changeFunc"
+    prop: 'value',
+    event: 'changeFunc',
   },
   props: {
     /**
@@ -35,30 +35,30 @@ export default {
      */
     title: {
       type: String,
-      default: "款数"
+      default: '款数',
     },
     /**
      * 备注信息
      */
     remark: {
       type: String,
-      default: "款"
+      default: '款',
     },
     /**
      * 该组件负责处理的值
      */
     value: {
-      required: true
+      required: true,
     },
     minNum: {},
     maxNum: {},
     /**
      * 是否为禁止输入状态
      */
-    disabled: {}
+    disabled: {},
   },
   computed: {
-    ...mapState("Quotation", ["obj2GetProductPrice"]),
+    ...mapState('Quotation', ['obj2GetProductPrice']),
     inpValue: {
       get() {
         return this.value;
@@ -67,18 +67,18 @@ export default {
       set(newValue) {
         // this.changeFunc(newValue);
         // this.setProductParams(["KindCount", newValue]);
-        this.$emit("changeFunc", newValue);
-      }
-    }
+        this.$emit('changeFunc', newValue);
+      },
+    },
   },
   methods: {
-    ...mapMutations("Quotation", ["setProductParams"])
+    ...mapMutations('Quotation', ['setProductParams']),
   },
   mounted() {
     if (this.minNum && this.minNum === this.maxNum) {
-      this.$emit("changeFunc", this.minNum);
+      this.$emit('changeFunc', this.minNum);
     }
-  }
+  },
 };
 </script>
 

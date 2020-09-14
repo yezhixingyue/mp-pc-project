@@ -47,25 +47,25 @@ export default {
   props: {
     title: {
       type: String,
-      default: "必选工艺"
+      default: '必选工艺',
     },
     craftList: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   methods: {
     geAttrValue(item) {
       if (item.CustomizedOptionValue) return item.CustomizedOptionValue;
       if (item.CustomerInputValue && item.OptionList.length > 0) {
         const _t = item.OptionList.find(
-          _it => _it.OptionID === item.CustomerInputValue
+          _it => _it.OptionID === item.CustomerInputValue,
         );
         return _t.Value;
       }
       return item.CustomerInputValue;
-    }
-  }
+    },
+  },
 };
 </script>
 

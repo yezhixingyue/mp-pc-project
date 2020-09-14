@@ -15,13 +15,12 @@ export default {
           <span class="is-gray">({props.remark})</span>：
         </header>
       );
-    } else {
-      return (
+    }
+    return (
         <header>
           <span>{props.title}</span>：
         </header>
-      );
-    }
-  }
+    );
+  },
 };
 </script>

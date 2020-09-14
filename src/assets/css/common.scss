@@ -18,6 +18,19 @@
   }
 }
 
+// 前面带有蓝色竖条的标题样式
+.blue-v-line {
+  &::before {
+    width: 3px;
+    height: 16px;
+    background-color: #428dfa;
+    content: '';
+    display: inline-block;
+    vertical-align: bottom;
+    margin-right: 8px;
+  }
+}
+
 .is-origin{
   color: $--color-text-orgin;
 }

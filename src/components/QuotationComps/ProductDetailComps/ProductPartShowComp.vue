@@ -177,21 +177,21 @@
 </template>
 
 <script>
-import ProductCraftShowComps from "./ProductCraftShowComps";
+import ProductCraftShowComps from './ProductCraftShowComps';
 
 export default {
   props: {
     partDataList: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     totalData: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   components: {
-    ProductCraftShowComps
+    ProductCraftShowComps,
   },
   methods: {
     getMaterial(Material, MaterialList) {
@@ -208,32 +208,32 @@ export default {
       if (item.CustomizedOptionValue) return item.CustomizedOptionValue;
       if (item.CustomerInputValue && item.OptionList.length > 0) {
         const _t = item.OptionList.find(
-          _it => _it.OptionID === item.CustomerInputValue
+          _it => _it.OptionID === item.CustomerInputValue,
         );
         return _t.Value;
       }
       return item.CustomerInputValue;
     },
     getSizeGroup(list, part) {
-      let _arr = [];
-      let _unitArr = [];
+      const _arr = [];
+      const _unitArr = [];
       list.forEach(it => {
         // eslint-disable-next-line prettier/prettier
         const _t = part.SizeGroup.PropertyList.find(it1 => it1.PropertyID === it1.PropertyID);
         // eslint-disable-next-line prettier/prettier
-        let _unit = _t ? _t.UserDefinedUnit ? _t.UserDefinedUnit : this.$utils.getUnit(_t.Unit) : "";
-        _unit = _unit === "毫米" ? "mm" : _unit;
+        let _unit = _t ? _t.UserDefinedUnit ? _t.UserDefinedUnit : this.$utils.getUnit(_t.Unit) : '';
+        _unit = _unit === '毫米' ? 'mm' : _unit;
         _arr.push(it.CustomerInputValue.toString());
         _unitArr.push(_unit);
       });
-      let _unitList = [...new Set(_unitArr)]; // 去重后的单位数组
-      if (_unitList.length === 1) return _arr.join(" * ") + _unitList[0];
-      return _arr.map((it, i) => it + _unitArr[i]).join(" * ");
+      const _unitList = [...new Set(_unitArr)]; // 去重后的单位数组
+      if (_unitList.length === 1) return _arr.join(' * ') + _unitList[0];
+      return _arr.map((it, i) => it + _unitArr[i]).join(' * ');
     },
     getCraftList(list1, list2, type) {
       if (!list1 || !list2) return [];
       let _target;
-      if (type === "require") {
+      if (type === 'require') {
         _target = list1.find(it => it.ChoiceType === 2);
       } else {
         _target = list1.find(it => it.ChoiceType === 1);
@@ -241,8 +241,8 @@ export default {
       if (!_target) return [];
       const _idList = _target.CraftList.map(it => it.CraftID);
       return list2.filter(it => _idList.includes(it.CraftID));
-    }
-  }
+    },
+  },
 };
 </script>
 

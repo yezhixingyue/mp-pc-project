@@ -23,19 +23,19 @@ export default {
     value: {},
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     errorInfo: {
-      default: ""
+      default: '',
     },
     placeholder: {
       type: String,
-      default: ""
+      default: '',
     },
     type: {
       type: String,
-      default: "number"
-    }
+      default: 'number',
+    },
   },
   computed: {
     inpVal: {
@@ -43,10 +43,10 @@ export default {
         return this.value;
       },
       set(newVal) {
-        console.log("mount init num-input-wrap----!");
-        this.$emit("input", newVal);
-      }
-    }
+        console.log('mount init num-input-wrap----!');
+        this.$emit('input', newVal);
+      },
+    },
   },
   methods: {
     // eslint-disable-next-line no-unused-vars
@@ -55,8 +55,8 @@ export default {
       // e.currentTarget.select();
       e.currentTarget.select();
       // return false;
-    }
-  }
+    },
+  },
 };
 </script>
 

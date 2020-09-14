@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import PartSingleComps from "@/components/QuotationComps/ProductQuotationContentComps/Sections/PartSingleComps.vue";
+import PartSingleComps from '@/components/QuotationComps/ProductQuotationContentComps/Sections/PartSingleComps.vue';
 
 export default {
   props: {
@@ -23,12 +23,12 @@ export default {
      */
     PartList: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   components: {
-    PartSingleComps
-  }
+    PartSingleComps,
+  },
 };
 </script>
 

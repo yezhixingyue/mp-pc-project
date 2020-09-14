@@ -3,40 +3,6 @@
  * @FilePath: /src/components/QuotationComps/SMComps/DropDownSelector.vue
 -->
 <template>
-  <!-- <div
-    class="mp-duotation-sm-comps-drop-down-wrap"
-    v-mpclose="mpClose"
-    :class="show ? 'active' : ''"
-    v-if="option.length > 0"
-  > -->
-  <!-- <div
-      class="title"
-      ref="dropDom"
-      :class="show ? 'active' : ''"
-      @click="onTitleClick"
-    >
-      {{ valueComp }}
-    </div>
-    <MpCollapseComp
-      :h="38 * option.length + 8 > 236 ? 236 : 38 * option.length + 8"
-      :duration="150"
-    >
-      <div class="list-content" :class="toUp ? 'toUp' : ''" v-if="show">
-        <div class="picker-arrow"></div>
-        <div class="lists">
-          <span
-            v-for="(item, i) of option"
-            :key="item[defaultProps.value] + '' + i"
-            :class="
-              `${inpValue}` === `${item[defaultProps.value]}` ? 'active' : ''
-            "
-            @click="onClick(item)"
-          >
-            {{ item[defaultProps.text] }}
-          </span>
-        </div>
-      </div>
-    </MpCollapseComp> -->
   <el-select
     v-model="valueComp"
     placeholder=""
@@ -53,35 +19,28 @@
     >
     </el-option>
   </el-select>
-  <!-- </div> -->
 </template>
 
 <script>
-// import Vue from "vue";
-// import { DropdownMenu, DropdownItem } from "vant";
-// import MpCollapseComp from "@/components/QuotationComps/SMComps/MpCollapseComp.vue";
-
-// Vue.use(DropdownMenu);
-// Vue.use(DropdownItem);
 export default {
   model: {
-    prop: "inpValue",
-    event: "handleInput"
+    prop: 'inpValue',
+    event: 'handleInput',
   },
   props: {
     inpValue: {},
     option: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     defaultProps: {
       type: Object,
       default: () => ({
-        text: "text",
-        value: "value"
-      })
+        text: 'text',
+        value: 'value',
+      }),
     },
-    disabled: {}
+    disabled: {},
   },
   components: {
     // MpCollapseComp
@@ -89,32 +48,30 @@ export default {
   directives: {
     mpclose(el, binding) {
       if (binding.value) {
-        document.addEventListener("click", binding.value, false);
+        document.addEventListener('click', binding.value, false);
       }
-    }
+    },
   },
   data() {
     return {
-      value: "",
+      value: '',
       show: false,
-      toUp: false
+      toUp: false,
     };
   },
   computed: {
     valueComp: {
       get() {
-        if (!this.inpValue && this.inpValue !== 0) return "";
-        const _target = this.option.find(it => {
-          return it[this.defaultProps.value] + "" === this.inpValue + "";
-        });
+        if (!this.inpValue && this.inpValue !== 0) return '';
+        const _target = this.option.find(it => `${it[this.defaultProps.value]}` === `${this.inpValue}`);
         if (_target) return _target[this.defaultProps.value];
-        else return this.inpValue;
+        return this.inpValue;
       },
       set(newVal) {
         // alert("valueComp");
-        this.$emit("handleInput", newVal); // newVal为option中对应value值
-      }
-    }
+        this.$emit('handleInput', newVal); // newVal为option中对应value值
+      },
+    },
   },
   methods: {
     onClick(item) {
@@ -135,14 +92,14 @@ export default {
       if (num <= 300 && toTopHeight >= 300) this.toUp = true;
       this.show = !this.show;
       const oWrap = document.querySelector(
-        ".mp-duotation-content-comps-craft-list-wrap .van-dialog__content"
+        '.mp-duotation-content-comps-craft-list-wrap .van-dialog__content',
       );
       if (!this.show || !oWrap) return;
       this.$utils.animateScroll(oWrap.scrollTop, oWrap.scrollHeight, num => {
         oWrap.scrollTop = num;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

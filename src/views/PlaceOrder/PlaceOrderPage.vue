@@ -4,7 +4,7 @@
       <PlaceOrderProductClassifyComp />
     </header>
     <div class="content">
-      <ProductQuotationContentComp :data='curProductInfo2Quotation' />
+      <ProductQuotationContentComp v-if="curProductInfo2Quotation" :data='curProductInfo2Quotation' />
     </div>
   </section>
 </template>

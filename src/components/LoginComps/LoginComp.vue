@@ -6,8 +6,15 @@
       </el-input>
     </el-form-item>
     <el-form-item prop="Password">
-      <el-input placeholder="请输入密码" type="password" clearable v-model.trim="Password" @focus="onPwdFocus">
-          <i slot="prefix" class="iconfont icon-mima"></i>
+      <el-input
+       placeholder="请输入密码"
+       type="password"
+       clearable
+       v-model.trim="Password"
+       @focus="onPwdFocus"
+       @keyup.enter.native="submitForm('ruleForm')"
+       >
+        <i slot="prefix" class="iconfont icon-mima"></i>
       </el-input>
     </el-form-item>
     <el-form-item prop="rememberPwd" class="rememberPwd-box">

@@ -42,48 +42,48 @@
 </template>
 
 <script>
-import CountClassComp from "@/components/QuotationComps/ProductQuotationContentComps/Sections/CountClassComp.vue";
-import { getRelevanceInTargetValue } from "@/store/module/Quotation/QuotationClassType.js";
-import { mapState } from "vuex";
+import CountClassComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/CountClassComp.vue';
+import { getRelevanceInTargetValue } from '@/store/module/Quotation/QuotationClassType.js';
+import { mapState } from 'vuex';
 
 export default {
   props: {
     title: {
       type: String,
-      default: "印面"
+      default: '印面',
     },
     data: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     defaultProps: {
       type: Object,
       default: () => ({
-        label: "Value",
-        value: "OptionID"
-      })
+        label: 'Value',
+        value: 'OptionID',
+      }),
     },
     index: {},
     /**
      * 属性关联信息
      */
-    RelevanceInformation: {}
+    RelevanceInformation: {},
   },
   components: {
-    CountClassComp
+    CountClassComp,
   },
   computed: {
-    ...mapState("Quotation", ["obj2GetProductPrice"]),
+    ...mapState('Quotation', ['obj2GetProductPrice']),
     watchTarget() {
       if (!this.RelevanceInformation) return null;
       return getRelevanceInTargetValue(
         this.obj2GetProductPrice.ProductParams,
-        this.RelevanceInformation
+        this.RelevanceInformation,
       );
     },
     optionList() {
       if (this.data.ValueType === 2 && this.RelevanceInformation) {
-        let _list = [];
+        const _list = [];
         this.RelevanceInformation.forEach((Relevance, i) => {
           // 属性关联结果数组  --- 取交集
           const _val = this.watchTarget[i];
@@ -92,18 +92,14 @@ export default {
           }
         });
         if (_list.length > 0) {
-          const _l = _list.reduce((Summary, key) => {
-            return key.filter(it => Summary.includes(it));
-          }, _list[0]);
-          const _resList = this.data.OptionList.filter(it =>
-            _l.includes(it.OptionID)
-          );
+          const _l = _list.reduce((Summary, key) => key.filter(it => Summary.includes(it)), _list[0]);
+          const _resList = this.data.OptionList.filter(it => _l.includes(it.OptionID));
           if (_resList.length > 0) {
             if (!_l.includes(this.inpValue)) {
-              this.$emit("change", [this.index, _resList[0]]);
+              this.$emit('change', [this.index, _resList[0]]);
             }
           } else {
-            this.$emit("changeFunc", ["", false]);
+            this.$emit('changeFunc', ['', false]);
           }
           return _resList;
         }
@@ -114,25 +110,25 @@ export default {
     disabled() {
       console.log(this.data.AllowCustomized);
       return this.data.AllowCustomized === false;
-    }
+    },
   },
   watch: {
     watchTarget(newVal) {
       if (!this.shouldShow) {
         // 属性关联类型为 其值和主属性值应该保持相同  所以此时可以隐藏该属性 在主属性修改时自动对其进行修改
-        this.$emit("changeFunc", [newVal[0], false]);
+        this.$emit('changeFunc', [newVal[0], false]);
       }
-    }
+    },
   },
   methods: {
     onClick(item) {
-      this.$emit("change", [this.index, item]);
+      this.$emit('change', [this.index, item]);
     },
     handleChangeFunc([OptionID]) {
       const _t = this.data.OptionList.find(it => it.OptionID === OptionID);
-      if (_t) this.$emit("change", [this.index, _t]);
-    }
-  }
+      if (_t) this.$emit('change', [this.index, _t]);
+    },
+  },
 };
 </script>
 

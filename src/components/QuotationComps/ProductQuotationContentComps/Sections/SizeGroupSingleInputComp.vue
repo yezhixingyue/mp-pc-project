@@ -9,31 +9,31 @@
 </template>
 
 <script>
-import BaseNumInput from "@/components/QuotationComps/SMComps/BaseNumInput.vue";
-import { Toast } from "vant";
+import BaseNumInput from '@/components/QuotationComps/SMComps/BaseNumInput.vue';
+import { Toast } from 'vant';
 
 export default {
   props: {
     sizeData: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     maxLen: {
       type: Number,
-      default: Infinity
+      default: Infinity,
     },
     index: {
-      type: Number
+      type: Number,
     },
     value: {},
-    sizeInputValueList: {}
+    sizeInputValueList: {},
   },
   components: {
-    BaseNumInput
+    BaseNumInput,
   },
   data() {
     return {
-      newVal: ""
+      newVal: '',
     };
   },
   computed: {
@@ -41,29 +41,29 @@ export default {
       get() {
         if (!this.newVal) {
           if (
-            this.sizeInputValueList.length === 0 ||
-            !this.sizeInputValueList[this.index]
+            this.sizeInputValueList.length === 0
+            || !this.sizeInputValueList[this.index]
           ) {
-            return "";
+            return '';
           }
           return this.sizeInputValueList[this.index].CustomerInputValue;
         }
         return this.newVal;
       },
       set(newVal) {
-        if (newVal.includes(".")) Toast("尺寸必须为整数");
+        if (newVal.includes('.')) Toast('尺寸必须为整数');
         const _str = parseInt(newVal);
         const _obj = {
           PropertyID: this.sizeData.PropertyID,
-          CustomerInputValue: _str
+          CustomerInputValue: _str,
         };
         this.newVal = _str;
         console.log(this.newVal);
-        this.$emit("change", [_obj, this.index]);
+        this.$emit('change', [_obj, this.index]);
         // console.log(newVal, _obj);
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 

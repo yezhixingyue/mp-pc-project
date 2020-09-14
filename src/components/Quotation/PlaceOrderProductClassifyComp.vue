@@ -141,6 +141,7 @@ export default {
     position: absolute;
     background-color: #fff;
     display: none;
+    z-index: 999;
     &.active {
       display: block;
     }
