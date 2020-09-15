@@ -19,7 +19,7 @@
       class="van-hairline--top"
     >
       <div>
-        <van-icon name="plus" />
+        <!-- <van-icon name="plus" /> -->
       </div>
       <span @click="handleAddPart"
         >添加{{ PartData.PartList[0].PartName }}</span
@@ -64,11 +64,11 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-part-comps-wrap {
   > footer {
     height: 30px;
-    color: $--color-gray;
+    // color: $--color-gray;
     font-size: 14px;
     display: flex;
     align-items: center;
@@ -81,7 +81,7 @@ export default {
       background-color: #428dfa;
       border-radius: 5px;
       margin-right: 7px;
-      color: $--color-white;
+      // color: $--color-white;
       display: flex;
       font-size: 12px;
       align-items: center;

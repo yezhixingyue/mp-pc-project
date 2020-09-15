@@ -61,11 +61,11 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-duotation-sm-comps-num-input-wrap {
   > input {
     outline: none;
-    border: 1px solid $--border-color-2;
+    // border: 1px solid $--border-color-2;
     display: inline-block;
     width: 100%;
     height: 30px;

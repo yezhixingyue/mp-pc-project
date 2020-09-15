@@ -10,15 +10,16 @@
   >
     <template #header>
       <header>
-        <span class="title"
-          >{{ data.PartName }}{{ indexLv2 > 0 ? indexLv2 + 1 : "" }}</span
+        <span class="header-title point" ref="headerTitle"
+          >// {{ data.PartName }}{{ indexLv2 > 0 ? indexLv2 + 1 : "" }}</span
         >
-        <div class="del-btn">
+        <span class="line" :style='headerWidth'></span>
+        <!-- <div class="del-btn">
           <span v-if="indexLv2 > 0 && canDel" @click.stop="handleDelClick"
             >删除{{ data.PartName }}{{ indexLv2 > 0 ? indexLv2 + 1 : "" }}</span
           >
           <i @click.stop="show = !show" :class="show ? '' : 'is-hide'">收起</i>
-        </div>
+        </div> -->
       </header>
     </template>
 
@@ -29,23 +30,18 @@
         :remark="data.Unit"
         :minNum="data.MinNumber"
         :maxNum="data.MaxNumber"
-        :multiple="data.Multiple"
         v-model.lazy="PartAmount"
         :disabled="!data.PartAmount.Second"
       />
 
       <!-- 物料与物料品牌 -->
-      <article class="material-brand-wrap">
-        <count-class-comp
-          title="物料"
-          remark=""
-          v-model="PartMaterial"
-          :showCheckBox="false"
-          v-if="data.MaterialList.length > 1"
-          :option="data.MaterialList"
-          :disabled="!data.Material.Second"
-          :defaultProps="{ text: 'Name', value: 'MaterialID' }"
-        />
+      <MaterialComp
+        title="物料"
+        v-model="PartMaterial"
+        v-if="data.MaterialList.length > 1"
+        :option="data.MaterialList"
+        :disabled="!data.Material.Second"
+      />
         <!-- <count-class-comp
           title="物料品牌"
           remark=""
@@ -55,7 +51,6 @@
           v-if="data.BrandList.length > 1"
           :defaultProps="{ text: 'BrandName', value: 'BrandID' }"
         /> -->
-      </article>
 
       <!-- 属性 -->
       <attributes-comp v-model="PartAttributeList" />
@@ -73,10 +68,11 @@
       />
 
       <!-- 印刷属性 -->
-      <print-type-list-comps v-model="PartPrintTypeList" />
+      <!-- <print-type-list-comps v-model="PartPrintTypeList" /> -->
+      <attributes-comp v-model="PartPrintTypeList" />
 
       <!-- 印刷属性组 -->
-      <attributes-group-comp
+      <!-- <attributes-group-comp
         v-model="PartPrintPropertyGroupList"
         @addPropertyGroup="
           data => addPartPrintPropertyGroupList([indexLv1, indexLv2, data])
@@ -84,10 +80,10 @@
         @delPropertyGroup="
           data => delPartPrintPropertyGroupList([indexLv1, indexLv2, data])
         "
-      />
+      /> -->
 
       <!-- 属性组 -->
-      <attributes-group-comp
+      <!-- <attributes-group-comp
         v-model="PartPropertyGroupList"
         @addPropertyGroup="
           data => addPartPropertyGroupList([indexLv1, indexLv2, data])
@@ -95,7 +91,7 @@
         @delPropertyGroup="
           data => delPartPropertyGroupList([indexLv1, indexLv2, data])
         "
-      />
+      /> -->
 
       <!-- 必选工艺 -->
       <craft-list-comp
@@ -130,26 +126,33 @@
 </template>
 
 <script>
+/* eslint-disable max-len */
 import MpCollapseComp from '@/components/QuotationComps/SMComps/MpCollapseComp.vue';
 import SingleInputComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/SingleInputComp.vue';
-import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/AttributesComp.vue';
+import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesComp.vue';
 import SizeGroupComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/SizeGroupComp.vue';
-import AttributesGroupComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/AttributesGroupComp.vue';
-import CraftListComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/CraftListComp.vue';
-import PrintTypeListComps from '@/components/QuotationComps/ProductQuotationContentComps/Sections/PrintTypeListComps.vue';
-import CountClassComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/CountClassComp.vue';
-import { mapState, mapMutations } from 'vuex';
+// import AttributesGroupComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/AttributesGroupComp.vue';
+import CraftListComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/CraftListComp.vue';
+// import PrintTypeListComps from '@/components/QuotationComps/ProductQuotationContentComps/Sections/PrintTypeListComps.vue';
+// import CountClassComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/CountClassComp.vue';
+import { mapMutations } from 'vuex';
+
+// import SingleAttributeComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/SingleAttributeComp.vue';
+import MaterialComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/MaterialComp.vue';
 
 export default {
   components: {
     MpCollapseComp,
     SingleInputComp,
     AttributesComp,
+    MaterialComp,
     SizeGroupComp,
-    AttributesGroupComp,
+    // AttributesGroupComp,
     CraftListComp,
-    PrintTypeListComps,
-    CountClassComp,
+    // PrintTypeListComps,
+    // CountClassComp,
+
+    // SingleAttributeComp,
   },
   props: {
     data: {
@@ -173,13 +176,11 @@ export default {
     },
   },
   computed: {
-    ...mapState('global', ['']),
     PartAmount: {
       get() {
         return this.data.PartAmount.First;
       },
       set(newVal) {
-        // eslint-disable-next-line prettier/prettier
         this.setQuotationPartPlainInfo([this.indexLv1, this.indexLv2, 'PartAmount', `${newVal}`]);
       },
     },
@@ -188,7 +189,7 @@ export default {
         return this.data.Material.First;
       },
       set(newVal) {
-        // eslint-disable-next-line prettier/prettier
+        console.log(newVal);
         this.setQuotationPartPlainInfo([this.indexLv1, this.indexLv2, 'Material', `${newVal}`]);
       },
     },
@@ -197,7 +198,6 @@ export default {
         return this.data.MaterialBrand.First;
       },
       set(newVal) {
-        // eslint-disable-next-line prettier/prettier
         this.setQuotationPartPlainInfo([this.indexLv1, this.indexLv2, 'MaterialBrand', `${newVal}`]);
       },
     },
@@ -206,7 +206,6 @@ export default {
         return this.data.PropertyList;
       },
       set([data, index, type]) {
-        // eslint-disable-next-line prettier/prettier
         this.setQuotationPartPropertyList([this.indexLv1, this.indexLv2, index, data, type]);
       },
     },
@@ -217,8 +216,9 @@ export default {
       let _unit;
       if (_unitID === 13) _unit = 'mm';
       else _unit = this.$utils.getUnit(_unitID);
-      const _str = `${_arr.join('*')}${_unit}`;
-      return _str;
+      _arr.push(_unit);
+      // const _str = `${_arr.join('*')}${_unit}`;
+      return _arr;
     },
     // 尺寸
     PartSizeGroup: {
@@ -227,9 +227,7 @@ export default {
       },
       set([newVal, sizelist]) {
         // console.log("PartSizeGroup ------- 1", newVal, sizelist);
-        // eslint-disable-next-line prettier/prettier
         this.setQuotationPartPlainInfo([this.indexLv1, this.indexLv2, 'Size', `${newVal}`]);
-        // eslint-disable-next-line prettier/prettier
         this.setQuotationPartSizePropertyList([this.indexLv1, this.indexLv2, sizelist]);
         // console.log(this.data.SizePropertyList);
       },
@@ -240,7 +238,7 @@ export default {
       },
       set([data, index]) {
         // console.log(data, index);
-        // eslint-disable-next-line prettier/prettier
+
         this.setQuotationPartPrintPropertyList([this.indexLv1, this.indexLv2, index, data]);
       },
     },
@@ -250,7 +248,7 @@ export default {
       },
       set([[value, index3, type], index1, index2]) {
         console.log(index1, index2, index3, value);
-        // eslint-disable-next-line prettier/prettier
+
         this.setPrintPropertyGroupList([this.indexLv1, this.indexLv2, index1, index2, index3, value, type]);
       },
     },
@@ -259,7 +257,6 @@ export default {
         return this.data.PropertyGroupList;
       },
       set([[value, index3, type], index1, index2]) {
-        // eslint-disable-next-line prettier/prettier
         this.setPropertyGroupList([this.indexLv1, this.indexLv2, index1, index2, index3, value, type]);
       },
     },
@@ -293,113 +290,50 @@ export default {
     return {
       show: true,
       h: 0,
+      headerWidth: { width: '800px' },
     };
   },
   methods: {
-    // eslint-disable-next-line prettier/prettier
+
     ...mapMutations('Quotation', ['setQuotationPartPlainInfo', 'setQuotationPartPropertyList', 'setQuotationPartSizePropertyList', 'setQuotationPartPrintPropertyList', 'setPrintPropertyGroupList', 'setPropertyGroupList', 'setPartProductParamsCraftList',
-      // eslint-disable-next-line prettier/prettier
+
       'addPartPrintPropertyGroupList', 'addPartPropertyGroupList', 'delPartProductParamsPartList', 'delPartPrintPropertyGroupList', 'delPartPropertyGroupList', 'setCraftItemDisabled4Part',
     ]),
     handleDelClick() {
       this.delPartProductParamsPartList([this.indexLv1, this.indexLv2]);
     },
   },
+  mounted() {
+    this.$nextTick(() => {
+      const w = 1140 - this.$refs.headerTitle.offsetWidth - 2;
+      this.headerWidth = { width: `${w}px` };
+    });
+  },
 };
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-part-comp-wrap {
   > header {
-    padding: 0 12.5px;
-    margin: 0 -12.5px;
-    margin-top: 18px;
-    font-size: 15px;
-    font-weight: 700;
-    color: $--color-dark;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: $--border-color-3;
-    height: 30px;
-    line-height: 30px;
-    > span.title {
-      display: flex;
-      align-items: center;
-      &::before {
-        display: inline-block;
-        width: 3px;
-        height: 20px;
-        background-color: $--color-blue;
-        margin-right: 10px;
-        content: "";
-      }
+    margin-top: 40px;
+    margin-bottom: 22px;
+    .header-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #333;
+      padding-right: 10px;
     }
-    > div.del-btn {
-      display: flex;
-      > span {
-        font-weight: 400;
-        font-size: 13px;
-        color: $--color-gray;
-        display: flex;
-        align-items: center;
-        &::after {
-          content: "";
-          width: 15px;
-          height: 15px;
-          background: url("../../../../assets/images/quotationdel.png")
-            no-repeat center/100% 100%;
-          margin-left: 12px;
-        }
-      }
-      > i {
-        font-size: 13px;
-        color: $--color-text-light;
-        display: flex;
-        font-weight: 400;
-        align-items: center;
-        margin-left: 30px;
-        &::after {
-          display: inline-block;
-          width: 14px;
-          height: 13px;
-          background: url("../../../../assets/images/doubleArrow.png") no-repeat
-            center;
-          background-size: 13px 12px;
-          margin-left: 10px;
-          content: "";
-          transition: 0.3s !important;
-          position: relative;
-          top: -1px;
-        }
-        &.is-hide::after {
-          transform: rotate(180deg);
-        }
-      }
+    .line {
+      height: 1px;
+      display: inline-block;
+      background-color: #eee;
+      vertical-align: middle;
     }
   }
-
   > .comp-content-wrap {
-    color: $--color-text-primary;
-    > .material-brand-wrap {
-      display: flex;
-      justify-content: space-between;
-      margin: 0 -10px;
-      margin-top: 12.5px;
-      > section {
-        // width: 44vw;
-        padding: 0 10px;
-        flex: 1;
-        min-width: 44vw;
-      }
-    }
-    > section,
-    > article {
-      margin-top: 12.5px;
-    }
-    > section:last-of-type {
-      padding-bottom: 18px;
+    > section {
+      margin-bottom: 22px;
     }
   }
 }

@@ -36,7 +36,7 @@
                 )
               "
             >
-              <img src="../../../../assets/images/quotationdel.png" alt="del" />
+              <!-- <img src="../../../../assets/images/quotationdel.png" alt="del" /> -->
             </span>
           </div>
         </li>
@@ -51,8 +51,8 @@
 </template>
 
 <script>
-import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/AttributesComp.vue';
-import { Toast } from 'vant';
+import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesComp.vue';
+// import { Toast } from 'vant';
 
 export default {
   components: {
@@ -89,8 +89,10 @@ export default {
       this.$emit('addPropertyGroup', [index1, _item]);
     },
     handleAttributeDel(index1, index2, len, groupName) {
-      if (len < 2) Toast(`至少需要一个${groupName}信息!`);
-      else this.$emit('delPropertyGroup', [index1, index2]);
+      console.log(groupName);
+      // if (len < 2) Toast(`至少需要一个${groupName}信息!`);
+      // else this.$emit('delPropertyGroup', [index1, index2]);
+      if (len >= 2) this.$emit('delPropertyGroup', [index1, index2]);
     },
   },
   mounted() {
@@ -101,12 +103,12 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-comps-attribute-group-wrap > section {
   > header {
     height: 16px;
     line-height: 16px;
-    color: $--color-dark;
+    // color: $--color-dark;
     padding-top: 10px;
     font-size: 15px;
     &::before {
@@ -114,7 +116,7 @@ export default {
       width: 6px;
       height: 6px;
       display: inline-block;
-      background-color: $--color-origin;
+      // background-color: $--color-origin;
       border-radius: 50%;
       vertical-align: 15%;
       margin-right: 6px;
@@ -132,7 +134,7 @@ export default {
           height: 25px;
           width: 25px;
           display: inline-block;
-          background-color: $--border-color;
+          // background-color: $--border-color;
           border-radius: 50%;
           position: relative;
           > img {
@@ -151,7 +153,7 @@ export default {
   > footer {
     height: 35px;
     text-align: center;
-    color: $--color-blue;
+    // color: $--color-blue;
     line-height: 35px;
     font-size: 15px;
   }

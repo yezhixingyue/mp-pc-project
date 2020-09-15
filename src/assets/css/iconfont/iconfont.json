@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "17177928",
+      "name": "向上",
+      "font_class": "xiangshang",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "17151279",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "17151280",
+      "name": "增加",
+      "font_class": "zengjia",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
       "icon_id": "3141394",
       "name": "右箭头",
       "font_class": "iconfontyoujiantou",

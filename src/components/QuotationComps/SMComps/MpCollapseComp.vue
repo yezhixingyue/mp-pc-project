@@ -13,6 +13,7 @@
 </template>
 
 <script>
+/* eslint-disable no-param-reassign */
 import Velocity from 'velocity-animate';
 
 export default {

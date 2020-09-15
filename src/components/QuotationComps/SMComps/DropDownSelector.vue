@@ -95,6 +95,7 @@ export default {
         '.mp-duotation-content-comps-craft-list-wrap .van-dialog__content',
       );
       if (!this.show || !oWrap) return;
+      // eslint-disable-next-line no-shadow
       this.$utils.animateScroll(oWrap.scrollTop, oWrap.scrollHeight, num => {
         oWrap.scrollTop = num;
       });
@@ -104,7 +105,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-duotation-sm-comps-drop-down-wrap {
   width: 100%;
   height: 30px;
@@ -265,7 +266,7 @@ export default {
 .el-zoom-in-top-leave-active {
   opacity: 1;
   transform: scaleY(1);
-  transition: $--md-fade-transition;
+  // transition: $--md-fade-transition;
   transform-origin: center top;
   // transition: none;
   // transition: transform 150ms cubic-bezier(0.23, 0.8, 0.38, 0.7),

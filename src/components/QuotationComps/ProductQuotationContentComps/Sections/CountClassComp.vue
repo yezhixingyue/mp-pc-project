@@ -259,7 +259,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-comps-count-wrap {
   position: relative;
   > header {

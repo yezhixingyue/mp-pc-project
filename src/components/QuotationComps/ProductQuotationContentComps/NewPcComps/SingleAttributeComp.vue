@@ -33,7 +33,8 @@
 
     <!-- 3. 不允许自定义单选框 -->
     <el-radio-group
-      v-model="inpValue" key="type-3" v-else-if="ValueType === 2 && !AllowUserDefinedOption && option.length < 6">
+      v-model="inpValue" key="type-3"
+      v-else-if="ValueType === 2 && !AllowUserDefinedOption && option.length < 6 && !isCraftUse">
       <el-radio v-for="item in optionList" :key="item[defaultProps.value]"
        :label="item[defaultProps.value]">{{item[defaultProps.text]}}</el-radio>
     </el-radio-group>
@@ -101,6 +102,13 @@ export default {
       default: false,
     },
     AllowUserDefinedOption: { // 是否允许自定义
+      type: Boolean,
+      default: false,
+    },
+    /**
+     * 是否由工艺组件调用
+     */
+    isCraftUse: {
       type: Boolean,
       default: false,
     },
@@ -189,6 +197,17 @@ export default {
     onFocus(e) {
       e.target.select();
     },
+    initIsSelectedInp() {
+      if (this.option.length > 0 && !this.CustomizedOptionValue) {
+        this.isSelectedInp = false;
+      } else if (this.ValueType === 2) {
+        this.isSelectedInp = true;
+        this.isCustomizedOptionValue = true;
+      } else {
+        this.isSelectedInp = true;
+        this.isCustomizedOptionValue = false;
+      }
+    },
   },
   watch: {
     watchTarget(newVal) {
@@ -197,15 +216,22 @@ export default {
         this.$emit('changeFunc', [newVal[0], false]);
       }
     },
-    watch2Dia() {
-      // 后续再调整
-      // if (!this.isSelectedInp) {
-      //   this.$emit('changeFunc', [
-      //     '',
-      //     !this.isSelectedInp && this.ValueType === 2,
-      //   ]);
-      // }
+    option(newVal) {
+      if (!newVal) return;
+      this.initIsSelectedInp();
     },
+    watch2Dia() {
+      if (!this.isSelectedInp) {
+        this.$emit('changeFunc', [
+          '',
+          !this.isSelectedInp && this.ValueType === 2,
+        ]);
+      }
+    },
+  },
+  created() {
+    if (!this.option) return;
+    this.initIsSelectedInp();
   },
 };
 </script>

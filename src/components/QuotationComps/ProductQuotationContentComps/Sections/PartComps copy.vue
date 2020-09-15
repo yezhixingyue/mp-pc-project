@@ -1,6 +1,6 @@
 <!--
  * @Describe: 部件
- * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/Sections/PartComps.vue
+ * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/Sections/PartComps copy.vue
 -->
 <template>
   <section class="mp-duotation-content-comps-part-comp-wrap">
@@ -94,16 +94,16 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-comps-part-comp-wrap {
   > .van-collapse {
     > .van-collapse-item {
       margin: 0 -12.5px;
       margin-top: 18px;
-      background-color: $--border-color-3;
+      // background-color: $--border-color-3;
       box-sizing: border-box;
       > .van-cell {
-        background-color: $--border-color-3;
+        // background-color: $--border-color-3;
         height: 30px;
         line-height: 30px;
         padding: 0;
@@ -113,7 +113,7 @@ export default {
           > header {
             font-size: 15px;
             font-weight: 700;
-            color: $--color-dark;
+            // color: $--color-dark;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -124,7 +124,7 @@ export default {
                 display: inline-block;
                 width: 3px;
                 height: 20px;
-                background-color: $--color-blue;
+                // background-color: $--color-blue;
                 margin-right: 10px;
                 content: "";
               }
@@ -133,15 +133,15 @@ export default {
               margin-right: 30px;
               font-weight: 400;
               font-size: 13px;
-              color: $--color-gray;
+              // color: $--color-gray;
               display: flex;
               align-items: center;
               &::after {
                 content: "";
                 width: 15px;
                 height: 15px;
-                background: url("../../../../assets/images/quotationdel.png")
-                  no-repeat center/100% 100%;
+                // background: url("../../../../assets/images/quotationdel.png")
+                //   no-repeat center/100% 100%;
                 margin-left: 12px;
               }
             }
@@ -149,7 +149,7 @@ export default {
         }
         > i {
           font-size: 13px;
-          color: $--color-text-light;
+          // color: $--color-text-light;
           display: flex;
           align-items: center;
           &::before {
@@ -185,7 +185,7 @@ export default {
           // }
           > footer {
             height: 50px;
-            color: $--color-gray;
+            // color: $--color-gray;
             font-size: 14px;
             display: flex;
             align-items: center;
@@ -196,7 +196,7 @@ export default {
               background-color: #428dfa;
               border-radius: 5px;
               margin-right: 7px;
-              color: $--color-white;
+              // color: $--color-white;
               display: flex;
               font-size: 12px;
               align-items: center;

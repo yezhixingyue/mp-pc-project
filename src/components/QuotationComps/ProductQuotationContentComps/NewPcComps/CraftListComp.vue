@@ -1,14 +1,15 @@
 <!--
  * @Describe: 工艺列表组件 CraftListComp
- * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/Sections/CraftListComp.vue
+ * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/NewPcComps/CraftListComp.vue
  *
  * @desc2： 每个工艺设置后会有编辑图标可再次编辑、工艺类型较多：布尔类型、输入类型(可能有多处)、下拉选择类型(可能有多个)
  *
 -->
 
 <template>
-  <section class="mp-duotation-content-comps-craft-list-wrap">
-    <SectionCompHeader :title="title" />
+  <section class="mp-duotation-content-comps-craft-list-wrap float">
+    <!-- <SectionCompHeader :title="title" /> -->
+    <span class="title gray">{{title}}：</span>
     <ul class="content">
       <li v-for="it of list" :key="it.CraftID">
         <show-product-btn
@@ -23,10 +24,10 @@
               it.PropertyList.length > 0
           "
         >
-          <i></i>
-          <div @click="handleEditClick(it)">
-            <!-- <img src="../../../../assets/images/editcraft.png" alt="编辑" /> -->
-          </div>
+          <i class="iconfont icon-bianji is-cyan" @click="handleEditClick(it)"></i>
+          <!-- <div @click="handleEditClick(it)">
+            <i class="iconfont icon-bianji is-cyan"></i>
+          </div> -->
         </template>
       </li>
     </ul>
@@ -34,27 +35,29 @@
       :visible.sync="showDia"
       :title="dialogTitle"
       custom-class="set-craft-dia"
-      width="650px"
-      :before-close="onDialogBeforeClose"
+      v-dialogDrag
     >
+      <header slot="title">
+        <i class="iconfont icon-shezhi is-primary-blue"></i>
+        <span>{{ dialogTitle }}</span>
+      </header>
       <attributes-comp
         v-for="(CraftData, i) in curCraftDataList"
         :key="`curCraftData-${i}`"
-        :class="
-          curCraftData && curCraftData.MultyApply ? 'van-hairline--bottom' : ''
-        "
         :watch2Dia="watch2Dia"
         :value="CraftData"
         @change="([data, index, type]) => handleChange(i, [data, type], index)"
         :showDel="curCraftData && curCraftData.MultyApply"
         @handleDel="() => handleDel(i, curCraftDataList.length)"
+        @addCraft='addCraft'
+        isCraftUse
       />
-      <footer v-if="curCraftData && curCraftData.MultyApply">
-        <span @click="addCraft()">
+      <footer>
+        <!-- <span @click="addCraft()">
           +添加
-        </span>
-        <el-button type="primary" @click="showDia = false">确 定</el-button>
-        <el-button @click="showDia = false">取 消</el-button>
+        </span> -->
+        <el-button type="primary" @click="onConfirm">确定</el-button>
+        <el-button @click="showDia = false">取消</el-button>
       </footer>
     </el-dialog>
   </section>
@@ -64,7 +67,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
-import SectionCompHeader from '@/components/QuotationComps/SMComps/SectionCompHeader.vue';
+// import SectionCompHeader from '@/components/QuotationComps/SMComps/SectionCompHeader.vue';
 import ShowProductBtn from '@/components/QuotationComps/SMComps/ShowProductBtn.vue';
 // import CountClassComp from "@/components/QuotationComps/ProductQuotationContentComps/Sections/CountClassComp.vue";
 import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesComp.vue';
@@ -73,7 +76,7 @@ import { mapState, mapGetters } from 'vuex';
 
 export default {
   components: {
-    SectionCompHeader,
+    // SectionCompHeader,
     ShowProductBtn,
     // [Dialog.Component.name]: Dialog.Component,
     AttributesComp,
@@ -95,7 +98,7 @@ export default {
     partData: {},
   },
   computed: {
-    ...mapState('global', ['CraftRelationList']),
+    ...mapState('common', ['CraftRelationList']),
     ...mapGetters('Quotation', ['curCraftRelationList']),
     ...mapState('Quotation', ['obj2GetProductPrice', 'watchTarget2DelCraft']),
     list() {
@@ -277,19 +280,14 @@ export default {
         }));
       }, 10);
     },
-    async onDialogBeforeClose(action, done) {
-      console.log(action, done);
-      if (action !== 'confirm') {
-        action();
-        // done();
-        return;
-      }
+    async onConfirm() {
       // 判断值 如果通过则emit 如果不通过则done(false);
       let key = true;
       this.curCraftData.PropertyList.forEach((item) => {
         item.forEach(it => {
+          if (!key) return;
           if (!it.CustomerInputValue && it.CustomerInputValue !== 0) {
-            // Toast(`${it.PropertyName}参数未设置!`);
+            this.messageBox.failSingleError({ title: '参数设置不正确!', msg: `${it.PropertyName}参数未设置!` });
             key = false;
           } else if (it.ValueType === 1) {
             const MaxValue = !it.MaxValue && it.MaxValue !== 0
@@ -307,11 +305,10 @@ export default {
               it.CustomerInputValue < MinValue
               || it.CustomerInputValue > MaxValue
             ) {
-              // Toast(
-              //   `${it.PropertyName}参数值应该在${
-              //     MinValue === -Infinity ? '负无穷' : MinValue
-              //   }与${MaxValue === Infinity ? '正无穷' : MaxValue}之间!`,
-              // );
+              const _msg = `[ ${it.PropertyName} ]取值范围应在${
+                MinValue === -Infinity ? '负无穷' : MinValue
+              }-${MaxValue === Infinity ? '正无穷' : MaxValue}之间!`;
+              this.messageBox.failSingleError({ title: '参数设置不正确!', msg: _msg });
               key = false;
             }
           }
@@ -329,7 +326,7 @@ export default {
       ]);
       this.addTemplateDate = null;
       this.curCraftData = null;
-      done();
+      this.showDia = false;
     },
     handleChange(i, [data, type], index) {
       if (!type) {
@@ -342,9 +339,9 @@ export default {
       const _temp = JSON.parse(JSON.stringify(this.addTemplateDate));
       this.curCraftData.PropertyList.push(_temp);
       const oWrap = document.querySelector(
-        '.mp-duotation-content-comps-craft-list-wrap .van-dialog__content',
+        '.mp-duotation-content-comps-craft-list-wrap .el-dialog__body',
       );
-      this.$utils.animateScroll(oWrap.scrollTop, oWrap.scrollHeight, num => {
+      this.utils.animateScroll(oWrap.scrollTop, oWrap.scrollHeight, num => {
         oWrap.scrollTop = num;
       });
     },
@@ -371,7 +368,7 @@ export default {
         if (item.ValueType === 1) {
           const _unit = item.UserDefinedUnit
             ? item.UserDefinedUnit
-            : this.$utils.getUnit(item.Unit);
+            : this.utils.getUnit(item.Unit);
           _str = item.CustomerInputValue + _unit;
         } else if (item.ValueType === 2) {
           if (item.CustomizedOptionValue) _str = item.CustomizedOptionValue;
@@ -697,176 +694,122 @@ export default {
 <style lang="scss">
 // @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-comps-craft-list-wrap {
-  margin-top: 14px;
-  overflow: hidden;
-  // font-size: 13px !important;
-  > header {
-    height: 22px;
-    line-height: 22px;
+  > .title {
+    float: left;
+    width: 84px;
+    line-height: 28px;
   }
   > .content {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: -20px;
-    margin-right: -28px;
-    padding: 2px 0;
+    float: right;
+    width: 1050px;
     > li {
-      margin-right: 28px;
-      margin-top: 20px;
-      display: flex;
-      align-items: center;
-      max-width: calc(100% - 30px);
-      > .mp-show-product-btn-wrap {
-        min-width: 0;
-        padding: 0 10px;
-        font-size: 13px;
+      display: inline-block;
+      margin-right: 25px;
+      > span {
+        min-width: 90px;
+        line-height: 26px;
+        box-sizing: border-box;
+        &.active {
+          border-color: #428dfa;
+          color: #428dfa;
+        }
+        &:active {
+          background-color: rgb(245, 245, 245);
+        }
       }
       > i {
-        height: 23px;
-        width: 1px;
-        // background-color: $--border-color;
         display: inline-block;
-        margin: 0 8px;
-      }
-      > div {
-        width: 25px;
-        height: 25px;
-        // background-color: $--border-color;
+        width: 24px;
+        height: 24px;
+        background-color: rgb(245, 245, 245);
+        // vertical-align: bottom;
         border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: none;
-        > img {
-          height: 13px;
-          width: 13px;
+        line-height: 24px;
+        text-align: center;
+        margin-left: 10px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 700;
+      }
+    }
+  }
+
+  > .el-dialog__wrapper {
+    > .el-dialog.set-craft-dia {
+      width: unset;
+      min-width: 650px;
+      display: table;
+      border-radius: 5px;
+      > .el-dialog__header {
+        padding-top: 16px;
+        padding-bottom: 15px;
+        > header {
+          > i {
+            margin-right: 10px;
+          }
+          color: #888;
+        }
+        > .el-dialog__headerbtn {
+          top: 10px;
+          right: 15px;
+          font-size: 18px;
+        }
+        position: relative;
+        &::after {
+          height: 1px;
+          width: calc(100% - 20px);
+          margin: 0 10px;
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: -1px;
+          background: rgb(245, 245, 245);
+        }
+      }
+      > .el-dialog__body {
+        margin-left: 30px;
+        // max-height: 360px;
+        padding-bottom: 25px;
+        // overflow-y: auto;
+        > .mp-duotation-content-comps-attribute-wrap {
+          > .attribute-list {
+            > section {
+              display: inline-block;
+              margin-right: 25px;
+              > .title {
+                min-width: unset;
+              }
+              .el-input {
+                > input {
+                  width: 100px;
+                  padding: 0 20px 0 8px;
+                  font-size: 13.3px;
+                }
+              }
+            }
+          }
+        }
+        > footer {
+          text-align: center;
+          margin-top: 58px;
+          > button {
+            height: 35px;
+            width: 120px;
+            line-height: 33px;
+            padding: 0;
+            & + button {
+              margin-left: 45px;
+            }
+          }
         }
       }
     }
   }
-  > .set-craft-dia {
-    min-width: 0;
-    max-width: 100%;
-    max-height: 500px;
-    // min-height: 280px;
-    border-radius: 2px;
-    overflow: unset;
-    transition: 300ms cubic-bezier(0.23, 0.8, 0.48, 0.8) !important;
-
-    > .van-dialog__header {
-      box-sizing: border-box;
-      padding: 0 12.5px;
-      height: 40px;
-      line-height: 40px;
-      text-align: left;
-      font-size: 15px;
-      // color: $--color-dark;
-      display: flex;
-      align-items: center;
-      position: relative;
-      &::before {
-        content: "";
-        display: inline-block;
-        width: 3px;
-        height: 20px;
-        // background-color: $--color-blue;
-        margin-right: 10px;
-      }
-      &::after {
-        position: absolute;
-        box-sizing: border-box;
-        content: " ";
-        pointer-events: none;
-        top: -50%;
-        right: -50%;
-        bottom: -50%;
-        left: -50%;
-        border: 0px solid #ebedf0;
-        border-bottom-width: 1px;
-        -webkit-transform: scale(0.5);
-        transform: scale(0.5);
-      }
-    }
-    > .van-dialog__content {
-      padding: 12.5px;
-      box-sizing: border-box;
-      max-height: 45vh;
-      min-height: 150px;
-      overflow-y: auto;
-      section > header {
-        height: 28px;
-        line-height: 28px;
-        font-size: 13px;
-      }
-      .flex-wrap {
-        display: flex;
-        justify-content: space-between;
-        > section {
-          width: 44vw;
-        }
-      }
-      .to-del {
-        height: 25px;
-        text-align: right;
-        padding: 7.5px 0;
-        > span {
-          height: 25px;
-          width: 25px;
-          display: inline-block;
-          // background-color: $--border-color;
-          border-radius: 50%;
-          position: relative;
-          > img {
-            height: 15px;
-            width: 15px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-          }
-        }
-      }
-      > footer {
-        height: 35px;
-        text-align: center;
-        // color: $--color-blue;
-        line-height: 35px;
-        font-size: 15px;
-      }
-      > .van-hairline--bottom {
-        &::after {
-          border-style: dashed;
-        }
-      }
-    }
-    > .van-dialog__footer {
-      padding-bottom: 25px;
-      justify-content: center;
-      margin-top: 30px;
-      &::after {
-        display: none;
-      }
-      > .van-button {
-        height: 32.5px;
-        width: 100px;
-        flex: none;
-        margin: 0 16.25px;
-        line-height: 32.5px;
-        border-radius: 16.25px;
-        // border: 1px solid $--color-blue;
-        font-size: 15px;
-        &.van-dialog__cancel {
-          // color: $--color-blue;
-        }
-        &.van-dialog__confirm {
-          color: #fff;
-          // background-color: $--color-blue;
-          &::after {
-            display: none;
-          }
-        }
-      }
-    }
+  // display: table;
+  margin-top: 8px;
+  margin-bottom: 22px;
+  & + .mp-duotation-content-comps-craft-list-wrap {
+    margin-top: 0px;
   }
 }
 </style>

@@ -98,7 +98,7 @@ export default {
     /* 当前选中产品工艺关系列表
     -------------------------------*/
     curCraftRelationList(state, getters, rootVal) {
-      const _CraftRelationList = rootVal.global.CraftRelationList;
+      const _CraftRelationList = rootVal.common.CraftRelationList;
       if (_CraftRelationList.length === 0) return [];
       const _ProductClass = state.obj2GetProductPrice.ProductParams.ProductClass;
       if (!_ProductClass) return [];

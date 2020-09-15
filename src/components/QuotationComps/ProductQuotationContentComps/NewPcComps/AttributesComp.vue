@@ -30,34 +30,27 @@
         :defaultProps="{ text: 'Value', value: 'OptionID' }"
         :ValueType="item.ValueType"
         :disabled="item.AllowCustomized === false"
+        :isCraftUse='isCraftUse'
       />
-      <!-- <div class="del-box" v-if="showDel">
-        <span @click="handleAttributeDel" class="to-del">
-          <img src="../../../../assets/images/quotationdel.png" alt="del" />
-        </span>
-      </div> -->
+      <section class="edit-box" v-if="showDel">
+        <div class="add" @click="handleAttributeAdd">
+          <i class="iconfont icon-zengjia is-primary-blue"></i>
+          <span class="menu-item-sm">增加一处</span>
+        </div>
+        <div class="del" @click="handleAttributeDel">
+          <i class="iconfont icon-shanchu is-pink"></i>
+          <span class="menu-item-sm">删除</span>
+        </div>
+      </section>
     </article>
-    <div class="del-box" v-if="showDel">
-      <span @click="handleAttributeDel" class="to-del">
-        <!-- <img src="../../../../assets/images/quotationdel.png" alt="del" /> -->
-      </span>
-    </div>
-    <!-- <section v-if="showDel" class="to-del">
-      <span @click="handleAttributeDel">
-        <img src="../../../../assets/images/quotationdel.png" alt="del" />
-      </span>
-    </section> -->
   </section>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-// import CountClassComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/CountClassComp.vue';
 import SingleAttributeComp from './SingleAttributeComp.vue';
 
 export default {
   components: {
-    // CountClassComp,
     SingleAttributeComp,
   },
   model: {
@@ -83,9 +76,13 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  computed: {
-    ...mapState('global', ['UnitTypeList']),
+    /**
+     * 是否由工艺组件调用
+     */
+    isCraftUse: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     handleChange([data, type], index) {
@@ -95,29 +92,36 @@ export default {
     handleAttributeDel() {
       this.$emit('handleDel');
     },
+    handleAttributeAdd() {
+      this.$emit('addCraft');
+    },
     changeFunc(data, i) {
-      // alert("changeFunc");
       this.handleChange(data, i);
     },
-    // handleCheckChange(e) {
-    //   console.log(e);
-    // }
   },
 };
 </script>
 
 <style lang="scss">
-// @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-comps-attribute-wrap {
   > article {
     > section {
-      // display: inline-block;
-      // & + section {
-      //   margin-left: 80px;
-      // }
       height: 30px;
       line-height: 30px;
       margin-bottom: 22px;
+      &.edit-box {
+        margin-left: 25px;
+        > div {
+          display: inline-block;
+          & + div {
+            margin-left: 25px;
+          }
+          > i {
+            margin-right: 8px;
+            vertical-align: bottom;
+          }
+        }
+      }
     }
   }
 }

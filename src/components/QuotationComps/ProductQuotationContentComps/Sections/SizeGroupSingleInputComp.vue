@@ -1,16 +1,13 @@
 <template>
-  <li>
-    <base-num-input
-      v-model="inpVal"
-      :placeholder="`请输入${sizeData.PropertyName}`"
-    />
-    <!-- <span v-if="index !== maxLen">*</span> -->
+  <li class="mp-pc-size-group-single-size-comp-wrap">
+    <el-input v-model="inpVal" class="size-box" @focus="onFocus" @blur="onBlur" />
+    <span class="gray" :class="inpVal || isFocue ? 'h' : ''">{{sizeData.PropertyName}}</span>
   </li>
 </template>
 
 <script>
-import BaseNumInput from '@/components/QuotationComps/SMComps/BaseNumInput.vue';
-import { Toast } from 'vant';
+// import BaseNumInput from '@/components/QuotationComps/SMComps/BaseNumInput.vue';
+// import { Toast } from 'vant';
 
 export default {
   props: {
@@ -29,17 +26,19 @@ export default {
     sizeInputValueList: {},
   },
   components: {
-    BaseNumInput,
+    // BaseNumInput,
   },
   data() {
     return {
       newVal: '',
+      isChanged: false,
+      isFocue: false,
     };
   },
   computed: {
     inpVal: {
       get() {
-        if (!this.newVal) {
+        if (!this.newVal && !this.isChanged) {
           if (
             this.sizeInputValueList.length === 0
             || !this.sizeInputValueList[this.index]
@@ -51,20 +50,48 @@ export default {
         return this.newVal;
       },
       set(newVal) {
-        if (newVal.includes('.')) Toast('尺寸必须为整数');
-        const _str = parseInt(newVal);
+        if (newVal.includes('.')) {
+          this.messageBox.failSingleError({ title: '参数设置不正确', msg: '尺寸必须为整数' });
+          return;
+        }
+        const _v = newVal.replace(/[^\d.]/g, '');
+        // eslint-disable-next-line radix
+        const _str = _v ? parseInt(_v) : _v;
         const _obj = {
           PropertyID: this.sizeData.PropertyID,
           CustomerInputValue: _str,
         };
         this.newVal = _str;
-        console.log(this.newVal);
         this.$emit('change', [_obj, this.index]);
-        // console.log(newVal, _obj);
+        this.isChanged = true;
       },
+    },
+  },
+  methods: {
+    onFocus(e) {
+      e.target.select();
+      this.isFocue = true;
+    },
+    onBlur() {
+      this.isFocue = false;
     },
   },
 };
 </script>
 
-<style></style>
+<style lang='scss'>
+.mp-pc-size-group-single-size-comp-wrap {
+  position: relative;
+  > span {
+    position: absolute;
+    white-space: nowrap;
+    left: 10px;
+    bottom: 10px;
+    transition: 0.3s;
+    &.h {
+      bottom: 33px;
+      transform: scale(0.9);
+    }
+  }
+}
+</style>

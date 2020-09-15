@@ -8,23 +8,18 @@
     class="mp-duotation-content-comps-single-input-comp-wrap"
     v-show="!(minNum && minNum === maxNum)"
   >
-    <section-comp-header :title="title" :remark="remark" />
-    <div class="kind-content">
-      <BaseNumInput v-model="inpValue" :disabled="disabled" />
-    </div>
+    <span class="title gray">{{title}}：</span>
+    <!-- <div class="kind-content"> -->
+      <el-input v-model="inpValue" @focus='utils.handleSelect' :disabled="disabled"></el-input>
+    <!-- </div> -->
+    <span class="remark gray">{{ remark }}</span>
   </section>
 </template>
 
 <script>
-import SectionCompHeader from '@/components/QuotationComps/SMComps/SectionCompHeader.vue';
-import BaseNumInput from '@/components/QuotationComps/SMComps/BaseNumInput.vue';
 import { mapState, mapMutations } from 'vuex';
 
 export default {
-  components: {
-    SectionCompHeader,
-    BaseNumInput,
-  },
   model: {
     prop: 'value',
     event: 'changeFunc',
@@ -62,12 +57,10 @@ export default {
     inpValue: {
       get() {
         return this.value;
-        // return this.obj2GetProductPrice.ProductParams.KindCount;
       },
       set(newValue) {
-        // this.changeFunc(newValue);
-        // this.setProductParams(["KindCount", newValue]);
-        this.$emit('changeFunc', newValue);
+        const _val = newValue.replace(/[^\d]/g, '');
+        this.$emit('changeFunc', _val);
       },
     },
   },

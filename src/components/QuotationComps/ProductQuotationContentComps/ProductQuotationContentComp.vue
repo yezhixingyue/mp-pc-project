@@ -60,15 +60,15 @@
         :data="RequiredCraft"
       />
       <!-- 可选工艺 -->
-      <!-- <craft-list-comp
+      <craft-list-comp
         title="可选工艺"
         v-if="notRequiredCraft"
         :selectedArr="obj2GetProductPrice.ProductParams.CraftList2Req.First"
         @setCraftList="setProductParamsCraftList"
         :data="notRequiredCraft"
-      /> -->
+      />
       <!-- 部件列表组件 -->
-      <!-- <PartComps :PartList="obj2GetProductPrice.ProductParams.PartList" /> -->
+      <PartComps :PartList="obj2GetProductPrice.ProductParams.PartList" />
     </div>
 
     <footer class="btn-wrap">
@@ -81,10 +81,10 @@
 import {
   mapState, mapGetters, mapMutations, mapActions,
 } from 'vuex';
-import MultyKindMakeup from '@/components/QuotationComps/ProductQuotationContentComps/Sections/MultyKindMakeup.vue';
+import MultyKindMakeup from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/MultyKindMakeup.vue';
 import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesComp.vue';
-import CraftListComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/CraftListComp.vue';
-// import PartComps from '@/components/QuotationComps/ProductQuotationContentComps/Sections/PartComps.vue';
+import CraftListComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/CraftListComp.vue';
+import PartComps from '@/components/QuotationComps/ProductQuotationContentComps/Sections/PartComps.vue';
 // import MpButton from '@/components/My/Btn2.vue';
 import ProductCountComp from './NewPcComps/ProductCountComp.vue';
 
@@ -103,7 +103,7 @@ export default {
     MultyKindMakeup,
     AttributesComp,
     CraftListComp,
-    // PartComps,
+    PartComps,
     // MpButton,
   },
   computed: {
@@ -288,6 +288,7 @@ export default {
       line-height: 28px;
       margin-left: 5px;
       margin-right: 10px;
+      padding: 0 20px 0 10px;
     }
     .el-input__suffix {
       .el-input__icon {

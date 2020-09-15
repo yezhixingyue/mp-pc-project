@@ -9,7 +9,8 @@
     v-show="isShowComp"
     v-if="SizeGroup && SizeGroup.PropertyList.length > 0"
   >
-    <section-comp-header :title="SizeGroup.GroupName" :remark="remark" />
+    <!-- <section-comp-header :title="SizeGroup.GroupName" :remark="remark" /> -->
+    <span class="title gray">{{ SizeGroup.GroupName }}：</span>
     <div class="count-content">
       <drop-down-selector
         v-if="!isSelectedInp"
@@ -33,16 +34,10 @@
             :key="it.PropertyID + i"
             v-if="i !== SizeGroup.PropertyList.length - 1"
           >
-            *
+            ×
           </li>
         </template>
-        <!-- <li v-for="(it, i) in SizeGroup.PropertyList" :key="it.PropertyID">
-          <base-num-input
-            v-model="value1"
-            :placeholder="`请输入${it.PropertyName}`"
-          />
-          <span v-if="i !== SizeGroup.PropertyList.length - 1">*</span>
-        </li> -->
+        <li class="gray">{{ remark[2] }}</li>
       </ul>
     </div>
     <check-box-single
@@ -57,10 +52,10 @@
 import CheckBoxSingle from '@/components/QuotationComps/SMComps/CheckBoxSingle.vue';
 // import BaseNumInput from "@/components/QuotationComps/SMComps/BaseNumInput.vue";
 import DropDownSelector from '@/components/QuotationComps/SMComps/DropDownSelector.vue';
-import SectionCompHeader from '@/components/QuotationComps/SMComps/SectionCompHeader.vue';
-import { getRelevanceInTargetValue } from '@/store/module/Quotation/QuotationClassType.js';
+// import SectionCompHeader from '@/components/QuotationComps/SMComps/SectionCompHeader.vue';
+import { getRelevanceInTargetValue } from '@/store/Quotation/QuotationClassType';
 import { mapState } from 'vuex';
-import { Toast } from 'vant';
+// import { Toast } from 'vant';
 import SizeGroupSingleInputComp from './SizeGroupSingleInputComp.vue';
 
 export default {
@@ -68,7 +63,7 @@ export default {
     CheckBoxSingle,
     // BaseNumInput,
     DropDownSelector,
-    SectionCompHeader,
+    // SectionCompHeader,
     SizeGroupSingleInputComp,
   },
   model: {
@@ -107,8 +102,7 @@ export default {
      * 备注信息
      */
     remark: {
-      type: String,
-      default: '张',
+      type: Array,
     },
     /**
      * 是否展示复选框
@@ -149,7 +143,8 @@ export default {
       },
       set(newVal) {
         const _target = this.SizeList.find(it => it.SizeID === newVal);
-        if (!_target) return Toast('系统异常，请刷新重试!');
+        // if (!_target) return Toast('系统异常，请刷新重试!');
+        if (!_target) return;
         const _list = _target.ValueList.map(it => ({
           PropertyID: it.First,
           CustomerInputValue: it.Second,
@@ -274,53 +269,37 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-comps-count-wrap {
-  position: relative;
-  > .count-content {
-    width: 100%;
-    // height: 30px;
+  height: 52px;
+  margin-top: -22px;
+  padding-top: 22px;
+  overflow: hidden;
+  .count-content {
+    display: inline-block;
+    input {
+      min-width: 140px;
+      width: unset !important;
+    }
+    .size-box input{
+        width: 90px !important;
+        min-width: 80px;
+        border: none;
+        border-bottom: 1px solid #eee;
+        border-radius: 0;
+        &:focus {
+          border-color: #428dfa;
+        }
+        transition: 0.32s;
+      }
     > .size-inp-wrap {
-      display: flex;
-      height: 30px;
       > li {
-        display: flex;
-        align-items: center;
-        // flex: 1;
-        height: 30px;
-        // > span {
-        //   margin: 0 10px;
-        //   line-height: 19px;
-        //   font-size: 18px;
-        // }
-        // > input {
-        //   text-align: center;
-        //   max-width: 16.5vw;
-        // }
-        > div {
-          height: 30px;
-          > input {
-            height: 30px;
-            text-align: center;
-          }
-        }
-        &:last-of-type > span {
-          display: none;
-        }
-        &.symbol-box {
-          margin: 0 6.5px;
-          line-height: 28px;
-          font-size: 18px;
-          margin-top: 6px;
-          height: 25px;
-        }
+        display: inline-block;
       }
     }
   }
-  > .mp-duotation-sm-comps-checked-wrap.van-checkbox {
-    position: absolute;
-    top: 0;
-    right: 0;
+  > label {
+    margin-left: 30px;
   }
 }
 </style>

@@ -23,9 +23,29 @@ export function delay(duration) {
   });
 }
 
+export function animateScroll(start, end, callback) {
+  let num = start;
+  const tick = 16; // 每隔16毫秒完成一次变化
+  const total = 300;
+  const times = Math.ceil(total / tick); // 变化的次数
+  let curTimes = 0;
+  const dis = (end - start) / times; // 总距离/次数，每次运动的距离
+  const timer = setInterval(() => {
+    curTimes += 1;
+    num += dis;
+    if (curTimes === times) {
+      num = end;
+      clearInterval(timer);
+    }
+    callback(num);
+  }, tick);
+  return timer;
+}
+
 export default {
   isNumber,
   getUnit,
   handleSelect,
   delay,
+  animateScroll,
 };

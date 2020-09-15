@@ -134,7 +134,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-product-detail-common-comp-wrap {
   background-color: #fff;
   width: 100%;
@@ -143,7 +143,7 @@ export default {
   font-size: 13px;
   box-sizing: border-box;
   > section {
-    color: $--color-text-primary;
+    // color: $--color-text-primary;
     margin: 12.5px 0;
     &.num-count-wrap,
     &.multy-kind-makeup-wrap {
@@ -154,7 +154,7 @@ export default {
     }
     &.title {
       font-size: 14px;
-      color: $--color-dark;
+      // color: $--color-dark;
       margin-bottom: 18px !important;
       // height: 20px;
       // line-height: 20px;

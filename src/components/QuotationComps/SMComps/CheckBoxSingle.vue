@@ -3,7 +3,7 @@
  * @FilePath: /src/components/QuotationComps/SMComps/CheckBoxSingle.vue
 -->
 <template>
-  <van-checkbox
+  <el-checkbox
     v-model="checked"
     shape="square"
     @change="handleChange"
@@ -17,15 +17,15 @@
         :src="props.checked ? imgSrc : ''"
       />
     </template>
-  </van-checkbox>
+  </el-checkbox>
 </template>
 
 <script>
-import Vue from 'vue';
-import { Checkbox } from 'vant';
+// import Vue from 'vue';
+// import { Checkbox } from 'vant';
 // const imgSrc = require("@/assets/images/selected.png");
 
-Vue.use(Checkbox);
+// Vue.use(Checkbox);
 
 export default {
   props: {
@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      imgSrc,
+      // imgSrc,
       checked: false,
     };
   },
@@ -70,31 +70,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-duotation-sm-comps-checked-wrap.van-checkbox {
-  height: 15px;
-  > .van-checkbox__icon {
-    height: 15px;
-    width: 15px;
-    box-sizing: border-box;
-    border: 1px solid $--border-color-2;
-    border-radius: 3px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    > .img-icon {
-      width: 11px;
-      height: 7px;
-    }
-    &.van-checkbox__icon--checked {
-      background-color: $--color-blue;
-      border-color: $--color-blue;
-    }
-  }
-
-  > span {
-    color: $--color-text-primary;
-    font-size: 13px;
-  }
 }
 </style>

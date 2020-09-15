@@ -30,6 +30,19 @@
     margin-right: 8px;
   }
 }
+// 黄色小圆点标题
+.point {
+  &::before {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: $--color-text-orgin;
+    content: '';
+    display: inline-block;
+    vertical-align: 20%;
+    margin-right: 15px;
+  }
+}
 
 .is-origin{
   color: $--color-text-orgin;
@@ -45,6 +58,9 @@
 }
 .is-pink{
   color: $--color-pink !important;
+}
+.is-cyan {
+  color: $--color-cyan !important;
 }
 .is-primary{
   color: $--color-text-primary !important;
@@ -79,4 +95,14 @@
 }
 .is-font-12 {
   font-size: 12px !important;
+}
+
+.menu-item-sm {
+  font-size: 12px;
+  color: #aaa;
+  cursor: pointer;
+  user-select: none;
+  &:hover {
+    color: #666;
+  }
 }

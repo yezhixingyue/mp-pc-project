@@ -43,7 +43,7 @@
 
 <script>
 import CountClassComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/CountClassComp.vue';
-import { getRelevanceInTargetValue } from '@/store/module/Quotation/QuotationClassType.js';
+import { getRelevanceInTargetValue } from '@/store/Quotation/QuotationClassType';
 import { mapState } from 'vuex';
 
 export default {
@@ -133,7 +133,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-comps-type-btn-selector-wrap {
   > header {
     height: 24x;
@@ -144,7 +144,7 @@ export default {
     margin-bottom: 18px;
     > span {
       padding: 0 20px;
-      border: 1px solid $--border-color-2;
+      // border: 1px solid $--border-color-2;
       height: 28px;
       line-height: 30px;
       max-width: 25%;
@@ -161,11 +161,11 @@ export default {
         border-bottom-right-radius: 5px;
       }
       &.active {
-        background-color: $--color-blue;
-        color: $--color-white;
-        border-color: $--color-blue;
+        // background-color: $--color-blue;
+        // color: $--color-white;
+        // border-color: $--color-blue;
         position: relative;
-        box-shadow: -1px 0 0px 0px $--color-blue;
+        // box-shadow: -1px 0 0px 0px $--color-blue;
         > svg {
           position: absolute;
           // background-color: #428dfa;

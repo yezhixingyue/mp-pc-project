@@ -247,11 +247,11 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/css/Common/var.scss";
+// @import "@/assets/css/Common/var.scss";
 .mp-quotation-part-list-comp-wrap {
   margin-top: 25px !important;
   > header {
-    color: $--color-dark;
+    // color: $--color-dark;
     font-weight: 700;
     font-size: 14px;
   }
@@ -288,7 +288,7 @@ export default {
             }
 
             > span {
-              color: $--color-dark;
+              // color: $--color-dark;
               font-size: 13px;
               font-weight: 700;
               margin-bottom: 5px;
