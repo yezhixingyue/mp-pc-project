@@ -1,6 +1,6 @@
 <!--
  * @Describe: 尺寸组
- * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/Sections/SizeGroupComp.vue
+ * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/NewPcComps/SizeGroupComp.vue
 -->
 
 <template>
@@ -273,6 +273,7 @@ export default {
 .mp-duotation-content-comps-count-wrap {
   height: 52px;
   margin-top: -22px;
+  margin-bottom: 0 !important;
   padding-top: 22px;
   overflow: hidden;
   .count-content {

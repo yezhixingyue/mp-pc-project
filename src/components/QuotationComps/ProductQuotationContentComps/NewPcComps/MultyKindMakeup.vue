@@ -1,6 +1,6 @@
 <!--
  * @Describe: 多款联拼组件
- * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/Sections/MultyKindMakeup.vue
+ * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/NewPcComps/MultyKindMakeup.vue
 -->
 
 <template>
@@ -98,5 +98,6 @@ export default {
       margin: 0 30px 0 80px;
     }
   }
+  margin-bottom: 22px;
 }
 </style>

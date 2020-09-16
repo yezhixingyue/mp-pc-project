@@ -1,6 +1,6 @@
 <!--
  * @Describe: 部件 mp-duotation-content-comps-part-comp-wrap
- * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/Sections/PartComps.vue
+ * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/NewPcComps/PartComps.vue
 -->
 <template>
   <article>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import PartSingleComps from '@/components/QuotationComps/ProductQuotationContentComps/Sections/PartSingleComps.vue';
+import PartSingleComps from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/PartSingleComps.vue';
 
 export default {
   props: {

@@ -89,7 +89,7 @@ export default {
     bottom: 10px;
     transition: 0.3s;
     &.h {
-      bottom: 33px;
+      bottom: 28px;
       transform: scale(0.9);
     }
   }

@@ -1,6 +1,6 @@
 <!--
  * @Describe: 部件 mp-duotation-content-comps-part-comp-wrap
- * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/Sections/PartSingleComp.vue
+ * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/NewPcComps/PartSingleComp.vue
 -->
 <template>
   <MpCollapseComp
@@ -11,46 +11,33 @@
     <template #header>
       <header>
         <span class="header-title point" ref="headerTitle"
-          >// {{ data.PartName }}{{ indexLv2 > 0 ? indexLv2 + 1 : "" }}</span
+          >// {{ data.PartName }}{{ indexLv2 > 0 ? '-' +(indexLv2 + 1) : "" }}</span
         >
         <span class="line" :style='headerWidth'></span>
-        <!-- <div class="del-btn">
-          <span v-if="indexLv2 > 0 && canDel" @click.stop="handleDelClick"
-            >删除{{ data.PartName }}{{ indexLv2 > 0 ? indexLv2 + 1 : "" }}</span
-          >
-          <i @click.stop="show = !show" :class="show ? '' : 'is-hide'">收起</i>
-        </div> -->
       </header>
     </template>
 
     <div v-if="show" class="comp-content-wrap">
-      <!-- 数量 -->
-      <single-input-comp
-        title="数量"
-        :remark="data.Unit"
-        :minNum="data.MinNumber"
-        :maxNum="data.MaxNumber"
-        v-model.lazy="PartAmount"
-        :disabled="!data.PartAmount.Second"
-      />
+      <!-- 数量 物料-->
+      <section class="part-count-material-box">
+        <single-input-comp
+          title="数量"
+          :remark="data.Unit"
+          :minNum="data.MinNumber"
+          :maxNum="data.MaxNumber"
+          v-model.lazy="PartAmount"
+          :disabled="!data.PartAmount.Second"
+        />
 
-      <!-- 物料与物料品牌 -->
-      <MaterialComp
-        title="物料"
-        v-model="PartMaterial"
-        v-if="data.MaterialList.length > 1"
-        :option="data.MaterialList"
-        :disabled="!data.Material.Second"
-      />
-        <!-- <count-class-comp
-          title="物料品牌"
-          remark=""
-          v-model="PartMaterialBrand"
-          :showCheckBox="false"
-          :option="data.BrandList"
-          v-if="data.BrandList.length > 1"
-          :defaultProps="{ text: 'BrandName', value: 'BrandID' }"
-        /> -->
+        <!-- 物料与物料品牌 -->
+        <MaterialComp
+          title="物料"
+          v-model="PartMaterial"
+          v-if="data.MaterialList.length > 1"
+          :option="data.MaterialList"
+          :disabled="!data.Material.Second"
+        />
+      </section>
 
       <!-- 属性 -->
       <attributes-comp v-model="PartAttributeList" />
@@ -68,11 +55,11 @@
       />
 
       <!-- 印刷属性 -->
-      <!-- <print-type-list-comps v-model="PartPrintTypeList" /> -->
-      <attributes-comp v-model="PartPrintTypeList" />
+      <print-type-list-comps v-model="PartPrintTypeList" />
+      <!-- <attributes-comp v-model="PartPrintTypeList" /> -->
 
       <!-- 印刷属性组 -->
-      <!-- <attributes-group-comp
+      <attributes-group-comp
         v-model="PartPrintPropertyGroupList"
         @addPropertyGroup="
           data => addPartPrintPropertyGroupList([indexLv1, indexLv2, data])
@@ -80,10 +67,10 @@
         @delPropertyGroup="
           data => delPartPrintPropertyGroupList([indexLv1, indexLv2, data])
         "
-      /> -->
+      />
 
       <!-- 属性组 -->
-      <!-- <attributes-group-comp
+      <attributes-group-comp
         v-model="PartPropertyGroupList"
         @addPropertyGroup="
           data => addPartPropertyGroupList([indexLv1, indexLv2, data])
@@ -91,7 +78,7 @@
         @delPropertyGroup="
           data => delPartPropertyGroupList([indexLv1, indexLv2, data])
         "
-      /> -->
+      />
 
       <!-- 必选工艺 -->
       <craft-list-comp
@@ -119,6 +106,19 @@
           data => setCraftItemDisabled4Part([indexLv1, indexLv2, data])
         "
       />
+      <section class="menu-box">
+        <div class="del-btn">
+          <span v-if="canDel" @click.stop="handleDelClick" class="iconfont icon-shanchu is-pink" >
+            <i class="menu-item-sm is-font-14">删除</i>
+          </span>
+        </div>
+        <div class="line"></div>
+        <div class="add-btn">
+          <span v-if="showAddBtn" @click.stop="handleAddClick">
+            <i class="span-title-blue">+添加{{data.PartName}}</i>
+          </span>
+        </div>
+      </section>
     </div>
 
     <!-- <template #will-not-collapse></template> -->
@@ -128,16 +128,14 @@
 <script>
 /* eslint-disable max-len */
 import MpCollapseComp from '@/components/QuotationComps/SMComps/MpCollapseComp.vue';
-import SingleInputComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/SingleInputComp.vue';
+import SingleInputComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/SingleInputComp.vue';
 import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesComp.vue';
-import SizeGroupComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/SizeGroupComp.vue';
-// import AttributesGroupComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/AttributesGroupComp.vue';
+import SizeGroupComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/SizeGroupComp.vue';
+import AttributesGroupComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesGroupComp.vue';
 import CraftListComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/CraftListComp.vue';
-// import PrintTypeListComps from '@/components/QuotationComps/ProductQuotationContentComps/Sections/PrintTypeListComps.vue';
-// import CountClassComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/CountClassComp.vue';
+import PrintTypeListComps from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/PrintTypeListComps.vue';
 import { mapMutations } from 'vuex';
 
-// import SingleAttributeComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/SingleAttributeComp.vue';
 import MaterialComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/MaterialComp.vue';
 
 export default {
@@ -147,12 +145,9 @@ export default {
     AttributesComp,
     MaterialComp,
     SizeGroupComp,
-    // AttributesGroupComp,
+    AttributesGroupComp,
     CraftListComp,
-    // PrintTypeListComps,
-    // CountClassComp,
-
-    // SingleAttributeComp,
+    PrintTypeListComps,
   },
   props: {
     data: {
@@ -173,6 +168,10 @@ export default {
     canDel: {
       type: Boolean,
       default: true,
+    },
+    showAddBtn: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
@@ -217,7 +216,6 @@ export default {
       if (_unitID === 13) _unit = 'mm';
       else _unit = this.$utils.getUnit(_unitID);
       _arr.push(_unit);
-      // const _str = `${_arr.join('*')}${_unit}`;
       return _arr;
     },
     // 尺寸
@@ -226,10 +224,8 @@ export default {
         return this.data.Size.First;
       },
       set([newVal, sizelist]) {
-        // console.log("PartSizeGroup ------- 1", newVal, sizelist);
         this.setQuotationPartPlainInfo([this.indexLv1, this.indexLv2, 'Size', `${newVal}`]);
         this.setQuotationPartSizePropertyList([this.indexLv1, this.indexLv2, sizelist]);
-        // console.log(this.data.SizePropertyList);
       },
     },
     PartPrintTypeList: {
@@ -237,8 +233,6 @@ export default {
         return this.data.PrintTypeList;
       },
       set([data, index]) {
-        // console.log(data, index);
-
         this.setQuotationPartPrintPropertyList([this.indexLv1, this.indexLv2, index, data]);
       },
     },
@@ -247,8 +241,6 @@ export default {
         return this.data.PrintPropertyGroupList;
       },
       set([[value, index3, type], index1, index2]) {
-        console.log(index1, index2, index3, value);
-
         this.setPrintPropertyGroupList([this.indexLv1, this.indexLv2, index1, index2, index3, value, type]);
       },
     },
@@ -302,6 +294,9 @@ export default {
     handleDelClick() {
       this.delPartProductParamsPartList([this.indexLv1, this.indexLv2]);
     },
+    handleAddClick() {
+      this.$emit('handleAddPart');
+    },
   },
   mounted() {
     this.$nextTick(() => {
@@ -313,7 +308,6 @@ export default {
 </script>
 
 <style lang="scss">
-// @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-part-comp-wrap {
   > header {
     margin-top: 40px;
@@ -334,6 +328,26 @@ export default {
   > .comp-content-wrap {
     > section {
       margin-bottom: 22px;
+      &.menu-box {
+        text-align: right;
+        .line {
+          height: 1px;
+          width: 100%;
+          background-color: #eee;
+          margin: 12px 0 13px 0;
+        }
+      }
+      &.part-count-material-box {
+        > section {
+          display: inline-block;
+          // &.mp-pc-material-comp-wrap {
+          //   margin-left: 80px;
+          // }
+        }
+      }
+      &.mp-duotation-content-comps-single-input-comp-wrap {
+        margin-right: 80px;
+      }
     }
   }
 }

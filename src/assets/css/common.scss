@@ -18,6 +18,17 @@
   }
 }
 
+.button-title-pink {
+  color: $--color-pink !important;
+  border-color: $--color-pink !important;
+  &:hover {
+    background-color: rgba($color: $--color-pink, $alpha: 0.05) !important;
+  }
+  &:active {
+    background-color: rgba($color: $--color-pink, $alpha: 0.12) !important;
+  }
+}
+
 // 前面带有蓝色竖条的标题样式
 .blue-v-line {
   &::before {
@@ -75,11 +86,20 @@
   color: $--color-primary !important;
 }
 .is-bold {
-  font-weight: 600;
+  font-weight: 700;
+}
+.is-black {
+  color:  $--color-primary-1;
 }
 
 .is-thick-line { // 粗体
   font-weight: 600;
+}
+.is-font-30 {
+  font-size: 30px !important;
+}
+.is-font-20 {
+  font-size: 20px !important;
 }
 .is-font-18 {
   font-size: 18px !important;
@@ -105,4 +125,11 @@
   &:hover {
     color: #666;
   }
+  &:active {
+    color: rgb(22, 3, 3);
+  }
+}
+
+body .iconfont {
+  font-size: 14px;
 }

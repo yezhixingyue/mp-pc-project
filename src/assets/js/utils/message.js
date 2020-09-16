@@ -33,7 +33,7 @@ function failSingleError({
     showClose: true,
     message: msg,
     type: 'fail ',
-    confirmButtonText: '关闭',
+    confirmButtonText: '确定',
     title,
     customClass: 'mp-order-del-pop-reverse-fail',
   }).then(() => successFunc && successFunc()).catch(() => failFunc && failFunc());
@@ -49,7 +49,7 @@ function failSingleError({
  * @param {string} [text='关闭']
  */
 function warnSingleError({
-  msg, successFunc, failFunc, title = '注意', text = '关闭',
+  msg, successFunc, failFunc, title = '注意', text = '确定',
 }) {
   MessageBox({
     showClose: true,
@@ -120,7 +120,8 @@ function successSingle({
     message: msg,
     closeOnPressEscape: canCloseOnPressEscape,
     customClass: 'mp-order-del-pop-success',
-  }).then(() => successFunc && successFunc()).catch(() => failFunc && failFunc());
+  // eslint-disable-next-line no-nested-ternary
+  }).then(() => successFunc && successFunc()).catch(() => (failFunc ? failFunc() : successFunc ? successFunc() : ''));
 }
 
 /**

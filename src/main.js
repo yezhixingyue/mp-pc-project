@@ -5,6 +5,7 @@ import router from './router';
 import store from './store';
 import api from './api/index';
 import '@/assets/js/utils/dialogDrag';
+import '@/assets/js/utils/filter';
 import './assets/css/common.scss';
 import './assets/css/summary.scss';
 import './assets/css/iconfont/iconfont.css';

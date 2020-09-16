@@ -49,12 +49,19 @@ axios.interceptors.response.use(
     const _statusList2NotNeed2Toast = [1000, 9062];
     // 包含以上的状态码 或 以上的请求路径  不会弹窗报错  其余以外都会报错出来
 
-    // eslint-disable-next-line max-len
-    if (!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(response.config.url.split('?')[0]) && !closeTip) {
+    const _url = response.config.url.split('?')[0];
+    if (!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && !closeTip) {
       const _obj = { msg: `[ ${response.data.Message} ]` };
       if ([7025, 8037].includes(response.data.Status)) _obj.successFunc = () => router.replace('/login');
       else _obj.successFunc = undefined;
-      messageBox.warnSingleError(_obj);
+      let _msg = '出错啦';
+      if (_url === '/Api/Customer/Login') _msg = '登录失败';
+      if (_url === '/Api/Customer/Reg') _msg = '注册失败';
+      if (_url === '/Api/Sms/Send/VerificationCode') _msg = '验证失败';
+      if (_url === '/Api/FindPassword/ResetPassword') _msg = '重置密码失败';
+      if (_url === '/Api/Customer/ChangePassword') _msg = '密码修改失败';
+      _obj.title = _msg;
+      messageBox.failSingleError(_obj);
     }
     return response;
   },
@@ -84,7 +91,7 @@ axios.interceptors.response.use(
             key = true;
             break;
           default:
-            messageBox.warnSingleError({ msg: `[ 错误代码${error.response.status}：${error.response.statusText}]` });
+            messageBox.failSingleError({ msg: `[ 错误代码${error.response.status}：${error.response.statusText}]` });
             key = true;
             break;
         }

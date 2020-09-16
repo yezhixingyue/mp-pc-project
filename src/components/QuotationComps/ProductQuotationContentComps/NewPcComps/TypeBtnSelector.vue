@@ -1,13 +1,13 @@
 <!--
  * @Describe: 胶囊选择样式按钮组
- * @FilePath: /src/components/QuotationComps/SMComps/TypeBtnSelector.vue
+ * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/NewPcComps/TypeBtnSelector.vue
 -->
 <template>
   <section
     class="mp-duotation-content-comps-type-btn-selector-wrap"
     v-show="optionList.length > 1"
   >
-    <template v-if="data.OptionList.length < 5">
+    <!-- <template v-if="data.OptionList.length < 5">
       <header>
         {{ title }}
       </header>
@@ -24,14 +24,12 @@
           </svg>
         </span>
       </div>
-    </template>
-    <CountClassComp
-      v-else
+    </template> -->
+    <SingleAttributeComp
       :title="title"
       :value="data.CustomerInputValue"
       @changeFunc="handleChangeFunc"
       remark=""
-      :showCheckBox="false"
       :option="data.OptionList"
       :defaultProps="{ text: 'Value', value: 'OptionID' }"
       :ValueType="2"
@@ -42,7 +40,9 @@
 </template>
 
 <script>
-import CountClassComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/CountClassComp.vue';
+// import CountClassComp from '@/components/QuotationComps/ProductQuotationContentComps/Sections/CountClassComp.vue';
+// eslint-disable-next-line max-len
+import SingleAttributeComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/SingleAttributeComp.vue';
 import { getRelevanceInTargetValue } from '@/store/Quotation/QuotationClassType';
 import { mapState } from 'vuex';
 
@@ -70,7 +70,8 @@ export default {
     RelevanceInformation: {},
   },
   components: {
-    CountClassComp,
+    // CountClassComp,
+    SingleAttributeComp,
   },
   computed: {
     ...mapState('Quotation', ['obj2GetProductPrice']),
@@ -133,66 +134,4 @@ export default {
 </script>
 
 <style lang="scss">
-// @import "@/assets/css/Common/var.scss";
-.mp-duotation-content-comps-type-btn-selector-wrap {
-  > header {
-    height: 24x;
-    line-height: 24px;
-  }
-  > .content {
-    display: flex;
-    margin-bottom: 18px;
-    > span {
-      padding: 0 20px;
-      // border: 1px solid $--border-color-2;
-      height: 28px;
-      line-height: 30px;
-      max-width: 25%;
-      min-width: 35px;
-      text-align: center;
-      border-left-width: 0;
-      &:first-of-type {
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-        border-left-width: 1px;
-      }
-      &:last-of-type {
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
-      }
-      &.active {
-        // background-color: $--color-blue;
-        // color: $--color-white;
-        // border-color: $--color-blue;
-        position: relative;
-        // box-shadow: -1px 0 0px 0px $--color-blue;
-        > svg {
-          position: absolute;
-          // background-color: #428dfa;
-          width: 7px;
-          height: 7px;
-          top: calc(50% - 4px);
-          right: 6px;
-          // > circle {
-          //   stroke: #fff;
-          // }
-        }
-        // &::after {
-        //   content: "";
-        //   height: 6px;
-        //   width: 9px;
-        //   position: absolute;
-        //   bottom: 3px;
-        //   right: 3px;
-        //   background: url("../../../assets/images/selected.png") no-repeat
-        //     center/ 100% 100%;
-        // }
-      }
-    }
-    &.is-disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-  }
-}
 </style>

@@ -147,6 +147,7 @@ export default {
     clearCurProductInfo2Quotation(state) {
       state.curProductInfo2Quotation = null;
       state.obj2GetProductPrice.ProductParams = {};
+      state.ProductQuotationResult = null;
     },
     /* 初始化数据
     ------------------------------- */
@@ -752,8 +753,8 @@ export default {
       _data.ProductParams = QuotationClassType.filter(
         QuotationClassType.transform(productData),
       );
-      const { CustomerID } = this.state.account.accountObj;
-      _data.Customer = { CustomerID };
+      // const { CustomerID } = this.state.account.accountObj;
+      // _data.Customer = { CustomerID };
       commit('setProductQuotationResult', null);
       commit('setProductQuotationDetail', null);
       const res = await api.getProductPrice(_data);

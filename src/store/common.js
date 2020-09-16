@@ -138,6 +138,9 @@ export default {
         value: 255,
       },
     ],
+    /** 客户信息
+    ---------------------------------------- */
+    customerInfo: null,
   },
   getters: {
   },
@@ -147,6 +150,11 @@ export default {
     setCraftRelationList(state, data) {
       state.CraftRelationList = data;
     },
+    /** 设置客户信息
+    ---------------------------------------- */
+    setCustomerInfo(state, data) {
+      state.customerInfo = data;
+    },
   },
   actions: {
     async getCraftRelationList({ state, commit }) {
@@ -154,6 +162,13 @@ export default {
       const res = await api.getCraftRelationList();
       if (res.data.Status === 1000) {
         commit('setCraftRelationList', res.data.Data);
+      }
+    },
+    async getCustomerDetail({ state, commit }) {
+      if (state.customerInfo) return;
+      const res = await api.getCustomerDetail();
+      if (res.data.Status === 1000) {
+        commit('setCustomerInfo', res.data.Data);
       }
     },
   },

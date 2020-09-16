@@ -1,8 +1,8 @@
 <template>
   <article class="mp-quotation-product-quotation-content-wrap">
-    <header v-if="data.DefaultProduct && data.DefaultProduct.length > 0">
+    <!-- <header v-if="data.DefaultProduct && data.DefaultProduct.length > 0">
       <span class="is-gray">常用规格：</span>
-      <!-- <ul class="is-blue">
+      <ul class="is-blue">
         <li v-for="item in data.DefaultProduct" :key="item.DefaultID">
           <button
             :class="curDefaultID === item.DefaultID ? 'active' : ''"
@@ -11,8 +11,8 @@
             {{ item.DefaultName }}
           </button>
         </li>
-      </ul> -->
-    </header>
+      </ul>
+    </header> -->
     <div class="content">
       <section class="content-title" v-if="curProductShowNameInfo && curProductShowNameInfo.length === 3">
         <span class="blue-v-line">{{curProductShowNameInfo[0]}}</span>
@@ -71,9 +71,72 @@
       <PartComps :PartList="obj2GetProductPrice.ProductParams.PartList" />
     </div>
 
-    <footer class="btn-wrap">
-      <!-- <mp-button @click.native="go2GetProductPrice" title="报价" /> -->
-    </footer>
+    <section class="btn-wrap">
+      <header>
+        <div class="result" v-if="ProductQuotationResult && !priceGetErrMsg">
+          <span>原价：<i>¥{{ProductQuotationResult.OriginalCost}}元</i></span>
+          <span>优惠券：<i></i></span>
+          <span>运费：<i>¥{{ProductQuotationResult.ExpressCost}}元</i></span>
+          <span>成交价：
+            <i class="is-pink is-bold is-font-20">¥{{ProductQuotationResult.CurrentCost}}</i>
+            <i class="is-pink">元</i>
+            <em class="is-gray is-font-12">(不含运费)</em>
+          </span>
+        </div>
+        <div class="result" v-if="priceGetErrMsg">
+          <span class="is-pink">{{ priceGetErrMsg }}</span>
+        </div>
+        <el-button type="primary" @click.native="go2GetProductPrice">计算价格</el-button>
+      </header>
+      <footer>
+        <el-collapse v-model="activeNames" @change="handleChange">
+        <el-collapse-item name="1">
+          <template slot="title">
+            <span class="gray" v-if="selectedCoupon">已选择满
+              {{selectedCoupon.MinPayAmount}}元减{{selectedCoupon.Amount}}元
+            </span>
+            <el-button class="button-title-pink" @click="onBtnClick">
+              使用优惠券<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+          </template>
+          <section class="coupon-wrap">
+            <header>
+              <span>激活优惠券：</span>
+              <el-input v-model="couponCode2Add" placeholder="请输入优惠券激活码"></el-input>
+              <el-button type="primary" @click="getCouponActivate">激活</el-button>
+              <!-- <i class="span-title-blue">不使用优惠券</i> -->
+            </header>
+            <ul class="coupon-list" v-if="couponList.length > 0">
+              <li class="float" v-for="item in couponList" :key="item.CouponCode"
+                :class="{selected: selectedCoupon && item.CouponCode === selectedCoupon.CouponCode}" >
+                <div class="header">
+                  <span>
+                    <i class="is-font-14">¥</i>
+                    <i class="is-bold is-font-30">{{item.Amount}}</i>
+                  </span>
+                  <span class="is-font-12">
+                    满<i class="is-font-14">{{item.MinPayAmount}}</i>元可用
+                  </span>
+                </div>
+                <div class="content is-font-12">
+                  <p>
+                    <span>限产品：</span>
+                    <span class="product">{{item.ProductString}}</span>
+                  </p>
+                  <p>
+                    <span>有效期至：</span>
+                    <span>{{item.ValidEndTime | format2MiddleLangTypeDate}}</span>
+                  </p>
+                </div>
+                <div class="aside" @click="addCouponCode(item)">点击选择</div>
+                <div class="icon-box"></div>
+              </li>
+            </ul>
+          </section>
+        </el-collapse-item>
+      </el-collapse>
+      </footer>
+    </section>
   </article>
 </template>
 
@@ -84,7 +147,7 @@ import {
 import MultyKindMakeup from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/MultyKindMakeup.vue';
 import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesComp.vue';
 import CraftListComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/CraftListComp.vue';
-import PartComps from '@/components/QuotationComps/ProductQuotationContentComps/Sections/PartComps.vue';
+import PartComps from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/PartComps.vue';
 // import MpButton from '@/components/My/Btn2.vue';
 import ProductCountComp from './NewPcComps/ProductCountComp.vue';
 
@@ -107,8 +170,9 @@ export default {
     // MpButton,
   },
   computed: {
-    ...mapState('Quotation', ['obj2GetProductPrice']),
+    ...mapState('Quotation', ['obj2GetProductPrice', 'ProductQuotationResult', 'curProductClass', 'curProductID']),
     ...mapGetters('Quotation', ['curProductShowNameInfo']),
+    ...mapState('common', ['customerInfo']),
     // 数量下拉列表数据
     countOption() {
       if (
@@ -171,33 +235,30 @@ export default {
   data() {
     return {
       curDefaultID: '',
-      // docmHeight: document.documentElement.clientHeight, //默认屏幕高度
-      // showHeight: document.documentElement.clientHeight //实时屏幕高度
-      // hideshow: true //显示或者隐藏
+      activeNames: [],
+      couponList: [],
+      selectedCoupon: null,
+      priceGetErrMsg: '',
+      couponCode2Add: '',
     };
   },
   methods: {
+    // eslint-disable-next-line max-len
     ...mapMutations('Quotation', ['setProductParams', 'setProductParamsPropertyList', 'setProductParamsCraftList']),
     ...mapActions('Quotation', ['getProductPrice']),
     ...mapActions('common', ['getCraftRelationList']),
     async go2GetProductPrice() {
-      // this.$message.singleSuccess(
-      //   "充值失败、请重试！",
-      //   "132",
-      //   this.getProductPriceLocal
-      // );
       this.getProductPriceLocal();
     },
     async getProductPriceLocal() {
+      this.priceGetErrMsg = '';
       const msg = await this.getProductPrice();
       if (msg === true) {
-        // this.$message.singleSuccess("报价成功", "", () =>
-        //   this.$router.push("/offerResult")
-        // );
-        // Toast("报价成功");
-        this.$router.push('/offerResult');
+        // this.$router.push('/offerResult');
       } else if (typeof msg === 'string') {
-        this.$message.singleError('报价失败', msg, null);
+        // this.$message.singleError('报价失败', msg, null);
+        this.priceGetErrMsg = msg;
+        // this.messageBox.failSingleError({ title: '报价失败', msg });
       }
     },
     handleSpecClick(item) {
@@ -207,6 +268,49 @@ export default {
       this.$store.commit('Quotation/setDefaultProductInfo', item);
       // console.log(1223332131);
       // this.$forceUpdate();
+    },
+    async handleChange(list, bool) {
+      if (list.length === 0) return; // 关闭
+      if (!bool && this.couponList.length > 0) return;
+      const _obj = { UseStatus: 0 };
+      _obj.Product = {
+        ClassID: this.curProductClass.First,
+        TypeID: this.curProductClass.Second,
+        ProductID: this.curProductID,
+      };
+      const res = await this.api.getMyCoupon(_obj);
+      if (res.data.Status !== 1000) return;
+      this.couponList = res.data.Data.Second;
+    },
+    onBtnClick(evt) {
+      let { target } = evt;
+      if (target.nodeName === 'SPAN') {
+        target = evt.target.parentNode;
+      }
+      target.blur();
+    },
+    async getCouponActivate() {
+      if (!this.couponCode2Add) return;
+      await this.$store.dispatch('common/getCustomerDetail');
+      if (!this.customerInfo) return;
+      const { CustomerID } = this.customerInfo;
+      const ProductID = this.curProductID;
+      const CouponCode = this.couponCode2Add;
+      const _obj = { CustomerID, ProductID, CouponCode };
+      const res = await this.api.getCouponActivate(_obj);
+      if (res.data.Status !== 1000) return;
+      this.couponCode2Add = '';
+      this.messageBox.successSingle({
+        title: '激活成功',
+        successFunc: () => this.handleChange([1], true),
+      });
+    },
+    addCouponCode(item) {
+      if (!this.selectedCoupon || this.selectedCoupon.CouponCode !== item.CouponCode) {
+        this.selectedCoupon = item;
+      } else {
+        this.selectedCoupon = null;
+      }
     },
   },
   mounted() {
@@ -293,6 +397,11 @@ export default {
     .el-input__suffix {
       .el-input__icon {
         line-height: 30px;
+        transform: rotate(0deg);
+        text-align: left;
+        &::before {
+          content: '\e790',
+        }
       }
     }
     .el-radio__input.is-checked + .el-radio__label,
@@ -314,6 +423,199 @@ export default {
       margin-left: 5px;
     }
     // ------------------------------- ⬆
+  }
+  > .btn-wrap {
+    > header {
+      text-align: right;
+      margin-top: 38px;
+      margin-bottom: 22px;
+      > .result {
+        display: inline-block;
+        margin-right: 3px;
+        > span {
+          margin-right: 18px;
+        }
+      }
+      > button {
+        width: 120px;
+      }
+    }
+    > footer {
+      > .el-collapse {
+        border: none;
+        > .el-collapse-item {
+          > div {
+            &::after {
+              content: '';
+              display: block;
+              clear: both;
+            }
+            > .el-collapse-item__header {
+              text-align: right;
+              justify-content: flex-end;
+              border: none;
+              float: right;
+              > span {
+                display: inline;
+                color: #888;
+              }
+              > button {
+                display: inline-block;
+                border-radius: 5px;
+                height: 30px;
+                width: 120px;
+                line-height: 28px;
+                padding: 0;
+                margin-left: 22px;
+                > span > i {
+                  transition: 0.2s;
+                }
+              }
+              > i {
+                display: none;
+              }
+              &.is-active > button > span > i{
+                transform: rotate(180deg);
+              }
+            }
+          }
+          .el-collapse-item__wrap {
+            border: none;
+            padding-top: 35px;
+            > .el-collapse-item__content {
+              padding: 0;
+              > .coupon-wrap {
+                > header {
+                  text-align: center;
+                  // .span-title-blue {
+                  //   display: inline-block;
+                  //   &::before {
+                  //     content: '';
+                  //     display: inline-block;
+                  //     height: 23px;
+                  //     width: 1px;
+                  //     background-color: #428dfa;
+                  //     margin: 0 15px 0px 35px;
+                  //     vertical-align: middle;
+                  //   }
+                  // }
+                  > .el-input {
+                    width: 300px;
+                    > input {
+                      height: 30px;
+                      line-height: 26px;
+                    }
+                  }
+                  > span {
+                    color: #888;
+                    margin-right: 6px;
+                  }
+                  > button {
+                    height: 30px;
+                    width: 70px;
+                    line-height: 28px;
+                    padding: 0;
+                    margin-left: 20px;
+                  }
+                }
+                > .coupon-list {
+                  padding: 0 10px;
+                  padding-top: 50px;
+                  // display: flex;
+                  > li {
+                    width: 240px;
+                    height: 135px;
+                    box-shadow: 0px 5px 7px 1px rgba(238, 238, 238, 0.7);
+                    border-radius: 5px;
+                    overflow: hidden;
+                    position: relative;
+                    display: inline-block;
+                    margin: 0 20px 20px;
+                    > .header {
+                      width: 100%;
+                      height: 60px;
+                      background-color: #9399ff;
+                      padding: 5px 20px 0;
+                      // padding-bottom: 10px;
+                      box-sizing: border-box;
+                      color: #fff;
+                      float: left;
+                      span.is-font-12 {
+                        vertical-align: 28%;
+                        margin-left: 23px;
+                      }
+                    }
+                    > .content {
+                      padding: 10px 20px 0;
+                      overflow: hidden;
+                      > p {
+                        > span {
+                          color: #888;
+                          &.product {
+                            color: #585858;
+                          }
+                        }
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        line-height: 27px;
+                      }
+                    }
+                    > .aside {
+                      position: absolute;
+                      top: 0;
+                      right: 0;
+                      bottom: 0;
+                      width: 40px;
+                      writing-mode: vertical-rl;
+                      padding: 28px 8px 12px 0;
+                      box-sizing: border-box;
+                      font-size: 14px;
+                      color: #fff;
+                      background-color: rgba($color: #428dfa, $alpha: 0.6);
+                      text-align: justify;
+                      text-justify:distribute-all-lines;
+                      text-align-last:justify;
+                      cursor: pointer;
+                      display: none;
+                      user-select: none;
+                      z-index: 9;
+                      transition: 0.2s;
+                      &:hover {
+                        background-color: rgba($color: #428dfa, $alpha: 0.72);
+                      }
+                      &:active {
+                         background-color: rgba($color: #428dfa, $alpha: 0.88);
+                      }
+                    }
+                    > .icon-box {
+                      width: 40px;
+                      height: 42px;
+                      position: absolute;
+                      right: 0;
+                      bottom: 0;
+                      display: none;
+                      background: url('../../../assets/images/coupon-selected.png') no-repeat right bottom / 100% 100%;
+                    }
+                    &:hover > .aside {
+                      display: block;
+                    }
+                    &.selected{
+                      > .icon-box {
+                        display: block;
+                      }
+                      // &:hover > .aside {
+                      //   display: none;
+                      // }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 </style>

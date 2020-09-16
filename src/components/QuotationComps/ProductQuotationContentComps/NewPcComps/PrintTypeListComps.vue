@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import TypeBtnSelector from '@/components/QuotationComps/SMComps/TypeBtnSelector.vue';
+import TypeBtnSelector from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/TypeBtnSelector.vue';
 
 export default {
   props: {
@@ -52,7 +52,7 @@ export default {
 <style lang="scss">
 .mp-print-type-comps-list-wrap {
   > section {
-    margin-top: 10px;
+    margin-bottom: 22px;
   }
 }
 </style>

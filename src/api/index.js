@@ -20,6 +20,7 @@ const api = {
   getResetPassword(data) { // 重置密码
     return instance.post('/Api/FindPassword/ResetPassword', data);
   },
+
   /* 产品报价部分api
   ----------------------------------------------------------------------------------- */
   getProductClassify() { // 获取产品分类
@@ -41,6 +42,21 @@ const api = {
   },
   getCraftRelationList() { // GET /Api/Craft/GetCraftRelationList 获取工艺关系列表
     return instance.get('/Api/Craft/GetCraftRelationList');
+  },
+
+  /* 优惠券部分api
+  ----------------------------------------------------------------------------------- */
+  getMyCoupon(data) { // POST /Api/Customer/MyCoupon    --- UseStatus：  0 未使用  1 已使用  2 已过期
+    return instance.post('/Api/Customer/MyCoupon', { FieldType: 1, ...data });
+  },
+  getCouponActivate(data) { // POST /Api/Coupon/Activate    优惠券激活
+    return instance.post('/Api/Coupon/Activate', data);
+  },
+
+  /* 客户信息api
+  ----------------------------------------------------------------------------------- */
+  getCustomerDetail() { // GET /Api/Customer/Detail  客户基础信息
+    return instance.get('/Api/Customer/Detail');
   },
 };
 

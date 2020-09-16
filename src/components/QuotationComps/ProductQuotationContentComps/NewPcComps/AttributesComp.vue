@@ -42,6 +42,14 @@
           <span class="menu-item-sm">删除</span>
         </div>
       </section>
+      <section class="group-menu-box" v-if="showGroupMenu">
+        <span @click="handleGroupDel" class="iconfont icon-shanchu is-pink" >
+          <i class="menu-item-sm is-font-14">删除</i>
+        </span>
+        <span class="is-font-14 span-title-blue" v-show="showGroupAdd" @click="handleGroupAdd">
+          +添加
+        </span>
+      </section>
     </article>
   </section>
 </template>
@@ -83,6 +91,20 @@ export default {
       type: Boolean,
       default: false,
     },
+    /**
+     * 是否展示属性组删除增加控制按钮
+     */
+    showGroupMenu: {
+      type: Boolean,
+      default: false,
+    },
+    /**
+     * 是否展示属性组删除增加控制按钮中的增加按钮
+     */
+    showGroupAdd: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     handleChange([data, type], index) {
@@ -97,6 +119,12 @@ export default {
     },
     changeFunc(data, i) {
       this.handleChange(data, i);
+    },
+    handleGroupAdd() {
+      this.$emit('handleGroupAdd');
+    },
+    handleGroupDel() {
+      this.$emit('handleGroupDel');
     },
   },
 };

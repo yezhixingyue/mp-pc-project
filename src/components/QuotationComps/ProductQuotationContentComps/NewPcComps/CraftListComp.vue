@@ -705,6 +705,7 @@ export default {
     > li {
       display: inline-block;
       margin-right: 25px;
+      margin-bottom: 10px;
       > span {
         min-width: 90px;
         line-height: 26px;
