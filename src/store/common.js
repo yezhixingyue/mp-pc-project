@@ -138,6 +138,12 @@ export default {
         value: 255,
       },
     ],
+    /** 配送列表
+    ---------------------------------------- */
+    ExpressList: [],
+    /** 地址列表
+    ---------------------------------------- */
+    addressList: [],
     /** 客户信息
     ---------------------------------------- */
     customerInfo: null,
@@ -155,6 +161,16 @@ export default {
     setCustomerInfo(state, data) {
       state.customerInfo = data;
     },
+    /** 设置配送列表
+    ---------------------------------------- */
+    setExpressList(state, data) {
+      state.ExpressList = data;
+    },
+    /** 地址列表
+    ---------------------------------------- */
+    setAddressList(state, data) {
+      state.addressList = data;
+    },
   },
   actions: {
     async getCraftRelationList({ state, commit }) {
@@ -169,6 +185,20 @@ export default {
       const res = await api.getCustomerDetail();
       if (res.data.Status === 1000) {
         commit('setCustomerInfo', res.data.Data);
+      }
+    },
+    async getExpressList({ state, commit }) {
+      if (state.ExpressList.length > 0) return;
+      const res = await api.getExpressList();
+      if (res.data.Status === 1000) {
+        commit('setExpressList', res.data.Data);
+      }
+    },
+    async getAddressIDList({ state, commit }, parent = undefined) {
+      if (state.addressList.length > 0) return;
+      const res = await api.getAddressIDList(parent);
+      if (res.data.Status === 1000) {
+        commit('setAddressList', res.data.Data);
       }
     },
   },

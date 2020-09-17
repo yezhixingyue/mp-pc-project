@@ -60,6 +60,8 @@ axios.interceptors.response.use(
       if (_url === '/Api/Sms/Send/VerificationCode') _msg = '验证失败';
       if (_url === '/Api/FindPassword/ResetPassword') _msg = '重置密码失败';
       if (_url === '/Api/Customer/ChangePassword') _msg = '密码修改失败';
+      if (_url === '/Api/Coupon/Activate') _msg = '激活失败';
+
       _obj.title = _msg;
       messageBox.failSingleError(_obj);
     }

@@ -133,3 +133,73 @@
 body .iconfont {
   font-size: 14px;
 }
+
+
+// ------------------------- 滚动条样式设置
+.mp-scroll-wrap::-webkit-scrollbar {
+  width: 6px;
+  height: 8px;
+}
+.mp-scroll-wrap::-webkit-scrollbar-thumb {
+  background-color: $--border-color-base;
+  border-radius: 3px;
+  &:hover {
+    background-color: $--color-text-secondary;
+  }
+}
+
+
+.el-input__suffix {
+  .el-input__icon {
+    line-height: 30px;
+    transform: rotate(0deg) !important;
+    text-align: center;
+    &::before {
+      content: '\e790',
+    }
+  }
+}
+.el-radio__input.is-checked + .el-radio__label,
+.el-checkbox__input.is-checked + .el-checkbox__label {
+  color: #585858;
+}
+.el-radio__input.is-checked .el-radio__inner {
+  background: #fff !important;
+  &::after {
+    background-color: #428DFA;
+    width: 8px;
+    height: 8px;
+  }
+}
+
+
+/** 统一弹窗标题样式， 需配合slot使用
+----------------------------------------------*/
+.set-craft-dia {
+  > .el-dialog__header {
+    padding-top: 16px;
+    padding-bottom: 15px;
+    > header {
+      > i {
+        margin-right: 10px;
+      }
+      color: #888;
+    }
+    > .el-dialog__headerbtn {
+      top: 10px;
+      right: 15px;
+      font-size: 18px;
+    }
+    position: relative;
+    &::after {
+      height: 1px;
+      width: calc(100% - 20px);
+      margin: 0 10px;
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      background: rgb(245, 245, 245);
+    }
+  }
+}

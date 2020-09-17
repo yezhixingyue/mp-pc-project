@@ -46,17 +46,26 @@ const api = {
 
   /* 优惠券部分api
   ----------------------------------------------------------------------------------- */
+  getCouponList(data) { // POST /Api/Customer/CouponList  下单界面使用
+    return instance.post('/Api/Customer/CouponList', { FieldType: 3, OrderType: 2, ...data });
+  },
   getMyCoupon(data) { // POST /Api/Customer/MyCoupon    --- UseStatus：  0 未使用  1 已使用  2 已过期
-    return instance.post('/Api/Customer/MyCoupon', { FieldType: 1, ...data });
+    return instance.post('/Api/Customer/MyCoupon', { FieldType: 1, OrderType: 2, ...data });
   },
   getCouponActivate(data) { // POST /Api/Coupon/Activate    优惠券激活
     return instance.post('/Api/Coupon/Activate', data);
   },
 
-  /* 客户信息api
+  /* 客户信息 配送方式 等公共部分api
   ----------------------------------------------------------------------------------- */
   getCustomerDetail() { // GET /Api/Customer/Detail  客户基础信息
     return instance.get('/Api/Customer/Detail');
+  },
+  getExpressList(data) { // 获取配送方式
+    return instance.get('/Api/Express/List', data);
+  },
+  getAddressIDList(data) { // 查询地址ID
+    return instance.get(`/Api/District/List?parentID=${data}`);
   },
 };
 

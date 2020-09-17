@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import PlaceOrderProductClassifyComp from '@/components/Quotation/PlaceOrderProductClassifyComp.vue';
+import PlaceOrderProductClassifyComp from '@/components/QuotationComps/PlaceOrderProductClassifyComp.vue';
 // eslint-disable-next-line max-len
 import ProductQuotationContentComp from '@/components/QuotationComps/ProductQuotationContentComps/ProductQuotationContentComp.vue';
 import { mapState } from 'vuex';

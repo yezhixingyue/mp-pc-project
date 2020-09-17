@@ -8,7 +8,6 @@
 
 <template>
   <section class="mp-duotation-content-comps-craft-list-wrap float">
-    <!-- <SectionCompHeader :title="title" /> -->
     <span class="title gray">{{title}}：</span>
     <ul class="content">
       <li v-for="it of list" :key="it.CraftID">
@@ -25,9 +24,6 @@
           "
         >
           <i class="iconfont icon-bianji is-cyan" @click="handleEditClick(it)"></i>
-          <!-- <div @click="handleEditClick(it)">
-            <i class="iconfont icon-bianji is-cyan"></i>
-          </div> -->
         </template>
       </li>
     </ul>
@@ -53,9 +49,6 @@
         isCraftUse
       />
       <footer>
-        <!-- <span @click="addCraft()">
-          +添加
-        </span> -->
         <el-button type="primary" @click="onConfirm">确定</el-button>
         <el-button @click="showDia = false">取消</el-button>
       </footer>
@@ -67,18 +60,13 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
-// import SectionCompHeader from '@/components/QuotationComps/SMComps/SectionCompHeader.vue';
 import ShowProductBtn from '@/components/QuotationComps/SMComps/ShowProductBtn.vue';
-// import CountClassComp from "@/components/QuotationComps/ProductQuotationContentComps/Sections/CountClassComp.vue";
 import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesComp.vue';
-// import { Toast, Dialog } from 'vant';
 import { mapState, mapGetters } from 'vuex';
 
 export default {
   components: {
-    // SectionCompHeader,
     ShowProductBtn,
-    // [Dialog.Component.name]: Dialog.Component,
     AttributesComp,
   },
   props: {
@@ -692,7 +680,6 @@ export default {
 </script>
 
 <style lang="scss">
-// @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-comps-craft-list-wrap {
   > .title {
     float: left;
@@ -741,32 +728,6 @@ export default {
       min-width: 650px;
       display: table;
       border-radius: 5px;
-      > .el-dialog__header {
-        padding-top: 16px;
-        padding-bottom: 15px;
-        > header {
-          > i {
-            margin-right: 10px;
-          }
-          color: #888;
-        }
-        > .el-dialog__headerbtn {
-          top: 10px;
-          right: 15px;
-          font-size: 18px;
-        }
-        position: relative;
-        &::after {
-          height: 1px;
-          width: calc(100% - 20px);
-          margin: 0 10px;
-          content: '';
-          position: absolute;
-          left: 0;
-          bottom: -1px;
-          background: rgb(245, 245, 245);
-        }
-      }
       > .el-dialog__body {
         margin-left: 30px;
         // max-height: 360px;

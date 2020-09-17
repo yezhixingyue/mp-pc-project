@@ -71,14 +71,14 @@
       <PartComps :PartList="obj2GetProductPrice.ProductParams.PartList" />
     </div>
 
-    <section class="btn-wrap">
+    <section class="coupon-calculate-price-wrap">
       <header>
         <div class="result" v-if="ProductQuotationResult && !priceGetErrMsg">
           <span>原价：<i>¥{{ProductQuotationResult.OriginalCost}}元</i></span>
-          <span>优惠券：<i></i></span>
+          <span>优惠券：<i v-if="selectedCoupon && coupon" class="is-pink">{{'¥' + coupon}}元</i></span>
           <span>运费：<i>¥{{ProductQuotationResult.ExpressCost}}元</i></span>
           <span>成交价：
-            <i class="is-pink is-bold is-font-20">¥{{ProductQuotationResult.CurrentCost}}</i>
+            <i class="is-pink is-bold is-font-20">¥{{Cost}}</i>
             <i class="is-pink">元</i>
             <em class="is-gray is-font-12">(不含运费)</em>
           </span>
@@ -92,8 +92,9 @@
         <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item name="1">
           <template slot="title">
-            <span class="gray" v-if="selectedCoupon">已选择满
+            <span class="gray no-cursor" v-if="selectedCoupon" @click.stop="null">已选择满
               {{selectedCoupon.MinPayAmount}}元减{{selectedCoupon.Amount}}元
+              <i class="is-font-12">{{ couponConditionText }}</i>
             </span>
             <el-button class="button-title-pink" @click="onBtnClick">
               使用优惠券<i class="el-icon-arrow-down el-icon--right"></i>
@@ -106,7 +107,7 @@
               <el-button type="primary" @click="getCouponActivate">激活</el-button>
               <!-- <i class="span-title-blue">不使用优惠券</i> -->
             </header>
-            <ul class="coupon-list" v-if="couponList.length > 0">
+            <ul class="coupon-list mp-scroll-wrap" v-if="couponList.length > 0">
               <li class="float" v-for="item in couponList" :key="item.CouponCode"
                 :class="{selected: selectedCoupon && item.CouponCode === selectedCoupon.CouponCode}" >
                 <div class="header">
@@ -137,6 +138,10 @@
       </el-collapse>
       </footer>
     </section>
+
+    <AddShowChangeComp />
+
+    <OrderSubmitComp />
   </article>
 </template>
 
@@ -148,8 +153,9 @@ import MultyKindMakeup from '@/components/QuotationComps/ProductQuotationContent
 import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesComp.vue';
 import CraftListComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/CraftListComp.vue';
 import PartComps from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/PartComps.vue';
-// import MpButton from '@/components/My/Btn2.vue';
 import ProductCountComp from './NewPcComps/ProductCountComp.vue';
+import AddShowChangeComp from '../PlaceOrderComps/AddShowChangeComp.vue';
+import OrderSubmitComp from '../PlaceOrderComps/OrderSubmitComp.vue';
 
 export default {
   props: {
@@ -167,7 +173,8 @@ export default {
     AttributesComp,
     CraftListComp,
     PartComps,
-    // MpButton,
+    AddShowChangeComp,
+    OrderSubmitComp,
   },
   computed: {
     ...mapState('Quotation', ['obj2GetProductPrice', 'ProductQuotationResult', 'curProductClass', 'curProductID']),
@@ -221,6 +228,27 @@ export default {
       );
       return _data;
     },
+    coupon() {
+      if (!this.ProductQuotationResult) return '';
+      if (!this.selectedCoupon) return '';
+      if (this.ProductQuotationResult.CurrentCost >= this.selectedCoupon.MinPayAmount) {
+        return this.selectedCoupon.Amount;
+      }
+      return '';
+    },
+    Cost() {
+      if (!this.ProductQuotationResult) return '';
+      if (!this.selectedCoupon) return this.ProductQuotationResult.CurrentCost;
+      if (this.ProductQuotationResult.CurrentCost >= this.selectedCoupon.MinPayAmount) {
+        const num = this.ProductQuotationResult.CurrentCost - this.selectedCoupon.Amount;
+        return num > 0 ? num : 0;
+      }
+      return this.ProductQuotationResult.CurrentCost;
+    },
+    couponConditionText() {
+      if (!this.coupon) return '(当前未满足使用条件)';
+      return '';
+    },
     // 产品属性
     AttributeList: {
       get() {
@@ -252,7 +280,7 @@ export default {
     },
     async getProductPriceLocal() {
       this.priceGetErrMsg = '';
-      const msg = await this.getProductPrice();
+      const msg = await this.getProductPrice(this.selectedCoupon && this.selectedCoupon.CouponCode);
       if (msg === true) {
         // this.$router.push('/offerResult');
       } else if (typeof msg === 'string') {
@@ -278,9 +306,9 @@ export default {
         TypeID: this.curProductClass.Second,
         ProductID: this.curProductID,
       };
-      const res = await this.api.getMyCoupon(_obj);
+      const res = await this.api.getCouponList(_obj);
       if (res.data.Status !== 1000) return;
-      this.couponList = res.data.Data.Second;
+      this.couponList = res.data.Data;
     },
     onBtnClick(evt) {
       let { target } = evt;
@@ -319,10 +347,6 @@ export default {
       this.setProductParams(['ProductAmount', `${_count}`]);
     }
     this.getCraftRelationList();
-    // window.onresize = () => {
-    //   // alert("onresize, default mounted");
-    //   this.showHeight = document.body.clientHeight;
-    // };
   },
   watch: {
     countOption(newVal) {
@@ -330,19 +354,7 @@ export default {
         this.setProductParams(['ProductAmount', `${newVal[0].value}`]);
       }
     },
-    // showHeight() {
-    //   if (this.docmHeight > this.showHeight + 100) {
-    //     // this.hideshow = false;
-    //     this.$store.commit("global/setState2BottomMenu", false);
-    //   } else {
-    //     // this.hideshow = true;
-    //     this.$store.commit("global/setState2BottomMenu", true);
-    //   }
-    // }
   },
-  // beforeDestroy() {
-  //   window.onresize = null;
-  // }
 };
 </script>
 
@@ -351,6 +363,7 @@ export default {
   width: 1200px;
   margin: 25px auto 30px;
   padding: 30px;
+  padding-bottom: 15px;
   box-sizing: border-box;
   background-color:#fff;
   font-size: 14px;
@@ -395,26 +408,7 @@ export default {
       padding: 0 20px 0 10px;
     }
     .el-input__suffix {
-      .el-input__icon {
-        line-height: 30px;
-        transform: rotate(0deg);
-        text-align: left;
-        &::before {
-          content: '\e790',
-        }
-      }
-    }
-    .el-radio__input.is-checked + .el-radio__label,
-    .el-checkbox__input.is-checked + .el-checkbox__label {
-      color: #585858;
-    }
-    .el-radio__input.is-checked .el-radio__inner {
-      background: #fff;
-      &::after {
-        background-color: #428DFA;
-        width: 8px;
-        height: 8px;
-      }
+      right: 10px;
     }
     .remark {
       font-size: 12px;
@@ -424,7 +418,7 @@ export default {
     }
     // ------------------------------- ⬆
   }
-  > .btn-wrap {
+  > .coupon-calculate-price-wrap {
     > header {
       text-align: right;
       margin-top: 38px;
@@ -455,9 +449,11 @@ export default {
               justify-content: flex-end;
               border: none;
               float: right;
+              cursor: unset;
               > span {
                 display: inline;
                 color: #888;
+                cursor: unset;
               }
               > button {
                 display: inline-block;
@@ -486,6 +482,7 @@ export default {
               padding: 0;
               > .coupon-wrap {
                 > header {
+                  margin-bottom: 50px;
                   text-align: center;
                   // .span-title-blue {
                   //   display: inline-block;
@@ -519,9 +516,10 @@ export default {
                   }
                 }
                 > .coupon-list {
-                  padding: 0 10px;
-                  padding-top: 50px;
+                  padding: 0 8px;
                   // display: flex;
+                  max-height: 322px;
+                  overflow-y: auto;
                   > li {
                     width: 240px;
                     height: 135px;
@@ -530,7 +528,7 @@ export default {
                     overflow: hidden;
                     position: relative;
                     display: inline-block;
-                    margin: 0 20px 20px;
+                    margin: 0 18px 20px;
                     > .header {
                       width: 100%;
                       height: 60px;
@@ -614,6 +612,40 @@ export default {
             }
           }
         }
+      }
+    }
+  }
+
+  > section {
+    > .bg-gray {
+      width: 1200px;
+      height: 15px;
+      margin: 15px -30px 0;
+      background-color: rgb(245, 245, 245);
+    }
+    > .comp-title {
+      height: 40px;
+      width: 1200px;
+      margin: 0 -30px;
+      border-bottom: 1px dashed #eee;
+      line-height: 39px;
+      box-sizing: border-box;
+      padding: 0 22px;
+      > .left {
+        float: left;
+      }
+      > .right {
+        float: right;
+      }
+      position: relative;
+      &::before {
+        height: 100%;
+        width: 2px;
+        background-color: #428dfa;
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
       }
     }
   }

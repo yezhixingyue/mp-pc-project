@@ -42,6 +42,9 @@ export default {
     /* 修改信息以通知工艺组件进行禁用状态的工艺取消
     -------------------------------*/
     watchTarget2DelCraft: 0,
+    /* 下单地址相关信息
+    -------------------------------*/
+    addressInfo4PlaceOrder: null,
   },
   getters: {
     /* 全部产品分类结构树，用于报价目录展示
@@ -714,6 +717,11 @@ export default {
       // state.obj2GetProductPrice.ProductParams =
       QuotationClassType.backfillDefaultProduct(state.obj2GetProductPrice.ProductParams, item);
     },
+    /* 设置下单地址相关信息
+    -------------------------------*/
+    setAddressInfo4PlaceOrder(state, data) {
+      state.addressInfo4PlaceOrder = data;
+    },
   },
   actions: {
     /* 产品分类相关 getProductClassify getProductLists
@@ -744,7 +752,7 @@ export default {
     },
     /* 获取产品报价信息
     -------------------------------*/
-    async getProductPrice({ state, commit, dispatch }) {
+    async getProductPrice({ state, commit, dispatch }, CouponCode = undefined) {
       const productData = state.obj2GetProductPrice.ProductParams;
       if (QuotationClassType.check(productData) === false) return;
       const _data = {};
@@ -757,6 +765,9 @@ export default {
       // _data.Customer = { CustomerID };
       commit('setProductQuotationResult', null);
       commit('setProductQuotationDetail', null);
+      if (CouponCode) {
+        _data.Coupon = { CouponCode };
+      }
       const res = await api.getProductPrice(_data);
       if (res.data.Status === 7025 || res.data.Status === 8037) return;
       // eslint-disable-next-line consistent-return
