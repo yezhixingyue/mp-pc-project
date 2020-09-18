@@ -76,7 +76,8 @@
         <div class="result" v-if="ProductQuotationResult && !priceGetErrMsg">
           <span>原价：<i>¥{{ProductQuotationResult.OriginalCost}}元</i></span>
           <span>优惠券：<i v-if="selectedCoupon && coupon" class="is-pink">{{'¥' + coupon}}元</i></span>
-          <span>运费：<i>¥{{ProductQuotationResult.ExpressCost}}元</i></span>
+          <span v-if="ProductQuotationResult.ExpressCost && ProductQuotationResult.ExpressCost > 0"
+            >运费：<i>¥{{ProductQuotationResult.ExpressCost}}元</i></span>
           <span>成交价：
             <i class="is-pink is-bold is-font-20">¥{{Cost}}</i>
             <i class="is-pink">元</i>
@@ -94,7 +95,7 @@
           <template slot="title">
             <span class="gray no-cursor" v-if="selectedCoupon" @click.stop="null">已选择满
               {{selectedCoupon.MinPayAmount}}元减{{selectedCoupon.Amount}}元
-              <i class="is-font-12">{{ couponConditionText }}</i>
+              <i class="is-font-12 is-cyan">{{ couponConditionText }}</i>
             </span>
             <el-button class="button-title-pink" @click="onBtnClick">
               使用优惠券<i class="el-icon-arrow-down el-icon--right"></i>
@@ -177,7 +178,8 @@ export default {
     OrderSubmitComp,
   },
   computed: {
-    ...mapState('Quotation', ['obj2GetProductPrice', 'ProductQuotationResult', 'curProductClass', 'curProductID']),
+    // eslint-disable-next-line max-len
+    ...mapState('Quotation', ['obj2GetProductPrice', 'ProductQuotationResult', 'curProductClass', 'curProductID', 'selectedCoupon']),
     ...mapGetters('Quotation', ['curProductShowNameInfo']),
     ...mapState('common', ['customerInfo']),
     // 数量下拉列表数据
@@ -265,7 +267,7 @@ export default {
       curDefaultID: '',
       activeNames: [],
       couponList: [],
-      selectedCoupon: null,
+      // selectedCoupon: null,
       priceGetErrMsg: '',
       couponCode2Add: '',
     };
@@ -335,9 +337,11 @@ export default {
     },
     addCouponCode(item) {
       if (!this.selectedCoupon || this.selectedCoupon.CouponCode !== item.CouponCode) {
-        this.selectedCoupon = item;
+        // this.selectedCoupon = item;
+        this.$store.commit('Quotation/setSelectedCoupon', item);
       } else {
-        this.selectedCoupon = null;
+        // this.selectedCoupon = null;
+        this.$store.commit('Quotation/setSelectedCoupon', null);
       }
     },
   },
@@ -500,7 +504,7 @@ export default {
                     width: 300px;
                     > input {
                       height: 30px;
-                      line-height: 26px;
+                      // line-height: 26px;
                     }
                   }
                   > span {

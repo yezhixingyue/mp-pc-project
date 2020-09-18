@@ -39,20 +39,20 @@
             </el-radio-group>
           </div>
         </li>
-        <li class="consignee-wrap" v-if="defaultAddInfo">
+        <li class="consignee-wrap" v-if="currentAddInfo">
           <div class="consignee-box">
             <span class="title">收货人：</span>
-            <span class="consignee">{{defaultAddInfo.Consignee}}</span>
-            <span>{{defaultAddInfo.Mobile}}</span>
+            <span class="consignee">{{currentAddInfo.Consignee}}</span>
+            <span>{{currentAddInfo.Mobile}}</span>
           </div>
           <div class="address">
             <span class="title">收货地址：</span>
-            <span>{{defaultAddInfo.address}}</span>
+            <span>{{currentAddInfo.address}}</span>
           </div>
         </li>
       </ul>
     </div>
-     <el-dialog :visible.sync="outerVisible" top='7vh' width="1000px" custom-class="set-craft-dia">
+     <el-dialog :visible.sync="outerVisible" top='10vh' width="750px" v-dialogDrag custom-class="set-craft-dia">
        <header slot="title">
         <i class="iconfont icon-shezhi is-primary-blue"></i>
         <span>更改配送地址</span>
@@ -60,65 +60,87 @@
 
       <ul class="change-add-dia-content">
         <li>
-          <section>
-            <header>
-              <div>
-                <span class="title">收货人：</span>
-                <el-input v-model="newAdd.Consignee" placeholder="收货人姓名"></el-input>
-              </div>
-              <div>
-                <span class="title">手机号：</span>
-                <el-input v-model="newAdd.Mobile" placeholder="手机号"></el-input>
-              </div>
-            </header>
-            <div class="content">
-              <div class="add-1">
-                <span class="title">收货地址：</span>
-                <el-select v-model="newAdd.ExpressArea.RegionalID" @change='handleRegionalChange'>
-                  <el-option
-                    v-for="item in RegionalList"
-                    :key="item.ID"
-                    :label="item.Name"
-                    :value="item.ID">
-                  </el-option>
-                </el-select>
-                <el-select v-model="newAdd.ExpressArea.CityID"
-                 :disabled="CityList.length === 0" @change='handleCityChange'>
-                  <el-option
-                    v-for="item in CityList"
-                    :key="item.ID"
-                    :label="item.Name"
-                    :value="item.ID">
-                  </el-option>
-                </el-select>
-                <el-select v-model="newAdd.ExpressArea.CountyID" :disabled="CountyList.length === 0">
-                  <el-option
-                    v-for="item in CountyList"
-                    :key="item.ID"
-                    :label="item.Name"
-                    :value="item.ID">
-                  </el-option>
-                </el-select>
-              </div>
-              <div class="add-2">
-                <el-input v-model="newAdd.AddressDetail" placeholder="详细地址 (不包含省市区)"></el-input>
-                <el-button type="primary" :disabled='!newAdd.AddressDetail || !newAdd.ExpressArea.CountyID'
-                 >地图定位</el-button>
-              </div>
-            </div>
+          <section v-if="customerInfo">
+            <el-radio v-model="addRadio" :label="i" v-for="(item, i) in customerInfo.Address" :key="item.AddressID">
+              <span class="is-font-12">{{getAddressInfoDetail(item)}}</span>
+              <span class="is-bold consig is-font-12">{{item.Consignee}}</span>
+              <span class="is-bold is-font-12">({{item.Mobile}})</span>
+              <span class="is-success mgleft" v-if="item.IsDefault">/ 默认地址</span>
+            </el-radio>
+            <el-radio v-model="addRadio" label="new" class="new-address-radio">
+              <el-form :model="newAdd" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
+                <div class="content">
+                  <div class="add-1">
+                    <span class="title">新地址：</span>
+                    <el-form-item prop="Regional">
+                      <el-select v-model="newAdd.ExpressArea.RegionalID" @change='handleRegionalChange'>
+                        <el-option
+                          v-for="item in RegionalList"
+                          :key="item.ID"
+                          :label="item.Name"
+                          :value="item.ID">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item prop="City">
+                      <el-select v-model="newAdd.ExpressArea.CityID"
+                      :disabled="CityList.length === 0" @change='handleCityChange'>
+                        <el-option
+                          v-for="item in CityList"
+                          :key="item.ID"
+                          :label="item.Name"
+                          :value="item.ID">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item prop="County">
+                      <el-select v-model="newAdd.ExpressArea.CountyID" :disabled="CountyList.length === 0">
+                        <el-option
+                          v-for="item in CountyList"
+                          :key="item.ID"
+                          :label="item.Name"
+                          :value="item.ID">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                </div>
+                <div class="add-2">
+                  <el-form-item prop="AddressDetail">
+                  <el-input v-model="newAdd.AddressDetail" placeholder="详细地址 (不包含省市区)"></el-input>
+                  </el-form-item>
+                  <!-- <el-button type="primary" :disabled='!newAdd.AddressDetail || !newAdd.ExpressArea.CountyID'
+                  >地图定位</el-button> -->
+                </div>
+                </div>
+                <header>
+                  <div>
+                    <span class="title">收货人：</span>
+                    <el-form-item prop="Consignee">
+                      <el-input v-model="newAdd.Consignee" placeholder="收货人姓名"></el-input>
+                    </el-form-item>
+                  </div>
+                  <div>
+                    <span class="title">手机号：</span>
+                    <el-form-item prop="Mobile">
+                      <el-input el-input v-model="Mobile" placeholder="手机号"></el-input>
+                    </el-form-item>
+                  </div>
+                </header>
+              </el-form>
+            </el-radio>
           </section>
         </li>
       </ul>
 
-      <el-dialog
+      <!-- <el-dialog
         width="1000px"
         custom-class="set-craft-dia"
         :visible.sync="innerVisible"
         append-to-body>
-      </el-dialog>
+      </el-dialog> -->
       <div slot="footer" class="dialog-footer">
-        <el-button @click="outerVisible = false">取 消</el-button>
-        <el-button type="primary" @click="innerVisible = true">打开内层 Dialog</el-button>
+        <el-button type="primary" @click="handleSubmit('ruleForm')">确定</el-button>
+        <el-button @click="outerVisible = false">取消</el-button>
       </div>
     </el-dialog>
   </section>
@@ -129,6 +151,21 @@ import { mapState } from 'vuex';
 
 export default {
   data() {
+    const validateMobile = (rule, value, callback) => {
+      if (this.validateCheck(value, this.defineRules.Mobile, callback)) callback();
+    };
+    const validateRegional = (rule, value, callback) => {
+      if (!this.newAdd.ExpressArea.RegionalID) callback(new Error('请选择省份'));
+      else callback();
+    };
+    const validateCity = (rule, value, callback) => {
+      if (!this.newAdd.ExpressArea.CityID) callback(new Error('请选择城市'));
+      else callback();
+    };
+    const validateCounty = (rule, value, callback) => {
+      if (!this.newAdd.ExpressArea.CountyID) callback(new Error('请选择地区'));
+      else callback();
+    };
     return {
       PlatformCode: '',
       radio: 1,
@@ -158,10 +195,40 @@ export default {
         Longitude: '',
         CustomerID: '',
         AddressID: '',
+        isSaved: false,
       },
+      selectdAddress: '', //  new | 地址数组索引号
       RegionalList: [],
       CityList: [],
       CountyList: [],
+      addRadio: '',
+      rules: {
+        Consignee: [
+          { required: true, message: '请输入收货人姓名', trigger: 'blur' },
+        ],
+        Mobile: [
+          { validator: validateMobile, trigger: 'blur' },
+        ],
+        AddressDetail: [
+          { required: true, message: '请填写详细地址(不包含省市区)', trigger: 'blur' },
+        ],
+        Regional: [
+          { validator: validateRegional, trigger: 'change' },
+        ],
+        City: [
+          { validator: validateCity, trigger: 'change' },
+        ],
+        County: [
+          { validator: validateCounty, trigger: 'change' },
+        ],
+      },
+      defineRules: {
+        Mobile: [
+          { strategy: 'isNotEmpty', errorMsg: '请输入手机号!' },
+          { strategy: 'shouldLength:11', errorMsg: '请输入11位手机号码' },
+          { strategy: 'isPhone', errorMsg: '手机号码格式不正确' },
+        ],
+      },
     };
   },
   computed: {
@@ -174,9 +241,15 @@ export default {
       if (this.ExpressList.length === 0) return [];
       return this.ExpressList.find(it => it.Type === 2).List;
     },
-    defaultAddInfo() {
+    currentAddInfo() {
       if (!this.customerInfo) return '';
-      const _t = this.customerInfo.Address.find(it => it.IsDefault);
+      let _t;
+      // if (this.selectdAddress === 'default') _t = this.customerInfo.Address.find(it => it.IsDefault);
+      // else if (this.selectdAddress === 'new') _t = this.newAdd;
+
+      if (this.selectdAddress === 'new') _t = this.newAdd;
+      else _t = this.customerInfo.Address.find((it, i) => i === this.selectdAddress);
+
       if (!_t) return '';
 
       const { ExpressArea, AddressDetail } = _t;
@@ -214,7 +287,14 @@ export default {
         this.setInfo4ReqObj();
       },
     },
-
+    Mobile: {
+      get() {
+        return this.newAdd.Mobile;
+      },
+      set(newVal) {
+        this.newAdd.Mobile = newVal.replace(/[^\d.]/g, '');
+      },
+    },
   },
   methods: {
     onVisibleChangeFor2(bool) {
@@ -251,14 +331,15 @@ export default {
       const _temp = {};
       _temp.Address = {};
       _temp.Address.Express = this.Express;
-      const { AddressID } = this.defaultAddInfo;
+      const { AddressID } = this.currentAddInfo;
       _temp.Address.AddressID = AddressID;
-      _temp.Address.Address = this.defaultAddInfo;
+      _temp.Address.Address = this.currentAddInfo;
       const OutPlate = { First: 1, Second: this.PlatformCode };
       _temp.OutPlate = OutPlate;
       this.$store.commit('Quotation/setAddressInfo4PlaceOrder', JSON.parse(JSON.stringify(_temp)));
     },
     async handleChangeAdd() {
+      this.addRadio = this.selectdAddress;
       this.outerVisible = true;
       if (this.RegionalList.length > 0) return;
       const res = await this.api.getAddressIDList(-1);
@@ -294,15 +375,39 @@ export default {
         }
       }
     },
+    handleSubmit(formName) {
+      console.log(this.addRadio);
+      if (this.addRadio === 'new') {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.newAdd.isSaved = true;
+            this.selectdAddress = this.addRadio;
+            this.outerVisible = false;
+          }
+        });
+      } else {
+        this.selectdAddress = this.addRadio;
+        this.outerVisible = false;
+      }
+    },
+    getAddressInfoDetail(item) {
+      if (!item) return '';
+      const { ExpressArea, AddressDetail } = item;
+      const { RegionalName, CountyName, CityName } = ExpressArea;
+      const address = `${RegionalName}${CityName}${CountyName}${AddressDetail}`;
+      return address;
+    },
   },
   watch: {
-    defaultAddInfo() {
+    currentAddInfo() {
       this.setInfo4ReqObj();
     },
   },
-  mounted() {
+  async mounted() {
     this.$store.dispatch('common/getExpressList');
-    this.$store.dispatch('common/getCustomerDetail');
+    await this.$store.dispatch('common/getCustomerDetail');
+    const _i = this.customerInfo.Address.findIndex(it => it.IsDefault);
+    if (_i || _i === 0) this.selectdAddress = _i;
   },
 };
 </script>
@@ -359,69 +464,154 @@ export default {
     margin-right: 7px;
   }
   .set-craft-dia {
-    height: 800px;
+    // height: 400px;
     box-sizing: border-box;
+    .title {
+      min-width: 4em;
+    }
     .el-dialog__body {
       padding-left: 22px;
       padding-right: 22px;
+      // height: 635px;
+      min-height: 188px;
       > .change-add-dia-content {
         > li {
           > section {
-            > header {
-              > div {
-                margin-right: 16px;
+            >.el-radio {
+              margin-bottom: 20px;
+              > .el-radio__label {
                 display: inline-block;
-                > .el-input {
-                  width: 120px;
-                  > input {
-                    height: 30px;
-                    &::placeholder {
-                      color: #cbcbcb;
+                > .demo-ruleForm {
+                  font-size: 12px;
+                  > header {
+                    > div {
+                      margin-right: 16px;
+                      display: inline-block;
+                      > .el-form-item {
+                        display: inline-block;
+                        > .el-form-item__content {
+                          height: 30px;
+                          > .el-input {
+                            width: 120px;
+                            > input {
+                              height: 25px;
+                              font-size: 12px;
+                              &::placeholder {
+                                color: #cbcbcb;
+                              }
+                            }
+                          }
+                        }
+                        &.is-error {
+                          > .el-form-item__content {
+                            // height: 50px;
+                            margin-bottom: 13px;
+                          }
+                        }
+                      }
                     }
+                    // margin-bottom: 25px;
                   }
-                }
-              }
-              margin-bottom: 25px;
-            }
-            > .content {
-              > .add-1 {
-                > .el-select {
-                  > .el-input {
-                    width: 100px;
-                    > input {
-                      height: 30px;
-                      &::placeholder {
-                        color: #cbcbcb;
+                  > .content {
+                    > .add-1 {
+                      > .el-form-item {
+                        display: inline-block;
+                        > .el-form-item__content {
+                          height: 30px;
+                          > .el-select {
+                            > .el-input {
+                              width: 100px;
+                              > input {
+                                height: 25px;
+                                font-size: 12px;
+                                &::placeholder {
+                                  color: #cbcbcb;
+                                }
+                              }
+                            }
+                            margin-right: 16px;
+                          }
+                        }
+                        &.is-error {
+                          > .el-form-item__content {
+                            // height: 50px;
+                            margin-bottom: 13px;
+                          }
+                        }
+                      }
+                      // margin-bottom: 10px;
+                    }
+                    > .add-2 {
+                      > .el-form-item {
+                        display: inline-block;
+                        margin-left: 55px;
+                        margin-right: 36px;
+                        > .el-form-item__content {
+                          height: 30px;
+                          > .el-input {
+                            width: 600px;
+                            > input {
+                              height: 25px;
+                              font-size: 12px;
+                              &::placeholder {
+                                color: #cbcbcb;
+                              }
+                            }
+                          }
+                        }
+                        &.is-error {
+                          > .el-form-item__content {
+                            // height: 50px;
+                            margin-bottom: 13px;
+                          }
+                        }
+                      }
+                      > button {
+                        width: 120px;
+                        height: 35px;
+                        padding: 0;
+                        vertical-align: top;
                       }
                     }
                   }
-                  margin-right: 16px;
-                }
-                margin-bottom: 10px;
-              }
-              > .add-2 {
-                > .el-input {
-                  width: 700px;
-                  margin-left: 77px;
-                  margin-right: 36px;
-                  > input {
-                    height: 30px;
-                    &::placeholder {
-                      color: #cbcbcb;
-                    }
+                  .title {
+                    color: #585858;
                   }
                 }
-                > button {
-                  width: 120px;
-                  height: 35px;
-                  padding: 0;
-                  vertical-align: bottom;
+                .consig {
+                  margin-right: 12px;
+                  margin-left: 16px;
+                }
+                .is-success.mgleft {
+                  margin-left: 8px;
+                }
+                color: #585858;
+              }
+              &.new-address-radio {
+                > .el-radio__input {
+                  vertical-align: top;
+                  position: relative;
+                  top: 13px;
                 }
               }
+              .el-form-item {
+                margin-bottom: 3px;
+              }
             }
-            .title {
-              color: #585858;
-            }
+          }
+        }
+      }
+    }
+    .el-dialog__footer {
+      padding: 30;
+      > .dialog-footer {
+        text-align: center;
+        > button {
+          height: 35px;
+          padding: 0;
+          width: 120px;
+          & + button {
+            margin-left: 50px;
           }
         }
       }

@@ -135,6 +135,7 @@ export default {};
   > footer {
     width: 100%;
     height: 55px;
+    overflow: hidden;
     background-color: #428dfa;
     > .common-header-menus-wrap {
       width: 1200px;

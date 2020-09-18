@@ -45,6 +45,9 @@ export default {
     /* 下单地址相关信息
     -------------------------------*/
     addressInfo4PlaceOrder: null,
+    /* 当前选中优惠券信息
+    -------------------------------*/
+    selectedCoupon: null,
   },
   getters: {
     /* 全部产品分类结构树，用于报价目录展示
@@ -111,6 +114,7 @@ export default {
       });
       return _list;
     },
+
   },
   mutations: {
     /* 设置产品分类相关
@@ -721,6 +725,11 @@ export default {
     -------------------------------*/
     setAddressInfo4PlaceOrder(state, data) {
       state.addressInfo4PlaceOrder = data;
+    },
+    /* 设置当前选中优惠券信息
+    -------------------------------*/
+    setSelectedCoupon(state, data) {
+      state.selectedCoupon = data;
     },
   },
   actions: {

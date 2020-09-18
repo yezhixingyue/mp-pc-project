@@ -67,6 +67,45 @@ const api = {
   getAddressIDList(data) { // 查询地址ID
     return instance.get(`/Api/District/List?parentID=${data}`);
   },
+
+  /* 图片与文件上传api
+   ----------------------------------------------------------------------------------- */
+  uploadImage(data) { // 图片上传  POST /Api/Upload/Image
+    const formData = new FormData();
+    formData.append('file', data);
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+    return instance.post('/Api/Upload/Image?type=1', formData, config);
+  },
+  UploadBigImgNormal(data, uniqueName, onUploadProgressFunc) { // 非断点上传方式上传文件
+    const formData = new FormData();
+    formData.append('file', data);
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      onUploadProgress: onUploadProgressFunc && onUploadProgressFunc,
+    };
+    return instance.post(`/Api/Upload/WholeFile?uniqueName=${uniqueName}`, formData, config);
+  },
+  getUploadedProgress(uniqueName) { // 获取断点续传文件已上传的位置  GET /Api/FileNode
+    console.log('getUploadedProgress', uniqueName);
+    return instance.get(`/Api/FileNode?uniqueName=${uniqueName}`);
+  },
+  UploadFileBreakpointResume(data, uniqueName, first, last, length, onUploadProgressFunc) { // 断点续传上传文件 /Api/Upload/File
+    const formData = new FormData();
+    formData.append('file', data);
+    const config = {
+      headers: {
+        'Content-Range': `bytes ${first}-${last}/${length}`,
+      },
+      onUploadProgress: onUploadProgressFunc && onUploadProgressFunc,
+    };
+    return instance.post(`/Api/Upload/File?uniqueName=${uniqueName}`, formData, config);
+  },
 };
 
 export default api;

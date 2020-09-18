@@ -42,10 +42,20 @@ export function animateScroll(start, end, callback) {
   return timer;
 }
 
+export function extname(filename) {
+  if (!filename || typeof filename !== 'string') {
+    return '未知类型';
+  }
+  const a = filename.split('').reverse().join('');
+  const b = a.substring(0, a.search(/\./)).split('').reverse().join('');
+  return b;
+}
+
 export default {
   isNumber,
   getUnit,
   handleSelect,
   delay,
   animateScroll,
+  extname,
 };

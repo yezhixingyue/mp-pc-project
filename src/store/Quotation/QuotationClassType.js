@@ -30,7 +30,7 @@ function _getProperty(_arr) { // 转换属性
 }
 
 function _setErrMsg(errMsg) {
-  massage.singleError('报价失败', errMsg, null);
+  massage.failSingleError({ title: '报价失败', msg: errMsg });
 }
 
 // eslint-disable-next-line consistent-return

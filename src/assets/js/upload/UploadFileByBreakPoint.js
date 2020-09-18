@@ -68,6 +68,7 @@ async function uploadFile(chunkCount, curChunkNum, {
  * @returns 返回布尔值
  */
 async function checkIsTrue(data, uniqueName) {
+  console.log('checkIsTrue');
   const hasUploadedInfo = await api.getUploadedProgress(uniqueName).catch(() => false);
   if (hasUploadedInfo.data.Status !== 1000) return false;
   if (hasUploadedInfo.data.Data < data.size) return false;
@@ -83,6 +84,7 @@ async function checkIsTrue(data, uniqueName) {
  * @returns 返回true或false，用于告知该函数上传结果: 成功 还是 失败
  */
 async function breakPointUpload(data, uniqueName, onUploadProgressFunc, finalPercentage = 98) {
+  console.log('breakPointUpload');
   const hasUploadedInfo = await api.getUploadedProgress(uniqueName).catch(() => false);
   if (hasUploadedInfo.data.Status !== 1000) return false; // 获取已上传信息
 
