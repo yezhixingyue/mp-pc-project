@@ -89,7 +89,7 @@ export default {
 </script>
 
 <style lang='scss'>
-@import "@/assets/css/common/var.scss";
+// @import "@/assets/css/common/var.scss";
 .mp-common-download-to-excel-comp-wrap {
   border: none;
   background-color: #fff;
@@ -101,7 +101,7 @@ export default {
     color: #35dff9 !important;
   }
   &:active {
-    color: $--color-primary-lighter !important;
+    // color: $--color-primary-lighter !important;
   }
 }
 </style>

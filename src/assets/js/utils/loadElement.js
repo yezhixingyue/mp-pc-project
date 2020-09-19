@@ -2,7 +2,7 @@ import Vue from 'vue';
 
 import {
   Dialog, Dropdown, DropdownMenu, DropdownItem, Select, Option, Steps, Step, Popover, Link, Radio, Collapse, Upload,
-  CollapseItem, RadioGroup, Tabs, TabPane, Message, Input, Form, FormItem, Button, CheckboxGroup, Checkbox,
+  CollapseItem, RadioGroup, Tabs, TabPane, Message, Input, Form, FormItem, Button, CheckboxGroup, Checkbox, Progress,
 } from 'element-ui';
 
 Vue.use(Select);
@@ -28,6 +28,7 @@ Vue.use(Radio);
 Vue.use(CollapseItem);
 Vue.use(Collapse);
 Vue.use(Upload);
+Vue.use(Progress);
 
 Vue.prototype.$message = Message;
 

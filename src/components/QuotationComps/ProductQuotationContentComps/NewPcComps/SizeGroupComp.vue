@@ -19,7 +19,7 @@
         v-model="inpValue"
         :defaultProps="{ text: 'SizeName', value: 'SizeID' }"
       />
-      <ul class="size-inp-wrap" v-else>
+      <ul class="size-inp-wrap" v-else-if="AllowCustomSize">
         <template v-for="(it, i) in SizeGroup.PropertyList">
           <size-group-single-input-comp
             :key="it.PropertyID"
@@ -41,7 +41,7 @@
       </ul>
     </div>
     <check-box-single
-      v-show="showCheckBox && SizeList.length > 0"
+      v-show="showCheckBox && SizeList.length > 0 && AllowCustomSize"
       :default="defaultSelect || SizeList.length === 0 || isSelectedInp"
       @change="handleCheckChange"
     /><!-- 此处change事件改变时需要清除inpVal值为空，后面添加 -->
@@ -127,6 +127,10 @@ export default {
       default: () => [],
     },
     disabled: {},
+    AllowCustomSize: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {

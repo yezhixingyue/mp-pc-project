@@ -23,7 +23,9 @@
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         :file-list="fileList"
+        :class="fileList.length > 0 ? '' : 'empty' "
         :limit='1'
+        :on-change='handleElChange'
         :auto-upload="false">
         <el-button slot="trigger" size="small" type="primary">{{showTitle}}</el-button>
         <!-- <el-button  size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
@@ -52,6 +54,7 @@
 <script>
 
 import UploadFileByBreakPoint from '@/assets/js/upload/UploadFileByBreakPoint';
+import massage from '@/assets/js/utils/message';
 
 const sha1 = require('js-sha1');
 
@@ -102,6 +105,11 @@ export default { // 上传图片按钮
       type: Boolean,
       default: false,
     },
+    validateFunc: {}, // 验证函数
+    msgTitle: {
+      type: String,
+      default: '验证失败',
+    },
   },
   data() {
     return {
@@ -112,6 +120,7 @@ export default { // 上传图片按钮
       fileName: '',
       files: null,
       fileList: [],
+      // eventFileList: [], //
     };
   },
   computed: {
@@ -154,9 +163,7 @@ export default { // 上传图片按钮
         const ext = this.utils.extname(file.name);
         const _name = `${sha1(reader.result)}.${ext}`; // 文件名称, 文件唯一标识
         this.upLoadTitle = '解析完成,开始上传';
-        console.log(_name, file);
         this.fileName = file.name;
-        console.log(this.fileName);
         if (file.size > 20 * 1024 * 1024) { // 文件大于20M显示进度条  客户端设置20M
           this.showProgress = true;
         } else {
@@ -175,25 +182,79 @@ export default { // 上传图片按钮
             this.successFunc({ compiledName: _name, initialName: this.fileName });
           } else {
             // 上传失败
-            this.massageBox.failSingleError({ title: '文件上传失败', msg: '抱歉，文件上传失败，请重试!', failFunc: this.failFunc });
+            massage.failSingleError({ title: '文件上传失败', msg: '抱歉，文件上传失败，请重试!', failFunc: this.failFunc });
           }
           if (this.showProgress) this.showProgress = false;
           if (this.showLoading) this.showLoading = false;
           this.upLoadTitle = '';
           const oInput = document.querySelector('.mp-phone-upload-comp-break-point-type-wrap > div > input.upload-inp');
-          oInput.value = '';
+          if (oInput) oInput.value = '';
           this.percentage = 0;
         }
       };
     },
+    // clearFile() {
+    //   console.log(this.$refs.uploadInp.value)
+    // },
     submitUpload() {
       this.$refs.upload.submit();
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
+      this.fileList = fileList;
     },
     handlePreview(file) {
       console.log(file);
+    },
+    handleElChange(file, fileList) {
+      console.log(file, fileList);
+      this.fileList = fileList;
+      this.$emit('fillFileContent', file.name.split('.')[0]);
+    },
+    delay(storeObj, duration) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve();
+        }, duration);
+      });
+    },
+    // exceed(...args) {
+    //   console.log(args);
+    //   massage.failSingleError({ title: '已上传订单文件', msg: '如需更换，请删除订单文件后重新上传' });
+    // },
+    async handleElUpload() {
+      await this.delay(0);
+      if (this.fileList.length === 0) {
+        massage.failSingleError({ title: `${this.msgTitle}失败`, msg: '请选择订单文件!', failFunc: this.failFunc });
+        return;
+      }
+      const msg = await this.validateFunc();
+      if (typeof msg === 'string') {
+        massage.failSingleError({ title: `${this.msgTitle}失败`, msg });
+        return;
+      }
+      if (msg === true) {
+        const file = this.fileList[0].raw;
+        this.upLoadSingleFile(file);
+      }
+    },
+    async saveFile2Store() {
+      await this.delay(0);
+      if (this.fileList.length === 0) {
+        massage.failSingleError({ title: `${this.msgTitle}失败`, msg: '请选择订单文件!', failFunc: this.failFunc });
+        return;
+      }
+      const msg = await this.validateFunc();
+      if (typeof msg === 'string') {
+        massage.failSingleError({ title: `${this.msgTitle}失败`, msg });
+        return;
+      }
+      if (msg === true) {
+        const file = this.fileList[0].raw;
+        // this.upLoadSingleFile(file);
+        this.$emit('saveFile2Store', file);
+        this.successFunc({ compiledName: '', initialName: this.fileName });
+      }
     },
   },
 };
@@ -202,7 +263,7 @@ export default { // 上传图片按钮
 <style lang='scss'>
 .mp-phone-upload-comp-break-point-type-wrap {
   > div.self-comp {
-    width: 100px;
+    min-width: 100px;
     height: 35px;
     background-color: #428dfa;
     border: 1px solid #428dfa;
@@ -304,20 +365,40 @@ export default { // 上传图片按钮
       width: 1050px;
       > .el-upload {
         > .el-button {
-          width: 100px;
+          min-width: 100px;
           height: 35px;
-          padding: 0;
+          padding: 0 15px;
         }
         float: right;
       }
       > .el-upload-list {
         float: left;
-        // width: 1000px;
+        width: 800px;
         margin: 0;
         // display: inline-block;
         > li {
           margin-top: 5px;
           outline-width: 0;
+          transition: none;
+          > a {
+            text-align: left;
+            font-size: 13px;
+          }
+        }
+        position: relative;
+        &::before {
+          content: '请选择订单文件';
+          display: inline-block;
+          line-height: 35px;
+          color: #989898;
+          font-size: 12px;
+          // display: block;
+          position: absolute;
+          width: 8em;
+          left: 0;
+          top: -30px;
+          // opacity: 0;
+          // display: block;
         }
       }
       &::after {
@@ -327,6 +408,13 @@ export default { // 上传图片按钮
       }
       overflow: hidden;
       height: 35px;
+      &.empty {
+        > .el-upload-list {
+          &::before {
+            top: 0;
+          }
+        }
+      }
     }
     &::after {
       content: '';

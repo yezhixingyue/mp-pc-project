@@ -21,7 +21,7 @@ const api = {
     return instance.post('/Api/FindPassword/ResetPassword', data);
   },
 
-  /* 产品报价部分api
+  /* 产品报价及下单部分api
   ----------------------------------------------------------------------------------- */
   getProductClassify() { // 获取产品分类
     return instance.post('/Api/Constant/VersionValid', { Key: 6 });
@@ -42,6 +42,12 @@ const api = {
   },
   getCraftRelationList() { // GET /Api/Craft/GetCraftRelationList 获取工艺关系列表
     return instance.get('/Api/Craft/GetCraftRelationList');
+  },
+  getOrderPreCreate(data) { // POST /Api/Order/PreCreate  直接下单 - 预下单
+    return instance.post('/Api/Order/PreCreate', data);
+  },
+  getQuotationSave(data) { // POST /Api/Quotation/Save  保存购物车
+    return instance.post('/Api/Quotation/Save', data);
   },
 
   /* 优惠券部分api

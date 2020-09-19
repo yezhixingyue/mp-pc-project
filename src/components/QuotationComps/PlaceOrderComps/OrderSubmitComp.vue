@@ -11,7 +11,9 @@
           <el-input v-model="fileContent" placeholder="文件内容"></el-input>
         </li>
         <li class="upload-box">
-          <UploadComp4BreakPoint :successFunc="successFunc" />
+          <UploadComp4BreakPoint ref='UploadComp4BreakPoint' :validateFunc='getProductPriceLocal'
+            :msgTitle='title' @fillFileContent='fillFileContent'
+            :successFunc="successFunc" @saveFile2Store='saveFile2Store' />
         </li>
       </ul>
       <div class="price-wrap">
@@ -35,9 +37,9 @@
         </div>
       </div>
       <div class="submit-btn-wrap">
-        <el-button class="button-title-pink" @click="goToGoodsCar">
-          <i class="iconfont icon-jiarugouwuche"></i>加入购物车</el-button>
-        <el-button type="danger">直接下单</el-button>
+        <el-button class="button-title-pink" @click="onSave2TheCar">
+          <i class="iconfont icon-jiarugouwuche" ></i>加入购物车</el-button>
+        <el-button type="danger" @click="onSubmitOrder">直接下单</el-button>
       </div>
     </div>
   </section>
@@ -52,7 +54,7 @@ export default {
     UploadComp4BreakPoint,
   },
   computed: {
-    ...mapState('Quotation', ['selectedCoupon', 'ProductQuotationResult']),
+    ...mapState('Quotation', ['selectedCoupon', 'ProductQuotationResult', 'addressInfo4PlaceOrder']),
     coupon() {
       if (!this.ProductQuotationResult) return '';
       if (!this.selectedCoupon) return '';
@@ -74,18 +76,47 @@ export default {
   data() {
     return {
       fileContent: '',
+      title: '', // 用于弹窗标题显示   下单 | 添加购物车   后面自动添加失败2字
+      type: '',
     };
   },
   methods: {
-    successFunc(e) {
-      console.log(e);
+    successFunc({ compiledName }) {
+      if (this.type === 'placeOrder') {
+        const callBack = () => this.$router.push('/OrderPreCreate');
+        this.$store.dispatch('Quotation/getOrderPreCreate', { compiledName, fileContent: this.fileContent, callBack });
+      } else if (this.type === 'saveCar') {
+        this.$store.dispatch('Quotation/getQuotationSave2Car', { compiledName, fileContent: this.fileContent });
+      }
     },
-    goToGoodsCar(evt) {
+    async onSubmitOrder() {
+      this.title = '下单';
+      this.type = 'placeOrder';
+      await this.$refs.UploadComp4BreakPoint.saveFile2Store();
+    },
+    async onSave2TheCar(evt) {
+      console.log(2131, 'onSave2TheCar');
       let { target } = evt;
       if (target.nodeName === 'SPAN') {
         target = evt.target.parentNode;
       }
       target.blur();
+      this.title = '添加购物车';
+      console.log(this.title);
+      this.type = 'saveCar';
+      await this.$refs.UploadComp4BreakPoint.handleElUpload();
+    },
+    fillFileContent(name) {
+      this.fileContent = name;
+    },
+    async getProductPriceLocal() { // 校验函数  用来判断是否可以进行下单
+      if (!this.addressInfo4PlaceOrder || !this.addressInfo4PlaceOrder.Address.Address.Consignee) return '请选择配送地址';
+      console.log(this.title);
+      const key = await this.$store.dispatch('Quotation/getProductPrice', this.title);
+      return key;
+    },
+    saveFile2Store(file) {
+      this.$store.commit('Quotation/setOrderFile4PreCreateData', file);
     },
   },
 };
@@ -105,6 +136,7 @@ export default {
             width: 700px;
             > input {
               height: 30px;
+              font-size: 13px;
             }
           }
         }

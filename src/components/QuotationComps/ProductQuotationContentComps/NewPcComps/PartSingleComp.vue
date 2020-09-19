@@ -52,6 +52,7 @@
         v-model="PartSizeGroup"
         :disabled="!data.Size.Second"
         :SizePropertyList="data.SizePropertyList"
+        :AllowCustomSize='data.AllowCustomSize'
       />
 
       <!-- 印刷属性 -->

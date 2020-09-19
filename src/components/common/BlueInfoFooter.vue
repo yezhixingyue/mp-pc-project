@@ -41,6 +41,7 @@ export default {
     width: 1200px;
     height: 100%;
     margin: 0 auto;
+    background-color: #1D7AD9;
     > li {
       height: 136px;
     }

@@ -1,6 +1,6 @@
 <!--
  * @Describe: 报价模块 -- 款数
- * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/Sections/SingleInputComp.vue
+ * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/NewPcComps/SingleInputComp.vue
 -->
 
 <template>
@@ -65,13 +65,29 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('Quotation', ['setProductParams']),
+    ...mapMutations('Quotation', ['setProductParams', 'curProductInfo2Quotation']),
   },
-  mounted() {
-    if (this.minNum && this.minNum === this.maxNum) {
-      this.$emit('changeFunc', this.minNum);
-    }
+  watch: {
+    curProductInfo2Quotation: {
+      handler(newVal) {
+        console.log('curProductInfo2Quotatio-------------------------------n');
+        if (newVal) {
+          if (this.minNum && this.minNum === this.maxNum) {
+            this.$emit('changeFunc', this.minNum);
+          }
+        }
+      },
+      immediate: true,
+    },
   },
+  updated() {
+    console.log('updated-------------------');
+  },
+  // mounted() {
+  //   if (this.minNum && this.minNum === this.maxNum) {
+  //     this.$emit('changeFunc', this.minNum);
+  //   }
+  // },
 };
 </script>
 

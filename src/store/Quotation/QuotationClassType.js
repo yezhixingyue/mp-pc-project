@@ -30,7 +30,9 @@ function _getProperty(_arr) { // 转换属性
 }
 
 function _setErrMsg(errMsg) {
-  massage.failSingleError({ title: '报价失败', msg: errMsg });
+  const msg = store.state.Quotation.curSelectStatus;
+  console.log(store.state.Quotation.curSelectStatus);
+  massage.failSingleError({ title: `${msg}失败`, msg: errMsg });
 }
 
 // eslint-disable-next-line consistent-return
@@ -791,6 +793,7 @@ export default class QuotationClassType {
   }
 
   static filter(obj) {
+    if (!obj) return;
     const _obj = obj;
     if (_obj.CraftList.First.length === 0) delete _obj.CraftList;
     if (_obj.PropertyList.length === 0) delete _obj.PropertyList;
@@ -926,6 +929,7 @@ export default class QuotationClassType {
 
   // 处理属性关联， 给有属性关联信息的属性上添加上相关信息
   static handlePropertyRelevanceList(obj) {
+    if (!obj) return;
     const _obj = obj;
     if (_obj.PropertyRelevanceList.length === 0) return _obj;
     _obj.PropertyRelevanceList.forEach(Relevance => {
@@ -962,6 +966,7 @@ export default class QuotationClassType {
 
   // 处理工艺上的条件判断，给设置有条件判断的工艺上添加相关信息
   static handleCraftConditionList(obj) {
+    if (!obj) return;
     const _obj = obj;
     if (_obj.CraftConditionList.length > 0) {
       _obj.CraftConditionList.forEach(it => {

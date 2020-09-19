@@ -282,7 +282,7 @@ export default {
     },
     async getProductPriceLocal() {
       this.priceGetErrMsg = '';
-      const msg = await this.getProductPrice(this.selectedCoupon && this.selectedCoupon.CouponCode);
+      const msg = await this.getProductPrice('报价');
       if (msg === true) {
         // this.$router.push('/offerResult');
       } else if (typeof msg === 'string') {
@@ -357,6 +357,12 @@ export default {
       if (newVal.length > 0) {
         this.setProductParams(['ProductAmount', `${newVal[0].value}`]);
       }
+    },
+    obj2GetProductPrice: {
+      handler() {
+        this.$store.commit('Quotation/setProductQuotationResult', null);
+      },
+      deep: true,
     },
   },
 };

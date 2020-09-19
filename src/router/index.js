@@ -41,6 +41,15 @@ const routes = [
         },
         component: () => import('../views/PlaceOrder/PlaceOrderPage.vue'),
       },
+      {
+        path: '/OrderPreCreate',
+        name: 'OrderPreCreate',
+        meta: {
+          requiresAuth: true,
+          title: '名片之家下单',
+        },
+        component: () => import('../views/PlaceOrder/OrderPreCreatePage.vue'),
+      },
     ],
   },
 ];

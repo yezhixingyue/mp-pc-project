@@ -8,7 +8,9 @@
  */
 
 import api from '@/api/index';
+import massage from '@/assets/js/utils/message';
 import QuotationClassType from './QuotationClassType';
+
 // eslint-disable-next-line no-unused-vars
 // import utils from "@/assets/js/utils";
 
@@ -48,6 +50,15 @@ export default {
     /* 当前选中优惠券信息
     -------------------------------*/
     selectedCoupon: null,
+    /* 当前状态是报价还是下单
+    -------------------------------*/
+    curSelectStatus: '报价',
+    /* 预下单后获取到的数据信息
+    -------------------------------*/
+    PreCreateData: null,
+    /* 预下单中存放的订单文件
+    -------------------------------*/
+    orderFile4PreCreateData: null,
   },
   getters: {
     /* 全部产品分类结构树，用于报价目录展示
@@ -731,6 +742,22 @@ export default {
     setSelectedCoupon(state, data) {
       state.selectedCoupon = data;
     },
+    /* 设置当前状态是报价还是下单
+    -------------------------------*/
+    setCurSelectStatus(state, msg) {
+      state.curSelectStatus = msg;
+    },
+    /* 设置预下单后获取到的数据信息
+    -------------------------------*/
+    setPreCreateData(state, data) {
+      if (!data) return;
+      state.PreCreateData = data;
+    },
+    /* 设置预下单中存放的订单文件
+    -------------------------------*/
+    setOrderFile4PreCreateData(state, file) {
+      state.orderFile4PreCreateData = file;
+    },
   },
   actions: {
     /* 产品分类相关 getProductClassify getProductLists
@@ -761,8 +788,10 @@ export default {
     },
     /* 获取产品报价信息
     -------------------------------*/
-    async getProductPrice({ state, commit, dispatch }, CouponCode = undefined) {
+    async getProductPrice({ state, commit, dispatch }, curSelectStatus) {
+      console.log(curSelectStatus);
       const productData = state.obj2GetProductPrice.ProductParams;
+      commit('setCurSelectStatus', curSelectStatus);
       if (QuotationClassType.check(productData) === false) return;
       const _data = {};
       commit('setWatchTarget2DelCraft');
@@ -774,9 +803,7 @@ export default {
       // _data.Customer = { CustomerID };
       commit('setProductQuotationResult', null);
       commit('setProductQuotationDetail', null);
-      if (CouponCode) {
-        _data.Coupon = { CouponCode };
-      }
+
       const res = await api.getProductPrice(_data);
       if (res.data.Status === 7025 || res.data.Status === 8037) return;
       // eslint-disable-next-line consistent-return
@@ -796,6 +823,86 @@ export default {
           resolve();
         }, duration);
       });
+    },
+    /* 下单 - 预下单
+    -------------------------------*/
+    async getOrderPreCreate({ state, commit, dispatch }, { compiledName, fileContent, callBack }) {
+      // console.log(state, compiledName, fileContent);
+      // 配置组合生成请求对象
+      const _requestObj = { List: [], OrderType: 2, PayInFull: false };
+      const _itemObj = {};
+      _itemObj.IsOrder = false; // 预下单false  正式下单 true
+      _itemObj.FilePath = compiledName;
+      if (state.addressInfo4PlaceOrder.OutPlate.Second) _itemObj.OutPlate = state.addressInfo4PlaceOrder.OutPlate;
+      _itemObj.Address = {};
+      _itemObj.Address.Express = state.addressInfo4PlaceOrder.Address.Express;
+      if (state.addressInfo4PlaceOrder.Address.AddressID) {
+        _itemObj.Address.AddressID = state.addressInfo4PlaceOrder.Address.AddressID;
+      } else {
+        _itemObj.Address.Address = state.addressInfo4PlaceOrder.Address.Address;
+        // if (!state.addressInfo4PlaceOrder.Address.Address.Latitude) alert('未定位')
+      }
+      _itemObj.Content = fileContent;
+      if (state.selectedCoupon) _itemObj.Coupon = { CouponCode: state.selectedCoupon.CouponCode };
+
+      const productData = state.obj2GetProductPrice.ProductParams;
+      if (QuotationClassType.check(productData) === false) return;
+      commit('setWatchTarget2DelCraft');
+      await dispatch('delay', 10);
+      const ProductParams = QuotationClassType.filter(
+        QuotationClassType.transform(productData),
+      );
+
+      _itemObj.ProductParams = ProductParams;
+
+      _requestObj.List.push(_itemObj);
+
+      const res = await api.getOrderPreCreate(_requestObj);
+      // console.log(res);
+
+      if (res.data.Status === 1000) {
+        commit('setPreCreateData', res.data.Data);
+        callBack();
+      }
+    },
+    /* 下单 - 保存购物车
+    -------------------------------*/
+    async getQuotationSave2Car({ state, commit, dispatch }, { compiledName, fileContent }) {
+      const _itemObj = {};
+      _itemObj.IsOrder = false; // 预下单false  正式下单 true
+      _itemObj.FilePath = compiledName;
+      _itemObj.FileHaveUpload = true;
+      if (state.addressInfo4PlaceOrder.OutPlate.Second) _itemObj.OutPlate = state.addressInfo4PlaceOrder.OutPlate;
+      _itemObj.Address = {};
+      _itemObj.Address.Express = state.addressInfo4PlaceOrder.Address.Express;
+      if (state.addressInfo4PlaceOrder.Address.AddressID) {
+        _itemObj.Address.AddressID = state.addressInfo4PlaceOrder.Address.AddressID;
+      } else {
+        _itemObj.Address.Address = state.addressInfo4PlaceOrder.Address.Address;
+        // if (!state.addressInfo4PlaceOrder.Address.Address.Latitude) alert('未定位')
+      }
+      _itemObj.Content = fileContent;
+      if (state.selectedCoupon) _itemObj.Coupon = { CouponCode: state.selectedCoupon.CouponCode };
+
+      const productData = state.obj2GetProductPrice.ProductParams;
+      if (QuotationClassType.check(productData) === false) return;
+      commit('setWatchTarget2DelCraft');
+      await dispatch('delay', 10);
+      const ProductParams = QuotationClassType.filter(
+        QuotationClassType.transform(productData),
+      );
+
+      _itemObj.ProductParams = ProductParams;
+      const res = await api.getQuotationSave(_itemObj);
+      console.log(res);
+
+      if (res.data.Status === 1000) {
+        massage.successSingle({ title: '添加成功!' });
+        const _obj = JSON.parse(JSON.stringify(state.curProductInfo2Quotation));
+        commit('setCurProductInfo2Quotation', null);
+        await dispatch('delay', 10);
+        commit('setCurProductInfo2Quotation', _obj);
+      }
     },
   },
 };

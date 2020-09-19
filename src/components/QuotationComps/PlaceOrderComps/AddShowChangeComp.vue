@@ -3,7 +3,9 @@
     <header class="bg-gray"></header>
     <div class="comp-title float">
       <span class="left is-bold">收货信息</span>
-      <span class="right span-title-blue" @click="handleChangeAdd">更改收货地址</span>
+      <span class="right span-title-blue" @click="handleChangeAdd">
+        {{ currentAddInfo && !newAdd.isSaved ? '更改配送地址' : '添加配送地址' }}
+      </span>
     </div>
     <div class="content">
       <ul>
@@ -50,12 +52,15 @@
             <span>{{currentAddInfo.address}}</span>
           </div>
         </li>
+        <li v-else class="has-none-consignee">
+          <span class="is-cyan">当前未设置收货地址，请点击右上方进行添加</span>
+        </li>
       </ul>
     </div>
      <el-dialog :visible.sync="outerVisible" top='10vh' width="750px" v-dialogDrag custom-class="set-craft-dia">
        <header slot="title">
         <i class="iconfont icon-shezhi is-primary-blue"></i>
-        <span>更改配送地址</span>
+        <span>{{ currentAddInfo && !newAdd.isSaved ? '更改配送地址' : '添加配送地址' }}</span>
       </header>
 
       <ul class="change-add-dia-content">
@@ -94,7 +99,8 @@
                       </el-select>
                     </el-form-item>
                     <el-form-item prop="County">
-                      <el-select v-model="newAdd.ExpressArea.CountyID" :disabled="CountyList.length === 0">
+                      <el-select v-model="newAdd.ExpressArea.CountyID"
+                       :disabled="CountyList.length === 0" @change='handleCountyChange'>
                         <el-option
                           v-for="item in CountyList"
                           :key="item.ID"
@@ -106,7 +112,7 @@
                 </div>
                 <div class="add-2">
                   <el-form-item prop="AddressDetail">
-                  <el-input v-model="newAdd.AddressDetail" placeholder="详细地址 (不包含省市区)"></el-input>
+                  <el-input v-model.trim="newAdd.AddressDetail" placeholder="详细地址 (不包含省市区)"></el-input>
                   </el-form-item>
                   <!-- <el-button type="primary" :disabled='!newAdd.AddressDetail || !newAdd.ExpressArea.CountyID'
                   >地图定位</el-button> -->
@@ -116,13 +122,13 @@
                   <div>
                     <span class="title">收货人：</span>
                     <el-form-item prop="Consignee">
-                      <el-input v-model="newAdd.Consignee" placeholder="收货人姓名"></el-input>
+                      <el-input v-model.trim="newAdd.Consignee" placeholder="收货人姓名"></el-input>
                     </el-form-item>
                   </div>
                   <div>
                     <span class="title">手机号：</span>
                     <el-form-item prop="Mobile">
-                      <el-input el-input v-model="Mobile" placeholder="手机号"></el-input>
+                      <el-input el-input v-model.trim="Mobile" placeholder="手机号"></el-input>
                     </el-form-item>
                   </div>
                 </header>
@@ -194,7 +200,6 @@ export default {
         Latitude: '',
         Longitude: '',
         CustomerID: '',
-        AddressID: '',
         isSaved: false,
       },
       selectdAddress: '', //  new | 地址数组索引号
@@ -317,10 +322,10 @@ export default {
           this.Express.Second = 1;
           break;
         case 2: // wuliu
-          this.Express.Second = this.secondExVal;
+          this.Express.Second = this.thirdExVal;
           break;
         case 3: // kuaidi
-          this.Express.Second = this.thirdExVal;
+          this.Express.Second = this.secondExVal;
           break;
         default:
           break;
@@ -332,10 +337,11 @@ export default {
       _temp.Address = {};
       _temp.Address.Express = this.Express;
       const { AddressID } = this.currentAddInfo;
-      _temp.Address.AddressID = AddressID;
+      if (AddressID) _temp.Address.AddressID = AddressID;
       _temp.Address.Address = this.currentAddInfo;
       const OutPlate = { First: 1, Second: this.PlatformCode };
       _temp.OutPlate = OutPlate;
+      console.log('_temp', _temp.Address.Express.First, _temp.Address.Express.Second);
       this.$store.commit('Quotation/setAddressInfo4PlaceOrder', JSON.parse(JSON.stringify(_temp)));
     },
     async handleChangeAdd() {
@@ -349,6 +355,8 @@ export default {
       // this.$store.dispatch('common/getAddressIDList', -1);
     },
     async handleRegionalChange(e) {
+      const _t = this.RegionalList.find(it => it.ID === e);
+      this.newAdd.ExpressArea.RegionalName = _t.Name;
       this.newAdd.ExpressArea.CityID = '';
       this.newAdd.ExpressArea.CityName = '';
       this.newAdd.ExpressArea.CountyID = '';
@@ -364,6 +372,8 @@ export default {
       }
     },
     async handleCityChange(e) {
+      const _t = this.CityList.find(it => it.ID === e);
+      this.newAdd.ExpressArea.CityName = _t.Name;
       this.newAdd.ExpressArea.CountyID = '';
       this.newAdd.ExpressArea.CountyName = '';
       this.CountyList = [];
@@ -374,6 +384,11 @@ export default {
           this.CountyList = res.data.Data;
         }
       }
+    },
+    handleCountyChange(e) {
+      console.log(e);
+      const _t = this.CountyList.find(it => it.ID === e);
+      this.newAdd.ExpressArea.CountyName = _t.Name;
     },
     handleSubmit(formName) {
       console.log(this.addRadio);
@@ -402,12 +417,20 @@ export default {
     currentAddInfo() {
       this.setInfo4ReqObj();
     },
+    newAdd: {
+      handler() {
+        // console.log(21321321, this.addRadio);
+        if (this.addRadio !== 'new') this.addRadio = 'new';
+      },
+      deep: true,
+    },
   },
   async mounted() {
     this.$store.dispatch('common/getExpressList');
     await this.$store.dispatch('common/getCustomerDetail');
     const _i = this.customerInfo.Address.findIndex(it => it.IsDefault);
-    if (_i || _i === 0) this.selectdAddress = _i;
+    if (_i > -1) this.selectdAddress = _i;
+    else this.selectdAddress = 'new';
   },
 };
 </script>
@@ -452,6 +475,13 @@ export default {
               margin-right: 30px;
             }
           }
+        }
+        &.has-none-consignee {
+          line-height: 28px;
+          margin-top: 20px;
+          font-size: 12px;
+          text-align: center;
+          color: #cbcbcb;
         }
       }
     }
