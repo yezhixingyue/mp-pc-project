@@ -151,12 +151,14 @@ function warnCancelMsgSM({ title, successFunc, failFunc }) {
  * @param {*} successFunc
  * @param {*} failFunc
  */
-function handleLoadingError({ error, successFunc, failFunc }) {
+// eslint-disable-next-line object-curly-newline
+function handleLoadingError({ error, successFunc, failFunc, title }) {
   let msg = error;
   if (error.response && error.response.data && error.response.data.Message) {
     msg = error.response.data.Message;
   }
-  failSingleError(undefined, msg, successFunc, failFunc);
+  console.log(msg);
+  failSingleError(title, msg, successFunc, failFunc);
 }
 
 const obj = {

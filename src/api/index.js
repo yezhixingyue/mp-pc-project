@@ -49,6 +49,9 @@ const api = {
   getQuotationSave(data) { // POST /Api/Quotation/Save  保存购物车
     return instance.post('/Api/Quotation/Save', data);
   },
+  CreateOrderFromPreCreate(data) { // POST /Api/Order/Create
+    return instance.post('/Api/Order/Create', data);
+  },
 
   /* 优惠券部分api
   ----------------------------------------------------------------------------------- */

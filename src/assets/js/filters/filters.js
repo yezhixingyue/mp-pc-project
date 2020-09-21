@@ -1,16 +1,10 @@
-/* eslint-disable max-len */
-// /* eslint-disable max-len */
-// /*
-//  * @Author: your name
-//  * @Date: 2020-05-26 09:16:49
-//  * @LastEditTime: 2020-09-07 16:53:55
-//  * @LastEditors: Please set LastEditors
-//  * @Description: In User Settings Edit 过滤器
-//  * @FilePath: /src/assets/js/filters/filters.js
-//  */
-
 // import Vue from 'vue';
-// import store from '@/store';
+// // import store from '@/store';
+
+// Vue.filter('numToFixed2', num => {
+//   if (!num && num !== 0) return '';
+//   return num.toFixed(2);
+// });
 
 // Vue.filter('formatDate', (date) => (date ? date.split('.')[0].slice(0, -3).replace('T', ' ') : ''));
 

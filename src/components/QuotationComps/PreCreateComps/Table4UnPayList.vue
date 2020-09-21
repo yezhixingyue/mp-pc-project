@@ -1,17 +1,15 @@
 <template>
   <RetractableDisplayComp
-    class="mp-unpay-order-list-table"
+    class="mp-pc-pre-create-order-list-wrap"
     :isScrollStyle="false"
     :widthObj="widthObj"
     :onWidthChange="onWidthChange"
     :titleList="titleList"
   >
-    <template v-if="unPayTableData">
+    <template v-if="PreCreateData">
       <ItemListComp
-        v-for="(value, key) in unPayTableData"
-        :key="value.CustomerNo"
-        :isDisabled="curSelectedList.length > 0 && curSelectedList[0].CustomerNo !== key"
-        :CustomerNo="key"
+        v-for="(value) in PreCreateData.PackageList"
+        :key="value.ID"
         :data="value"
         :widthObj="widthObj"
       />
@@ -22,7 +20,7 @@
 
 <script>
 import RetractableDisplayComp from '@/components/common/RetractableDisplayComp/Index.vue';
-// import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import ItemListComp from './ItemListComp.vue';
 
 export default {
@@ -33,18 +31,16 @@ export default {
   data() {
     return {
       widthObj: {
-        w1: 175,
-        w2: 120,
-        w3: 95,
-        w4: 80,
-        w5: 315,
+        w1: 270,
+        w2: 105,
+        w3: 105,
+        w4: 105,
+        w5: 105,
         w6: 105,
-        w7: 120,
-        w8: 95,
+        w7: 402,
       },
       titleList: [
         '产品',
-        '尺寸',
         '数量',
         '原价',
         '优惠券',
@@ -57,8 +53,7 @@ export default {
     };
   },
   computed: {
-    // ...mapState('unpaylist', ['curSelectedList']),
-    // ...mapGetters('unpaylist', ['unPayTableData']),
+    ...mapState('Quotation', ['PreCreateData']),
   },
   methods: {
     onWidthChange(newW, w) {
@@ -69,38 +64,31 @@ export default {
 </script>
 
 <style lang='scss'>
-// @import "@/assets/css/common/var.scss";
-.mp-unpay-order-list-table {
+.mp-pc-pre-create-order-list-wrap {
   height: 100%;
   padding-top: 8px;
   box-sizing: border-box;
-  // overflow-y: auto;
   > header {
-    height: 36px;
-    // border-top: 1px solid $--border-color-light;
-    // border-bottom: 1px solid $--border-color-light;
-    // background-color: $--bg-color-base;
+    height: 40px;
+    border: 1px solid #eee;
+    // border-bottom: 1px solid #eee;
+    background-color: rgb(248, 248, 248);
     box-sizing: border-box;
     > div {
-      line-height: 34px;
+      line-height: 38px;
       height: 100%;
-      // color: $--color-text-primary;
-      // background-color: $--bg-color-base;
-      font-weight: 600;
-      &::after {
-        // background-color: rgba($color: $--color-text-secondary, $alpha: 0.6);
-      }
-      &:first-of-type {
-        text-align: left;
-        padding-left: 70px;
-        box-sizing: border-box;
-      }
+      background-color: rgb(248, 248, 248);
+      // &:first-of-type {
+      //   text-align: left;
+      //   padding-left: 118px;
+      //   box-sizing: border-box;
+      // }
     }
   }
   .no-data-show {
     text-align: center;
     font-size: 13px;
-    margin-top: 20vh;
+    margin-top: 6vh;
   }
   > main {
     height: calc(100% - 36px);

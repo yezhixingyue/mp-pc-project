@@ -1,90 +1,29 @@
 <template>
-  <div class="unpay-list-item-wrap">
+  <div class="mp-pc-pre-create-order-list-item-wrap">
     <div class="product-item-header">
-      <div class="product-item-header-left">  <!-- 标题部分 -->
-        <span class="check-item">
-          <el-checkbox
-           :disabled="isDisabled"
-           :indeterminate="isIndeterminate"
-           v-model="checkAll"
-          ></el-checkbox> <!-- 标题总复选框 -->
-        </span>
-        <span class="product-item-header-freight-box">{{data.CustomerName}}</span>
-        <span class="customer-sn">客户编号：{{data.CustomerNo}}</span>
+      <div class="product-item-header-left">
+        <span class="product-item-header-amount-box gray is-font-14">产品金额：<i class="is-pink"
+          >{{data.OrderList[0].FinalPrice}}元</i></span>
+        <span class="freight-box"> <i class="gray">运费：</i>{{data.Freight}}元</span>
+        <span><i class="gray">配送地址：</i>{{getAddress(data.Address.Address)}}</span>
       </div>
       <div class="product-item-header-right" @click="handleCollapse">
-          <div :class="isActive ? 'active' : ''"></div>
-        </div>
+        <div :class="isActive ? 'active' : ''"></div>
+      </div>
     </div>
     <TransitionGroupCollapse tag="ul" class="has-transition"> <!-- 子列表部分 -->
       <li
         class="product-item-content has-transition"
-        v-for="item in data.subList"
+        key='product-item-content-1'
         v-show="isActive"
-        :key="item.OrderID"
       >
-        <div :style="wStyles[0]" class="check-item">
-          <el-checkbox
-           @change="onItemCheck(item, $event)"
-           :value="getSingleCheckStatus(item.OrderID)"
-           :disabled="isDisabled || item.Status !== 10"
-          >
-          </el-checkbox> <!-- 子项复选框 -->
-          {{item.ProductName}}
-        </div>
-        <div
-          :style="wStyles[1]"
-          class="is-twelve"
-        >{{item.ProductAmount}}{{item.Unit?item.Unit:'个'}}{{item.KindCount?item.KindCount:1}}款</div>
-        <div :style="wStyles[2]">{{item.Funds.FinalPrice}}元</div>
-        <div :style="wStyles[3]">{{item.Funds.Deposit}}元</div>
-        <div class="product-item-ontent-text-box is-gray" :style="wStyles[4]">
-          <i>{{item.Content}}</i>
-        </div>
-        <div :style="wStyles[5]">{{item.Package.Address.Address.Consignee}}</div> <!-- 收货人 -->
-        <div :style="wStyles[6]">{{item.Package.Address.Address.Mobile}}</div> <!-- 收货人手机 -->
-        <div :style="wStyles[7]">{{item.Express}}</div> <!-- 配送方式 -->
-        <div
-          :style="wStyles[8]"
-          :class="{'is-cancel': item.Status === 254,
-                'is-red': item.Status === 10,
-                'is-success': item.Status === 200}"
-         >{{item.Status | formatStatus}}</div> <!-- 状态 -->
-        <div :style="wStyles[9]" class="is-twelve">{{item.Taker}}</div> <!-- 接单人 -->
-        <div :style="wStyles[10]" class="is-twelve is-date">
-          {{item.CreateTime | formatDate}}
-        </div> <!-- 下单时间 -->
-        <div :style="wStyles[11]">
-          {{item.FinalPrice}}
-          <ul class="payment-table-handle-menu-wrap">
-            <li class="handle-menu-item">
-              <span @click="goToOrderDetail(item)">
-                <!-- <img src="@/assets/images/detail.png" class="detail" alt />详情 -->
-              </span>
-            </li>
-            <li class="handle-menu-item"
-             v-if="Permission.PermissionList.PermissionManageOrder.Obj.HelpSubmit">
-              <span
-                v-if="item.Status !== 200 && item.Status !== 254"
-                @click="go2PaySingleOrder(item)"
-              >
-                <!-- <img src="@/assets/images/pay.png" alt />付款 -->
-              </span>
-              <span v-else class="is-cancel">
-                <!-- <img src="@/assets/images/unpay.png" alt />付款 -->
-              </span>
-            </li>
-            <li class="handle-menu-item"
-             v-if="Permission.PermissionList.PermissionManageOrder.Obj.HelpSubmit">
-              <span v-if="item.Status !== 254 && item.Status !== 200" @click="cancelOrder(item)">
-                <!-- <img src="@/assets/images/cancel.png" alt />取消 -->
-              </span>
-              <span v-else class="is-cancel">
-                取消
-              </span>
-            </li>
-          </ul>
-        </div> <!-- 操作 -->
+        <div :style="wStyles[0]" class="is-twelve">{{getProductName(data.OrderList[0])}}</div>
+        <div :style="wStyles[1]">{{getProductCount(obj2GetProductPrice.ProductParams)}}</div>
+        <div :style="wStyles[2]">{{data.OrderList[0].OriginalPrice}}元</div>
+        <div :style="wStyles[3]">{{ selectedCoupon ? selectedCoupon.Amount : 0}}元</div>
+        <div :style="wStyles[4]">{{data.OrderList[0].FinalPrice}}元</div> <!-- 成交价 -->
+        <div :style="wStyles[5]">{{data.OrderList[0].DepositAmount}}元</div> <!-- 订金 -->
+        <div :style="wStyles[6]" class="is-font-12 gray">{{curFileContent}}</div>
       </li>
     </TransitionGroupCollapse>
   </div>
@@ -92,7 +31,7 @@
 
 <script>
 import TransitionGroupCollapse from '@/components/common/TransitionGroupCollapse.vue';
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   props: {
@@ -129,32 +68,10 @@ export default {
     TransitionGroupCollapse,
   },
   computed: {
-    ...mapState('unpaylist', ['curSelectedList']),
-    ...mapState('common', ['Permission']),
+    ...mapState('Quotation', ['obj2GetProductPrice', 'selectedCoupon', 'curFileContent']),
+    // ...mapState('common', ['Permission']),
     wStyles() {
       return Object.values(this.widthObj).map((item) => `width: ${item}px`);
-    },
-    isIndeterminate() {
-      return this.curSelectedList.length > 0
-        && this.curSelectedList.length < this.data.subList.length
-        && this.curSelectedList[0].CustomerNo === this.CustomerNo;
-    },
-    checkAll: {
-      get() {
-        if (this.curSelectedList.length === 0) return false;
-        const bool1 = this.curSelectedList.length === this.data.subList.length;
-        const bool2 = this.curSelectedList[0].CustomerNo === this.CustomerNo;
-        return bool1 && bool2;
-      },
-      set(val) {
-        if (val) {
-          this.setCurSelectedList(this.data.subList.filter((item) => (
-            item.Status === 10
-          )));
-        } else {
-          this.setCurSelectedList([]);
-        }
-      },
     },
   },
   data() {
@@ -163,65 +80,45 @@ export default {
     };
   },
   methods: {
-    // eslint-disable-next-line max-len
-    ...mapMutations('unpaylist', ['setCurOrderID', 'setIsShowDia', 'setIsShowPreDialog', 'addCurSelectedList', 'setCurSelectedList', 'setSingleSelectedOrder']),
-    ...mapActions('unpaylist', ['delTargetOrder', 'getOrderDetail', 'getPrePayData']),
-    ...mapMutations('common', ['setIsLoading']),
     handleCollapse() {
       this.isActive = !this.isActive;
     },
-    onItemCheck(item, key) {
-      if (key) this.addCurSelectedList(item);
-      else this.setCurSelectedList(this.curSelectedList.filter((it) => it !== item));
+    getProductName({ FirstLevelName, SecondLevelName, ProductName }) {
+      return `${FirstLevelName}-${SecondLevelName}-${ProductName}`;
     },
-    cancelOrder(row) { // 取消订单弹窗
-      this.setCurOrderID(row.OrderID);
-      this.messageBox.warnCancelBox('确定取消此订单吗 ?', `客户名称： ${row.CustomerName}`, () => this.delTargetOrder(), null);
+    getProductCount({ ProductAmount, Unit, KindCount }) {
+      return `${ProductAmount}${Unit}${KindCount}款`;
     },
-    goToOrderDetail(row) {
-      this.setCurOrderID(row.OrderID);
-      this.$utils.handleLoadingHOF(
-        () => this.getOrderDetail(), () => this.setIsShowDia(true), () => this.setIsShowDia(false),
-      );
-    },
-    go2PaySingleOrder(row) {
-      // this.setIsLoading(true);
-      this.setSingleSelectedOrder(row);
-      this.$utils.handleLoadingHOF(
-        () => this.getPrePayData({ type: 'single' }),
-        () => this.setIsShowPreDialog(true),
-        () => this.setIsShowPreDialog(false),
-      );
-    },
-    getSingleCheckStatus(OrderID) {
-      return this.curSelectedList.some((item) => item.OrderID === OrderID && item.Status === 10);
+    // eslint-disable-next-line object-curly-newline
+    getAddress({ AddressDetail, Consignee, Mobile, ExpressArea }) {
+      const { RegionalName, CityName, CountyName } = ExpressArea;
+      return `${RegionalName}${CityName}${CountyName}${AddressDetail} (${Consignee} ${Mobile})`;
     },
   },
 };
 </script>
 
 <style lang='scss'>
-// @import "@/assets/css/common/var.scss";
-.unpay-list-item-wrap {
-  margin-top: 10px;
+.mp-pc-pre-create-order-list-item-wrap {
+  margin-top: 20px;
+  margin-bottom: 20px;
   font-size: 12px;
-  // border: 1px solid $--border-color-light;
-  border-bottom: none;
+  border: 1px solid #eee;
+  // border-bottom: none;
   box-sizing: border-box;
 
   .product-item-header {
-    // background-color: $--bg-color-base;
+    background-color: rgb(248, 248, 248);
     display: flex;
     justify-content: space-between;
-    // border-bottom: 1px solid $--border-color-light;
     .product-item-header-left {
       height: 36px;
       line-height: 35px;
+      padding-left: 30px;
       display: flex;
       overflow: hidden;
       width: calc(100% - 32px);
       > span {
-        // color: $--color-gray-1;
         text-align: center;
         white-space: nowrap;
         overflow: hidden;
@@ -229,17 +126,12 @@ export default {
         > .is-pink {
           font-size: 14px;
         }
-        &.product-item-header-freight-box {
-          margin-right: 26px;
-          // color: $--color-text-primary;
-          font-size: 14px;
-          font-weight: 600;
-          min-width: 5em;
-          text-align: left;
+        &.product-item-header-amount-box {
+          margin-right: 25px;
         }
-        &.customer-sn {
-          //   width: 186px;
-          // color: $--color-text-table-time;
+        &.freight-box {
+          margin-right: 50px;
+          font-size: 14px;
         }
       }
     }
@@ -258,13 +150,20 @@ export default {
         left: 50%;
         transition: 0.1s linear !important;
         transform: translate(-50%, -50%) rotate(90deg);
-        // background: url("../../../assets/images/right-arrow.png") center
-          // no-repeat;
+        background: url("../../../assets/images/right-arrow.png") center
+          no-repeat;
         background-size: 100% 100%;
         &.active {
           transform: translate(-50%, -50%) rotate(-90deg);
         }
       }
+    }
+    &::before {
+      content: '';
+      display: inline-block;
+      height: 35px;
+      width: 2px;
+      background-color: #428dfa;
     }
   }
   .product-item-content {
@@ -273,6 +172,8 @@ export default {
     white-space: nowrap;
     display: flex;
     border-bottom: none;
+    border-top: 1px solid #eee;
+
     > div {
       white-space: nowrap;
       display: block;
@@ -283,88 +184,8 @@ export default {
       box-sizing: border-box;
       flex: none;
       font-size: 14px;
-      // color: $--color-text-primary;
-      &.is-twelve {
-        font-size: 12px;
-      }
-      &.is-date {
-        // color: $--color-text-table-time;
-      }
-      &.product-item-ontent-text-box {
-        font-size: 12px;
-        white-space: nowrap;
-        line-height: 44px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align: center;
-      }
-      .payment-table-handle-menu-wrap {
-        display: flex;
-        // padding: 0 35px 0 50px;
-        justify-content: space-between;
-        &:before,
-        &:after {
-          content: '';
-          display: block;
-        }
-        user-select: none;
-        font-size: 12px;
-        // color: $--color-text-primary;
-        .handle-menu-item {
-          cursor: pointer;
-          position: relative;
-          height: 44px;
-          flex: none;
-          padding: 0 6px;
-          span {
-            // position: absolute;
-            // height: 28px;
-            // line-height: 28px;
-            // top: 50%;
-            // transform: translateY(-50%);
-            img {
-              margin-right: 5px;
-              position: relative;
-              top: 3px;
-              &.detail {
-                width: 15px;
-                height: 15px;
-              }
-            }
-          }
-          &:hover {
-            // color: $--color-text-regular;
-          }
-        }
-      }
-      &.check-item {
-        text-align: left;
-        .el-checkbox__input.is-checked .el-checkbox__inner {
-          background-color: #fff;
-          border-color: #26bcf9;
-          &::after{
-            border-color: #26bcf9;
-          }
-        }
-      }
+      color: #585858;
     }
-    &.active {
-      height: 44px;
-      opacity: 1;
-      // border-bottom: 1px solid $--border-color-light;
-    }
-    opacity: 1;
-    // border-bottom: 1px solid $--border-color-light;
-    &:hover {
-      // background-color: $--color-text-table-hover;
-      // border-color: $--color-text-table-hover;
-      // box-shadow: 0px -1px 0px $--color-text-table-hover
-    }
-  }
-  .product-item-content > div.check-item .el-checkbox,
-  div.product-item-header-left .check-item .el-checkbox {
-    text-align: left;
-    padding: 0 18px 0 20px;
   }
 }
 </style>

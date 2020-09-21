@@ -53,12 +53,24 @@ export default {
     /* 当前状态是报价还是下单
     -------------------------------*/
     curSelectStatus: '报价',
+    /* 当前预下单文件内容
+    -------------------------------*/
+    curFileContent: '',
     /* 预下单后获取到的数据信息
     -------------------------------*/
     PreCreateData: null,
     /* 预下单中存放的订单文件
     -------------------------------*/
     orderFile4PreCreateData: null,
+    /* 支付二维码信息
+    -------------------------------*/
+    curPayInfo2Code: null,
+    /* 预下单请求数据
+    -------------------------------*/
+    curReqObj4PreCreate: null,
+    /* 控制弹窗3- 支付二维码弹窗显示状态
+    -------------------------------*/
+    isShow2PayDialog: false,
   },
   getters: {
     /* 全部产品分类结构树，用于报价目录展示
@@ -758,6 +770,31 @@ export default {
     setOrderFile4PreCreateData(state, file) {
       state.orderFile4PreCreateData = file;
     },
+    /* 设置当前预下单文件内容
+    -------------------------------*/
+    setCurFileContent(state, data) {
+      state.curFileContent = data;
+    },
+    /* 设置支付二维码信息
+    -------------------------------*/
+    setCurPayInfo2Code(state, data) {
+      state.curPayInfo2Code = data;
+    },
+    /* 设置预下单请求数据
+    -------------------------------*/
+    setCurReqObj4PreCreate(state, data) {
+      state.curReqObj4PreCreate = data;
+    },
+    /* 控制弹窗3- 支付二维码弹窗显示状态
+    -------------------------------*/
+    setIsShow2PayDialog(state, bool) {
+      state.isShow2PayDialog = bool;
+    },
+    /* 设置订单付款成功后的状态
+    -------------------------------*/
+    setPaySuccessOrderDataStatus(state) {
+      console.log(state, '设置订单付款成功后的状态');
+    },
   },
   actions: {
     /* 产品分类相关 getProductClassify getProductLists
@@ -843,6 +880,7 @@ export default {
         // if (!state.addressInfo4PlaceOrder.Address.Address.Latitude) alert('未定位')
       }
       _itemObj.Content = fileContent;
+      commit('setCurFileContent', fileContent);
       if (state.selectedCoupon) _itemObj.Coupon = { CouponCode: state.selectedCoupon.CouponCode };
 
       const productData = state.obj2GetProductPrice.ProductParams;
@@ -856,11 +894,11 @@ export default {
       _itemObj.ProductParams = ProductParams;
 
       _requestObj.List.push(_itemObj);
-
       const res = await api.getOrderPreCreate(_requestObj);
       // console.log(res);
 
       if (res.data.Status === 1000) {
+        commit('setCurReqObj4PreCreate', _itemObj);
         commit('setPreCreateData', res.data.Data);
         callBack();
       }
@@ -902,6 +940,60 @@ export default {
         commit('setCurProductInfo2Quotation', null);
         await dispatch('delay', 10);
         commit('setCurProductInfo2Quotation', _obj);
+      }
+    },
+    async createPaymentOrder({ state, commit }, isPayInFull) { // 提交订单
+      const obj2Request = {
+        PayInFull: isPayInFull,
+        IsOrder: true,
+        OrderType: 1,
+        IsCreate: true,
+        List: [{ ID: 0 }],
+      };
+      obj2Request.List = state.curToPayList.map((item) => ({ ID: item.OrderID }));
+      const res = await api.createPaymentOrder(obj2Request);
+      if (res.data.Status === 1000) {
+        commit('setCurPayInfo2Code', res.data.Data);
+        if (!res.data.Data) {
+          // commit('setClock2PaySuccess');
+          massage.successSingle({
+            title: '下单成功!',
+            successFunc: () => {
+              commit('setPaySuccessOrderDataStatus');
+              commit('setIsShow2PayDialog', false);
+              commit('setIsShowPreDialog', false);
+            },
+          });
+        }
+      } else {
+        throw new Error(res.data.Message);
+      }
+    },
+    /* 根据付款单号轮询查询当前二维码对应订单付款状态
+    -------------------------------*/
+    async getPayResult({ state }, cb) {
+      if (!state.curPayInfo2Code || !state.curPayInfo2Code.PayCode) return;
+      const res = await api.getPayResult(state.curPayInfo2Code.PayCode);
+      if (res.data.Status === 1000) cb(res.data.Data);
+    },
+    async placeOrderFromPreCreate({ state, commit }, { FilePath, PayInFull }) {
+      const _obj = { OrderType: 2, PayInFull, List: [] };
+      const item = { ...state.curReqObj4PreCreate, FilePath };
+      _obj.List.push(item);
+      const res = await api.CreateOrderFromPreCreate(_obj);
+      if (res.data.Status !== 1000) {
+        throw new Error(res.data.Message);
+      }
+      commit('setCurPayInfo2Code', res.data.Data);
+      if (!res.data.Data) {
+        // commit('setClock2PaySuccess');
+        massage.successSingle({
+          title: '下单成功!',
+          successFunc: () => {
+            commit('setPaySuccessOrderDataStatus');
+            commit('setIsShow2PayDialog', false);
+          },
+        });
       }
     },
   },

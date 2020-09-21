@@ -7,3 +7,9 @@ Vue.filter('format2MiddleLangTypeDate', date => {
   const t2 = t2s.split('.')[0].slice(0, -3);
   return `${t1}  ${t2}`;
 });
+
+Vue.filter('numToFixed2', num => {
+  console.log(num);
+  if (!num && num !== 0) return '';
+  return num.toFixed(2);
+});

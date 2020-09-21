@@ -17,7 +17,7 @@
         </li>
       </ul>
       <div class="price-wrap">
-        <div class="price-box">
+        <div class="price-box"  v-if="ProductQuotationResult">
           <div class="price-left">
             <p>原价：</p>
             <p>优惠券：</p>
@@ -25,14 +25,12 @@
             <p class="final-price">成交价<i class="is-font-12 gray">（不含运费）</i>：</p>
           </div>
           <div class="price-right">
-            <template v-if="ProductQuotationResult">
               <p>¥ {{ProductQuotationResult.OriginalCost}}</p>
               <p :class="coupon && coupon > 0 ? 'is-pink' : ''">
                 <template v-show='coupon'>{{'¥ ' + (coupon ? coupon : 0)}}</template>
               </p>
               <p>¥ {{ProductQuotationResult.ExpressCost}}</p>
               <p class="final-price is-pink">¥ <i class="is-font-24 is-bold">{{Cost}}</i></p>
-            </template>
           </div>
         </div>
       </div>
@@ -95,14 +93,12 @@ export default {
       await this.$refs.UploadComp4BreakPoint.saveFile2Store();
     },
     async onSave2TheCar(evt) {
-      console.log(2131, 'onSave2TheCar');
       let { target } = evt;
       if (target.nodeName === 'SPAN') {
         target = evt.target.parentNode;
       }
       target.blur();
       this.title = '添加购物车';
-      console.log(this.title);
       this.type = 'saveCar';
       await this.$refs.UploadComp4BreakPoint.handleElUpload();
     },
@@ -111,7 +107,6 @@ export default {
     },
     async getProductPriceLocal() { // 校验函数  用来判断是否可以进行下单
       if (!this.addressInfo4PlaceOrder || !this.addressInfo4PlaceOrder.Address.Address.Consignee) return '请选择配送地址';
-      console.log(this.title);
       const key = await this.$store.dispatch('Quotation/getProductPrice', this.title);
       return key;
     },

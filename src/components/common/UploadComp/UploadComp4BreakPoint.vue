@@ -9,6 +9,7 @@
         :multiple='multiple'
         :accept="accept"
         @change="onChange"
+        @click.stop="onInputClick"
         class="upload-inp"
         ref="uploadInp"
       />
@@ -110,6 +111,13 @@ export default { // 上传图片按钮
       type: String,
       default: '验证失败',
     },
+    /**
+     * 是否只用于状态显示 不能点击上传  通过ref调用上传方法
+     */
+    onlyShow: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -149,7 +157,7 @@ export default { // 上传图片按钮
     },
     upLoadSingleFile(file) {
       if (!file) return;
-      this.upLoadTitle = '读取中...';
+      this.upLoadTitle = '读取文件中...';
       const reader = new FileReader();
       reader.readAsArrayBuffer(file);
       reader.onerror = () => {
@@ -254,6 +262,13 @@ export default { // 上传图片按钮
         // this.upLoadSingleFile(file);
         this.$emit('saveFile2Store', file);
         this.successFunc({ compiledName: '', initialName: this.fileName });
+      }
+    },
+    // eslint-disable-next-line consistent-return
+    onInputClick(e) {
+      if (this.onlyShow) {
+        e.stopPropagation();
+        return false;
       }
     },
   },

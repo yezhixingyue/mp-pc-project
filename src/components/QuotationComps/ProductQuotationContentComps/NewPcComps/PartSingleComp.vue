@@ -8,7 +8,7 @@
     v-show="!canHidePartComponent"
     :h="h"
   >
-    <template #header>
+    <template #header v-if="!showTitle">
       <header>
         <span class="header-title point" ref="headerTitle"
           >// {{ data.PartName }}{{ indexLv2 > 0 ? '-' +(indexLv2 + 1) : "" }}</span
@@ -135,7 +135,7 @@ import SizeGroupComp from '@/components/QuotationComps/ProductQuotationContentCo
 import AttributesGroupComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesGroupComp.vue';
 import CraftListComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/CraftListComp.vue';
 import PrintTypeListComps from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/PrintTypeListComps.vue';
-import { mapMutations } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 import MaterialComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/MaterialComp.vue';
 
@@ -176,6 +176,19 @@ export default {
     },
   },
   computed: {
+    ...mapState('Quotation', ['obj2GetProductPrice']),
+    showTitle() {
+      if (
+        this.obj2GetProductPrice.ProductParams.PartList.length === 1
+        && this.obj2GetProductPrice.ProductParams.PartList[0].PartList.length
+          === 1
+        && this.data.MinUsePart === 1
+        && this.data.MaxUsePart === 1
+      ) {
+        return true;
+      }
+      return false;
+    },
     PartAmount: {
       get() {
         return this.data.PartAmount.First;
@@ -301,6 +314,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
+      if (!this.$refs.headerTitle) return;
       const w = 1140 - this.$refs.headerTitle.offsetWidth - 2;
       this.headerWidth = { width: `${w}px` };
     });

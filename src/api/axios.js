@@ -18,7 +18,7 @@ axios.interceptors.request.use(
     if (token && !arrWithOutToken.includes(url)) curConfig.headers.common.Authorization = `Bearer ${token}`;
     // console.log(curConfig);
     let key = true;
-    const arr = []; // 不需要展示loading的api地址
+    const arr = ['/Api/Order/Create', '/Api/Order/PreCreate']; // 不需要展示loading的api地址
     for (let i = 0; i < arr.length; i += 1) {
       if (curConfig.url.includes(arr[i]) || store.state.common.isLoading) {
         key = false;
@@ -45,7 +45,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => {
     if (loadingInstance) loadingInstance.close();
-    const _list2NotNeed2Toast = [];
+    const _list2NotNeed2Toast = ['/Api/Calculate/ProductPrice'];
     const _statusList2NotNeed2Toast = [1000, 9062];
     // 包含以上的状态码 或 以上的请求路径  不会弹窗报错  其余以外都会报错出来
 
@@ -61,6 +61,7 @@ axios.interceptors.response.use(
       if (_url === '/Api/FindPassword/ResetPassword') _msg = '重置密码失败';
       if (_url === '/Api/Customer/ChangePassword') _msg = '密码修改失败';
       if (_url === '/Api/Coupon/Activate') _msg = '激活失败';
+      if (_url === '/Api/Order/Create' || _url === '/Api/Order/PreCreate') _msg = '下单失败';
 
       _obj.title = _msg;
       messageBox.failSingleError(_obj);
