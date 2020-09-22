@@ -27,7 +27,7 @@ export default {
 <style lang='scss'>
 .mp-pc-common-page-comp-view-wrap {
   padding-top: 135px;
-  background-color: rgb(245, 245, 245);
+  // background-color: rgb(245, 245, 245);
   box-sizing: border-box;
   > .common-page-view-content {
     width: 100%;

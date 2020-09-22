@@ -81,7 +81,10 @@ export default {
   methods: {
     successFunc({ compiledName }) {
       if (this.type === 'placeOrder') {
-        const callBack = () => this.$router.push('/OrderPreCreate');
+        const callBack = () => {
+          this.$store.commit('Quotation/setCurPayInfo2Code', null);
+          this.$router.push('/OrderPreCreate');
+        };
         this.$store.dispatch('Quotation/getOrderPreCreate', { compiledName, fileContent: this.fileContent, callBack });
       } else if (this.type === 'saveCar') {
         this.$store.dispatch('Quotation/getQuotationSave2Car', { compiledName, fileContent: this.fileContent });
@@ -98,7 +101,7 @@ export default {
         target = evt.target.parentNode;
       }
       target.blur();
-      this.title = '添加购物车';
+      this.title = '添加';
       this.type = 'saveCar';
       await this.$refs.UploadComp4BreakPoint.handleElUpload();
     },
@@ -107,8 +110,9 @@ export default {
     },
     async getProductPriceLocal() { // 校验函数  用来判断是否可以进行下单
       if (!this.addressInfo4PlaceOrder || !this.addressInfo4PlaceOrder.Address.Address.Consignee) return '请选择配送地址';
-      const key = await this.$store.dispatch('Quotation/getProductPrice', this.title);
-      return key;
+      // const key = await this.$store.dispatch('Quotation/getProductPrice', this.title);
+      // return key;
+      return true;
     },
     saveFile2Store(file) {
       this.$store.commit('Quotation/setOrderFile4PreCreateData', file);

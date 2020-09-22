@@ -21,7 +21,7 @@
             <i class="iconfont icon-xiadan"></i>
             <span>下单</span>
           </router-link>
-          <router-link tag="li" to="/">
+          <router-link tag="li" to="/shoppingCar">
             <i class="iconfont icon-gouwuche"></i>
             <span>购物车</span>
           </router-link>
@@ -74,7 +74,7 @@ export default {};
   left: 0;
   background-color: #fff;
   width: 100%;
-  z-index: 999;
+  z-index: 1000;
   > header {
     width: 1200px;
     height: 80px;

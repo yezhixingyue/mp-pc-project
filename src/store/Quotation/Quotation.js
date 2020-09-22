@@ -71,6 +71,15 @@ export default {
     /* 控制弹窗3- 支付二维码弹窗显示状态
     -------------------------------*/
     isShow2PayDialog: false,
+    /* 下单时 - 支付全款是否为禁用状态  （初始不禁用， 下单成功后禁用， 返回其它页面时重新设置为不禁用）
+    -------------------------------*/
+    isFullPayoutDisabled: false,
+    /* 初始页面字体
+    -------------------------------*/
+    initPageText: '',
+    /* 客户设置快捷方式
+    -------------------------------*/
+    customerShortCutList: [],
   },
   getters: {
     /* 全部产品分类结构树，用于报价目录展示
@@ -171,6 +180,7 @@ export default {
       if (data !== null) _tempObj = QuotationClassType.init(data);
       state.curProductInfo2Quotation = data;
       state.obj2GetProductPrice.ProductParams = _tempObj;
+      state.initPageText = '';
     },
     /* 清除选中产品详细信息
     -------------------------------*/
@@ -793,7 +803,46 @@ export default {
     /* 设置订单付款成功后的状态
     -------------------------------*/
     setPaySuccessOrderDataStatus(state) {
-      console.log(state, '设置订单付款成功后的状态');
+      console.log(state, '设置订单付款成功后的状态,清除一些数据的状态值');
+      state.PreCreateData = null;
+      state.orderFile4PreCreateData = null;
+      state.curProductID = '';
+      state.curProductClass = null;
+      state.curProductName = '';
+      state.curProductInfo2Quotation = null;
+      state.obj2GetProductPrice = {
+        ProductParams: {},
+      };
+      state.ProductQuotationResult = null;
+      state.ProductQuotationDetail = null;
+      state.curFileContent = '';
+      state.curPayInfo2Code = null;
+      state.curReqObj4PreCreate = null;
+      state.selectedCoupon = null;
+      state.isFullPayoutDisabled = false;
+      state.initPageText = '下单成功';
+    },
+    /* 下单成功后的状态清理
+    -------------------------------*/
+    clearStateAfterPlaceOrderSuccess(state) {
+      console.log(1231232132132131);
+      state.selectedCoupon = null;
+      state.isFullPayoutDisabled = true;
+    },
+    /* 设置支付全款禁用状态    下单时 - 支付全款是否为禁用状态  （初始不禁用， 下单成功后禁用， 返回其它页面时重新设置为不禁用）
+    -------------------------------*/
+    setIsFullPayoutDisabled(state, bool) {
+      state.isFullPayoutDisabled = bool;
+    },
+    /* 设置初始页面字体
+    -------------------------------*/
+    setInitPageText(state, text) {
+      state.initPageText = text;
+    },
+    /* 设置客户快捷方式
+    -------------------------------*/
+    setCustomerShortCutList(state, data) {
+      state.customerShortCutList = data;
     },
   },
   actions: {
@@ -828,7 +877,7 @@ export default {
     async getProductPrice({ state, commit, dispatch }, curSelectStatus) {
       console.log(curSelectStatus);
       const productData = state.obj2GetProductPrice.ProductParams;
-      commit('setCurSelectStatus', curSelectStatus);
+      commit('setCurSelectStatus', '报价');
       if (QuotationClassType.check(productData) === false) return;
       const _data = {};
       commit('setWatchTarget2DelCraft');
@@ -881,6 +930,7 @@ export default {
       }
       _itemObj.Content = fileContent;
       commit('setCurFileContent', fileContent);
+      commit('setCurSelectStatus', '下单');
       if (state.selectedCoupon) _itemObj.Coupon = { CouponCode: state.selectedCoupon.CouponCode };
 
       const productData = state.obj2GetProductPrice.ProductParams;
@@ -985,6 +1035,8 @@ export default {
         throw new Error(res.data.Message);
       }
       commit('setCurPayInfo2Code', res.data.Data);
+      commit('clearStateAfterPlaceOrderSuccess');
+      // 成功后清除优惠券等信息
       if (!res.data.Data) {
         // commit('setClock2PaySuccess');
         massage.successSingle({
@@ -995,6 +1047,22 @@ export default {
           },
         });
       }
+    },
+    /* 获取客户设置快捷方式
+    -------------------------------*/
+    async getCustomerShortCutList({ commit }) {
+      const res = await api.getCustomerShortCutList();
+      if (res.data.Status === 1000) {
+        console.log(res);
+        commit('setCustomerShortCutList', res.data.Data);
+      }
+    },
+    // eslint-disable-next-line consistent-return
+    async getCustomerShortCutSave(args, data) {
+      const res = await api.getCustomerShortCutSave(data);
+      console.log(res);
+      if (res.data.Status !== 1000) return false;
+      return true;
     },
   },
 };

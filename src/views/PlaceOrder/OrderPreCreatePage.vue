@@ -25,7 +25,7 @@
             <p class="is-pink">¥ <i class="is-font-20 is-bold">{{payNumOnline | numToFixed2}}</i></p>
             <p class="is-pink">{{PayOnDelivery | numToFixed2}}</p>
             <p v-if="PreCreateData.MinimumCost !== PreCreateData.FullPayout">
-              <el-checkbox v-model="checked">在线支付全款</el-checkbox>
+              <el-checkbox v-model="checked" :disabled='!!curPayInfo2Code'>在线支付全款</el-checkbox>
             </p>
             <p>¥{{PreCreateData.FundBalance | numToFixed2}}</p>
           </div>
@@ -36,7 +36,7 @@
           ref='UploadComp4BreakPoint' title='' isUploadRightNow onlyShow :successFunc="subMitPlaceOrder" />
         <el-button type="danger" @click="handleSubmit">提交订单</el-button>
       </div>
-      <Dialog2Pay />
+      <Dialog2Pay :needClear='false' />
     </footer>
   </section>
 </template>
@@ -54,7 +54,8 @@ export default {
     Dialog2Pay,
   },
   computed: {
-    ...mapState('Quotation', ['orderFile4PreCreateData', 'PreCreateData', 'selectedCoupon']),
+    // eslint-disable-next-line max-len
+    ...mapState('Quotation', ['orderFile4PreCreateData', 'PreCreateData', 'selectedCoupon', 'curPayInfo2Code', 'curPayInfo2Code']),
     payNumOnline() {
       if (this.isFullPayout) return this.PreCreateData.FullPayout;
       return this.PreCreateData.MinimumCost;
@@ -72,6 +73,9 @@ export default {
         this.isFullPayout = key;
       },
     },
+    data2Listener() {
+      return (!this.orderFile4PreCreateData || !this.PreCreateData);
+    },
   },
   data() {
     return {
@@ -81,21 +85,17 @@ export default {
   methods: {
     onReturnClick() {
       this.$router.replace('/placeOrder');
-    },
-    handleClose(done) {
-      this.$confirm('确认关闭？')
-        .then(() => {
-          done();
-        })
-        .catch(() => {});
+      this.$store.commit('Quotation/setIsFullPayoutDisabled', false);
     },
     handleSubmit() {
-      this.$refs.UploadComp4BreakPoint.upLoadSingleFile(this.orderFile4PreCreateData);
+      if (this.curPayInfo2Code) this.$store.commit('Quotation/setIsShow2PayDialog', true);
+      else this.$refs.UploadComp4BreakPoint.upLoadSingleFile(this.orderFile4PreCreateData);
     },
     subMitPlaceOrder({ compiledName }) {
       this.$store.commit('Quotation/setIsShow2PayDialog', true);
       const _obj = { FilePath: compiledName, PayInFull: this.checked };
-      this.$store.dispatch('Quotation/placeOrderFromPreCreate', _obj).catch((error) => {
+      this.$store.dispatch('Quotation/placeOrderFromPreCreate', _obj).catch((...args) => {
+        const error = args[0];
         this.messageBox.handleLoadingError({
           title: '下单失败',
           error,
@@ -104,8 +104,13 @@ export default {
       });
     },
   },
+  watch: {
+    data2Listener(newVal) {
+      if (newVal) this.$router.replace('/placeOrder');
+    },
+  },
   mounted() {
-    if (!this.orderFile4PreCreateData || !this.PreCreateData) this.$router.replace('/placeOrder');
+    if (this.data2Listener) this.$router.replace('/placeOrder');
   },
 };
 </script>
@@ -185,13 +190,21 @@ export default {
       > .mp-phone-upload-comp-break-point-type-wrap{
         display: inline-block;
         vertical-align: bottom;
+        height: 40px;
         .self-comp {
           background-color: #fff;
           border-color: #fff;
           box-shadow: none;
-          width: 1px;
+          width: 240px;
           min-width: 1px;
-          margin-right: 15px;
+          margin-right: 35px;
+          white-space: nowrap;
+          color: #989898 !important;
+          text-align: right;
+          > input {
+            white-space: nowrap;
+            color: #888;
+          }
         }
       }
     }

@@ -1,8 +1,8 @@
 <template>
-  <div class="mp-phone-upload-comp-break-point-type-wrap out-btn">
+  <div class="mp-phone-upload-comp-break-point-type-wrap out-btn" @click.stop="onInputClick">
     <!-- <span class="is-pink" @click="clearFile">清除文件</span> -->
-    <div class="self-comp" v-if="isUploadRightNow"
-      :class="showLoading || showProgress ? 'hide' : ''"
+    <div class="self-comp" v-if="isUploadRightNow" @click.stop="onInputClick"
+      :class="{hide: showLoading || showProgress, disabled: onlyShow}"
      >
       <input
         type="file"
@@ -12,6 +12,7 @@
         @click.stop="onInputClick"
         class="upload-inp"
         ref="uploadInp"
+        :disabled='onlyShow'
       />
       {{showTitle}}
     </div>
@@ -160,11 +161,12 @@ export default { // 上传图片按钮
       this.upLoadTitle = '读取文件中...';
       const reader = new FileReader();
       reader.readAsArrayBuffer(file);
+      console.log(file, 12345);
       reader.onerror = () => {
         this.messageBox.failSingleError({ title: '文件解析错误！', msg: '请检查文件并重新上传' });
         this.upLoadTitle = '读取失败请重新选择';
         const oInput = document.querySelector('.mp-phone-upload-comp-break-point-type-wrap > input');
-        oInput.value = '';
+        if (oInput) oInput.value = '';
       };
       reader.onloadend = async () => {
         if (!(reader.result)) return;
@@ -295,6 +297,21 @@ export default { // 上传图片按钮
     line-height: 35px;
     box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.15);
     cursor: pointer;
+    &.disabled {
+      user-select: none;
+      pointer-events: none;
+      &::after {
+        opacity: 0;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        z-index: 9;
+        content: '';
+        cursor: unset;
+      }
+    }
 
     > input {
       opacity: 0;

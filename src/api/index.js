@@ -52,6 +52,15 @@ const api = {
   CreateOrderFromPreCreate(data) { // POST /Api/Order/Create
     return instance.post('/Api/Order/Create', data);
   },
+  getPayResult(payCode) { // GET /Api/PaymentOrder/PayResult 查询付款结果
+    return instance.get(`/Api/PaymentOrder/PayResult?payCode=${payCode}`);
+  },
+  getCustomerShortCutList() { // GET /Api/Customer/ShortCut/List 快捷方式列表
+    return instance.get('/Api/Customer/ShortCut/List');
+  },
+  getCustomerShortCutSave(data) { // POST /Api/Customer/ShortCut/Save
+    return instance.post('/Api/Customer/ShortCut/Save', data);
+  },
 
   /* 优惠券部分api
   ----------------------------------------------------------------------------------- */
@@ -114,6 +123,12 @@ const api = {
       onUploadProgress: onUploadProgressFunc && onUploadProgressFunc,
     };
     return instance.post(`/Api/Upload/File?uniqueName=${uniqueName}`, formData, config);
+  },
+
+  /* 购物车部分 api
+   ----------------------------------------------------------------------------------- */
+  getQuotationList() { // GET /Api/Quotation/List 获取购物车数据列表
+    return instance.get('/Api/Quotation/List');
   },
 };
 

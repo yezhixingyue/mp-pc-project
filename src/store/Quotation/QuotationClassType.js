@@ -785,6 +785,7 @@ export default class QuotationClassType {
           PropertyList: _PropertyList,
           PropertyGroupList: _PropertyGroupList,
           SizePropertyList: it2.SizePropertyList,
+          Size: it2.Size,
         });
       }),
     }));
@@ -801,6 +802,7 @@ export default class QuotationClassType {
       item.PartList.forEach(it2 => {
         if (it2.CraftList.First.length === 0) delete it2.CraftList;
         if (!it2.Material.First) delete it2.Material;
+        if (!it2.Size.First) delete it2.Size;
         if (!it2.MaterialBrand.First) delete it2.MaterialBrand;
         if (it2.PropertyGroupList.length === 0) delete it2.PropertyGroupList;
         if (it2.PropertyList.length === 0) delete it2.PropertyList;

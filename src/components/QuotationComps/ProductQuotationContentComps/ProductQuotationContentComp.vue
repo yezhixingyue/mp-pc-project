@@ -384,6 +384,7 @@ export default {
       color: #333;
       font-weight: 700;
       margin-bottom: 35px;
+      // padding-left: 20px;
       > .blue-v-line {
         margin-right: 6px;
       }
@@ -631,7 +632,7 @@ export default {
       width: 1200px;
       height: 15px;
       margin: 15px -30px 0;
-      background-color: rgb(245, 245, 245);
+      // background-color: rgb(245, 245, 245);
     }
     > .comp-title {
       height: 40px;

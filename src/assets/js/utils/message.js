@@ -29,6 +29,7 @@ function failSingle({ msg, successFunc, failFunc }) {
 function failSingleError({
   title = '出错啦 ！', msg, successFunc, failFunc,
 }) {
+  console.log(title);
   MessageBox({
     showClose: true,
     message: msg,
@@ -156,9 +157,13 @@ function handleLoadingError({ error, successFunc, failFunc, title }) {
   let msg = error;
   if (error.response && error.response.data && error.response.data.Message) {
     msg = error.response.data.Message;
+  } else if (msg.message) {
+    msg = msg.message;
   }
-  console.log(msg);
-  failSingleError(title, msg, successFunc, failFunc);
+  console.log(title);
+  failSingleError({
+    title, msg, successFunc, failFunc,
+  });
 }
 
 const obj = {

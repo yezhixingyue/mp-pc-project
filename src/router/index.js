@@ -50,12 +50,21 @@ const routes = [
         },
         component: () => import('../views/PlaceOrder/OrderPreCreatePage.vue'),
       },
+      {
+        path: '/shoppingCar',
+        name: 'shoppingCar',
+        meta: {
+          requiresAuth: true,
+          title: '购物车',
+        },
+        component: () => import('../views/ShoppingCar/ShoppingCarPage.vue'),
+      },
     ],
   },
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes,
 });

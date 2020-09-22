@@ -1,11 +1,3 @@
-<!--
- * @Author: your name
- * @Date: 2020-05-11 17:47:43
- * @LastEditTime: 2020-09-21 17:55:17
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: /src/components/common/LoadingComp.vue
--->
 <template>
   <div class="mp-common-loading-wrap">
       <LoadingMiniSpinner class="loading-box" />

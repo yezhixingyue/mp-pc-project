@@ -26,7 +26,7 @@
           <!-- <span>客户：{{curToPayList[0].CustomerName}} </span>
           <span class="is-gray"> （{{curToPayList[0].CustomerNo}}）</span> -->
         </p>
-        <p>[ 请使用微信/支付宝扫一扫，扫描二维码支付 ]</p>
+        <p class="gray">[ 请使用微信/支付宝扫一扫，扫描二维码支付 ]</p>
       </header>
       <footer class="mp-pay-price-wrap">
         <div class="left">
@@ -45,7 +45,7 @@
         </div>
         <div class="right" v-if="curPayInfo2Code">
           <p>
-            <span class="should-pay">
+            <span class="should-pay is-pink">
               <i>￥</i>
               {{numToFixed(curPayInfo2Code.Amount, 2)}}元
             </span>
@@ -85,6 +85,12 @@ import {
 import LoadingComp from '@/components/common/LoadingComp.vue';
 
 export default {
+  props: {
+    needClear: {
+      default: true,
+      type: Boolean,
+    },
+  },
   components: {
     LoadingComp,
   },
@@ -102,6 +108,9 @@ export default {
       if (!this.curPayInfo2Code || !this.curPayInfo2Code.PayWay || !this.curPayInfo2Code.PayWay.AllinPay) return '';
       return this.curPayInfo2Code.PayWay.AllinPay;
     },
+    listener4GetPayStatus() { // 监听数据变化以启动支付状态轮询
+      return this.showImg && this.isShow2PayDialog;
+    },
   },
   methods: {
     ...mapActions('Quotation', ['getPayResult']),
@@ -109,8 +118,8 @@ export default {
     ...mapMutations('Quotation', ['setIsShow2PayDialog', 'setCurPayInfo2Code', 'setPaySuccessOrderDataStatus']),
     handleClose() {
       // 关闭前清除img元素src地址
-      this.showImg = false;
-      this.setCurPayInfo2Code(null);
+      if (this.needClear) this.showImg = false;
+      if (this.needClear) this.setCurPayInfo2Code(null);
       this.setIsShow2PayDialog(false);
       clearTimeout(this.timer);
       this.timer = null;
@@ -118,7 +127,7 @@ export default {
     onLoad() {
       // 图片下载完成
       this.showImg = true;
-      if (this.isShow2PayDialog) this.getPayStatus();
+      // if (this.isShow2PayDialog) this.getPayStatus();
     },
     onError(e) {
       // 图片下载出错
@@ -142,11 +151,10 @@ export default {
         if (status === 'True') key = true;
       });
       if (key) {
-        this.messageBox.successSingle(
-          '付款成功',
-          this.handleSuccessPay,
-          this.handleSuccessPay,
-        );
+        this.messageBox.successSingle({
+          title: '付款成功',
+          successFunc: () => this.handleSuccessPay(),
+        });
       } else {
         this.timer = setTimeout(() => {
           this.getPayStatus();
@@ -157,6 +165,11 @@ export default {
       // 转换数字格式
       if (!num && num !== 0) return '';
       return num.toFixed(count);
+    },
+  },
+  watch: {
+    listener4GetPayStatus(newVal) {
+      if (newVal) this.getPayStatus();
     },
   },
   mounted() {
@@ -307,6 +320,10 @@ export default {
         height: 30px;
         margin: 0 auto;
         border-radius: 2px;
+        padding: 0;
+        border-radius: 4px;
+        color: #428dfa;
+        border-color: #428dfa;
       }
     }
   }
