@@ -47,9 +47,9 @@ export default {
     }
     > .bg-empty-wrap {
       background: url('../../assets/images/placeorderisempty.png') no-repeat center/100% 100%;
-      height: 180px;
-      width: 418px;
-      margin: 170px auto 0;
+      height: 266px;
+      width: 545px;
+      margin: 80px auto 0;
     }
   }
 }

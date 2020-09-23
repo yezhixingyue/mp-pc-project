@@ -11,32 +11,63 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" class-name="check-row" width="60"></el-table-column>
-      <el-table-column label="产品" width="150" show-overflow-tooltip>
+      <el-table-column type="selection" class-name="check-row" width="54"></el-table-column>
+      <el-table-column label="产品" width="130" show-overflow-tooltip>
         <template slot-scope="scope">{{getName(scope.row)}}</template>
       </el-table-column>
-      <el-table-column label="尺寸" width="120">
+      <el-table-column label="尺寸" width="70" show-overflow-tooltip>
         <template slot-scope="scope">{{getSize(scope.row)}}</template>
       </el-table-column>
-      <el-table-column prop="address" label="数量" show-overflow-tooltip></el-table-column>
-      <el-table-column label="工艺" width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
+      <el-table-column label="数量" width="78" show-overflow-tooltip>
+        <template slot-scope="scope">{{ getNumber(scope.row.ProductParams) }}</template>
       </el-table-column>
-      <el-table-column prop="name" label="原价" width="120"></el-table-column>
-      <el-table-column prop="address" label="优惠券" show-overflow-tooltip></el-table-column>
-      <el-table-column label="成交价" width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
+      <el-table-column label="工艺" width="70" show-overflow-tooltip>
+        <template slot-scope="scope">{{ getCraft(scope.row.ProductParams) }}</template>
       </el-table-column>
-      <el-table-column prop="name" label="定金" width="120"></el-table-column>
-      <el-table-column prop="address" label="文件内容" show-overflow-tooltip></el-table-column>
-      <el-table-column label="收货人" width="120">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
+      <el-table-column label="原价" width="65" show-overflow-tooltip>
+        <template slot-scope="scope">{{ scope.row.Funds.OriginalPrice }}元</template>
       </el-table-column>
-      <el-table-column prop="name" label="收货人手机" width="120"></el-table-column>
-      <el-table-column prop="address" label="配送方式" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="address" label="状态" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="address" label="操作" ></el-table-column>
+      <el-table-column label="优惠券" show-overflow-tooltip width="65">
+        <template slot-scope="scope"
+          >{{ scope.row.Funds.CouponAmount > 0 ? '-' + scope.row.Funds.CouponAmount : 0 }}元</template>
+      </el-table-column>
+      <el-table-column label="成交价" width="65" show-overflow-tooltip>
+        <template slot-scope="scope">{{ scope.row.Funds.FinalPrice }}元</template>
+      </el-table-column>
+      <el-table-column label="定金" width="65" show-overflow-tooltip>
+        <template slot-scope="scope">{{ scope.row.Funds.Deposit }}元</template>
+      </el-table-column>
+      <el-table-column prop="Content" label="文件内容" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="Address.Address.Consignee" label="收货人" width="60" show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column prop="Address.Address.Mobile" label="收货人手机" width="90" show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column label="配送方式" show-overflow-tooltip width="78">
+        <template slot-scope="scope">{{ getExpress(scope.row.Address.Express) }}</template>
+      </el-table-column>
+      <el-table-column label="状态" show-overflow-tooltip width="75">
+        <span slot-scope="scope" :class="scope.row.FileHaveUpload ? '' : 'is-pink'"
+        >{{ scope.row.FileHaveUpload ? '文件已上传':'文件未上传' }}</span>
+      </el-table-column>
+      <el-table-column label="操作" width="150" >
+        <div class="menu-list" slot-scope="scope">
+          <span class="span-title-blue">下单</span>
+          <span @click="onDetailClick(scope.row)" class="span-title-blue detail">详情</span>
+          <span class="span-title-pink">删除</span>
+        </div>
+      </el-table-column>
     </el-table>
+    <footer class="float is-font-14">
+      <div class="left">
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll">全选</el-checkbox>
+        <span class="gray">共检测出 <i class="is-pink">{{shoppingDataNumber}}</i> 个订单</span>
+      </div>
+      <div class="right">
+        <span class="span-title-blue">清除已上传订单</span>
+        <span class="span-title-pink">删除选中订单</span>
+        <el-button type="primary">上传选中订单</el-button>
+      </div>
+    </footer>
   </section>
 </template>
 
@@ -51,12 +82,32 @@ export default {
     };
   },
   computed: {
-    ...mapState('shoppingCar', ['shoppingDataList']),
+    ...mapState('shoppingCar', ['shoppingDataList', 'shoppingDataNumber']),
+    ...mapState('common', ['ExpressList']),
+    checkedAll: {
+      get() {
+        return this.multipleSelection.length === this.shoppingDataNumber;
+      },
+      set(newVal) {
+        if (newVal) {
+          // this.multipleSelection = this.shoppingDataList;
+          // this.shoppingDataList.forEach(row => {
+          //   this.$refs.multipleTable.toggleRowSelection(row, true);
+          // });
+          this.$refs.multipleTable.toggleAllSelection();
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
+    },
+    isIndeterminate() {
+      return this.multipleSelection.length < this.shoppingDataNumber && this.multipleSelection.length > 0;
+    },
   },
   methods: {
     getHeight() {
       const oBody = document.getElementsByTagName('body')[0];
-      return oBody.offsetHeight - 310;
+      return oBody.offsetHeight - 369;
     },
     setHeight() {
       const tempHeight = this.getHeight();
@@ -70,8 +121,10 @@ export default {
     getSize({ ProductParams }) {
       const { PartList } = ProductParams;
       const _sizeArr = [];
+      if (PartList[0].PartList[0].Attributes.SizeName) return PartList[0].PartList[0].Attributes.SizeName;
       PartList.forEach(item => {
         const { SizePropertyList } = item.PartList[0];
+        let _str = '';
         const _sizeList = [];
         const _unitList = [];
         SizePropertyList.forEach(it => {
@@ -84,34 +137,91 @@ export default {
           else _obj[it] += 1;
         });
         if (Object.keys(_obj).length === 1) {
-          const len = _sizeArr.length;
-          const _str = _sizeList.join('×') + _unitList[0];
-          if (len > 0 && _sizeArr[len - 1] === _str) return;
-          _sizeArr.push(_str);
-          return;
+          _str = _sizeList.join('×') + _unitList[0];
+        } else {
+          const _arr = [];
+          _sizeList.forEach((it, i) => {
+            const _temp = it + _unitList[i];
+            _arr.push(_temp);
+          });
+          _str = _arr.join('×');
         }
-        const _arr = [];
-        _sizeList.forEach((it, i) => {
-          const _temp = it + _unitList[i];
-          _arr.push(_temp);
-        });
         const len = _sizeArr.length;
-        const _str = _arr.join('×');
         if (len > 0 && _sizeArr[len - 1] === _str) return;
         _sizeArr.push(_str);
       });
+
       return _sizeArr.join('、');
-      // console.log(ProductParams);
-      // return '12';
+    },
+    getNumber({ Attributes, ProductAmount, KindCount }) {
+      const { Unit } = Attributes;
+      let _str = '';
+      if (KindCount > 1) _str = `${KindCount}款`;
+      return `${ProductAmount}${Unit}${_str}`;
+    },
+    getCraftFromItem(First, arr) {
+      if (First && First.length > 0) {
+        First.forEach(craft => {
+          let _str = '';
+          const { Attributes, PropertyList } = craft;
+          const { NickName } = Attributes;
+          _str += NickName;
+          if (PropertyList.length > 1) _str += `${PropertyList.length}处`;
+          else if (PropertyList.length === 1) {
+            if (PropertyList[0].length > 0) {
+              PropertyList[0].forEach(it => {
+                const { ShowValue } = it;
+                if (ShowValue) {
+                  _str += ` ${ShowValue}`;
+                }
+              });
+            }
+          }
+          arr.push(_str);
+        });
+      }
+    },
+    getCraft({ CraftList, PartList }) {
+      const _arr = [];
+
+      const { First } = CraftList;
+      this.getCraftFromItem(First, _arr);
+      if (PartList.length > 0) {
+        PartList.forEach(part => {
+          part.PartList.forEach(subPart => {
+            const partFirst = subPart.CraftList.First;
+            this.getCraftFromItem(partFirst, _arr);
+          });
+        });
+      }
+      return _arr.join('，');
+    },
+    getExpress({ First, Second }) {
+      if (First === 1 && Second === 1) return '名片之家';
+      if (this.ExpressList.length === 0) return '';
+      let _str = '';
+      const _first = this.ExpressList.find(it => it.Type === First);
+      if (_first) {
+        _str = _first.Name;
+        const _second = _first.List.find(item => item.ID === Second);
+        if (_second) _str += ` ${_second.Name}`;
+      }
+      return _str;
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    onDetailClick(row) {
+      console.log(row);
+      this.$store.commit('shoppingCar/setCurShoppingCarDetailData', row);
+      this.$router.push('/shoppingCarDetail');
     },
   },
   mounted() {
     this.$nextTick(() => this.setHeight());
     window.onresize = () => this.setHeight();
     this.$store.dispatch('shoppingCar/getQuotationList');
+    this.$store.dispatch('common/getExpressList');
   },
   beforeDestroy() {
     window.onresize = null;
@@ -129,9 +239,9 @@ export default {
           top: 13px;
           height: 15px;
           width: 30px;
-          left: 32px;
+          left: 25px;
           content: '全选';
-          font-size: 13px;
+          font-size: 12px;
           background-color: rgb(245, 245, 245);
           color: #39588a;
         }
@@ -144,9 +254,43 @@ export default {
           &.check-row {
             padding-right: 20px;
           }
+          > .cell {
+            padding: 0 2px;
+            > .menu-list {
+              > span {
+                font-size: 12px;
+                &.detail {
+                  margin: 0 15px;
+                }
+              }
+            }
+          }
         }
       }
      }
+    }
+  }
+  > footer {
+    height: 65px;
+    width: 100%;
+    padding: 15px 0 10px 0;
+    box-sizing: border-box;
+    line-height: 40px;
+    // box-shadow: 0px 0px 14px 7px rgba(136, 136, 136, 0.3);
+    // z-index: 10;
+    > .left {
+      float: left;
+      padding-left: 10px;
+      > .gray {
+        margin-left: 16px;
+      }
+    }
+    > .right {
+      float: right;
+      padding-right: 5px;
+      > .span-title-pink {
+        margin: 0 35px;
+      }
     }
   }
 }

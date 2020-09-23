@@ -59,6 +59,15 @@ const routes = [
         },
         component: () => import('../views/ShoppingCar/ShoppingCarPage.vue'),
       },
+      {
+        path: '/shoppingCarDetail',
+        name: 'shoppingCarDetail',
+        meta: {
+          requiresAuth: true,
+          title: '购物车产品详情',
+        },
+        component: () => import('../views/ShoppingCar/ShoppingCarDetailPage.vue'),
+      },
     ],
   },
 ];
