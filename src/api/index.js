@@ -44,7 +44,8 @@ const api = {
     return instance.get('/Api/Craft/GetCraftRelationList');
   },
   getOrderPreCreate(data) { // POST /Api/Order/PreCreate  直接下单 - 预下单
-    return instance.post('/Api/Order/PreCreate', data);
+    const { closeTip } = data;
+    return instance.post('/Api/Order/PreCreate', data, { closeTip });
   },
   getQuotationSave(data) { // POST /Api/Quotation/Save  保存购物车
     return instance.post('/Api/Quotation/Save', data);

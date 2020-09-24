@@ -8,7 +8,37 @@
         <OrderCommonSummary :showData='info4OrderSummary' />
       </li>
       <li>
-        <OrderDetailCommonComp />
+        <OrderDetailCommonComp :orderDetail='curShoppingCarDetailData'>
+          <div class="price-wrap">
+            <div class="price-box"  v-if="curShoppingCarDetailData">
+              <div class="price-left">
+                <p>产品原价：</p>
+                <p>优惠券：</p>
+                <p class="final-price">成交价<i class="is-font-12 gray"></i>：</p>
+                <p>定金：</p>
+                <p>运费：</p>
+              </div>
+              <div class="price-right">
+                  <p>¥ {{curShoppingCarDetailData.Funds.OriginalPrice}}</p>
+                  <p :class="curShoppingCarDetailData.Funds.CouponAmount
+                     && curShoppingCarDetailData.Funds.CouponAmount > 0 ? 'is-pink' : ''">
+                    <template v-show='curShoppingCarDetailData.Funds.CouponAmount'
+                      >{{'-¥ ' + (curShoppingCarDetailData.Funds.CouponAmount
+                        ? curShoppingCarDetailData.Funds.CouponAmount : 0)}}</template>
+                  </p>
+                  <p class="final-price is-pink">¥ <i class="is-font-24 is-bold"
+                    >{{curShoppingCarDetailData.Funds.FinalPrice}}</i></p>
+                  <p>¥ {{curShoppingCarDetailData.Funds.Deposit}}</p>
+                  <p>¥ {{curShoppingCarDetailData.Funds.Freight}}</p>
+              </div>
+            </div>
+          </div>
+          <p class="btn-wrap">
+            <span class="span-title-blue" @click="onReturnClick">
+              <i class="iconfont icon-left-double-arrow"></i> 返回列表</span>
+            <el-button type="danger" @click="handleSubmit">下单</el-button>
+          </p>
+        </OrderDetailCommonComp>
       </li>
     </ul>
   </section>
@@ -40,6 +70,11 @@ export default {
     onReturnClick() {
       this.$router.replace('/shoppingCar');
       // this.$store.commit('Quotation/setIsFullPayoutDisabled', false);
+    },
+    async handleSubmit() {
+      // eslint-disable-next-line max-len
+      const res = await this.$store.dispatch('shoppingCar/getOrderPreCreateFromShoppingCar', [this.curShoppingCarDetailData]);
+      if (res) this.$router.push('/shoppingCar/submit');
     },
   },
   mounted() {
@@ -86,6 +121,49 @@ export default {
       bottom: -15px;
       left: 0;
       background-color: rgb(245, 245, 245);
+    }
+    .price-wrap {
+      text-align: center;
+      > .price-box {
+        height: 100%;
+        overflow: hidden;
+        display: inline-block;
+        margin: 0 auto;
+        text-align: right;
+        > div {
+          padding-top: 48px;
+          > p {
+            line-height: 33px;
+            &.final-price {
+              margin-top: 6px;
+            }
+          }
+          &.price-left {
+            float: left;
+          }
+          &.price-right {
+            float: right;
+            margin-left: 10px;
+            > p {
+              min-width: 100px;
+            }
+          }
+        }
+      }
+    }
+    .btn-wrap {
+      padding-left: 40px;
+      padding-top: 64px;
+      padding-bottom: 25px;
+      > span {
+        > i {
+          transform: rotate(-90deg);
+        }
+        margin-right: 25px;
+      }
+      > button {
+        width: 130px;
+      }
     }
   }
 }

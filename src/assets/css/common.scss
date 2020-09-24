@@ -68,6 +68,29 @@
   }
 }
 
+.return-btn {
+  padding: 9px 0;
+  line-height: 24px;
+  padding-left: 26px;
+  color: #888;
+  > span {
+    font-size: 14px;
+    > i {
+      vertical-align: -15%;
+    }
+    cursor: pointer;
+    display: inline-block;
+    padding: 4px 15px 4px 8px;
+    border-radius: 2px;
+    &:hover {
+      background-color: rgb(230, 230, 230);
+    }
+    &:active {
+      background-color: rgb(208, 208, 208);
+    }
+  }
+}
+
 // 前面带有蓝色竖条的标题样式
 .blue-v-line {
   &::before {

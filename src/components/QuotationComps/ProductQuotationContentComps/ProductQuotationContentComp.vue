@@ -75,7 +75,7 @@
       <header>
         <div class="result" v-if="ProductQuotationResult && !priceGetErrMsg">
           <span>原价：<i>¥{{ProductQuotationResult.OriginalCost}}元</i></span>
-          <span>优惠券：<i v-if="selectedCoupon && coupon" class="is-pink">{{'¥' + coupon}}元</i></span>
+          <span>优惠券：<i v-if="selectedCoupon && coupon" class="is-pink">{{'-¥' + coupon}}元</i></span>
           <span v-if="ProductQuotationResult.ExpressCost && ProductQuotationResult.ExpressCost > 0"
             >运费：<i>¥{{ProductQuotationResult.ExpressCost}}元</i></span>
           <span>成交价：

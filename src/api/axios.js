@@ -18,7 +18,7 @@ axios.interceptors.request.use(
     if (token && !arrWithOutToken.includes(url)) curConfig.headers.common.Authorization = `Bearer ${token}`;
     // console.log(curConfig);
     let key = true;
-    const arr = ['/Api/Order/Create', '/Api/Order/PreCreate', '/Api/PaymentOrder/PayResult']; // 不需要展示loading的api地址
+    const arr = ['/Api/Order/Create', '/Api/PaymentOrder/PayResult']; // 不需要展示loading的api地址
     for (let i = 0; i < arr.length; i += 1) {
       if (curConfig.url.includes(arr[i]) || store.state.common.isLoading) {
         key = false;
@@ -50,7 +50,8 @@ axios.interceptors.response.use(
     // 包含以上的状态码 或 以上的请求路径  不会弹窗报错  其余以外都会报错出来
 
     const _url = response.config.url.split('?')[0];
-    if (!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && !closeTip) {
+    // eslint-disable-next-line max-len
+    if (!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && (!closeTip && ![7025, 8037].includes(response.data.Status))) {
       const _obj = { msg: `[ ${response.data.Message} ]` };
       if ([7025, 8037].includes(response.data.Status)) _obj.successFunc = () => router.replace('/login');
       else _obj.successFunc = undefined;

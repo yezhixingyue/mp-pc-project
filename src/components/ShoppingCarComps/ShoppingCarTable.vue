@@ -51,7 +51,7 @@
       </el-table-column>
       <el-table-column label="操作" width="150" >
         <div class="menu-list" slot-scope="scope">
-          <span class="span-title-blue">下单</span>
+          <span class="span-title-blue" @click="handleSingleSubmit(scope.row)">下单</span>
           <span @click="onDetailClick(scope.row)" class="span-title-blue detail">详情</span>
           <span class="span-title-pink">删除</span>
         </div>
@@ -65,7 +65,7 @@
       <div class="right">
         <span class="span-title-blue">清除已上传订单</span>
         <span class="span-title-pink">删除选中订单</span>
-        <el-button type="primary">上传选中订单</el-button>
+        <el-button type="primary" @click="handleSelectedSubmit">上传选中订单</el-button>
       </div>
     </footer>
   </section>
@@ -90,10 +90,6 @@ export default {
       },
       set(newVal) {
         if (newVal) {
-          // this.multipleSelection = this.shoppingDataList;
-          // this.shoppingDataList.forEach(row => {
-          //   this.$refs.multipleTable.toggleRowSelection(row, true);
-          // });
           this.$refs.multipleTable.toggleAllSelection();
         } else {
           this.$refs.multipleTable.clearSelection();
@@ -212,9 +208,20 @@ export default {
       this.multipleSelection = val;
     },
     onDetailClick(row) {
-      console.log(row);
       this.$store.commit('shoppingCar/setCurShoppingCarDetailData', row);
-      this.$router.push('/shoppingCarDetail');
+      this.$router.push('/shoppingCar/detail');
+    },
+    async handleSelectedSubmit() {
+      if (this.multipleSelection.length === 0) {
+        this.$message.error('请选择订单');
+        return;
+      }
+      const res = await this.$store.dispatch('shoppingCar/getOrderPreCreateFromShoppingCar', this.multipleSelection);
+      if (res) this.$router.push('/shoppingCar/submit');
+    },
+    async handleSingleSubmit(row) {
+      const res = await this.$store.dispatch('shoppingCar/getOrderPreCreateFromShoppingCar', [row]);
+      if (res) this.$router.push('/shoppingCar/submit');
     },
   },
   mounted() {

@@ -992,33 +992,32 @@ export default {
         commit('setCurProductInfo2Quotation', _obj);
       }
     },
-    async createPaymentOrder({ state, commit }, isPayInFull) { // 提交订单
-      const obj2Request = {
-        PayInFull: isPayInFull,
-        IsOrder: true,
-        OrderType: 1,
-        IsCreate: true,
-        List: [{ ID: 0 }],
-      };
-      obj2Request.List = state.curToPayList.map((item) => ({ ID: item.OrderID }));
-      const res = await api.createPaymentOrder(obj2Request);
-      if (res.data.Status === 1000) {
-        commit('setCurPayInfo2Code', res.data.Data);
-        if (!res.data.Data) {
-          // commit('setClock2PaySuccess');
-          massage.successSingle({
-            title: '下单成功!',
-            successFunc: () => {
-              commit('setPaySuccessOrderDataStatus');
-              commit('setIsShow2PayDialog', false);
-              commit('setIsShowPreDialog', false);
-            },
-          });
-        }
-      } else {
-        throw new Error(res.data.Message);
-      }
-    },
+    // async createPaymentOrder({ state, commit }, isPayInFull) { // 提交订单
+    //   const obj2Request = {
+    //     PayInFull: isPayInFull,
+    //     IsOrder: true,
+    //     OrderType: 1,
+    //     IsCreate: true,
+    //     List: [{ ID: 0 }],
+    //   };
+    //   obj2Request.List = state.curToPayList.map((item) => ({ ID: item.OrderID }));
+    //   const res = await api.createPaymentOrder(obj2Request);
+    //   if (res.data.Status === 1000) {
+    //     commit('setCurPayInfo2Code', res.data.Data);
+    //     if (!res.data.Data) {
+    //       // commit('setClock2PaySuccess');
+    //       massage.successSingle({
+    //         title: '下单成功!',
+    //         successFunc: () => {
+    //           commit('setPaySuccessOrderDataStatus');
+    //           commit('setIsShow2PayDialog', false);
+    //         },
+    //       });
+    //     }
+    //   } else {
+    //     throw new Error(res.data.Message);
+    //   }
+    // },
     /* 根据付款单号轮询查询当前二维码对应订单付款状态
     -------------------------------*/
     async getPayResult({ state }, cb) {
@@ -1026,10 +1025,17 @@ export default {
       const res = await api.getPayResult(state.curPayInfo2Code.PayCode);
       if (res.data.Status === 1000) cb(res.data.Data);
     },
-    async placeOrderFromPreCreate({ state, commit }, { FilePath, PayInFull }) {
+    async placeOrderFromPreCreate({ state, commit, rootState }, { FilePath, PayInFull }) {
       const _obj = { OrderType: 2, PayInFull, List: [] };
-      const item = { ...state.curReqObj4PreCreate, FilePath };
-      _obj.List.push(item);
+      let item;
+      if (FilePath) {
+        item = { ...state.curReqObj4PreCreate, FilePath };
+        _obj.List.push(item);
+      } else {
+        item = [...rootState.shoppingCar.curShoppingCarDataBeforeFirstPlace];
+        _obj.List = item;
+      }
+
       const res = await api.CreateOrderFromPreCreate(_obj);
       if (res.data.Status !== 1000) {
         throw new Error(res.data.Message);
@@ -1042,7 +1048,8 @@ export default {
         massage.successSingle({
           title: '下单成功!',
           successFunc: () => {
-            commit('setPaySuccessOrderDataStatus');
+            if (FilePath) commit('setPaySuccessOrderDataStatus');
+            // else 清除购物车中一些数据 然后跳转购物车列表页面
             commit('setIsShow2PayDialog', false);
           },
         });
@@ -1059,6 +1066,7 @@ export default {
     },
     // eslint-disable-next-line consistent-return
     async getCustomerShortCutSave(args, data) {
+      console.log(args);
       const res = await api.getCustomerShortCutSave(data);
       console.log(res);
       if (res.data.Status !== 1000) return false;

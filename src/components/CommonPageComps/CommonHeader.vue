@@ -25,19 +25,19 @@
             <i class="iconfont icon-gouwuche"></i>
             <span>购物车</span>
           </router-link>
-          <router-link tag="li" to="/">
+          <router-link tag="li" to="/nonPayment">
             <i class="iconfont icon-weifukuan"></i>
             <span>未付款</span>
           </router-link>
-          <router-link tag="li" to="/">
+          <router-link tag="li" to="/order">
             <i class="iconfont icon-dingdan"></i>
             <span>订单</span>
           </router-link>
-          <router-link tag="li" to="/">
+          <router-link tag="li" to="/serviceAfterSales">
             <i class="iconfont icon-shouhoudan"></i>
             <span>售后单</span>
           </router-link>
-          <router-link tag="li" to="/">
+          <router-link tag="li" to="/bill">
             <i class="iconfont icon-zhangdan"></i>
             <span>账单</span>
           </router-link>
@@ -156,7 +156,7 @@ export default {};
             margin-right: 8px;
             vertical-align: bottom;
           }
-          &.router-link-exact-active {
+          &.router-link-active {
             > span {
               font-weight: 600;
             }

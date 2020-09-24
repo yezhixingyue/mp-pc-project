@@ -34,16 +34,16 @@
              <!-- :underline="false" -->
           </div>
         </li>
-        <li class="shortcut">
-          <p v-if="!curMenus.canCollect">
-            <el-button type="primary" @click="setCanCollect">设置快捷方式</el-button>
-          </p>
-          <p v-else class="r">
-            <el-button type="primary" class="submit linear-bg-color" @click="onSubmit">保存</el-button>
-            <el-button @click="onCancel">取消</el-button>
-          </p>
-        </li>
       </ul>
+      <div class="shortcut">
+        <p v-if="curMenus && !curMenus.canCollect">
+          <el-button type="primary" @click="setCanCollect">设置快捷方式</el-button>
+        </p>
+        <p v-else class="r">
+          <el-button type="primary" class="submit linear-bg-color" @click="onSubmit">保存</el-button>
+          <el-button @click="onCancel">取消</el-button>
+        </p>
+      </div>
     </div>
     <ul class="shortcut-list float">
       <li v-for="item in hasCollectList" :key="item.ID" @click="onShortcutClick(item)">
@@ -262,6 +262,8 @@ export default {
       margin: 0 auto;
       padding: 14px 0;
       height: 100%;
+      max-height: 385px;
+      overflow-y: auto;
       > li {
         display: flex;
         > .products {
@@ -306,24 +308,26 @@ export default {
           }
         }
         line-height: 22px;
-        &.shortcut {
-          margin-top: 25px;
-          text-align: center;
-          margin-bottom: 18px;
-          display: block;
-          > p {
-            > button {
-              width: 130px;
-              &.submit {
-                margin-right: 30px;
-                transition: 0.1s;
-              }
-            }
-            &.r {
-              text-align: right;
-              padding-right: 80px;
-            }
+      }
+    }
+    > div {
+      width: 1200px;
+      margin: 0 auto;
+      margin-top: 25px;
+      text-align: center;
+      margin-bottom: 18px;
+      display: block;
+      > p {
+        > button {
+          width: 130px;
+          &.submit {
+            margin-right: 30px;
+            transition: 0.1s;
           }
+        }
+        &.r {
+          text-align: right;
+          padding-right: 80px;
         }
       }
     }

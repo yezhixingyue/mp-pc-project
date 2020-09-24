@@ -27,7 +27,7 @@
           <div class="price-right">
               <p>¥ {{ProductQuotationResult.OriginalCost}}</p>
               <p :class="coupon && coupon > 0 ? 'is-pink' : ''">
-                <template v-show='coupon'>{{'¥ ' + (coupon ? coupon : 0)}}</template>
+                <template v-show='coupon'>{{'-¥ ' + (coupon ? coupon : 0)}}</template>
               </p>
               <p>¥ {{ProductQuotationResult.ExpressCost}}</p>
               <p class="final-price is-pink">¥ <i class="is-font-24 is-bold">{{Cost}}</i></p>

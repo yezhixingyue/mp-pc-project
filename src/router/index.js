@@ -1,14 +1,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import CommonViewPage from '../views/Common/CommonViewPage.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
     redirect: '/login',
   },
   {
@@ -37,7 +35,7 @@ const routes = [
         name: 'placeOrder',
         meta: {
           requiresAuth: true,
-          title: '名片之家下单',
+          title: '名片之家 - 下单',
         },
         component: () => import('../views/PlaceOrder/PlaceOrderPage.vue'),
       },
@@ -46,27 +44,44 @@ const routes = [
         name: 'OrderPreCreate',
         meta: {
           requiresAuth: true,
-          title: '名片之家下单',
+          title: '名片之家 - 下单',
         },
         component: () => import('../views/PlaceOrder/OrderPreCreatePage.vue'),
       },
       {
-        path: '/shoppingCar',
-        name: 'shoppingCar',
-        meta: {
-          requiresAuth: true,
-          title: '购物车',
-        },
-        component: () => import('../views/ShoppingCar/ShoppingCarPage.vue'),
-      },
-      {
-        path: '/shoppingCarDetail',
-        name: 'shoppingCarDetail',
-        meta: {
-          requiresAuth: true,
-          title: '购物车产品详情',
-        },
-        component: () => import('../views/ShoppingCar/ShoppingCarDetailPage.vue'),
+        path: '/shopping',
+        name: 'shopping',
+        component: CommonViewPage,
+        redirect: 'shoppingCar',
+        children: [
+          {
+            path: '/shoppingCar',
+            name: 'shoppingCar',
+            meta: {
+              requiresAuth: true,
+              title: '名片之家 - 购物车',
+            },
+            component: () => import('../views/ShoppingCar/ShoppingCarPage.vue'),
+          },
+          {
+            path: '/shoppingCar/detail',
+            name: 'shoppingCarDetail',
+            meta: {
+              requiresAuth: true,
+              title: '名片之家 - 购物车产品详情',
+            },
+            component: () => import('../views/ShoppingCar/ShoppingCarDetailPage.vue'),
+          },
+          {
+            path: '/shoppingCar/submit',
+            name: 'shoppingCar/submit',
+            meta: {
+              requiresAuth: true,
+              title: '名片之家 - 购物车订单提交',
+            },
+            component: () => import('../views/ShoppingCar/ShoppingCarSubmitPage.vue'),
+          },
+        ],
       },
     ],
   },

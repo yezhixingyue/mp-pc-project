@@ -1,17 +1,301 @@
 <template>
-  <section>
-    <header class="section-title">订单详情</header>
-    <div class="content">
+  <section class="mp-pc-order-detail-common-comp-wrap">
+    <header class="section-title">{{title}}</header>
+    <div class="main">
+      <div class="left">
+        <!-- 产品名称 -->
+        <p class="product-name">
+          <span class="gray">产品：</span>
+          <span class="is-bold">{{productName}}</span>
+        </p>
+        <!-- 数量、款数 -->
+        <p>
+          <span class="width-122 gray">数量：{{ProductNum}}</span>
+          <span><i class="gray">款数：</i>{{productKindCount}}款</span>
+        </p>
+        <!-- 联拼行列数 和 多款联拼 -->
+        <p v-if="productMakeup">
+          <span class="width-122 gray"
+           >联拼：{{productMakeup}}</span>
+          <span>{{productMultyKindMakeup}}</span>
+        </p>
+        <!-- 产品属性 -->
+        <p v-for="item in productPropertyList" :key="item.PropertyID">
+          <span class="gray">{{item.PropertyName}}：</span>
+          <span class="is-font-12">{{item.ShowValue}}{{item.ShowUnit}}</span>
+        </p>
+
+        <!-- 产品工艺 -->
+        <div class="craft-wrap float" v-if="productCraftList.length > 0">
+          <div class="gray">工艺：</div>
+          <ul>
+            <li v-for="item in productCraftList" :key="item.CraftID" class="is-font-12">
+              <span class="craft-title">{{item.craftName}}</span>
+              <span v-if="item.Property" class="gray">：（ {{item.Property}} ）</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="content">
+        <!-- 产品部件 -->
+        <ul>
+          <li v-for="item in PartList" :key="item.PartID">
+            <!-- 部件名称 -->
+            <p class="is-bold" :class="PartList.length > 1 ? '' : 'is-opacity0'">
+              <i class="is-origin">//</i> {{item.Attributes.Name}}</p>
+            <div v-for="(part, i) in item.PartList" :key="part.PartID + i">
+              <!-- 部件数量与物料 -->
+              <p>
+                <span class="width-122 gray" v-if="part.PartAmount.First > 1"
+                >数量：{{part.PartAmount.First}}{{item.Attributes.Unit}}/{{orderDetail.ProductParams.Attributes.Unit}}
+                </span>
+                <span v-if="part.Attributes.Material"><i class="gray">物料：</i>{{part.Attributes.Material.Name}}</span>
+              </p>
+              <!-- 尺寸 -->
+              <p v-if="part.Attributes.SizeName">
+                <span><i class="gray">尺寸：</i>{{part.Attributes.SizeName}}</span>
+              </p>
+              <!-- 属性(包含印刷属性) -->
+              <p v-for="item in part.PropertyList" :key="item.PropertyID">
+                <span class="gray">{{item.PropertyName}}：</span>
+                <span class="is-font-12">{{item.ShowValue}}{{item.ShowUnit}}</span>
+              </p>
+              <!-- 属性组 -->
+              <div v-for="item in part.PropertyGroupList" :key="item.GroupID">
+                <p class="is-bold is-font-13">{{item.GroupName}}：</p>
+                <p v-for="(group, i) in item.PropertyList" :key="item.GroupID + i" class="property-list">
+                  <span v-for="it in group.Second" :key="it.PropertyID">
+                    <i class="gray">{{it.PropertyName}}</i>
+                    <i v-if="it.ShowValue" class="is-font-12">：{{it.ShowValue}}{{it.ShowUnit}}</i>
+                  </span>
+                </p>
+              </div>
+              <!-- 工艺 -->
+              <div class="craft-wrap float" v-if="getCraftList(part.CraftList).length > 0">
+                <div class="gray">工艺：</div>
+                <ul>
+                  <li v-for="item in getCraftList(part.CraftList)" :key="item.CraftID" class="is-font-12">
+                    <span class="craft-title">{{item.craftName}}</span>
+                    <span v-if="item.Property" class="gray">：（ {{item.Property}} ）</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="right">
+        <slot></slot>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
-export default {
 
+export default {
+  props: {
+    title: {
+      type: String,
+      default: '产品详情',
+    },
+    orderDetail: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+  computed: {
+    productName() {
+      if (!this.orderDetail) return '';
+      const { FirstLevelName, SecondLevelName, Name } = this.orderDetail.ProductParams.Attributes;
+      return `${FirstLevelName}-${SecondLevelName}-${Name}`;
+    },
+    ProductNum() {
+      if (!this.orderDetail) return '';
+      const { ProductAmount, Attributes } = this.orderDetail.ProductParams;
+      return `${ProductAmount}${Attributes.Unit}`;
+    },
+    productKindCount() {
+      if (!this.orderDetail) return '';
+      return this.orderDetail.ProductParams.KindCount;
+    },
+    productMakeup() {
+      if (!this.orderDetail) return '';
+      const { MakeupRowNumber, MakeupColumnNumber } = this.orderDetail.ProductParams;
+      if (MakeupRowNumber === 1 && MakeupColumnNumber === 1) return '';
+      return `${MakeupRowNumber}行${MakeupColumnNumber}列`;
+    },
+    productMultyKindMakeup() {
+      if (!this.orderDetail) return '';
+      const { MultyKindMakeup } = this.orderDetail.ProductParams;
+      if (MultyKindMakeup) return '多款联拼';
+      return '';
+    },
+    productPropertyList() {
+      if (!this.orderDetail) return '';
+      return this.orderDetail.ProductParams.PropertyList;
+    },
+    productCraftList() {
+      if (!this.orderDetail) return '';
+      let _list = this.orderDetail.ProductParams.CraftList;
+      // eslint-disable-next-line no-nested-ternary
+      _list = _list ? _list.First ? _list.First : [] : [];
+      const _arr = [];
+      _list.forEach(it => {
+        const _obj = {};
+        _obj.craftName = it.Attributes.NickName;
+        const _subArr = [];
+        if (it.PropertyList.length > 1) _subArr.push(`${it.PropertyList.length}处`);
+        else {
+          it.PropertyList.forEach(it2 => {
+            it2.forEach(it3 => {
+              const _str = it3.ShowValue + it3.ShowUnit;
+              _subArr.push(_str);
+            });
+          });
+        }
+        _obj.Property = _subArr.join(' ');
+        _arr.push(_obj);
+      });
+      return _arr;
+    },
+    PartList() {
+      if (!this.orderDetail) return [];
+      return this.orderDetail.ProductParams.PartList;
+    },
+  },
+  methods: {
+    getCraftList(CraftList) {
+      let _list = CraftList;
+      // eslint-disable-next-line no-nested-ternary
+      _list = _list ? _list.First ? _list.First : [] : [];
+      const _arr = [];
+      _list.forEach(it => {
+        const _obj = {};
+        _obj.craftName = it.Attributes.NickName;
+        const _subArr = [];
+        if (it.PropertyList.length > 1) _subArr.push(`${it.PropertyList.length}处`);
+        else {
+          it.PropertyList.forEach(it2 => {
+            it2.forEach(it3 => {
+              const _str = it3.ShowValue + it3.ShowUnit;
+              _subArr.push(_str);
+            });
+          });
+        }
+        _obj.Property = _subArr.join(' ');
+        _arr.push(_obj);
+      });
+      return _arr;
+    },
+  },
 };
 </script>
 
-<style>
-
+<style lang='scss'>
+.mp-pc-order-detail-common-comp-wrap {
+  font-size: 14px;
+  color: #585858;
+  padding-bottom: 35px;
+  background-color: #fff;
+  > .main {
+    padding-top: 22px;
+    position: relative;
+    overflow: hidden;
+    > .left {
+      display: inline-block;
+      vertical-align: top;
+      width: 360px;
+      padding: 30px;
+      padding-top: 15px;
+      box-sizing: border-box;
+      > p {
+        margin-bottom: 20px;
+        &.product-name {
+          margin-bottom: 28px;
+        }
+      }
+    }
+    > .content {
+      border-left: 1px solid #eee;
+      border-right: 1px solid #eee;
+      box-sizing: border-box;
+      width: 483px;
+      display: inline-block;
+      height: 10000px;
+      margin-bottom: -9999px;
+      > ul {
+        width: 380px;
+        margin-top: 15px;
+        margin-left: 58px;
+        box-sizing: border-box;
+        > li {
+          > p {
+            margin-bottom: 28px;
+            padding-left: 26px;
+          }
+          > div {
+            padding-left: 26px;
+            > p {
+              margin-bottom: 20px;
+            }
+            & + div {
+              margin-top: 10px;
+              padding-top: 20px;
+              border-top: 1px solid #eee;
+            }
+            > div {
+              margin-bottom: 15px;
+              > p {
+                // margin-bottom: 20px;
+                > span {
+                  line-height: 30px;
+                  margin-right: 15px;
+                }
+                &.property-list {
+                  + p {
+                    border-top: 1px dashed #eee;
+                  }
+                  &:last-of-type {
+                    border-bottom: 1px dashed #eee;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    > .right {
+      display: inline-block;
+      width: 355px;
+      vertical-align: top;
+      // padding-left: 40px;
+      box-sizing: border-box;
+    }
+    .craft-wrap {
+      > div {
+        float: left;
+        margin-right: 8px;
+      }
+      > ul {
+        overflow: hidden;
+        > li {
+          margin-bottom: 20px;
+          .craft-title {
+            min-width: 3em;
+            display: inline-block;
+          }
+        }
+      }
+    }
+    .width-122 {
+      width: 122px;
+      display: inline-block;
+    }
+  }
+  .is-opacity0 {
+    opacity: 0;
+  }
+}
 </style>

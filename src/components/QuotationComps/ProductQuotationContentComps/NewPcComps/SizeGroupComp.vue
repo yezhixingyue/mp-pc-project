@@ -13,7 +13,7 @@
     <span class="title gray">{{ SizeGroup.GroupName }}：</span>
     <div class="count-content">
       <drop-down-selector
-        v-if="!isSelectedInp"
+        v-if="!isSelectedInp && SizePropertyList.length > 0"
         :option="SizeList"
         :disabled="disabled"
         v-model="inpValue"

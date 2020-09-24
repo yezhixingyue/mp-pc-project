@@ -7,12 +7,23 @@ import validateCheck from '@/assets/js/validator/validateCheck';
 import massage from '@/assets/js/utils/message';
 import store from '@/store';
 
-function _getProperty(_arr) { // 转换属性
+function _getProperty(_arr, isGroup) { // 转换属性
   return _arr.map(it => {
     if (it.CustomizedOptionValue) {
       return ({
         PropertyID: it.PropertyID,
         CustomizedOptionValue: it.CustomizedOptionValue,
+      });
+    }
+    // console.log(it, 'it-----------');
+    if (isGroup && it.ValueType === 2) {
+      let CustomizedOptionValue = '';
+      const _t = it.OptionList.find(sub => sub.OptionID === it.CustomerInputValue);
+      if (_t) CustomizedOptionValue = _t.Value;
+      return ({
+        CustomerInputValue: it.CustomerInputValue,
+        PropertyID: it.PropertyID,
+        CustomizedOptionValue,
       });
     }
     return ({
@@ -765,9 +776,12 @@ export default class QuotationClassType {
 
         _PropertyGroupList = _PropertyGroupList.map(item => {
           const _PropertyList = item.PropertyList.map(it2 => {
-            const _Second = _getProperty(it2.Second);
+            // console.log(it2);
+            const _Second = _getProperty(it2.Second, true);
+            // const
             return ({
               Second: _Second,
+              OptionList: it2.OptionList,
             });
           });
           return ({
