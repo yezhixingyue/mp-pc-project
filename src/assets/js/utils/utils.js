@@ -50,6 +50,13 @@ export function extname(filename) {
   const b = a.substring(0, a.search(/\./)).split('').reverse().join('');
   return b;
 }
+/**
+ * 转换时间格式
+ * @param {*} date
+ */
+export function getDateFormat2Date(date) {
+  return date ? date.split('T')[0] : '';
+}
 
 export default {
   isNumber,
@@ -58,4 +65,5 @@ export default {
   delay,
   animateScroll,
   extname,
+  getDateFormat2Date,
 };

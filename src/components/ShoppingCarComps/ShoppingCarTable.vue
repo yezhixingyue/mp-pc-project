@@ -46,14 +46,16 @@
         <template slot-scope="scope">{{ getExpress(scope.row.Address.Express) }}</template>
       </el-table-column>
       <el-table-column label="状态" show-overflow-tooltip width="75">
-        <span slot-scope="scope" :class="scope.row.FileHaveUpload ? '' : 'is-pink'"
-        >{{ scope.row.FileHaveUpload ? '文件已上传':'文件未上传' }}</span>
+        <span
+         slot-scope="scope"
+         :class="{ 'is-pink': getStatus(scope.row).warn, 'is-success': getStatus(scope.row).success }"
+        >{{ getStatus(scope.row).text }}</span>
       </el-table-column>
       <el-table-column label="操作" width="150" >
         <div class="menu-list" slot-scope="scope">
           <span class="span-title-blue" @click="handleSingleSubmit(scope.row)">下单</span>
           <span @click="onDetailClick(scope.row)" class="span-title-blue detail">详情</span>
-          <span class="span-title-pink">删除</span>
+          <span class="span-title-pink" @click="handleDel(scope.row)">删除</span>
         </div>
       </el-table-column>
     </el-table>
@@ -63,8 +65,8 @@
         <span class="gray">共检测出 <i class="is-pink">{{shoppingDataNumber}}</i> 个订单</span>
       </div>
       <div class="right">
-        <span class="span-title-blue">清除已上传订单</span>
-        <span class="span-title-pink">删除选中订单</span>
+        <span class="span-title-blue" @click="handleClearList">清除已上传订单</span>
+        <span class="span-title-pink" @click="handleDel(null)">删除选中订单</span>
         <el-button type="primary" @click="handleSelectedSubmit">上传选中订单</el-button>
       </div>
     </footer>
@@ -86,7 +88,7 @@ export default {
     ...mapState('common', ['ExpressList']),
     checkedAll: {
       get() {
-        return this.multipleSelection.length === this.shoppingDataNumber;
+        return this.multipleSelection.length === this.shoppingDataNumber && this.multipleSelection.length > 0;
       },
       set(newVal) {
         if (newVal) {
@@ -103,7 +105,7 @@ export default {
   methods: {
     getHeight() {
       const oBody = document.getElementsByTagName('body')[0];
-      return oBody.offsetHeight - 369;
+      return oBody.offsetHeight - 280;
     },
     setHeight() {
       const tempHeight = this.getHeight();
@@ -207,9 +209,26 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
+    getStatus(item) {
+      if (!item.FileErrorMessage) {
+        if (item.FileHaveUpload) return { text: '文件已上传', warn: false, success: false };
+        return { text: '文件未上传', warn: true, success: false };
+      }
+      let warn = false;
+      let success = false;
+      if (['删除失败'].includes(item.FileErrorMessage)) {
+        warn = true;
+        success = false;
+      }
+      if (['订单已提交'].includes(item.FileErrorMessage)) {
+        warn = false;
+        success = true;
+      }
+      return { text: item.FileErrorMessage, warn, success };
+    },
     onDetailClick(row) {
       this.$store.commit('shoppingCar/setCurShoppingCarDetailData', row);
-      this.$router.push('/shoppingCar/detail');
+      this.$router.push('/shopping/detail');
     },
     async handleSelectedSubmit() {
       if (this.multipleSelection.length === 0) {
@@ -217,11 +236,29 @@ export default {
         return;
       }
       const res = await this.$store.dispatch('shoppingCar/getOrderPreCreateFromShoppingCar', this.multipleSelection);
-      if (res) this.$router.push('/shoppingCar/submit');
+      if (res) this.$router.push('/shopping/submit');
     },
     async handleSingleSubmit(row) {
       const res = await this.$store.dispatch('shoppingCar/getOrderPreCreateFromShoppingCar', [row]);
-      if (res) this.$router.push('/shoppingCar/submit');
+      if (res) this.$router.push('/shopping/submit');
+    },
+    handleDel(item) {
+      console.log(item);
+      if (!item && this.multipleSelection.length === 0) {
+        this.$message.error('请选择订单');
+        return;
+      }
+      const title = item ? '确定删除该订单吗' : '确定删除选中订单吗';
+      this.messageBox.warnCancelBox({
+        title,
+        successFunc: () => {
+          const list = item ? [item] : this.multipleSelection;
+          this.$store.dispatch('shoppingCar/getQuotationRemove', list);
+        },
+      });
+    },
+    handleClearList() {
+      this.$store.commit('shoppingCar/clearShoppingDataList');
     },
   },
   mounted() {

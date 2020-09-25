@@ -17,6 +17,11 @@
     cursor: default;
   }
 }
+html, body, #app {
+  background-color: rgb(245, 245, 245);
+  font-size: 14px;
+  color: #585858;
+}
 
 .span-title-pink {
   color: $--color-pink;
@@ -239,7 +244,7 @@ body .iconfont {
   line-height: 20px !important;
 }
 
-.el-input__suffix {
+.el-select .el-input__suffix {
   .el-input__icon {
     line-height: 30px;
     transform: rotate(0deg) !important;

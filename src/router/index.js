@@ -52,10 +52,10 @@ const routes = [
         path: '/shopping',
         name: 'shopping',
         component: CommonViewPage,
-        redirect: 'shoppingCar',
+        redirect: '/shopping/car',
         children: [
           {
-            path: '/shoppingCar',
+            path: '/shopping/car',
             name: 'shoppingCar',
             meta: {
               requiresAuth: true,
@@ -64,7 +64,7 @@ const routes = [
             component: () => import('../views/ShoppingCar/ShoppingCarPage.vue'),
           },
           {
-            path: '/shoppingCar/detail',
+            path: '/shopping/detail',
             name: 'shoppingCarDetail',
             meta: {
               requiresAuth: true,
@@ -73,7 +73,7 @@ const routes = [
             component: () => import('../views/ShoppingCar/ShoppingCarDetailPage.vue'),
           },
           {
-            path: '/shoppingCar/submit',
+            path: '/shopping/submit',
             name: 'shoppingCar/submit',
             meta: {
               requiresAuth: true,
@@ -82,6 +82,15 @@ const routes = [
             component: () => import('../views/ShoppingCar/ShoppingCarSubmitPage.vue'),
           },
         ],
+      },
+      {
+        path: '/bill',
+        name: 'bill',
+        meta: {
+          requiresAuth: true,
+          title: '名片之家 - 下单',
+        },
+        component: () => import('../views/Bill/BillPage.vue'),
       },
     ],
   },

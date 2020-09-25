@@ -3,7 +3,7 @@ import Vue from 'vue';
 import {
   Dialog, Dropdown, DropdownMenu, DropdownItem, Select, Option, Steps, Step, Popover, Link, Radio, Collapse, Upload,
   CollapseItem, RadioGroup, Tabs, TabPane, Message, Input, Form, FormItem, Button, CheckboxGroup, Checkbox, Progress,
-  Table, TableColumn, Tooltip,
+  Table, TableColumn, Tooltip, DatePicker, RadioButton, Pagination,
 } from 'element-ui';
 
 Vue.use(Select);
@@ -33,6 +33,9 @@ Vue.use(Progress);
 Vue.use(Table);
 Vue.use(TableColumn);
 Vue.use(Tooltip);
+Vue.use(DatePicker);
+Vue.use(RadioButton);
+Vue.use(Pagination);
 
 Vue.prototype.$message = Message;
 

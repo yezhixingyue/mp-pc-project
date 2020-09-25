@@ -642,6 +642,7 @@ export default {
       line-height: 39px;
       box-sizing: border-box;
       padding: 0 22px;
+      padding-right: 30px;
       > .left {
         float: left;
       }

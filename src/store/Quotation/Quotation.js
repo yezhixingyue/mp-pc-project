@@ -988,6 +988,7 @@ export default {
         massage.successSingle({ title: '添加成功!' });
         const _obj = JSON.parse(JSON.stringify(state.curProductInfo2Quotation));
         commit('setCurProductInfo2Quotation', null);
+        commit('setSelectedCoupon', null);
         await dispatch('delay', 10);
         commit('setCurProductInfo2Quotation', _obj);
       }
@@ -1025,7 +1026,7 @@ export default {
       const res = await api.getPayResult(state.curPayInfo2Code.PayCode);
       if (res.data.Status === 1000) cb(res.data.Data);
     },
-    async placeOrderFromPreCreate({ state, commit, rootState }, { FilePath, PayInFull }) {
+    async placeOrderFromPreCreate({ state, commit, rootState }, { FilePath, PayInFull, cb }) {
       const _obj = { OrderType: 2, PayInFull, List: [] };
       let item;
       if (FilePath) {
@@ -1049,7 +1050,7 @@ export default {
           title: '下单成功!',
           successFunc: () => {
             if (FilePath) commit('setPaySuccessOrderDataStatus');
-            // else 清除购物车中一些数据 然后跳转购物车列表页面
+            if (cb) cb(); // 清除购物车中一些数据 然后跳转购物车列表页面 该方法目前只在购物车提交时使用
             commit('setIsShow2PayDialog', false);
           },
         });

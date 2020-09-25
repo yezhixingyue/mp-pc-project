@@ -24,6 +24,7 @@ export default {
 .mp-pc-shopping-car-page-wrap {
   width: 100%;
   background-color: #fff;
+  min-height: calc(100vh - 135px - 22px);
   > section {
     margin: 0 auto;
     width: 1200px;

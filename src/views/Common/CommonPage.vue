@@ -7,7 +7,7 @@
       <router-view />
     </div>
     <footer>
-      <BlueInfoFooter />
+      <BlueInfoFooter cancollapse />
     </footer>
   </article>
 </template>
@@ -32,7 +32,7 @@ export default {
   > .common-page-view-content {
     width: 100%;
     margin: 0 auto;
-    min-height: calc(100vh - 135px - 144px);
+    min-height: calc(100vh - 135px - 22px);
   }
 }
 </style>

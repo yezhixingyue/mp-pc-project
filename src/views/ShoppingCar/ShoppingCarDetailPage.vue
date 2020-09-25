@@ -68,17 +68,17 @@ export default {
   },
   methods: {
     onReturnClick() {
-      this.$router.replace('/shoppingCar');
+      this.$router.replace('/shopping/car');
       // this.$store.commit('Quotation/setIsFullPayoutDisabled', false);
     },
     async handleSubmit() {
       // eslint-disable-next-line max-len
       const res = await this.$store.dispatch('shoppingCar/getOrderPreCreateFromShoppingCar', [this.curShoppingCarDetailData]);
-      if (res) this.$router.push('/shoppingCar/submit');
+      if (res) this.$router.push('/shopping/submit');
     },
   },
   mounted() {
-    if (!this.curShoppingCarDetailData) this.$router.replace('/shoppingCar');
+    if (!this.curShoppingCarDetailData) this.$router.replace('/shopping/car');
   },
 };
 </script>

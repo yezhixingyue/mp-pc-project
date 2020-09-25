@@ -21,7 +21,7 @@
             <i class="iconfont icon-xiadan"></i>
             <span>下单</span>
           </router-link>
-          <router-link tag="li" to="/shoppingCar">
+          <router-link tag="li" to="/shopping">
             <i class="iconfont icon-gouwuche"></i>
             <span>购物车</span>
           </router-link>

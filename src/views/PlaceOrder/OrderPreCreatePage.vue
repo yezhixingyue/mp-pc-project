@@ -87,6 +87,7 @@ export default {
   methods: {
     onReturnClick() {
       this.$router.replace('/placeOrder');
+      this.$store.commit('Quotation/setCurPayInfo2Code', null);
       this.$store.commit('Quotation/setIsFullPayoutDisabled', false);
     },
     handleSubmit() {
@@ -108,11 +109,17 @@ export default {
   },
   watch: {
     data2Listener(newVal) {
-      if (newVal) this.$router.replace('/placeOrder');
+      if (newVal) {
+        this.$router.replace('/placeOrder');
+        this.$store.commit('Quotation/setCurPayInfo2Code', null);
+      }
     },
   },
   mounted() {
-    if (this.data2Listener) this.$router.replace('/placeOrder');
+    if (this.data2Listener) {
+      this.$router.replace('/placeOrder');
+      this.$store.commit('Quotation/setCurPayInfo2Code', null);
+    }
   },
 };
 </script>

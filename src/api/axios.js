@@ -12,6 +12,7 @@ axios.interceptors.request.use(
     // console.log(curConfig);
     const token = sessionStorage.getItem('token');
     closeTip = curConfig.closeTip;
+    // console.log(closeTip);
     const url = curConfig.url.split('?')[0];
     const arrWithOutToken = ['/Api/Sms/Send', '/Api/Customer/Reg', '/Api/Customer/Login'];
     // console.log(curConfig, `Bearer ${token}`);

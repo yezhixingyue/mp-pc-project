@@ -2,7 +2,7 @@
   <article class="mp-pc-shopping-car-submit-page-wrap">
     <section>
       <header class="return-btn" @click="onReturnClick">
-        <span @click="onReturnClick"><i class="el-icon-arrow-left is-font-24 is-cancel"></i> 返回上一级</span>
+        <span><i class="el-icon-arrow-left is-font-24 is-cancel"></i> 返回上一级</span>
       </header>
       <Table4PlaceOrderFromShoppingCar :orderData='curShoppingCarData4FirstPlace' />
       <footer v-if="PreCreateData">
@@ -33,7 +33,7 @@
         <div class="btn-wrap">
           <el-button type="danger" @click="handleSubmit">提交订单</el-button>
         </div>
-        <Dialog2Pay :needClear='false' />
+        <Dialog2Pay pageType='shoppingCarPage' :needClear='false' />
       </footer>
     </section>
   </article>
@@ -99,12 +99,20 @@ export default {
   methods: {
     onReturnClick() {
       this.$router.go(-1);
+      this.$store.commit('Quotation/setCurPayInfo2Code', null);
+      // console.log(this.$router, this.$route);
     },
     handleSubmit() {
       console.log('handleSubmit');
       this.$store.commit('Quotation/setIsShow2PayDialog', true);
+      const cb = () => {
+        this.$router.push('/shopping/car');
+        this.$store.commit('shoppingCar/setCurShoppingCarDetailData', null);
+        this.$store.commit('shoppingCar/setCurShoppingCarDataBeforeFirstPlace', null);
+        this.$store.commit('shoppingCar/setCurShoppingCarData4FirstPlace', null);
+      };
       if (!this.curPayInfo2Code) {
-        const _obj = { PayInFull: this.checked };
+        const _obj = { PayInFull: this.checked, cb };
         this.$store.dispatch('Quotation/placeOrderFromPreCreate', _obj).catch((...args) => {
           const error = args[0];
           this.messageBox.handleLoadingError({
@@ -131,7 +139,7 @@ export default {
   > section {
     width: 1200px;
     margin: 0 auto;
-    min-height: calc( 100vh - 135px - 144px);
+    min-height: calc(100vh - 135px - 22px);
     > footer {
       padding: 30px;
       font-size: 14px;

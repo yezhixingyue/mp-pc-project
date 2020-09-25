@@ -147,6 +147,22 @@ export default {
     /** 客户信息
     ---------------------------------------- */
     customerInfo: null,
+    /** 客户账单交易类型筛选方式列表
+    ---------------------------------------- */
+    TransactionTypeList: [
+      {
+        label: '所有',
+        value: '',
+      },
+      {
+        label: '充值',
+        value: '11',
+      },
+      {
+        label: '支出',
+        value: '21',
+      },
+    ],
   },
   getters: {
   },

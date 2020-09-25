@@ -131,6 +131,15 @@ const api = {
   getQuotationList() { // GET /Api/Quotation/List 获取购物车数据列表
     return instance.get('/Api/Quotation/List');
   },
+  getQuotationRemove({ preOrderID, closeTip }) { // DELETE /Api/Quotation/Remove
+    return instance.delete(`/Api/Quotation/Remove?preOrderID=${preOrderID}`, { closeTip });
+  },
+
+  /* 账单部分 api
+   ----------------------------------------------------------------------------------- */
+  getCustomerFundBill(data) { // /Api/Customer/FundBill 获取账单流水
+    return instance.post('/Api/Customer/FundBill', data);
+  },
 };
 
 export default api;

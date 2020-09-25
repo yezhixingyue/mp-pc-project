@@ -1,5 +1,5 @@
 <template>
-  <div class="mp-pc-common-comp-all-page-footer-wrap">
+  <div class="mp-pc-common-comp-all-page-footer-wrap" :class="cancollapse ? 'cancollapse' : ''">
     <ul class="content float">
       <li class="img-box"></li>
       <li class="text-box">
@@ -28,7 +28,12 @@
 
 <script>
 export default {
-
+  props: {
+    cancollapse: {
+      type: Boolean,
+      default: false,
+    },
+  },
 };
 </script>
 
@@ -72,6 +77,18 @@ export default {
       float: right;
       width: 182px;
       background: url(https://0.rc.xiniu.com/g1/M00/20/75/CgAGTF1D4GyAOFkhAAMezvQFbb4851.png) no-repeat right center;
+    }
+  }
+  &.cancollapse {
+    position: fixed;
+    left: 0;
+    bottom: -126px;
+    right: 0;
+    // top: 130px;
+    transition: 0.2s;
+    z-index: 999;
+    &:hover {
+      bottom: 0;
     }
   }
 }

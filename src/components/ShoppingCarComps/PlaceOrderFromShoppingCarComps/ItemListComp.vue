@@ -198,7 +198,7 @@ export default {
     }
   }
   .product-item-content {
-    height: 70px;
+    height: 60px;
     // padding: 13px 0;
     box-sizing: border-box;
     vertical-align: middle;
@@ -221,7 +221,7 @@ export default {
       font-size: 14px;
       color: #585858;
       line-height: 30px;
-      margin-top: 20px;
+      margin-top: 15px;
     }
   }
 }
