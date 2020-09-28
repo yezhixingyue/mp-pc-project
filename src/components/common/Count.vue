@@ -15,7 +15,7 @@
           </el-pagination>
         </div>
         <slot></slot>
-        <span class="count">共检索出<i>{{count}}</i>条记录</span>
+        <span class="count">共检索出<i >{{count}}</i>条记录</span>
 </div>
 </template>
 
@@ -94,7 +94,10 @@ export default {
 <style lang='scss'>
 @import "@/assets/css/var.scss";
 .count-wrap{
-  text-align: right;
+  text-align: center;
+  display: block;
+  padding: 0;
+  padding-left: 25px;
   font-size: 12px;
   line-height: 45px;
   padding-right: 72px;
@@ -104,8 +107,8 @@ export default {
   box-sizing: border-box;
   border-top: none;
   position: relative;
-  display: flex;
-  justify-content: flex-end;
+  // display: flex;
+  // justify-content: flex-end;
   font-size: 13px;
   color: $--color-text-regular;
   background-color: $--color-white;
@@ -115,7 +118,9 @@ export default {
     text-align: left;
   }
   .count{
-    margin-left: 70px;
+    color: #585858;
+    position: absolute;
+    right: 25px;
     i {
         font-weight: 600;
         color: rgb(45, 189, 249);
@@ -123,6 +128,7 @@ export default {
     }
   }
   .mp-pagination-wrap{
+    display: inline-block;
     .el-pagination{
       padding-top: 8px;
       color: $--color-text-table-time;
@@ -136,22 +142,22 @@ export default {
             width: 10px;
             top: 6px;
             height: 15px;
-            // background: url('../../assets/images/left-arrow.png') center no-repeat;
+            background: url('../../assets/images/left-arrow.png') center no-repeat;
           }
         }
         &:disabled{
           > i::before {
-            // background: url('../../assets/images/left-disabled.png') center no-repeat;
+            background: url('../../assets/images/left-disabled.png') center no-repeat;
           }
         }
       }
       .btn-next{
         > i::before {
-            // background: url('../../assets/images/right-arrow.png') center no-repeat;
+            background: url('../../assets/images/right-arrow.png') center no-repeat;
           }
         &:disabled{
           > i::before {
-            // background: url('../../assets/images/right-disabled.png') center no-repeat;
+            background: url('../../assets/images/right-disabled.png') center no-repeat;
           }
         }
       }

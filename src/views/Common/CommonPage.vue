@@ -32,6 +32,7 @@ export default {
   > .common-page-view-content {
     width: 100%;
     margin: 0 auto;
+    box-sizing: border-box;
     min-height: calc(100vh - 135px - 22px);
   }
 }

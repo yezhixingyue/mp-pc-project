@@ -46,9 +46,10 @@
       </div>
     </div>
     <ul class="shortcut-list float">
-      <li v-for="item in hasCollectList" :key="item.ID" @click="onShortcutClick(item)">
+      <li v-for="item in hasCollectList" :key="item.ID || item.ProductID" @click="onShortcutClick(item)">
         <el-link :underline="false"
-         :class="curProduct && curProduct.ProductID === item.ID ? 'active' : ''">{{item.Name}}</el-link>
+         :class="curProduct && curProduct.ProductID === item.ID ? 'active' : ''"
+         >{{item.Name || item.ProductName}}</el-link>
       </li>
     </ul>
     <div class="mark" v-show="isOpen"></div>
@@ -97,7 +98,7 @@ export default {
       return null;
     },
     hasCollectList4Req() {
-      if (this.hasCollectList.length === 0 || !this.curMenus) return null;
+      // if (this.hasCollectList.length === 0 || !this.curMenus) return null;
       const ClassID = this.curMenus.ID;
       // eslint-disable-next-line max-len
       const _tempList = this.hasCollectList.filter(it => it.ClassID === ClassID || (it.ProductClass && it.ProductClass.First === ClassID));
@@ -154,7 +155,7 @@ export default {
           this.hasCollectList = this.hasCollectList.filter(it => it.ProductID !== item.ProductID)
             .filter(it => it.ID !== item.ProductID);
         } else {
-          this.hasCollectList.push(item);
+          this.hasCollectList = [...this.hasCollectList, item];
         }
       }
     },
@@ -169,12 +170,17 @@ export default {
     async onSubmit() {
       if (this.hasCollectList4Req) {
         const res = await this.$store.dispatch('Quotation/getCustomerShortCutSave', this.hasCollectList4Req);
-        if (res) this.canCollectList = this.canCollectList.filter(it => it !== this.index);
+        console.log(res);
+        if (res) {
+          this.canCollectList = this.canCollectList.filter(it => it !== this.index);
+          // this.hasCollectList = this.hasCollectList.filter(it => it !== this.index);
+        }
       }
     },
     onShortcutClick(item) {
-      if (this.curProduct && this.curProduct.ProductID === item.ID) return;
-      const _t = this.productNames.find(it => it.ProductID === item.ID);
+      const _id = item.ID ? item.ID : item.ProductID;
+      if (this.curProduct && this.curProduct.ProductID === _id) return;
+      const _t = this.productNames.find(it => it.ProductID === _id);
       this.curProduct = _t;
       this.$store.commit('Quotation/setCurProductInfo', _t);
       this.$store.dispatch('Quotation/getProductDetail');

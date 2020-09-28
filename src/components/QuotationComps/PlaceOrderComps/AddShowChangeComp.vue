@@ -109,14 +109,14 @@
                         </el-option>
                       </el-select>
                     </el-form-item>
-                </div>
-                <div class="add-2">
-                  <el-form-item prop="AddressDetail">
-                  <el-input v-model.trim="newAdd.AddressDetail" placeholder="详细地址 (不包含省市区)"></el-input>
-                  </el-form-item>
-                  <!-- <el-button type="primary" :disabled='!newAdd.AddressDetail || !newAdd.ExpressArea.CountyID'
-                  >地图定位</el-button> -->
-                </div>
+                  </div>
+                  <div class="add-2">
+                    <el-form-item prop="AddressDetail">
+                    <el-input v-model.trim="newAdd.AddressDetail" placeholder="详细地址 (不包含省市区)"></el-input>
+                    </el-form-item>
+                    <!-- <el-button type="primary" :disabled='!newAdd.AddressDetail || !newAdd.ExpressArea.CountyID'
+                    >地图定位</el-button> -->
+                  </div>
                 </div>
                 <header>
                   <div>

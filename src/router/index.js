@@ -88,9 +88,80 @@ const routes = [
         name: 'bill',
         meta: {
           requiresAuth: true,
-          title: '名片之家 - 下单',
+          title: '名片之家 - 账单',
         },
         component: () => import('../views/Bill/BillPage.vue'),
+      },
+      {
+        path: '/mySetting',
+        name: 'mySetting',
+        component: () => import('../views/mySettingPages/mySettingCommonPage.vue'),
+        redirect: '/mySetting/account',
+        children: [
+          {
+            path: '/mySetting/account',
+            name: 'mySettingAccount',
+            meta: {
+              requiresAuth: true,
+              title: '账户信息',
+            },
+            component: () => import('../views/mySettingPages/AccountPage.vue'),
+          },
+          {
+            path: '/mySetting/address',
+            name: 'mySettingAddress',
+            meta: {
+              requiresAuth: true,
+              title: '收货地址',
+            },
+            component: () => import('../views/mySettingPages/AddressPage.vue'),
+          },
+          {
+            path: '/mySetting/couponCenter',
+            name: 'mySettingCouponCenter',
+            meta: {
+              requiresAuth: true,
+              title: '领券中心',
+            },
+            component: () => import('../views/mySettingPages/CouponCenterPage.vue'),
+          },
+          {
+            path: '/mySetting/myCoupons',
+            name: 'mySettingMyCoupons',
+            meta: {
+              requiresAuth: true,
+              title: '我的优惠券',
+            },
+            component: () => import('../views/mySettingPages/MyCouponsPage.vue'),
+          },
+          {
+            path: '/mySetting/subAccountManage',
+            name: 'subAccountManage',
+            meta: {
+              requiresAuth: true,
+              title: '子账号管理',
+            },
+            component: () => import('../views/mySettingPages/SubAccountManagePage.vue'),
+          },
+          {
+            path: '/mySetting/changePwd',
+            name: 'mySettingChangePwd',
+            meta: {
+              requiresAuth: true,
+              title: '修改密码',
+            },
+            component: () => import('../views/mySettingPages/ChangePwdPage.vue'),
+          },
+          {
+            path: '/mySetting/changeMobile',
+            name: 'mySettingChangeMobile',
+            meta: {
+              requiresAuth: true,
+              title: '修改手机号',
+            },
+            component: () => import('../views/mySettingPages/ChangeMobilePage.vue'),
+          },
+        ],
       },
     ],
   },

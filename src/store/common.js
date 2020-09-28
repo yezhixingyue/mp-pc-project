@@ -147,6 +147,9 @@ export default {
     /** 客户信息
     ---------------------------------------- */
     customerInfo: null,
+    /** 客户资金余额
+    ---------------------------------------- */
+    customerBalance: null,
     /** 客户账单交易类型筛选方式列表
     ---------------------------------------- */
     TransactionTypeList: [
@@ -163,6 +166,20 @@ export default {
         value: '21',
       },
     ],
+    /** 客户账单交易渠道列表
+    ---------------------------------------- */
+    formatTransactionCurrencyList: [
+      { name: '不限', ID: '' },
+      { name: '余额', ID: 1 },
+      { name: '支付宝', ID: 3 },
+      { name: '微信支付', ID: 4 },
+      { name: '物流代收', ID: 5 },
+      { name: '退款', ID: 12 },
+      { name: '返现', ID: 15 },
+      { name: '手动入账', ID: 16 },
+      { name: '手动扣款', ID: 23 },
+      { name: '支付订单', ID: 24 },
+    ],
   },
   getters: {
   },
@@ -176,6 +193,11 @@ export default {
     ---------------------------------------- */
     setCustomerInfo(state, data) {
       state.customerInfo = data;
+    },
+    /** 设置客户资金余额
+    ---------------------------------------- */
+    setCustomerBalance(state, balance) {
+      state.customerBalance = balance;
     },
     /** 设置配送列表
     ---------------------------------------- */
@@ -196,11 +218,17 @@ export default {
         commit('setCraftRelationList', res.data.Data);
       }
     },
-    async getCustomerDetail({ state, commit }) {
+    async getCustomerDetail({ state, commit }) { // 获取账号基本信息
       if (state.customerInfo) return;
       const res = await api.getCustomerDetail();
       if (res.data.Status === 1000) {
         commit('setCustomerInfo', res.data.Data);
+      }
+    },
+    async getCustomerFundBalance({ commit }) {
+      const res = await api.getCustomerFundBalance();
+      if (res.data.Status === 1000) {
+        commit('setCustomerBalance', res.data.Data);
       }
     },
     async getExpressList({ state, commit }) {

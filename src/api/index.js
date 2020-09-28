@@ -86,6 +86,12 @@ const api = {
   getAddressIDList(data) { // 查询地址ID
     return instance.get(`/Api/District/List?parentID=${data}`);
   },
+  getCustomerFundBalance() { // GET /Api/Customer/FundBalance 获取账号资金余额
+    return instance.get('/Api/Customer/FundBalance');
+  },
+  getCustomerApplyAuthentication(data) { // POST /Api/Customer/ApplyAuthentication 申请认证
+    return instance.post('/Api/Customer/ApplyAuthentication', data);
+  },
 
   /* 图片与文件上传api
    ----------------------------------------------------------------------------------- */

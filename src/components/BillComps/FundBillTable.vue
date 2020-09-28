@@ -1,26 +1,21 @@
 <template>
   <section>
-    <el-table
-      tooltip-effect="dark"
-      :max-height="h"
-      :height="h"
-      stripe
-      border
-      :data="tableData"
-      style="width: 100%">
-      <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
+    <el-table :max-height="h" :height="h" stripe border :data="dataList" style="width: 100%" class="ft-14-table">
+      <el-table-column prop="BillID" label="流水号" width="220" show-overflow-tooltip></el-table-column>
+      <el-table-column label="金额" width="150" show-overflow-tooltip>
+        <template slot-scope="scope">{{ scope.row.Amount }}元</template>
       </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
+      <el-table-column label="交易类型" width="150" show-overflow-tooltip>
+        <span slot-scope="scope" :class="{'is-pink': scope.row.Type === 21, 'is-success': scope.row.Type === 11}"
+         >{{ scope.row.Type | formatTransactionType }}</span>
       </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址">
+      <el-table-column label="渠道" show-overflow-tooltip width="160">
+        <template slot-scope="scope">{{ scope.row.Currency | formatTransactionCurrency }}</template>
+      </el-table-column>
+      <el-table-column prop="Remark" label="备注" width="260" show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column prop="Content" label="时间" show-overflow-tooltip width="259">
+        <span class="gray" slot-scope="scope">{{ scope.row.OperateTime | format2MiddleLangTypeDate }}</span>
       </el-table-column>
     </el-table>
   </section>
@@ -28,25 +23,14 @@
 
 <script>
 export default {
+  props: {
+    dataList: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄',
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄',
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄',
-      }],
       h: 0,
     };
   },

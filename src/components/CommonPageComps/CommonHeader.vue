@@ -42,20 +42,41 @@
             <span>账单</span>
           </router-link>
         </ul>
-        <div class="customer-box">
+        <div class="customer-box" v-if="customerInfo">
           <span>
-            豫纹图文
+            <span>{{customerInfo.CustomerName}} </span>
             <i class="title">/ 余额：</i>
-            <i class="price">￥150</i>
+            <i class="price">￥{{customerBalance}}</i>
           </span>
           <el-button round>在线充值</el-button>
-          <el-popover placement="bottom-end" width="200" trigger="click">
-            <div class="content">sadsadsadsadasd</div>
-            <span class="customer-btn" slot="reference">
-              150....2355
-              <i class="iconfont icon-xiala"></i>
+          <el-dropdown trigger="click" @command='onCommand'>
+            <span class="el-dropdown-link">
+              {{formatMobile(customerInfo.Mobile)}}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
-          </el-popover>
+            <el-dropdown-menu slot="dropdown" class="mp-pc-my-set-drop-down-wrap">
+              <el-dropdown-item
+                :class="{active: $route.name === 'mySettingAccount'}"
+                command='account' icon="el-icon-user-solid">账户信息</el-dropdown-item>
+              <el-dropdown-item
+                :class="{active: $route.name === 'mySettingAddress'}"
+                command='address' icon="el-icon-location">收货地址</el-dropdown-item>
+              <el-dropdown-item
+                :class="{active: $route.name === 'mySettingCouponCenter'}"
+                command='couponCenter' icon="el-icon-s-goods">领券中心</el-dropdown-item>
+              <el-dropdown-item
+                :class="{active: $route.name === 'mySettingMyCoupons'}"
+                command='myCoupons' icon="el-icon-s-claim">我的优惠券</el-dropdown-item>
+              <el-dropdown-item
+                :class="{active: $route.name === 'subAccountManage'}"
+                command='subAccountManage' icon="el-icon-menu">子账号管理</el-dropdown-item>
+              <el-dropdown-item
+                :class="{active: $route.name === 'mySettingChangePwd'}"
+                command='changePwd' icon="el-icon-s-help">修改密码</el-dropdown-item>
+              <el-dropdown-item
+                :class="{active: $route.name === 'mySettingChangeMobile'}"
+                command='changeMobile' icon="el-icon-s-order">修改手机号</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </div>
     </footer>
@@ -63,7 +84,57 @@
 </template>
 
 <script>
-export default {};
+import { mapState } from 'vuex';
+
+export default {
+  computed: {
+    ...mapState('common', ['customerInfo', 'customerBalance']),
+  },
+  methods: {
+    formatMobile(mobile) {
+      if (!mobile || mobile.length !== 11) return '';
+      const _arr = mobile.split('');
+      const _arr1 = _arr.map((it, i) => {
+        if (i > 2 && i < 7) return '.';
+        return it;
+      });
+      return _arr1.join('');
+    },
+    onCommand(command) {
+      let _path = '';
+      switch (command) {
+        case 'account':
+          _path = '/mySetting/account';
+          break;
+        case 'address':
+          _path = '/mySetting/address';
+          break;
+        case 'couponCenter':
+          _path = '/mySetting/couponCenter';
+          break;
+        case 'myCoupons':
+          _path = '/mySetting/myCoupons';
+          break;
+        case 'subAccountManage':
+          _path = '/mySetting/subAccountManage';
+          break;
+        case 'changePwd':
+          _path = '/mySetting/changePwd';
+          break;
+        case 'changeMobile':
+          _path = '/mySetting/changeMobile';
+          break;
+        default:
+          break;
+      }
+      if (this.$route.path !== _path) this.$router.push(_path);
+    },
+  },
+  mounted() {
+    this.$store.dispatch('common/getCustomerDetail');
+    this.$store.dispatch('common/getCustomerFundBalance');
+  },
+};
 </script>
 
 <style lang='scss'>
@@ -171,10 +242,43 @@ export default {};
         float: right;
         color: #fff;
         line-height: 55px;
+        max-width: 560px;
+        text-align: right;
+        white-space: nowrap;
         > span {
           font-size: 12px;
+          display: inline-block;
+          // max-width: 360px;
+          overflow: hidden;
+          height: 55px;
+          vertical-align: top;
+          text-align: end;
+          overflow-x: auto;
+          > span {
+            display: inline-block;
+            margin-right: 4px;
+            max-width: 175px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            vertical-align: -44%;
+          }
+          &::-webkit-scrollbar {
+            height: 6px;
+            // background: #fff;
+          }
+          &::-webkit-scrollbar-thumb {
+            height: 4px;
+            background-color: rgba($color: #000000, $alpha: 0.2);
+            border-radius: 2px;
+            cursor: pointer;
+            margin-bottom: 2px;
+          }
           > i {
             font-size: 14px;
+            height: 55px;
+            display: inline-block;
+            vertical-align: top;
             &.price {
               font-weight: 600;
               font-size: 16px;
@@ -193,14 +297,51 @@ export default {};
             text-shadow: 0 0 1px #fff;
           }
         }
-        .customer-btn {
-          font-size: 14px;
-          > i {
-            font-size: 15px;
-            margin-left: 8px;
+        // .customer-btn {
+        //   font-size: 14px;
+        //   > i {
+        //     font-size: 15px;
+        //     margin-left: 8px;
+        //   }
+        // }
+        > div {
+          color: #fff;
+          > span {
+            cursor: pointer;
+            line-height: 30px;
+            display: inline-block;
+            padding: 0 6px;
+            border-radius: 3px;
+            outline: none;
+            z-index: 3;
+            transition: 0.2s;
+            // border: 1px solid #428dfa;
+            &:hover {
+              // background-color: rgba($color: #428dfa, $alpha: 0.3) !important;
+              // border-color: #000;
+              background-color:  mix(#428dfa, #000, 90%);;
+              // color: mix(#f4a307, #fff, 40%);
+              // color: #428dfa;
+            }
           }
         }
       }
+    }
+  }
+}
+.mp-pc-my-set-drop-down-wrap {
+  > li {
+    font-size: 13px;
+    transition: 0.2s;
+    margin: 5px 0;
+    > i {
+      font-size: 16px;
+      margin-right: 8px;
+      vertical-align: -8%;
+    }
+    &.active {
+      color: #428dfa;
+      font-weight: 700;
     }
   }
 }

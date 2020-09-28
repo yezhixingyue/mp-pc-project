@@ -365,6 +365,20 @@ body .el-radio__inner, body .el-checkbox__inner {
     }
   }
 }
+.ft-14-table .el-table__body-wrapper, .el-table__fixed-right, .el-table__fixed {
+  
+  .el-table__body {
+    tbody {
+      tr {
+        td {
+          > .cell {
+            font-size: 13px;
+          }
+        }
+      }
+    }
+  }
+}
 .el-table__fixed-right-patch{
   background-color: rgb(245, 245, 245);
 }

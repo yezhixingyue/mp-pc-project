@@ -25,6 +25,7 @@
           :handlePageChange='handlePageChange'
           :count='FundBillListNumber'
           :pageSize='20'
+          class="float"
          />
       </div>
     </div>
@@ -72,7 +73,7 @@ export default {
     return {
       billValue: '',
       // eslint-disable-next-line max-len
-      dateList: [{ label: '不限', value: 'all' }, { label: '今天', value: 'today' }, { label: '昨天', value: 'yesterday' }, { label: '前天', value: 'beforeyesterday' }, { label: '本月', value: 'curMonth' }, { label: '上月', value: 'lastMonth' }],
+      dateList: [{ label: '全部', value: 'all' }, { label: '今天', value: 'today' }, { label: '昨天', value: 'yesterday' }, { label: '前天', value: 'beforeyesterday' }, { label: '本月', value: 'curMonth' }, { label: '上月', value: 'lastMonth' }],
     };
   },
   methods: {
@@ -116,6 +117,9 @@ export default {
       width: 1200px;
       margin: 0 auto;
       padding-top: 25px;
+      > div {
+        margin-top: 19px;
+      }
     }
   }
   > .empty {
