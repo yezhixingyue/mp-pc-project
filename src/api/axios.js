@@ -51,8 +51,9 @@ axios.interceptors.response.use(
     // 包含以上的状态码 或 以上的请求路径  不会弹窗报错  其余以外都会报错出来
 
     const _url = response.config.url.split('?')[0];
+    console.log(response.data.Status);
     // eslint-disable-next-line max-len
-    if (!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && (!closeTip && ![7025, 8037].includes(response.data.Status))) {
+    if ((!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && (!closeTip)) || [7025, 8037].includes(response.data.Status)) {
       const _obj = { msg: `[ ${response.data.Message} ]` };
       if ([7025, 8037].includes(response.data.Status)) _obj.successFunc = () => router.replace('/login');
       else _obj.successFunc = undefined;

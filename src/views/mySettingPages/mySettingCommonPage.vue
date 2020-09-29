@@ -77,6 +77,9 @@ export default {
       vertical-align: top;
       display: inline-block;
       padding-left: 80px;
+      // height: calc(100vh - 160px - 70px - 156px);
+      // min-height: 410px;
+      // overflow-y: auto;
     }
   }
   > header, > footer {

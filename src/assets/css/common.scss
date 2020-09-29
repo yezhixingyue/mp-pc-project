@@ -21,6 +21,7 @@ html, body, #app {
   background-color: rgb(245, 245, 245);
   font-size: 14px;
   color: #585858;
+  overflow: overlay;
 }
 
 .span-title-pink {
@@ -173,6 +174,12 @@ html, body, #app {
 }
 .is-font-24 {
   font-size: 24px !important;
+}
+.is-font-26 {
+  font-size: 26px !important;
+}
+.is-font-22 {
+  font-size: 22px !important;
 }
 .is-font-20 {
   font-size: 20px !important;

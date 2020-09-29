@@ -1,12 +1,17 @@
 <template>
   <section>
-    修改手机号页面
+    <span class="blue-v-line is-bold is-black">修改手机号</span>
+    <ChangePhoneComp />
   </section>
 </template>
 
 <script>
-export default {
+import ChangePhoneComp from '@/components/MySettingComps/ChangePhoneComp.vue';
 
+export default {
+  components: {
+    ChangePhoneComp,
+  },
 };
 </script>
 

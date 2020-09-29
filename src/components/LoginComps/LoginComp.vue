@@ -83,6 +83,7 @@ export default {
       },
       set(newVal) {
         this.ruleForm.Mobile = newVal.replace(/[^\d.]/g, '');
+        this.ruleForm.Password = '';
         if (this.isRemember) this.isRemember = false;
       },
     },

@@ -20,3 +20,15 @@ public enum ImageType : byte
         /// </summary>
         AfterSales,  3
     }
+
+
+## 短信类型验证图片验证码
+
+  账号注册  0
+  
+  找回密码  1
+  
+  换绑手机  2
+  
+  绑定新手机  3
+  

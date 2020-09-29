@@ -1,7 +1,7 @@
 <template>
   <div class="mp-pc-common-comps-input-common-comp-wrap">
     <span> <i v-if="required" class="is-pink">*</i> {{title}}：</span>
-    <el-input disabled v-model.trim="inpVal" :placeholder="placeholder"></el-input>
+    <el-input :disabled='disabled' v-model.trim="inpVal" :placeholder="placeholder"></el-input>
   </div>
 </template>
 

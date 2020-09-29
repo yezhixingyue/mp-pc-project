@@ -53,8 +53,9 @@ const api = {
   CreateOrderFromPreCreate(data) { // POST /Api/Order/Create
     return instance.post('/Api/Order/Create', data);
   },
-  getPayResult(payCode) { // GET /Api/PaymentOrder/PayResult 查询付款结果
-    return instance.get(`/Api/PaymentOrder/PayResult?payCode=${payCode}`);
+  getPayResult(payCode, type) { // GET /Api/PaymentOrder/PayResult 查询付款结果
+    if (!type) return instance.get(`/Api/PaymentOrder/PayResult?payCode=${payCode}`);
+    return instance.get(`/Api/PaymentOrder/PayResult?payCode=${payCode}&type=${type}`);
   },
   getCustomerShortCutList() { // GET /Api/Customer/ShortCut/List 快捷方式列表
     return instance.get('/Api/Customer/ShortCut/List');
@@ -91,6 +92,9 @@ const api = {
   },
   getCustomerApplyAuthentication(data) { // POST /Api/Customer/ApplyAuthentication 申请认证
     return instance.post('/Api/Customer/ApplyAuthentication', data);
+  },
+  getCustomerRecharge(data) { // POST /Api/Customer/Recharge 客户充值
+    return instance.post('/Api/Customer/Recharge', data);
   },
 
   /* 图片与文件上传api

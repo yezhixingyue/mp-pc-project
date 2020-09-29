@@ -3,20 +3,18 @@
     <div class="basic-info">
       <span class="blue-v-line is-bold is-black">基本信息</span>
       <div>
-        <InputComp :disabled='AuthenInfo4Submit.disabled'
-          v-model="AuthenInfo4Submit.CustomerName"  title='企业简称' required />
-        <InputComp :disabled='AuthenInfo4Submit.disabled'
-          v-model="AuthenInfo4Submit.AuthenInfo.CompanyName"  title='企业全称' placeholder='须与营业执照上的名称一致' />
+        <InputComp :disabled='!AllowEdit' v-model="AuthenInfo4Submit.CustomerName"  title='企业简称' required />
+        <InputComp :disabled='!AllowEdit'
+         v-model="AuthenInfo4Submit.AuthenInfo.CompanyName"  title='企业全称' placeholder='须与营业执照上的名称一致' />
       </div>
       <div class="second">
-        <InputComp :disabled='AuthenInfo4Submit.disabled'
-          v-model="AuthenInfo4Submit.AuthenInfo.TaxID"  title='纳税人识别号' placeholder='营业执照上的纳税人识别号' />
-        <InputComp :disabled='AuthenInfo4Submit.disabled' v-model="AuthenInfo4Submit.QQ"  title='QQ' />
+        <InputComp :disabled='!AllowEdit' v-model="TaxID"  title='纳税人识别号' placeholder='营业执照上的纳税人识别号' />
+        <InputComp :disabled='!AllowEdit' v-model="QQ"  title='QQ' />
       </div>
       <div class="address-wrap">
         <div class="add-1">
           <p class="title"><i class="is-pink">*</i> 经营地址：</p>
-          <el-select :disabled='!AuthenInfo4Submit.disabled'
+          <el-select :disabled='!AllowEdit'
             v-model="AuthenInfo4Submit.AuthenInfo.SellArea.RegionalID" @change='handleRegionalChange'>
             <el-option
               v-for="item in RegionalList"
@@ -26,7 +24,7 @@
             </el-option>
           </el-select>
           <el-select v-model="AuthenInfo4Submit.AuthenInfo.SellArea.CityID"
-          :disabled="CityList.length === 0 || !AuthenInfo4Submit.disabled" @change='handleCityChange'>
+          :disabled="CityList.length === 0 || !AllowEdit" @change='handleCityChange'>
             <el-option
               v-for="item in CityList"
               :key="item.ID"
@@ -35,7 +33,7 @@
             </el-option>
           </el-select>
           <el-select v-model="AuthenInfo4Submit.AuthenInfo.SellArea.CountyID"
-            :disabled="CountyList.length === 0 || !AuthenInfo4Submit.disabled" @change='handleCountyChange'>
+            :disabled="CountyList.length === 0 || !AllowEdit" @change='handleCountyChange'>
             <el-option
               v-for="item in CountyList"
               :key="item.ID"
@@ -45,7 +43,7 @@
           </el-select>
         </div>
         <div class="add-2">
-          <el-input :disabled='!AuthenInfo4Submit.disabled'
+          <el-input :disabled='!AllowEdit'
             v-model.trim="AuthenInfo4Submit.AuthenInfo.DetailAddress" placeholder="在此输入详细地址"></el-input>
         </div>
       </div>
@@ -53,22 +51,28 @@
     <div class="img-info">
       <p class="blue-v-line is-bold is-black">营业执照照片</p>
       <div class="img-box">
-        <div class="pic is-font-18">
-          双击添加照片
-          <div class="remark">
-            <p class="remoark-text1">照片支持 .png, .jpg,.bmp 格式；</p>
-            <p>宽度和长度比率为5:7</p>
-          </div>
-          <input type="file" @change="onChange" accept='.png,.jpeg,.jpg,.bmp'>
+        <div class="pic is-font-18" :class="AuthenInfo4Submit.AuthenInfo.LicensePath?'':'show-bg'">
+          <input type="file" class="upload" @change="onChange" accept='.png,.jpeg,.jpg,.bmp'>
+          <template v-if="!AuthenInfo4Submit.AuthenInfo.LicensePath">
+            <span>双击添加照片</span>
+            <div class="remark">
+              <p class="remoark-text1">照片支持 .png, .jpg,.bmp 格式；</p>
+              <p>宽度和长度比率为5:7</p>
+            </div>
+          </template>
+          <el-image v-else fit='cover' :src="imgSrc" class="upload-img" :preview-src-list="srcList">
+          </el-image>
+          <div class="img-mask" @click="onImgClick"></div>
         </div>
-        <div class="text gray">
+        <div class="text gray" v-if="!hasUploadedImg || AllowEdit">
           <p class="is-bold">操作说明：</p>
-          <p class="is-font-12">双击可更换照片；鼠标滚轮滚动可放大/ 缩小图片；拖拽可移动图片。</p>
+          <p class="is-font-12">双击可更换照片；单击查看照片，鼠标滚轮滚动可放大/ 缩小图片；拖拽可移动图片。</p>
         </div>
       </div>
     </div>
     <footer>
-      <el-button type="primary" :disabled='!AuthenInfo4Submit.disabled'>保存</el-button>
+      <span class="is-cyan" v-if="customerInfo&&customerInfo.RefuseTips&&!AllowEdit">{{customerInfo.RefuseTips}}</span>
+      <el-button type="primary" :disabled='!AllowEdit' @click="handleSubmit">保存</el-button>
     </footer>
   </section>
 </template>
@@ -84,13 +88,43 @@ export default {
   },
   computed: {
     ...mapState('common', ['customerInfo']),
+    imgSrc() {
+      if (process.env.NODE_ENV === 'development') {
+        return `http://192.168.1.92:8055/${this.AuthenInfo4Submit.AuthenInfo.LicensePath}`;
+      }
+      return this.AuthenInfo4Submit.AuthenInfo.LicensePath;
+    },
+    srcList() {
+      return [this.imgSrc];
+    },
+    AllowEdit() {
+      return this.AuthenInfo4Submit.AllowEdit;
+    },
+    QQ: {
+      get() {
+        return this.AuthenInfo4Submit.QQ;
+        // return this.AuthenInfo4Submit.AuthenInfo.QQ;
+      },
+      set(newVal) {
+        this.AuthenInfo4Submit.QQ = newVal.replace(/[^\d]/g, '');
+        // this.AuthenInfo4Submit.AuthenInfo.QQ = newVal.replace(/[^\d]/g, '');
+      },
+    },
+    TaxID: {
+      get() {
+        return this.AuthenInfo4Submit.AuthenInfo.TaxID;
+      },
+      set(newVal) {
+        this.AuthenInfo4Submit.AuthenInfo.TaxID = newVal.replace(/[^\w]/g, '');
+      },
+    },
   },
   data() {
     return {
-      nickName: '',
       RegionalList: [],
       CityList: [],
       CountyList: [],
+      hasUploadedImg: false,
       AuthenInfo4Submit: {
         AuthenInfo: {
           CompanyName: '',
@@ -107,9 +141,39 @@ export default {
           LicensePath: '',
         },
         CustomerName: '',
-        QQ: '',
         AllowEdit: true,
+        QQ: '',
       },
+      firstClickTime: '',
+      secondClickTime: '',
+      timer: null,
+      simpNameRules: [
+        { strategy: 'isNotEmpty', errorMsg: '请输入企业简称' },
+        { strategy: 'maxLength:20', errorMsg: '企业简称长度不能超过20个字' },
+      ],
+      companyRules: [{ strategy: 'isNotEmpty', errorMsg: '请输入企业全称' }],
+      detailRules: [
+        { strategy: 'isNotEmpty', errorMsg: '请输入详细地址信息' },
+        { strategy: 'maxLength:60', errorMsg: '详细地址长度不能超过60字' },
+      ],
+      RegionalRules: [
+        { strategy: 'isNotEmpty', errorMsg: '请选择省份' },
+        { strategy: 'isNotZero', errorMsg: '请选择省份' },
+      ],
+      CityRules: [
+        { strategy: 'isNotEmpty', errorMsg: '请选择城市' },
+        { strategy: 'isNotZero', errorMsg: '请选择城市' },
+      ],
+      CountyRules: [
+        { strategy: 'isNotEmpty', errorMsg: '请选择县/区' },
+        { strategy: 'isNotZero', errorMsg: '请选择县/区' },
+      ],
+      TaxIDRules: [
+        {
+          strategy: 'hasNotSpace',
+          errorMsg: '纳税人识别号中不能有空格',
+        },
+      ],
     };
   },
   methods: {
@@ -146,6 +210,7 @@ export default {
     },
     handleCountyChange(e) {
       const _t = this.CountyList.find(it => it.ID === e);
+      console.log(_t);
       this.AuthenInfo4Submit.AuthenInfo.SellArea.CountyName = _t.Name;
     },
     onChange(e) {
@@ -190,24 +255,113 @@ export default {
         };
       };
     },
+    handleSingleClick() {
+      const oImg = document.querySelector('div.upload-img.el-image > img');
+      if (!oImg) return;
+      const oMask = document.querySelector('div.img-mask');
+      oMask.style.cursor = 'progress';
+      this.timer = setTimeout(() => {
+        oImg.click();
+        this.timer = null;
+        oMask.style.cursor = 'default';
+      }, 300);
+    },
+    onImgClick() {
+      if (this.hasUploadedImg || !this.AllowEdit) return;
+      this.firstClickTime = this.secondClickTime;
+      this.secondClickTime = Date.now();
+      if (!this.firstClickTime) {
+        this.handleSingleClick();
+        return;
+      }
+      if (this.secondClickTime - this.firstClickTime >= 300) {
+        this.handleSingleClick();
+      } else {
+        clearTimeout(this.timer);
+        this.timer = null;
+        const oMask = document.querySelector('div.img-mask');
+        const oInp = document.querySelector('input.upload');
+        oMask.style.cursor = 'default';
+        oInp.click();
+      }
+    },
+    reportError(msg) {
+      this.messageBox.warnSingleError({
+        title: '校验错误',
+        msg,
+      });
+    },
+    checkValue() {
+      const {
+        SellArea,
+        DetailAddress,
+        // CompanyName,
+        TaxID,
+      } = this.AuthenInfo4Submit.AuthenInfo;
+      if (!SellArea) {
+        this.reportError('请选择地址!');
+        return false;
+      }
+      // eslint-disable-next-line object-curly-newline
+      const { RegionalID, CityID, CountyID } = SellArea;
+      const { CustomerName, QQ } = this.AuthenInfo4Submit;
+      if (!this.validateCheck(CustomerName, this.simpNameRules, this.reportError)) return false; // 企业简称校验
+      // if (!this.validateCheck(CompanyName, this.companyRules, this.reportError)) return false; // 企业全称校验
+      if (!this.validateCheck(RegionalID, this.RegionalRules, this.reportError)) return false; // 省校验
+      if (!this.validateCheck(CityID, this.CityRules, this.reportError)) return false; // 市校验
+      if (!this.validateCheck(CountyID, this.CountyRules, this.reportError)) return false; // 县区校验
+      if (!this.validateCheck(DetailAddress, this.detailRules, this.reportError)) return false; // 详细地址校验
+      if (TaxID) {
+        const { length } = TaxID;
+        if (length !== 15 && length !== 17 && length !== 18 && length !== 20) {
+          this.reportError('纳税人识别号长度不正确,应为15、17、18、20位数字或字母');
+          return false;
+        }
+        if (!this.validateCheck(TaxID, this.TaxIDRules, this.reportError)) return false; // 详细地址校验
+      }
+      if (QQ) {
+        const { length } = QQ;
+        if (length < 5) {
+          this.reportError('QQ号长度最少为5位');
+          return false;
+        }
+      }
+      return true;
+    },
+    async handleSubmit() {
+      if (!this.checkValue()) return;
+      // console.log(this.AuthenInfo4Submit);
+      const res = await this.api.getCustomerApplyAuthentication(this.AuthenInfo4Submit);
+      if (res.data.Status === 1000) {
+        this.messageBox.successSingle({
+          title: '修改成功',
+          successFunc: () => {
+            this.AuthenInfo4Submit.AllowEdit = false;
+          },
+        });
+      }
+    },
   },
   watch: {
     customerInfo: {
       async handler(newVal) {
         if (!newVal) return;
         // eslint-disable-next-line object-curly-newline
-        const { QQ, CustomerName, AuthenInfo, AllowEdit } = newVal;
+        const { CustomerName, AuthenInfo, AllowEdit, QQ } = newVal;
         if (!AuthenInfo) return;
         // eslint-disable-next-line object-curly-newline
         const { CompanyName, DetailAddress, LicensePath, TaxID, SellArea } = AuthenInfo;
         this.AuthenInfo4Submit.CustomerName = CustomerName;
         this.AuthenInfo4Submit.QQ = QQ;
+        // this.AuthenInfo4Submit.AuthenInfo.QQ = QQ;
         this.AuthenInfo4Submit.AllowEdit = AllowEdit;
         this.AuthenInfo4Submit.AuthenInfo.TaxID = TaxID;
         this.AuthenInfo4Submit.AuthenInfo.CompanyName = CompanyName;
         this.AuthenInfo4Submit.AuthenInfo.DetailAddress = DetailAddress;
         this.AuthenInfo4Submit.AuthenInfo.LicensePath = LicensePath;
-        this.AuthenInfo4Submit.AuthenInfo.SellArea = { ...SellArea };
+        if (LicensePath) this.hasUploadedImg = true;
+        // console.log(SellArea);
+        if (SellArea) this.AuthenInfo4Submit.AuthenInfo.SellArea = { ...SellArea };
         if (SellArea) {
           const { RegionalID, CityID } = SellArea;
           const res = await Promise.all([
@@ -224,6 +378,11 @@ export default {
           this.RegionalList = [..._list[0]];
           this.CityList = [..._list[1]];
           this.CountyList = [..._list[2]];
+        } else {
+          const res = await this.api.getAddressIDList(-1);
+          if (res.data.Status === 1000) {
+            this.RegionalList = res.data.Data;
+          }
         }
       },
       immediate: true,
@@ -290,12 +449,15 @@ export default {
         display: inline-block;
         &.pic {
           width: 300px;
-          height: 225px;
-          background: url(../../assets/images/license-bg-pic.png) no-repeat center/100% 100%;
+          height: 400px;
+          overflow: hidden;
           text-align: center;
-          padding-top: 175px;
+          // padding-top: 175px;
           user-select: none;
           position: relative;
+          &.show-bg {
+            background: url(../../assets/images/license-bg-pic.png) no-repeat center/100% 100%;
+          }
           color: #aaa;
           > .remark {
             width: 300px;
@@ -310,22 +472,51 @@ export default {
               margin: 12px 0;
             }
           }
+          > .el-image {
+            width: 100%;
+            height: 100%;
+          }
+          > span {
+            position: absolute;
+            top: 175px;
+            left: 96px;
+          }
+          > input.upload {
+            opacity: 0;
+            width: 1px;
+            height: 1px;
+            position: absolute;
+          }
+          > .img-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9;
+          }
         }
         &.text {
           line-height: 20px;
           padding-left: 15px;
           padding-bottom: 5px;
           vertical-align: bottom;
+          &.cancel {
+            color: #aaa !important;
+          }
         }
       }
     }
   }
   > footer {
     margin-top: 50px;
-    margin-bottom: 45px;
-    padding-left: 325px;
+    margin-bottom: 80px;
+    padding-right: 80px;
+    // padding-left: 325px;
+    text-align: center;
     > button {
       width: 120px;
+      margin-left: 30px;
     }
   }
 }

@@ -48,7 +48,7 @@
             <i class="title">/ 余额：</i>
             <i class="price">￥{{customerBalance}}</i>
           </span>
-          <el-button round>在线充值</el-button>
+          <el-button round @click="setShowRechange">在线充值</el-button>
           <el-dropdown trigger="click" @command='onCommand'>
             <span class="el-dropdown-link">
               {{formatMobile(customerInfo.Mobile)}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -80,15 +80,30 @@
         </div>
       </div>
     </footer>
+    <div class="recharge-remark" :class="{ show:showRemark, showBg: showRechange }"  @click.self='onRemarkClick'>
+      <div class="recharge-box" :class="showRechange? 'showRechange' : ''">
+        <RechargeComp :showRechange='showRechange' @handleClose='setShowRechange' />
+      </div>
+    </div>
   </section>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import RechargeComp from './RechargeComp.vue';
 
 export default {
+  components: {
+    RechargeComp,
+  },
   computed: {
     ...mapState('common', ['customerInfo', 'customerBalance']),
+  },
+  data() {
+    return {
+      showRechange: false,
+      showRemark: false,
+    };
   },
   methods: {
     formatMobile(mobile) {
@@ -99,6 +114,21 @@ export default {
         return it;
       });
       return _arr1.join('');
+    },
+    setShowRechange() {
+      this.showRechange = !this.showRechange;
+      if (this.showRechange) {
+        this.$store.dispatch('common/getCustomerFundBalance');
+        this.showRemark = true;
+      }
+      if (!this.showRechange) {
+        setTimeout(() => {
+          this.showRemark = false;
+        }, 200);
+      }
+    },
+    onRemarkClick() {
+      console.log('onRemarkClick');
     },
     onCommand(command) {
       let _path = '';
@@ -208,6 +238,7 @@ export default {
     height: 55px;
     overflow: hidden;
     background-color: #428dfa;
+    position: relative;
     > .common-header-menus-wrap {
       width: 1200px;
       margin: 0 auto;
@@ -325,6 +356,41 @@ export default {
             }
           }
         }
+      }
+    }
+  }
+  > .recharge-remark {
+    position: fixed;
+    top: 135px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0;
+    z-index: 666;
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    opacity: 0;
+    transition: opacity 0.2s;
+    &.show {
+      height: 100%;
+    }
+    &.showBg {
+      opacity: 1;
+    }
+    > .recharge-box {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 0px;
+      background-color: #fff;
+      overflow: hidden;
+      z-index: -1;
+      transition: 0.2s;
+      // opacity: 0;
+      &.showRechange {
+        height: 348px;
+        // opacity: 1;
+        box-shadow: 0 8px 10px -5px rgba(0,0,0,.2), 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12);
       }
     }
   }
