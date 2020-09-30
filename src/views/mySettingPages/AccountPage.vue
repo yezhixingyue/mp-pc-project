@@ -150,8 +150,15 @@ export default {
       simpNameRules: [
         { strategy: 'isNotEmpty', errorMsg: '请输入企业简称' },
         { strategy: 'maxLength:20', errorMsg: '企业简称长度不能超过20个字' },
+        { strategy: 'hasNotSpace', errorMsg: '企业简称中不能有空格' },
+        { strategy: 'hasNotRung', errorMsg: '企业简称中不能有横杠' },
       ],
-      companyRules: [{ strategy: 'isNotEmpty', errorMsg: '请输入企业全称' }],
+      companyRules: [
+        { strategy: 'isNotEmpty', errorMsg: '请输入企业全称' },
+        { strategy: 'hasNotSpace', errorMsg: '企业全称中不能有空格' },
+        { strategy: 'hasNotRung', errorMsg: '企业全称中不能有横杠' },
+        { strategy: 'maxLength:40', errorMsg: '企业全称长度最多不能超过40个字' },
+      ],
       detailRules: [
         { strategy: 'isNotEmpty', errorMsg: '请输入详细地址信息' },
         { strategy: 'maxLength:60', errorMsg: '详细地址长度不能超过60字' },
@@ -169,10 +176,7 @@ export default {
         { strategy: 'isNotZero', errorMsg: '请选择县/区' },
       ],
       TaxIDRules: [
-        {
-          strategy: 'hasNotSpace',
-          errorMsg: '纳税人识别号中不能有空格',
-        },
+        { strategy: 'hasNotSpace', errorMsg: '纳税人识别号中不能有空格' },
       ],
     };
   },
@@ -323,6 +327,10 @@ export default {
         const { length } = QQ;
         if (length < 5) {
           this.reportError('QQ号长度最少为5位');
+          return false;
+        }
+        if (length > 13) {
+          this.reportError('QQ号长度不应超过13位');
           return false;
         }
       }

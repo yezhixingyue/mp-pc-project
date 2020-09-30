@@ -69,6 +69,13 @@ Validator.prototype.strategies = {
     }
     return true;
   },
+  hasNotRung: (value, errorMsg) => {
+    // 不能有空格
+    if (value.includes('-')) {
+      return errorMsg;
+    }
+    return true;
+  },
   Maximum(value, maxNum, errorMsg) { // 最大值验证
     if (+value > +maxNum) return errorMsg;
     return true;

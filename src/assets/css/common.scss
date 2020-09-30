@@ -28,10 +28,28 @@ html, body, #app {
   color: $--color-pink;
   cursor: pointer;
   &:hover {
-    color: rgba($color: $--color-pink, $alpha: 0.82);
+    color:  #ff90ac;;
   }
   &:active {
-    color: rgba($color: $--color-pink, $alpha: 0.52);
+    color: #e42a2a
+  }
+  user-select: none;
+  transition: 0.15s;
+  &.disabled {
+    color: #cbcbcb;
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+.span-title-gray {
+  color: #aaa;
+  cursor: pointer;
+  &:hover {
+    color: #585858;
+  }
+  &:active {
+    color: #ccc;
   }
   user-select: none;
   transition: 0.15s;

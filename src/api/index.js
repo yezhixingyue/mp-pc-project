@@ -3,7 +3,7 @@
 import instance from '@/api/axios';
 
 const api = {
-  /* 登录注册部分api
+  /* 登录注册部分 与 账号相关等 api
   ----------------------------------------------------------------------------------- */
   getLogin(data) { // POST /Api/Customer/Login
     return instance.post('/Api/Customer/Login', data);
@@ -19,6 +19,27 @@ const api = {
   },
   getResetPassword(data) { // 重置密码
     return instance.post('/Api/FindPassword/ResetPassword', data);
+  },
+  getCustomerChangeMobile(data) { // POST /Api/Customer/ChangeMobile  修改手机号
+    return instance.post('/Api/Customer/ChangeMobile', data);
+  },
+  getCustomerChangePassword(data) { // PUT /Api/Customer/ChangePassword
+    return instance.put('/Api/Customer/ChangePassword', data);
+  },
+  getCustomerAccountList() { // GET /Api/Customer/AccountList 获取子账号列表
+    return instance.get('/Api/Customer/AccountList');
+  },
+  getCustomerEditSubAccount(data) { // POST /Api/Customer/EditSubAccount 添加编辑子账号
+    return instance.post('/Api/Customer/EditSubAccount', data);
+  },
+  getCustomerRemoveAccount(accountID) { // DELETE /Api/Customer/RemoveAccount 子账号删除
+    return instance.delete(`/Api/Customer/RemoveAccount?accountID=${accountID}`);
+  },
+  getCustomerRemoveAddress(addressID) { // DELETE /Api/Customer/RemoveAddress 收货地址删除
+    return instance.delete(`/Api/Customer/RemoveAddress?addressID=${addressID}`);
+  },
+  getCustomerSetDefaultAddress(data) { // PUT /Api/Customer/SetDefaultAddress  设置客户默认收货地址
+    return instance.put('/Api/Customer/SetDefaultAddress', data);
   },
 
   /* 产品报价及下单部分api

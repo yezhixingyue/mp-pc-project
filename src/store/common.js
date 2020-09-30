@@ -147,6 +147,9 @@ export default {
     /** 客户信息
     ---------------------------------------- */
     customerInfo: null,
+    /** 客户子账号列表
+    ---------------------------------------- */
+    customerAccountList: [],
     /** 客户资金余额
     ---------------------------------------- */
     customerBalance: null,
@@ -193,6 +196,24 @@ export default {
     ---------------------------------------- */
     setCustomerInfo(state, data) {
       state.customerInfo = data;
+    },
+    SetDefaultAddress(state, AddressID) {
+      if (!state.customerInfo || !state.customerInfo.Address || state.customerInfo.Address.length === 0) return;
+      state.customerInfo.Address.forEach(it => {
+        const _it = it;
+        _it.IsDefault = false;
+      });
+      const _t = state.customerInfo.Address.find(it => it.AddressID === AddressID);
+      _t.IsDefault = true;
+    },
+    handleDelAddressOnStore(state, AddressID) {
+      if (!state.customerInfo || !state.customerInfo.Address || state.customerInfo.Address.length === 0) return;
+      state.customerInfo.Address = state.customerInfo.Address.filter(it => it.AddressID !== AddressID);
+    },
+    /** 设置客户子账号列表
+    ---------------------------------------- */
+    setCustomerAccountList(state, data) {
+      state.customerAccountList = data;
     },
     /** 设置客户资金余额
     ---------------------------------------- */
@@ -243,6 +264,13 @@ export default {
       const res = await api.getAddressIDList(parent);
       if (res.data.Status === 1000) {
         commit('setAddressList', res.data.Data);
+      }
+    },
+    async getCustomerAccountList({ state, commit }, key = false) {
+      if (state.customerAccountList.length > 0 && !key) return;
+      const res = await api.getCustomerAccountList();
+      if (res.data.Status === 1000) {
+        commit('setCustomerAccountList', res.data.Data);
       }
     },
   },

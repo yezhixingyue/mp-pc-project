@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["chunk-2d0c1158"],{4512:function(n,e,t){"use strict";t.r(e);var c={},u=t("2877"),l=Object(u.a)(c,(function(){var n=this,e=n.$createElement;return(n._self._c||e)("section",[n._v(" 领券中心页面 ")])}),[],!1,null,null,null);e.default=l.exports}}]);

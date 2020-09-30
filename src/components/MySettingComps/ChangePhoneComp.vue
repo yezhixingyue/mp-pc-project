@@ -1,5 +1,5 @@
 <template>
-  <section class="mp-pc-login-find-pass-comp-wrap">
+  <section class="mp-pc-my-setting-page-change-phone-comp-wrap">
     <el-steps :active="active">
        <!-- align-center -->
       <el-step title="验证身份"></el-step>
@@ -35,19 +35,24 @@
       </el-form>
       <!-- 密码表单 -->
       <el-form
-        :model="pwdForm"
+        :model="newMobileForm"
         status-icon
-        :rules="pwdRules"
-        ref="pwdForm"
+        :rules="newMobileRules"
+        ref="newMobileForm"
         label-width="100px"
         key="find-pwd-form-0002"
         v-if="active === 1"
       >
-        <el-form-item label="设置新密码：" prop="Password">
-          <el-input placeholder="请输入密码" type="password" v-model.trim="pwdForm.Password"></el-input>
+        <el-form-item label="新手机号：" prop="newMobile">
+          <el-input placeholder="请输入新手机号" v-model.trim="newMobileForm.newMobile"></el-input>
         </el-form-item>
-        <el-form-item label="确认新密码：" prop="rePassword">
-          <el-input placeholder="请再次输入密码" type="password" v-model.trim="pwdForm.rePassword"></el-input>
+        <el-form-item prop="VertifyCode" class="code-box" label="短信验证码：">
+          <el-input placeholder="请输入短信验证码" v-model.trim="VertifyCode2"></el-input>
+          <span
+            class="span-title-blue"
+            :class="canGetCode2?'':'disabled'"
+            @click="getVertifyCode2"
+          >{{ codeTitle2 }}</span>
         </el-form-item>
       </el-form>
       <div class="res-wrap" v-if="active === 2">
@@ -66,48 +71,38 @@ import { mapState } from 'vuex';
 
 export default {
   data() {
-    // const validateMobile = (rule, value, callback) => {
-    //   if (this.validateCheck(value, this.defineRules.Mobile, callback)) callback();
-    // };
+    const validateMobile = (rule, value, callback) => {
+      if (this.validateCheck(value, this.defineRules.Mobile, callback)) callback();
+    };
     const validateVertifyCode = (rule, value, callback) => {
       if (
         this.validateCheck(value, this.defineRules.VertifyCodeRules, callback)
       ) callback();
     };
 
-    const validatePassword = (rule, value, callback) => {
-      if (this.validateCheck(value, this.defineRules.Password, callback)) {
-        if (this.pwdForm.rePassword !== '') this.$refs.pwdForm.validateField('rePassword');
-        callback();
-      }
-    };
-    const validateRePassword = (rule, value, callback) => {
-      if (this.validateCheck(value, this.defineRules.Password, callback)) {
-        if (this.pwdForm.rePassword !== this.pwdForm.Password) callback(new Error('两次密码输入不一致'));
-        else callback();
-      }
-    };
     return {
       codeRules: {
         // Mobile: [{ validator: validateMobile, trigger: 'blur' }],
         VertifyCode: [{ validator: validateVertifyCode, trigger: 'blur' }],
       },
-      pwdRules: {
-        Password: [{ validator: validatePassword, trigger: 'blur' }],
-        rePassword: [{ validator: validateRePassword, trigger: 'blur' }],
+      newMobileRules: {
+        newMobile: [{ validator: validateMobile, trigger: 'blur' }],
+        VertifyCode: [{ validator: validateVertifyCode, trigger: 'blur' }],
       },
       active: 0,
       codeForm: {
         Mobile: '',
         VertifyCode: '',
       },
-      pwdForm: {
-        Password: '',
-        rePassword: '',
+      newMobileForm: {
+        newMobile: '',
+        VertifyCode: '',
       },
       codeTitle: '获取短信验证码',
+      codeTitle2: '获取短信验证码',
       timer: null,
       canGetCode: true,
+      canGetCode2: true,
       firstRes: null,
       defineRules: {
         Mobile: [
@@ -115,12 +110,6 @@ export default {
           { strategy: 'shouldLength:11', errorMsg: '请输入11位手机号码' },
           { strategy: 'isPhone', errorMsg: '手机号码格式不正确' },
         ],
-        Password: [
-          { strategy: 'isNotEmpty', errorMsg: '请输入密码!' },
-          { strategy: 'minLength:6', errorMsg: '密码最小长度为6位' },
-          { strategy: 'maxLength:16', errorMsg: '密码最大长度为16位' },
-        ],
-        nameRules: [{ strategy: 'isNotEmpty', errorMsg: '请输入企业简称' }],
         VertifyCodeRules: [
           { strategy: 'isNotEmpty', errorMsg: '请输入短信验证码' },
           { strategy: 'shouldLength:6', errorMsg: '短信验证码长度为6位' },
@@ -143,7 +132,15 @@ export default {
         return this.codeForm.VertifyCode;
       },
       set(newVal) {
-        this.codeForm.VertifyCode = newVal.replace(/[^\d.]/g, '');
+        this.codeForm.VertifyCode = newVal.replace(/[^\d]/g, '');
+      },
+    },
+    VertifyCode2: {
+      get() {
+        return this.newMobileForm.VertifyCode;
+      },
+      set(newVal) {
+        this.newMobileForm.VertifyCode = newVal.replace(/[^\d]/g, '');
       },
     },
   },
@@ -166,15 +163,20 @@ export default {
         });
       }
       if (this.active === 1) {
-        this.$refs.pwdForm.validate(async (valid) => {
+        this.$refs.newMobileForm.validate(async (valid) => {
           if (valid) {
             // 成功
-            const { Password, rePassword } = this.pwdForm;
-            const RePassword = rePassword;
-            const _obj = { ...this.firstRes, Password, RePassword };
-            const res = await this.api.getResetPassword(_obj);
+            const { newMobile, VertifyCode } = this.newMobileForm;
+            const Mobile = newMobile;
+            const { Sign, TimeStamp, UserID } = this.firstRes;
+            const _obj = {
+              Sign, TimeStamp, UserID, Mobile, VertifyCode,
+            };
+            const res = await this.api.getCustomerChangeMobile(_obj);
             if (res.data.Status === 1000) {
               this.active += 1;
+              this.$store.commit('common/setCustomerInfo', null);
+              this.$store.dispatch('common/getCustomerDetail');
             }
           }
           return false;
@@ -183,7 +185,7 @@ export default {
     },
     async getVertifyCode() {
       if (!this.canGetCode) return;
-      const res = await this.api.getSmsCode(this.customerInfo.Mobile, 2);
+      const res = await this.api.getSmsCode(null, 2);
       if (res.data.Status === 1000) {
         this.changeCodeTitleAtSecond();
       }
@@ -203,6 +205,28 @@ export default {
         }
       }, 1000);
     },
+    async getVertifyCode2() {
+      if (!this.canGetCode2) return;
+      const res = await this.api.getSmsCode(this.newMobileForm.newMobile, 3);
+      if (res.data.Status === 1000) {
+        this.changeCodeTitleAtSecond2();
+      }
+    },
+    changeCodeTitleAtSecond2() {
+      let _second = 60;
+      this.canGetCode2 = false;
+      this.codeTitle2 = `${_second}秒后重新获取`;
+      if (this.timer) clearInterval(this.timer);
+      this.timer = setInterval(() => {
+        _second -= 1;
+        this.codeTitle2 = `${_second}秒后重新获取`;
+        if (_second === 0) {
+          this.codeTitle2 = '重新获取验证码';
+          clearInterval(this.timer);
+          this.canGetCode2 = true;
+        }
+      }, 1000);
+    },
     formatMobile(mobile) {
       if (!mobile || mobile.length !== 11) return '';
       const _arr = mobile.split('');
@@ -217,7 +241,7 @@ export default {
 </script>
 
 <style lang='scss'>
-.mp-pc-login-find-pass-comp-wrap {
+.mp-pc-my-setting-page-change-phone-comp-wrap {
   width: 100%;
   margin: 0 auto;
   > .el-steps {
@@ -332,7 +356,8 @@ export default {
     //   }
     }
     > .res-wrap {
-      text-align: center;
+      // text-align: center;
+      margin-left: 120px;
       color: #585858;
       font-size: 18px;
       > i {

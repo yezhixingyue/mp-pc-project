@@ -14,7 +14,7 @@ axios.interceptors.request.use(
     closeTip = curConfig.closeTip;
     // console.log(closeTip);
     const url = curConfig.url.split('?')[0];
-    const arrWithOutToken = ['/Api/Sms/Send', '/Api/Customer/Reg', '/Api/Customer/Login'];
+    const arrWithOutToken = ['/Api/Customer/Reg', '/Api/Customer/Login'];
     // console.log(curConfig, `Bearer ${token}`);
     if (token && !arrWithOutToken.includes(url)) curConfig.headers.common.Authorization = `Bearer ${token}`;
     // console.log(curConfig);
@@ -65,6 +65,7 @@ axios.interceptors.response.use(
       if (_url === '/Api/Customer/ChangePassword') _msg = '密码修改失败';
       if (_url === '/Api/Coupon/Activate') _msg = '激活失败';
       if (_url === '/Api/Order/Create' || _url === '/Api/Order/PreCreate') _msg = '下单失败';
+      if (_url === '/Api/FindPassword/CheckCode') _msg = '验证码错误';
 
       _obj.title = _msg;
       messageBox.failSingleError(_obj);
