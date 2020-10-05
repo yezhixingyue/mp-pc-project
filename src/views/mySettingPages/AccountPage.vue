@@ -2,6 +2,7 @@
   <section class="mp-pc-my-setting-account-page-wrap">
     <div class="basic-info">
       <span class="blue-v-line is-bold is-black">基本信息</span>
+      <span class="is-font-13">（ 每月可修改一次 ）</span>
       <div>
         <InputComp :disabled='!AllowEdit' v-model="AuthenInfo4Submit.CustomerName"  title='企业简称' required />
         <InputComp :disabled='!AllowEdit'
@@ -64,7 +65,7 @@
           </el-image>
           <div class="img-mask" @click="onImgClick"></div>
         </div>
-        <div class="text gray" v-if="!hasUploadedImg || AllowEdit">
+        <div class="text gray" v-if="!(hasUploadedImg || !AllowEdit)">
           <p class="is-bold">操作说明：</p>
           <p class="is-font-12">双击可更换照片；单击查看照片，鼠标滚轮滚动可放大/ 缩小图片；拖拽可移动图片。</p>
         </div>

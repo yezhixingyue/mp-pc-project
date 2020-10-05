@@ -57,7 +57,7 @@
         </li>
       </ul>
     </div>
-     <el-dialog :visible.sync="outerVisible" top='10vh' width="750px" v-dialogDrag custom-class="set-craft-dia">
+    <el-dialog :visible.sync="outerVisible" top='10vh' width="750px" v-dialogDrag custom-class="set-craft-dia">
        <header slot="title">
         <i class="iconfont icon-shezhi is-primary-blue"></i>
         <span>{{ currentAddInfo && !newAdd.isSaved ? '更改配送地址' : '添加配送地址' }}</span>
@@ -398,6 +398,7 @@ export default {
             this.newAdd.isSaved = true;
             this.selectdAddress = this.addRadio;
             this.outerVisible = false;
+            if (!this.newAdd.HavePosition) console.log('应弹窗选择');
           }
         });
       } else {

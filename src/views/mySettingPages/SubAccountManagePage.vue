@@ -291,7 +291,8 @@ export default {
           padding-right: 13px;
           > span {
             &.span-title-pink {
-              margin-left: 15px;
+              margin-left: 4px;
+              margin-right: -6px;
             }
           }
         }

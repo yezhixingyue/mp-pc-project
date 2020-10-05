@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline */
 import api from '@/api';
-import ClassType from './ClassType';
+import ClassType from './CommonClassType';
 // import { Message } from 'element-ui';
 // import massage from '@/assets/js/utils/message';
 // import asyncNonCurrentFunc from '../assets/js/utils/asyncNonCurrentFunc';

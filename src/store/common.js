@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 import api from '@/api/index';
 
 export default {
@@ -183,6 +184,23 @@ export default {
       { name: '手动扣款', ID: 23 },
       { name: '支付订单', ID: 24 },
     ],
+    /* 订单状态列表
+    -------------------------------*/
+    OrderStatusList: [
+      { label: '不限', value: 0 },
+      { label: '待分发', value: 20 },
+      { label: '待审稿', value: 30 },
+      { label: '待拼版', value: 40 },
+      { label: '待生产', value: 50 },
+      { label: '生产中', value: 55 },
+      { label: '生产完成', value: 60 },
+      { label: '已揽收', value: 70 },
+      { label: '已发货', value: 80 },
+      { label: '交易成功', value: 200 },
+      { label: '已取消', value: 254 },
+      { label: '已过期', value: 255 },
+      { label: '问题件', value: 35 },
+    ],
   },
   getters: {
   },
@@ -209,6 +227,35 @@ export default {
     handleDelAddressOnStore(state, AddressID) {
       if (!state.customerInfo || !state.customerInfo.Address || state.customerInfo.Address.length === 0) return;
       state.customerInfo.Address = state.customerInfo.Address.filter(it => it.AddressID !== AddressID);
+    },
+    handleAddOrEditAddressOnStore(state, [obj, type]) {
+      if (!state.customerInfo || !state.customerInfo.Address || state.customerInfo.Address.length === 0 || !obj) return;
+      console.log(obj, 'handleAddOrEditAddressOnStore');
+      if (type === 'add') state.customerInfo.Address.push(JSON.parse(JSON.stringify(obj)));
+      else if (type === 'edit') {
+        const { AddressID } = obj;
+        const _t = state.customerInfo.Address.find(it => it.AddressID === AddressID);
+        console.log(_t.Latitude);
+        // eslint-disable-next-line max-len
+        const { AddressDetail, Consignee, ExpressArea, CustomerID, HavePosition, IsDefault, Latitude, Longitude, Mobile } = obj;
+        _t.Consignee = Consignee;
+        _t.Mobile = Mobile;
+        _t.CustomerID = CustomerID;
+        _t.AddressDetail = AddressDetail;
+        _t.HavePosition = HavePosition;
+        _t.IsDefault = IsDefault;
+        _t.Latitude = Latitude;
+        _t.Longitude = Longitude;
+        console.log(_t, 'sasasa');
+        const { RegionalName, RegionalID, CityName, CityID, CountyName, CountyID } = ExpressArea;
+        _t.ExpressArea.RegionalName = RegionalName;
+        _t.ExpressArea.RegionalID = RegionalID;
+        _t.ExpressArea.CityName = CityName;
+        _t.ExpressArea.CityID = CityID;
+        _t.ExpressArea.CountyName = CountyName;
+        _t.ExpressArea.CountyID = CountyID;
+        console.log(_t.Latitude, 'sasasa');
+      }
     },
     /** 设置客户子账号列表
     ---------------------------------------- */

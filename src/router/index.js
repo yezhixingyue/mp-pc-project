@@ -84,6 +84,27 @@ const routes = [
         ],
       },
       {
+        path: '/order',
+        name: 'order',
+        component: CommonViewPage,
+        redirect: '/order/list',
+        meta: {
+          requiresAuth: true,
+          title: '名片之家 - 我的订单',
+        },
+        children: [
+          {
+            path: '/order/list',
+            name: 'orderList',
+            meta: {
+              requiresAuth: true,
+              title: '名片之家 - 我的订单',
+            },
+            component: () => import('../views/OrderPages/OrderListPage.vue'),
+          },
+        ],
+      },
+      {
         path: '/bill',
         name: 'bill',
         meta: {

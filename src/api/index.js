@@ -41,6 +41,9 @@ const api = {
   getCustomerSetDefaultAddress(data) { // PUT /Api/Customer/SetDefaultAddress  设置客户默认收货地址
     return instance.put('/Api/Customer/SetDefaultAddress', data);
   },
+  getCustomerAddress(data) { // POST /Api/Customer/Address 客户收货地址设置
+    return instance.post('/Api/Customer/Address', data);
+  },
 
   /* 产品报价及下单部分api
   ----------------------------------------------------------------------------------- */
@@ -170,6 +173,12 @@ const api = {
    ----------------------------------------------------------------------------------- */
   getCustomerFundBill(data) { // /Api/Customer/FundBill 获取账单流水
     return instance.post('/Api/Customer/FundBill', data);
+  },
+
+  /* 订单部分 api
+   ----------------------------------------------------------------------------------- */
+  getCustomerOrderList(data) { // POST /Api/Customer/OrderList 获取订单列表
+    return instance.post('/Api/Customer/OrderList', data);
   },
 };
 

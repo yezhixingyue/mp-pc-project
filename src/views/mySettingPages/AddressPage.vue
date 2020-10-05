@@ -5,7 +5,7 @@
       <span class="is-font-12">（ 最多可添加<i class="is-pink is-font-16"> 3 </i>个收货地址 ）</span>
     </header>
     <ul class="content" v-if="customerInfo">
-      <li v-for="item in customerInfo.Address" :key="item.AddressID"
+      <li v-for="(item,i) in customerInfo.Address" :key="item.AddressID + i"
           class="address-item" :class="item.IsDefault?'active':''">
         <div class="address-item-header">
           <i class="iconfont icon-yonghu1"></i>
@@ -43,9 +43,9 @@
           <img src="../../assets/images/add-line.png" alt="">
         </div>
       </li>
-      <li class="add-new-address-box" @click="handleAddNewAccount">
+      <li class="add-new-address-box" @click="handleAddNewAccount" v-if="customerInfo.Address.length < 3">
         <i class="el-icon-plus"></i>
-        <span>新增子账号</span>
+        <span>新增收货地址</span>
         <div class="img-box top">
           <div class="img-remark"></div>
           <img src="../../assets/images/add-line.png" alt="">
@@ -56,22 +56,38 @@
         </div>
       </li>
     </ul>
+    <AddMapComp :openType='openType' :curEditInfo='curEditInfo' @changeStatus='changeDiaStatus' :visible='diaVisible'/>
   </section>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import AddMapComp from '@/components/MySettingComps/AddMapComp.vue';
 
 export default {
+  components: {
+    AddMapComp,
+  },
   computed: {
     ...mapState('common', ['customerInfo']),
   },
+  data() {
+    return {
+      diaVisible: false,
+      curEditInfo: null,
+      openType: 'new', // edit | new
+    };
+  },
   methods: {
     handleAddNewAccount() {
-      console.log('handleAddNewAccount');
+      this.openType = 'new';
+      this.curEditInfo = null;
+      this.changeDiaStatus(true);
     },
     handleEdit(item) {
-      console.log(item);
+      this.curEditInfo = item;
+      this.openType = 'edit';
+      this.changeDiaStatus(true);
     },
     handleDel(item) {
       if (!item) return;
@@ -108,9 +124,12 @@ export default {
         this.$store.commit('common/SetDefaultAddress', AddressID);
       }
     },
+    changeDiaStatus(bool) {
+      this.diaVisible = bool;
+    },
   },
   mounted() {
-    this.$store.dispatch('common/getCustomerDetail');
+    // this.$store.dispatch('common/getCustomerDetail');
   },
 };
 </script>
@@ -225,7 +244,8 @@ export default {
           > div {
             float: right;
             >.span-title-pink {
-              margin-left: 15px;
+              margin-left: 4px;
+              margin-right: -6px;
             }
           }
         }
@@ -255,11 +275,13 @@ export default {
           right: 0;
           bottom: 0;
           display: none;
+          transition: 0.2s;
         }
         &:hover {
           > .address-item-sign {
             display: block;
             opacity: 0.6;
+            transition: 0.2s;
             &:hover {
               opacity: 1;
               cursor: pointer;
@@ -272,6 +294,7 @@ export default {
         &.active {
           i.iconfont {
             color: #428dfa;
+            transition: color 0.2s;
           }
           > .address-item-sign, > .address-item-sign-img {
             display: block;
