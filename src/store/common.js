@@ -187,7 +187,7 @@ export default {
     /* 订单状态列表
     -------------------------------*/
     OrderStatusList: [
-      { label: '不限', value: 0 },
+      { label: '不限', value: '' },
       { label: '待分发', value: 20 },
       { label: '待审稿', value: 30 },
       { label: '待拼版', value: 40 },
@@ -214,6 +214,9 @@ export default {
     ---------------------------------------- */
     setCustomerInfo(state, data) {
       state.customerInfo = data;
+      if (!data || !data.FundInfo) return;
+      const { Amount } = data.FundInfo;
+      if ((Amount || Amount === 0) && Amount !== state.customerBalance) state.customerBalance = Amount;
     },
     SetDefaultAddress(state, AddressID) {
       if (!state.customerInfo || !state.customerInfo.Address || state.customerInfo.Address.length === 0) return;

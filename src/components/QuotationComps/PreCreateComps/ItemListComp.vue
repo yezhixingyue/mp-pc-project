@@ -172,7 +172,7 @@ export default {
     white-space: nowrap;
     display: flex;
     border-bottom: none;
-    border-top: 1px solid #eee;
+    // border-top: 1px solid #eee;
 
     > div {
       white-space: nowrap;

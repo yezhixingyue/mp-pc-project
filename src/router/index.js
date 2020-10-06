@@ -98,9 +98,18 @@ const routes = [
             name: 'orderList',
             meta: {
               requiresAuth: true,
-              title: '名片之家 - 我的订单',
+              title: '名片之家 - 我的订单列表',
             },
             component: () => import('../views/OrderPages/OrderListPage.vue'),
+          },
+          {
+            path: '/order/detail',
+            name: 'orderDetail',
+            meta: {
+              requiresAuth: true,
+              title: '名片之家 - 我的订单详情',
+            },
+            component: () => import('../views/OrderPages/OrderDetailPage.vue'),
           },
         ],
       },

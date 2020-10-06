@@ -15,7 +15,7 @@
           </el-pagination>
         </div>
         <slot></slot>
-        <span class="count">共检索出<i >{{count}}</i>条记录</span>
+        <span class="count">共检索出<i class="is-pink is-font-16">{{count}}</i>条记录</span>
 </div>
 </template>
 
@@ -122,8 +122,6 @@ export default {
     position: absolute;
     right: 25px;
     i {
-        font-weight: 600;
-        color: rgb(45, 189, 249);
         margin: 0 3px;
     }
   }

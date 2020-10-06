@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable max-len */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable no-return-assign */
@@ -912,7 +913,7 @@ export default {
     },
     /* 下单 - 预下单
     -------------------------------*/
-    async getOrderPreCreate({ state, commit, dispatch }, { compiledName, fileContent, callBack }) {
+    async getOrderPreCreate({ state, commit, dispatch, rootState }, { compiledName, fileContent, callBack }) {
       // console.log(state, compiledName, fileContent);
       // 配置组合生成请求对象
       const _requestObj = { List: [], OrderType: 2, PayInFull: false };
@@ -950,6 +951,9 @@ export default {
       if (res.data.Status === 1000) {
         commit('setCurReqObj4PreCreate', _itemObj);
         commit('setPreCreateData', res.data.Data);
+        const _b = rootState.common.customerBalance;
+        const { FundBalance } = res.data.Data;
+        if (FundBalance !== +_b) commit('common/setCustomerBalance', FundBalance, { root: true });
         callBack();
       }
     },
@@ -993,33 +997,7 @@ export default {
         commit('setCurProductInfo2Quotation', _obj);
       }
     },
-    // async createPaymentOrder({ state, commit }, isPayInFull) { // 提交订单
-    //   const obj2Request = {
-    //     PayInFull: isPayInFull,
-    //     IsOrder: true,
-    //     OrderType: 1,
-    //     IsCreate: true,
-    //     List: [{ ID: 0 }],
-    //   };
-    //   obj2Request.List = state.curToPayList.map((item) => ({ ID: item.OrderID }));
-    //   const res = await api.createPaymentOrder(obj2Request);
-    //   if (res.data.Status === 1000) {
-    //     commit('setCurPayInfo2Code', res.data.Data);
-    //     if (!res.data.Data) {
-    //       // commit('setClock2PaySuccess');
-    //       massage.successSingle({
-    //         title: '下单成功!',
-    //         successFunc: () => {
-    //           commit('setPaySuccessOrderDataStatus');
-    //           commit('setIsShow2PayDialog', false);
-    //         },
-    //       });
-    //     }
-    //   } else {
-    //     throw new Error(res.data.Message);
-    //   }
-    // },
-    /* 根据付款单号轮询查询当前二维码对应订单付款状态
+    /* 最终下单
     -------------------------------*/
     async getPayResult({ state }, cb) {
       if (!state.curPayInfo2Code || !state.curPayInfo2Code.PayCode) return;

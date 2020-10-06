@@ -34,6 +34,7 @@ Vue.filter('formatTransactionCurrency', Currency => {
   return '';
 });
 
+// 为手机号码中间4位数字转换为*号样式
 Vue.filter('formatMobile', mobile => {
   if (!mobile || mobile.length !== 11) return '';
   const _arr = mobile.split('');
@@ -42,4 +43,14 @@ Vue.filter('formatMobile', mobile => {
     return it;
   });
   return _arr1.join('');
+});
+
+// 订单状态
+const { OrderStatusList } = store.state.common;
+Vue.filter('formatStatus', (status) => {
+  if (!status && status !== 0) return '';
+  if (status === 10) return '待付款';
+  const arr = OrderStatusList.find((item) => item.value === status);
+  if (arr) return arr.label.trim();
+  return '';
 });

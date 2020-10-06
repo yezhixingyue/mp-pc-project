@@ -28,7 +28,7 @@
               <p v-if="PreCreateData.MinimumCost !== PreCreateData.FullPayout">
                 <el-checkbox v-model="checked" :disabled='!!curPayInfo2Code'>在线支付全款</el-checkbox>
               </p>
-              <p>¥{{PreCreateData.FundBalance | numToFixed2}}</p>
+              <p class="final-price">¥{{PreCreateData.FundBalance | numToFixed2}}</p>
             </div>
           </div>
         </div>
@@ -96,7 +96,10 @@ export default {
     },
     subMitPlaceOrder({ compiledName }) {
       this.$store.commit('Quotation/setIsShow2PayDialog', true);
-      const _obj = { FilePath: compiledName, PayInFull: this.checked };
+      const cb = () => {
+        this.$store.dispatch('common/getCustomerFundBalance');
+      };
+      const _obj = { FilePath: compiledName, PayInFull: this.checked, cb };
       this.$store.dispatch('Quotation/placeOrderFromPreCreate', _obj).catch((...args) => {
         const error = args[0];
         this.messageBox.handleLoadingError({
@@ -192,6 +195,9 @@ export default {
               margin-left: 10px;
               > p {
                 min-width: 100px;
+                &.final-price {
+                  margin-top: 5px;
+                }
               }
             }
           }

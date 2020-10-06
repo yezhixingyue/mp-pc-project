@@ -208,13 +208,14 @@ export default {
 @import "@/assets/css/var.scss";
 .mp-line-date-selector-wrap {
   min-width: 712px;
+  display: inline-block;
   > .title {
     font-size: 14px;
     width: 5em;
     margin-right: 4px;
     vertical-align: top;
     font-weight: 600;
-    color: $--color-text-primary;
+    color:#585858;
     text-align: right;
   }
   > .box {

@@ -252,6 +252,7 @@ export default {
           color: #fff;
           font-size: 14px;
           text-align: center;
+          transition: 0.2s;
           cursor: pointer;
           > i {
             font-size: 19px;

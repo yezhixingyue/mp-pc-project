@@ -278,6 +278,12 @@ body .iconfont {
   line-height: 20px !important;
 }
 
+.table-item {
+  line-height: 16px !important;
+  padding: 5px 10px !important;
+  transition: none;
+}
+
 .el-select .el-input__suffix {
   .el-input__icon {
     line-height: 30px;

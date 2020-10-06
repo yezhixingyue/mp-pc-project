@@ -151,6 +151,7 @@ export default {
         this.$store.commit('shoppingCar/setCurShoppingCarDataBeforeFirstPlace', null);
         this.$store.commit('shoppingCar/setCurShoppingCarData4FirstPlace', null);
       }
+      this.$store.dispatch('common/getCustomerFundBalance');
       this.setCurPayInfo2Code(null);
       this.handleClose();
     },

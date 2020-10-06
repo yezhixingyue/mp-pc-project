@@ -110,6 +110,7 @@ export default {
         this.$store.commit('shoppingCar/setCurShoppingCarDetailData', null);
         this.$store.commit('shoppingCar/setCurShoppingCarDataBeforeFirstPlace', null);
         this.$store.commit('shoppingCar/setCurShoppingCarData4FirstPlace', null);
+        this.$store.dispatch('common/getCustomerFundBalance');
       };
       if (!this.curPayInfo2Code) {
         const _obj = { PayInFull: this.checked, cb };
@@ -126,7 +127,7 @@ export default {
   },
   created() {
     if (!this.curShoppingCarData4FirstPlace) {
-      this.$router.replace('/shoppingCar');
+      this.$router.replace('/shopping/car');
     }
   },
 };

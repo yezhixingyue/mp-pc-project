@@ -28,7 +28,7 @@ export default {
 .mp-group-collapse-for-shop-enter-to,
 .mp-group-collapse-for-shop-leave {
   opacity: 1 !important;
-  height: 60px !important;
+  height: 70px !important;
 }
 
 </style>
