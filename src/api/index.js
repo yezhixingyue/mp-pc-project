@@ -180,6 +180,19 @@ const api = {
   getCustomerOrderList(data) { // POST /Api/Customer/OrderList 获取订单列表
     return instance.post('/Api/Customer/OrderList', data);
   },
+  getOrderProgress(OrderID) { // GET /Api/Order/Progress  订单进度
+    return instance.get(`/Api/Order/Progress?orderID=${OrderID}`);
+  },
+  getOrderPackageList(OrderID) { // GET /Api/Order/PackageList  包裹列表
+    return instance.get(`/Api/Order/PackageList?orderID=${OrderID}`);
+  },
+  getOrderDetail(OrderID) { // GET /Api/Order/Detail  获取订单详情
+    return instance.get(`/Api/Order/Detail?orderID=${OrderID}`);
+  },
+  // DELETE /Api/Order/Cancle?orderID=100368895  订单取消
+  getOrderCancle(OrderID) {
+    return instance.delete(`/Api/Order/Cancle?orderID=${OrderID}`);
+  },
 };
 
 export default api;

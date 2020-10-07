@@ -22,7 +22,7 @@
         </el-form-item> -->
         <div class="before-phone-wrap">
           <span class="title">手机号码： </span>
-          <span>{{formatMobile(customerInfo.Mobile)}}</span>
+          <span>{{formatMobile(customerInfo.Account.Mobile)}}</span>
         </div>
         <el-form-item prop="VertifyCode" class="code-box" label="短信验证码：">
           <el-input placeholder="请输入短信验证码" v-model.trim="VertifyCode"></el-input>

@@ -8,40 +8,48 @@
         <OrderDetailHeader :info4OrderSummary='info4OrderSummary' />
       </li>
       <li>
-        <OrderProgress />
+        <OrderProgress :OrderID='this.curOrderDetailData.OrderID' />
       </li>
       <li>
-        <!-- <OrderDetailCommonComp :orderDetail='curOrderDetailData'>
+        <OrderPackageList :OrderID='this.curOrderDetailData.OrderID' :Unit='this.curOrderDetailData.Unit'
+        :Express='this.curOrderDetailData.Express' />
+      </li>
+      <li class="last-item">
+        <OrderDetailCommonComp :orderDetail='curOrderDetailData'>
           <div class="price-wrap">
             <div class="price-box"  v-if="curOrderDetailData">
               <div class="price-left">
-                <p>产品原价：</p>
+                <p>原价：</p>
                 <p>优惠券：</p>
+                <p>活动：</p>
                 <p class="final-price">成交价<i class="is-font-12 gray"></i>：</p>
-                <p>定金：</p>
-                <p>运费：</p>
+                <p>已付：</p>
+                <p>未付：</p>
+                <p>退款：</p>
               </div>
               <div class="price-right">
                   <p>¥ {{curOrderDetailData.Funds.OriginalPrice}}</p>
                   <p :class="curOrderDetailData.Funds.CouponAmount
                      && curOrderDetailData.Funds.CouponAmount > 0 ? 'is-pink' : ''">
-                    <template v-show='curOrderDetailData.Funds.CouponAmount'
-                      >{{'-¥ ' + (curOrderDetailData.Funds.CouponAmount
-                        ? curOrderDetailData.Funds.CouponAmount : 0)}}</template>
+                    <template>
+                      <i v-if='curOrderDetailData.Funds.CouponAmount && curOrderDetailData.Funds.CouponAmount>0'>-</i>
+                      ¥ {{(curOrderDetailData.Funds.CouponAmount ? curOrderDetailData.Funds.CouponAmount : 0)}}
+                    </template>
+                  </p>
+                  <p :class="promotePrice > 0 ? 'is-pink' : ''">
+                    <template>
+                      <i v-if='promotePrice && promotePrice>0'>-</i>¥ {{(promotePrice ? promotePrice : 0)}}
+                    </template>
                   </p>
                   <p class="final-price is-pink">¥ <i class="is-font-24 is-bold"
                     >{{curOrderDetailData.Funds.FinalPrice}}</i></p>
-                  <p>¥ {{curOrderDetailData.Funds.Deposit}}</p>
-                  <p>¥ {{curOrderDetailData.Funds.Freight}}</p>
+                  <p>¥ {{curOrderDetailData.Funds.HavePaid}}</p>
+                  <p>¥ {{curOrderDetailData.Funds.Unpaid}}</p>
+                  <p>¥ {{curOrderDetailData.Funds.Refund}}</p>
               </div>
             </div>
           </div>
-          <p class="btn-wrap">
-            <span class="span-title-blue" @click="onReturnClick">
-              <i class="iconfont icon-left-double-arrow"></i> 返回列表</span>
-            <el-button type="danger" @click="handleSubmit">下单</el-button>
-          </p>
-        </OrderDetailCommonComp> -->
+        </OrderDetailCommonComp>
       </li>
     </ul>
   </section>
@@ -52,13 +60,15 @@ import { mapState } from 'vuex';
 
 import OrderDetailHeader from '@/components/OrderListComps/OrderDetail/OrderDetailHeader.vue';
 import OrderProgress from '@/components/OrderListComps/OrderDetail/OrderProgress.vue';
-// import OrderDetailCommonComp from '@/components/common/OrderCommonComps/OrderDetailCommonComp.vue';
+import OrderPackageList from '@/components/OrderListComps/OrderDetail/OrderPackageList.vue';
+import OrderDetailCommonComp from '@/components/common/OrderCommonComps/OrderDetailCommonComp.vue';
 
 export default {
   components: {
     OrderDetailHeader,
     OrderProgress,
-    // OrderDetailCommonComp,
+    OrderPackageList,
+    OrderDetailCommonComp,
   },
   computed: {
     ...mapState('order', ['curOrderDetailData']),
@@ -82,6 +92,9 @@ export default {
         Mobile,
         Status,
       };
+    },
+    promotePrice() {
+      return +((this.curOrderDetailData.Funds.DiscountPrice - this.curOrderDetailData.Funds.CouponAmount).toFixed(2));
     },
   },
   methods: {
@@ -128,60 +141,79 @@ export default {
       }
     }
   }
-  > ul > li {
-    position: relative;
-    margin-bottom: 15px;
-    &::after {
-      height: 15px;
-      content: '';
-      width: 100%;
-      position: absolute;
-      bottom: -15px;
-      left: 0;
-      background-color: rgb(245, 245, 245);
-    }
-    .price-wrap {
-      text-align: center;
-      > .price-box {
-        height: 100%;
-        overflow: hidden;
-        display: inline-block;
-        margin: 0 auto;
-        text-align: right;
-        > div {
-          padding-top: 48px;
-          > p {
-            line-height: 33px;
-            &.final-price {
-              margin-top: 6px;
-            }
-          }
-          &.price-left {
-            float: left;
-          }
-          &.price-right {
-            float: right;
-            margin-left: 10px;
+  > ul {
+    margin-bottom: 40px;
+    > li {
+      position: relative;
+      margin-bottom: 15px;
+      &::after {
+        height: 15px;
+        content: '';
+        width: 100%;
+        position: absolute;
+        bottom: -15px;
+        left: 0;
+        background-color: rgb(245, 245, 245);
+      }
+      .price-wrap {
+        text-align: center;
+        > .price-box {
+          height: 100%;
+          // overflow: hidden;
+          display: inline-block;
+          margin: 0 auto;
+          text-align: right;
+          > div {
+            padding-top: 48px;
             > p {
-              min-width: 100px;
+              line-height: 32px;
+              &.final-price {
+                margin-top: 4px;
+                height: 32px;
+                margin-bottom: 30px;
+              }
             }
+            &.price-left {
+              float: left;
+            }
+            &.price-right {
+              float: right;
+              margin-left: 10px;
+              > p {
+                min-width: 100px;
+              }
+            }
+          }
+          position: relative;
+          &::after {
+            content: '';
+            height: 1px;
+            width: 240px;
+            background-color: #eee;
+            position: absolute;
+            right: -30px;
+            top: 195px;
           }
         }
       }
-    }
-    .btn-wrap {
-      padding-left: 40px;
-      padding-top: 64px;
-      padding-bottom: 25px;
-      > span {
-        > i {
-          transform: rotate(-90deg);
+      .btn-wrap {
+        padding-left: 40px;
+        padding-top: 64px;
+        padding-bottom: 25px;
+        > span {
+          > i {
+            transform: rotate(-90deg);
+          }
+          margin-right: 25px;
         }
-        margin-right: 25px;
+        > button {
+          width: 130px;
+        }
       }
-      > button {
-        width: 130px;
+      &.last-item {
+        padding-bottom: 95px;
       }
+      box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045);
     }
   }
 }

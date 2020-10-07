@@ -6,7 +6,7 @@
     :onWidthChange="onWidthChange"
     :titleList="titleList"
   >
-    <template v-if="orderData">
+    <template v-if="orderData && orderData.length > 0">
       <ul>
         <li v-for="(data, i) in orderData" :key='"orderlistitem-" + i'
           :class="i === orderData.length - 1 ? 'hide-border' : ''" >

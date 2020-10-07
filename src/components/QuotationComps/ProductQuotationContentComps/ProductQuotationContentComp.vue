@@ -332,7 +332,10 @@ export default {
       this.couponCode2Add = '';
       this.messageBox.successSingle({
         title: '激活成功',
-        successFunc: () => this.handleChange([1], true),
+        // successFunc: () => this.handleChange([1], true),
+        successFunc: () => {
+          this.couponList.push(res.data.Data);
+        },
       });
     },
     addCouponCode(item) {

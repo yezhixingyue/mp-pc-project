@@ -92,6 +92,11 @@ export default {
     setCurOrderDetailData(state, data) {
       state.curOrderDetailData = data;
     },
+    handleCancelOrder(state, OrderID) {
+      const _t = state.OrderList.find(it => it.OrderID === OrderID);
+      _t.Status = 254;
+      // state.OrderList = state.OrderList.filter(it => it.OrderID !== OrderID);
+    },
   },
   actions: {
     /** 获取订单列表数据

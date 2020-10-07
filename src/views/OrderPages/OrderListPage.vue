@@ -152,7 +152,7 @@ export default {
     &.content-wrap {
       margin-bottom: 45px;
       box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.07);
-      min-height: calc(100vh - 135px - 170px - 70px);
+      min-height: calc(100vh - 135px - 170px - 48px);
       > .content {
         margin: 0 auto;
         width: 1200px;

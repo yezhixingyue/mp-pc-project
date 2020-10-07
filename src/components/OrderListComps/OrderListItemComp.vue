@@ -65,7 +65,9 @@
           <div :style="wStyles[13]" class="is-font-12 gray">{{item.CreateTime | format2MiddleLangTypeDate}}</div>
           <div :style="wStyles[14]" class="is-font-12 gray">
             <span class="span-title-blue" @click="goToDetailPage(item)">订单详情</span>
-            <span class="span-title-pink">取消</span>
+            <span class="span-title-pink" @click="handleOrderCancel(item)"
+               v-if="[20, 30, 35, 40].includes(item.Status)">取消</span>
+            <span class="is-cancel" :style="{paddingLeft:'6px', paddingRight:'6px'}" v-else>取消</span>
           </div>
         </li>
       </TransitionGroupCollapse4ShopCar>
@@ -167,6 +169,26 @@ export default {
     goToDetailPage(data) {
       this.$store.commit('order/setCurOrderDetailData', data);
       this.$router.push('/order/detail');
+    },
+    handleOrderCancel({ OrderID }) {
+      this.messageBox.warnCancelBox({
+        title: '确定取消该订单吗?',
+        msg: `订单号：[ ${OrderID} ]`,
+        successFunc: () => {
+          this.cancelOrder(OrderID);
+        },
+      });
+    },
+    async cancelOrder(OrderID) {
+      const res = await this.api.getOrderCancle(OrderID);
+      if (res.data.Status === 1000) {
+        this.messageBox.successSingle({
+          title: '取消成功',
+          successFunc: () => {
+            this.$store.commit('order/handleCancelOrder', OrderID);
+          },
+        });
+      }
     },
   },
 };

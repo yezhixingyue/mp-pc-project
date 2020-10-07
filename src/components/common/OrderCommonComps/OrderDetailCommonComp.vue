@@ -1,7 +1,7 @@
 <template>
   <section class="mp-pc-order-detail-common-comp-wrap">
     <header class="section-title">{{title}}</header>
-    <div class="main">
+    <div class="main" :class="PartList.length === 1 ? 'is-merge' : ''">
       <div class="left">
         <!-- 产品名称 -->
         <p class="product-name">
@@ -31,12 +31,61 @@
           <ul>
             <li v-for="item in productCraftList" :key="item.CraftID" class="is-font-12">
               <span class="craft-title">{{item.craftName}}</span>
-              <span v-if="item.Property" class="gray">：（ {{item.Property}} ）</span>
+              <span v-if="item.Property" class="gray">（ {{item.Property}} ）</span>
             </li>
           </ul>
         </div>
+
+        <!-- 产品部件 -->
+        <ul v-if="PartList.length === 1">
+          <li v-for="item in PartList" :key="item.PartID">
+            <!-- 部件名称 -->
+            <p class="is-bold" :class="PartList.length > 1 ? '' : 'is-opacity0'">
+              <i class="is-origin">//</i> {{item.Attributes.Name}}</p>
+            <div v-for="(part, i) in item.PartList" :key="part.PartID + i">
+              <!-- 部件数量与物料 -->
+              <p>
+                <span class="width-122 gray" v-if="part.PartAmount.First > 1"
+                >数量：{{part.PartAmount.First}}{{item.Attributes.Unit}}/{{productUnit}}
+                </span>
+                <span v-if="part.Attributes.Material"><i class="gray">物料：</i>{{part.Attributes.Material.Name}}</span>
+              </p>
+              <!-- 尺寸 -->
+              <p v-if="part.Attributes.SizeName">
+                <span><i class="gray">尺寸：</i>{{part.Attributes.SizeName}}</span>
+              </p>
+              <!-- 属性(包含印刷属性) -->
+              <p v-for="item in part.PropertyList" :key="item.PropertyID">
+                <span class="gray">{{item.PropertyName}}：</span>
+                <span class="is-font-12">{{item.ShowValue}}{{item.ShowUnit}}</span>
+              </p>
+              <!-- 属性组 -->
+              <div v-for="item in part.PropertyGroupList" :key="item.GroupID" class="property-group-wrap">
+                <p class="is-bold is-font-13">{{item.GroupName}}：</p>
+                <div>
+                  <p v-for="(group, i) in item.PropertyList" :key="item.GroupID + i" class="property-list">
+                  <span v-for="it in group.Second" :key="it.PropertyID">
+                    <i class="gray">{{it.PropertyName}}</i>
+                    <i v-if="it.ShowValue" class="is-font-12">：{{it.ShowValue}}{{it.ShowUnit}}</i>
+                  </span>
+                </p>
+                </div>
+              </div>
+              <!-- 工艺 -->
+              <div class="craft-wrap float" v-if="getCraftList(part.CraftList).length > 0">
+                <div class="gray">工艺：</div>
+                <ul>
+                  <li v-for="item in getCraftList(part.CraftList)" :key="item.CraftID" class="is-font-12">
+                    <span class="craft-title">{{item.craftName}}</span>
+                    <span v-if="item.Property" class="gray">（ {{item.Property}} ）</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
-      <div class="content">
+      <div class="content" v-if="PartList.length > 1">
         <!-- 产品部件 -->
         <ul>
           <li v-for="item in PartList" :key="item.PartID">
@@ -47,7 +96,7 @@
               <!-- 部件数量与物料 -->
               <p>
                 <span class="width-122 gray" v-if="part.PartAmount.First > 1"
-                >数量：{{part.PartAmount.First}}{{item.Attributes.Unit}}/{{orderDetail.ProductParams.Attributes.Unit}}
+                >数量：{{part.PartAmount.First}}{{item.Attributes.Unit}}/{{productUnit}}
                 </span>
                 <span v-if="part.Attributes.Material"><i class="gray">物料：</i>{{part.Attributes.Material.Name}}</span>
               </p>
@@ -76,7 +125,7 @@
                 <ul>
                   <li v-for="item in getCraftList(part.CraftList)" :key="item.CraftID" class="is-font-12">
                     <span class="craft-title">{{item.craftName}}</span>
-                    <span v-if="item.Property" class="gray">：（ {{item.Property}} ）</span>
+                    <span v-if="item.Property" class="gray">（ {{item.Property}} ）</span>
                   </li>
                 </ul>
               </div>
@@ -105,39 +154,76 @@ export default {
     },
   },
   computed: {
+    productUnit() {
+      if (!this.orderDetail) return '';
+      if (this.pageName === 'orderDetail') {
+        return this.orderDetail.Unit;
+      }
+      if (!this.orderDetail.ProductParams || !this.orderDetail.ProductParams.Attributes) return '';
+      return this.orderDetail.ProductParams.Attributes.Unit;
+    },
     productName() {
       if (!this.orderDetail) return '';
+      if (this.pageName === 'orderDetail') {
+        const { FirstLevelName, SecondLevelName, ProductName } = this.orderDetail;
+        return `${FirstLevelName}-${SecondLevelName}-${ProductName}`;
+      }
+      if (!this.orderDetail.ProductParams || !this.orderDetail.ProductParams.Attributes) return '';
       const { FirstLevelName, SecondLevelName, Name } = this.orderDetail.ProductParams.Attributes;
       return `${FirstLevelName}-${SecondLevelName}-${Name}`;
     },
     ProductNum() {
       if (!this.orderDetail) return '';
+      if (this.pageName === 'orderDetail') {
+        const { ProductAmount, Unit } = this.orderDetail;
+        return `${ProductAmount}${Unit}`;
+      }
+      if (!this.orderDetail.ProductParams) return '';
       const { ProductAmount, Attributes } = this.orderDetail.ProductParams;
       return `${ProductAmount}${Attributes.Unit}`;
     },
     productKindCount() {
       if (!this.orderDetail) return '';
+      if (this.pageName === 'orderDetail') return this.orderDetail.KindCount;
+      if (!this.orderDetail.ProductParams) return '';
       return this.orderDetail.ProductParams.KindCount;
     },
     productMakeup() {
       if (!this.orderDetail) return '';
+      if (this.pageName === 'orderDetail') {
+        const { MakeupRowNumber, MakeupColumnNumber } = this.orderDetail;
+        if (MakeupRowNumber === 1 && MakeupColumnNumber === 1) return '';
+        return `${MakeupRowNumber}行${MakeupColumnNumber}列`;
+      }
+      if (!this.orderDetail.ProductParams) return '';
       const { MakeupRowNumber, MakeupColumnNumber } = this.orderDetail.ProductParams;
       if (MakeupRowNumber === 1 && MakeupColumnNumber === 1) return '';
       return `${MakeupRowNumber}行${MakeupColumnNumber}列`;
     },
     productMultyKindMakeup() {
       if (!this.orderDetail) return '';
+      if (this.pageName === 'orderDetail') {
+        const { MultyKindMakeup } = this.orderDetail;
+        if (MultyKindMakeup) return '多款联拼';
+        return '';
+      }
       const { MultyKindMakeup } = this.orderDetail.ProductParams;
       if (MultyKindMakeup) return '多款联拼';
       return '';
     },
     productPropertyList() {
       if (!this.orderDetail) return '';
+      if (this.pageName === 'orderDetail') {
+        if (this.curOrderData) return this.curOrderData.ProductParams.PropertyList;
+        return [];
+      }
+      if (!this.orderDetail.ProductParams) return '';
       return this.orderDetail.ProductParams.PropertyList;
     },
     productCraftList() {
       if (!this.orderDetail) return '';
-      let _list = this.orderDetail.ProductParams.CraftList;
+      let _list = this.orderDetail.ProductParams ? this.orderDetail.ProductParams.CraftList : [];
+      if (this.curOrderData) _list = this.curOrderData.ProductParams.CraftList;
       // eslint-disable-next-line no-nested-ternary
       _list = _list ? _list.First ? _list.First : [] : [];
       const _arr = [];
@@ -161,8 +247,19 @@ export default {
     },
     PartList() {
       if (!this.orderDetail) return [];
+      if (this.pageName === 'orderDetail') {
+        if (this.curOrderData) return this.curOrderData.ProductParams.PartList;
+        return [];
+      }
+      if (!this.orderDetail.ProductParams) return [];
       return this.orderDetail.ProductParams.PartList;
     },
+  },
+  data() {
+    return {
+      pageName: '',
+      curOrderData: null,
+    };
   },
   methods: {
     getCraftList(CraftList) {
@@ -189,6 +286,14 @@ export default {
       return _arr;
     },
   },
+  async mounted() {
+    this.pageName = this.$route.name;
+    if (this.pageName !== 'orderDetail') return;
+    const res = await this.api.getOrderDetail(this.orderDetail.OrderID);
+    if (res.data.Status === 1000) {
+      this.curOrderData = res.data.Data;
+    }
+  },
 };
 </script>
 
@@ -213,6 +318,48 @@ export default {
         margin-bottom: 20px;
         &.product-name {
           margin-bottom: 28px;
+        }
+      }
+      > ul {
+        width: 380px;
+        margin-top: 15px;
+        // margin-left: 58px;
+        box-sizing: border-box;
+        > li {
+          > p {
+            margin-bottom: 28px;
+            // padding-left: 26px;
+          }
+          > div {
+            // padding-left: 26px;
+            > p {
+              margin-bottom: 20px;
+            }
+            & + div {
+              margin-top: 10px;
+              padding-top: 20px;
+              border-top: 1px solid #eee;
+            }
+            > div {
+              margin-bottom: 15px;
+              > p {
+                // margin-bottom: 20px;
+                > span {
+                  line-height: 30px;
+                  margin-right: 15px;
+                }
+              }
+              > div > p {
+                margin-top: 2px;
+                & + p {
+                  border-top: 1px dashed #eee;
+                }
+                &:last-of-type {
+                  border-bottom: 1px dashed #eee;
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -253,7 +400,8 @@ export default {
                   margin-right: 15px;
                 }
                 &.property-list {
-                  + p {
+                  margin-top: 2px;
+                  & + p {
                     border-top: 1px dashed #eee;
                   }
                   &:last-of-type {
@@ -272,6 +420,10 @@ export default {
       vertical-align: top;
       // padding-left: 40px;
       box-sizing: border-box;
+
+      border-left: 1px solid #eee;
+      height: 10000px;
+      margin-bottom: -9999px;
     }
     .craft-wrap {
       > div {
@@ -292,6 +444,56 @@ export default {
     .width-122 {
       width: 122px;
       display: inline-block;
+    }
+    &.is-merge {
+      > .left {
+        width: 765px;
+        padding-left: 60px;
+        padding-top: 30px;
+        > ul {
+          width: 100%;
+          position: relative;
+          > li {
+            > div > .property-group-wrap {
+              > p {
+                display: inline-block;
+                vertical-align: top;
+                padding-top: 4px;
+                margin-right: 6px;
+              }
+              > div {
+                display: inline-block;
+                vertical-align: top;
+                > p {
+                  line-height: 20px;
+                  > span {
+                    margin-right: 24px;
+                  }
+                }
+              }
+            }
+          }
+          // &::after {
+          //   content: '';
+          //   width: 100%;
+          //   height: 1px;
+          //   position: absolute;
+          //   background-color: #eee;
+          //   // border-bottom: 1px dashed #eee;
+          //   top: 8px;
+          // }
+        }
+        .craft-wrap {
+          > ul > li {
+            display: inline-block;
+            margin-right: 20px;
+            .craft-title {
+              min-width: unset;
+              display: inline-block;
+            }
+          }
+        }
+      }
     }
   }
   .is-opacity0 {

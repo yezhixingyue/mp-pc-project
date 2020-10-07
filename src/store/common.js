@@ -201,6 +201,23 @@ export default {
       { label: '已过期', value: 255 },
       { label: '问题件', value: 35 },
     ],
+    /* 订单状态列表 --- 包裹列表专用
+    -------------------------------*/
+    OrderStatusList4PackageList: [
+      { label: '不限', value: 0 },
+      { label: '待分发', value: 20 },
+      { label: '待审稿', value: 30 },
+      { label: '待拼版', value: 40 },
+      { label: '待生产', value: 50 },
+      { label: '生产中', value: 55 },
+      { label: '未揽收', value: 60 },
+      { label: '已揽收', value: 70 },
+      { label: '已发货', value: 80 },
+      { label: '交易成功', value: 200 },
+      { label: '已取消', value: 254 },
+      { label: '已过期', value: 255 },
+      { label: '问题件', value: 35 },
+    ],
   },
   getters: {
   },

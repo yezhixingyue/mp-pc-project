@@ -51,7 +51,7 @@
           <el-button round @click="setShowRechange">在线充值</el-button>
           <el-dropdown trigger="click" @command='onCommand'>
             <span class="el-dropdown-link">
-              {{formatMobile(customerInfo.Mobile)}}<i class="el-icon-arrow-down el-icon--right"></i>
+              {{formatMobile(customerInfo.Account.Mobile)}}<i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown" class="mp-pc-my-set-drop-down-wrap">
               <el-dropdown-item

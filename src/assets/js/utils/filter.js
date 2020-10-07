@@ -54,3 +54,13 @@ Vue.filter('formatStatus', (status) => {
   if (arr) return arr.label.trim();
   return '';
 });
+
+// 订单状态 -- 包裹列表专用
+const { OrderStatusList4PackageList } = store.state.common;
+Vue.filter('formatStatus4PackageList', status => {
+  if (!status && status !== 0) return '';
+  if (status === 10) return '待付款';
+  const arr = OrderStatusList4PackageList.find(item => item.value === status);
+  if (arr) return arr.label.trim();
+  return '';
+});
