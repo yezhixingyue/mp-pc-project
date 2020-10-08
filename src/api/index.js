@@ -93,11 +93,14 @@ const api = {
   getCouponList(data) { // POST /Api/Customer/CouponList  下单界面使用
     return instance.post('/Api/Customer/CouponList', { FieldType: 3, OrderType: 2, ...data });
   },
-  getMyCoupon(data) { // POST /Api/Customer/MyCoupon    --- UseStatus：  0 未使用  1 已使用  2 已过期
+  getMyCoupon(data) { // POST /Api/Customer/MyCoupon    --- UseStatus：  0 未使用  1 已使用  2 已过期    获取带状态对应条数的优惠券列表
     return instance.post('/Api/Customer/MyCoupon', { FieldType: 1, OrderType: 2, ...data });
   },
   getCouponActivate(data) { // POST /Api/Coupon/Activate    优惠券激活
     return instance.post('/Api/Coupon/Activate', data);
+  },
+  getCouponRemove(couponCode) { // DELETE /Api/Customer/Coupon/Remove 优惠券删除
+    return instance.delete(`/Api/Customer/Coupon/Remove?couponCode=${couponCode}`);
   },
 
   /* 客户信息 配送方式 等公共部分api
@@ -192,6 +195,12 @@ const api = {
   // DELETE /Api/Order/Cancle?orderID=100368895  订单取消
   getOrderCancle(OrderID) {
     return instance.delete(`/Api/Order/Cancle?orderID=${OrderID}`);
+  },
+
+  /* 售后单部分 api
+   ----------------------------------------------------------------------------------- */
+  getAfterSalesList(data) { // POST /Api/AfterSales/List 获取售后单列表
+    return instance.post('/Api/AfterSales/List', data);
   },
 };
 

@@ -1,6 +1,9 @@
 <template>
   <section>
-    领券中心页面
+    <header>
+      <span class="blue-v-line is-bold is-black">领券中心</span>
+      <span class="is-font-12">（ 共检测出 <i class="is-pink is-font-16">15</i> 张优惠券 ）</span>
+    </header>
   </section>
 </template>
 

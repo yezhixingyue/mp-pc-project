@@ -109,10 +109,10 @@ export default {
     }
   }
   > .content-wrap {
-    margin-top: 25px;
+    margin-top: 22px;
     width: 100%;
     background-color: #fff;
-    min-height: calc(100vh - 135px - 100px - 70px);
+    min-height: calc(100vh - 135px - 100px - 61px);
     > .content {
       width: 1200px;
       margin: 0 auto;

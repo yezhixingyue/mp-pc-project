@@ -46,10 +46,10 @@ export default {
   },
   mounted() {
     this.$nextTick(() => this.setHeight());
-    window.onresize = () => this.setHeight();
+    window.addEventListener('resize', this.setHeight);
   },
   beforeDestroy() {
-    window.onresize = null;
+    window.removeEventListener('resize', this.setHeight);
   },
 };
 </script>

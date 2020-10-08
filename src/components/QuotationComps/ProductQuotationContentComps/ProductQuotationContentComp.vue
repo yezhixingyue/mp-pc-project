@@ -104,8 +104,8 @@
           <section class="coupon-wrap">
             <header>
               <span>激活优惠券：</span>
-              <el-input v-model="couponCode2Add" placeholder="请输入优惠券激活码"></el-input>
-              <el-button type="primary" @click="getCouponActivate">激活</el-button>
+              <el-input v-model.trim="computedCouponCode2Add" placeholder="请输入优惠券激活码"></el-input>
+              <el-button type="primary" :disabled='!computedCouponCode2Add' @click="getCouponActivate">激活</el-button>
               <!-- <i class="span-title-blue">不使用优惠券</i> -->
             </header>
             <ul class="coupon-list mp-scroll-wrap" v-if="couponList.length > 0">
@@ -195,6 +195,14 @@ export default {
           value: item,
         }),
       );
+    },
+    computedCouponCode2Add: {
+      get() {
+        return this.couponCode2Add;
+      },
+      set(newVal) {
+        this.couponCode2Add = newVal.replace(/[^\w]/g, '');
+      },
     },
     // 产品数量
     ProductAmount: {
@@ -321,6 +329,13 @@ export default {
     },
     async getCouponActivate() {
       if (!this.couponCode2Add) return;
+      if (this.couponCode2Add.length !== 10) {
+        this.messageBox.warnSingleError({
+          title: '激活失败',
+          msg: '请输入10位优惠券码',
+        });
+        return;
+      }
       await this.$store.dispatch('common/getCustomerDetail');
       if (!this.customerInfo) return;
       const { CustomerID } = this.customerInfo;

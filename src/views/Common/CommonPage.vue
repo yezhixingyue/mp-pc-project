@@ -4,7 +4,9 @@
       <CommonHeader />
     </header>
     <div class="common-page-view-content">
-      <router-view />
+      <keep-alive>
+        <router-view />
+      </keep-alive>
     </div>
     <footer>
       <BlueInfoFooter cancollapse />

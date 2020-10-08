@@ -263,12 +263,12 @@ export default {
   },
   mounted() {
     this.$nextTick(() => this.setHeight());
-    window.onresize = () => this.setHeight();
+    window.addEventListener('resize', this.setHeight);
     this.$store.dispatch('shoppingCar/getQuotationList');
     this.$store.dispatch('common/getExpressList');
   },
   beforeDestroy() {
-    window.onresize = null;
+    window.removeEventListener('resize', this.setHeight);
   },
 };
 </script>

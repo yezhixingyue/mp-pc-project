@@ -100,6 +100,7 @@ export default {
   // min-height: 360px;
   padding-bottom: 15px;
   border: 1px solid #eee;
+  position: relative;
   > header {
     height: 40px;
     // border: 1px solid #eee;
@@ -122,13 +123,15 @@ export default {
     }
   }
   .no-data-show {
+    font-size: 12px;
     text-align: center;
-    font-size: 13px;
-    margin-top: 6vh;
-    margin-bottom: 6vh;
+    display: block;
+    position: absolute;
+    left: calc(50% - 24px);
+    top: calc(50% - 9px);
   }
   > main {
-    height: calc(100% - 36px);
+    min-height: calc(100vh - 135px - 175px - 205px);
     // border-left: 1px solid #eee;
     // border-right: 1px solid #eee;
     overflow-x: hidden;

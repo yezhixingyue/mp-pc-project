@@ -114,6 +114,15 @@ const routes = [
         ],
       },
       {
+        path: '/serviceAfterSales',
+        name: 'serviceAfterSales',
+        meta: {
+          requiresAuth: true,
+          title: '名片之家 - 账单',
+        },
+        component: () => import('../views/serviceAfterSales/serviceAfterSalesPage.vue'),
+      },
+      {
         path: '/bill',
         name: 'bill',
         meta: {

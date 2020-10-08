@@ -2,7 +2,7 @@
   <section class="mp-pc-my-setting-account-page-wrap">
     <div class="basic-info">
       <span class="blue-v-line is-bold is-black">基本信息</span>
-      <span class="is-font-13">（ 每月可修改一次 ）</span>
+      <span class="is-font-12">（ 每月可修改一次 ）</span>
       <div>
         <InputComp :disabled='!AllowEdit' v-model="AuthenInfo4Submit.CustomerName"  title='企业简称' required />
         <InputComp :disabled='!AllowEdit'

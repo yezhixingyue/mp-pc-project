@@ -1,6 +1,6 @@
 <template>
   <section class="mp-pc-common-comps-select-comp-wrap float">
-    <header class="is-bold">交易类型：</header>
+    <header class="is-bold">{{title}}：</header>
     <el-select v-model="selectValue" placeholder="请选择">
       <el-option
         v-for="item in optionList"
@@ -26,6 +26,10 @@ export default {
         label: 'label',
         value: 'value',
       }),
+    },
+    title: {
+      type: String,
+      default: '交易类型',
     },
   },
   model: {

@@ -3,7 +3,7 @@
     <section class="header">
       <ul class="header-content">
         <li>
-          <SingleSelector v-model="OrderStatus" :optionList='OrderStatusList' />
+          <SingleSelector v-model="OrderStatus" :optionList='OrderStatusList' title="订单状态" />
           <product-selector
           :changePropsFunc='setCondition4OrderList'
           :requestFunc='getOrderList'
@@ -118,7 +118,7 @@ export default {
     width: 100%;
     background-color: #fff;
     // height: 120px;
-    margin-bottom: 25px;
+    margin-bottom: 22px;
     &.header {
       // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
     }
@@ -150,16 +150,16 @@ export default {
       }
     }
     &.content-wrap {
-      margin-bottom: 45px;
-      box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.07);
-      min-height: calc(100vh - 135px - 170px - 48px);
+      margin-bottom: 10px;
+      // box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.07);
+      min-height: calc(100vh - 135px - 170px - 38px);
       > .content {
         margin: 0 auto;
         width: 1200px;
         padding-top: 25px;
         > footer {
-          height: 82px;
-          padding-top: 30px;
+          height: 65px;
+          padding-top: 19px;
         }
       }
     }
