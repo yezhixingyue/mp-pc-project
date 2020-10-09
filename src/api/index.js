@@ -202,6 +202,24 @@ const api = {
   getAfterSalesList(data) { // POST /Api/AfterSales/List 获取售后单列表
     return instance.post('/Api/AfterSales/List', data);
   },
+
+  /* 未付款订单部分 api
+   ----------------------------------------------------------------------------------- */
+  getUnpayList() { // 获取未付款单列表
+    return instance.post('/Api/Customer/OrderList', { FieldType: 3, NotPaidList: true });
+  },
+  getUnpayOrderCancle({ OrderID, closeTip }) { // 未付款单取消 - 和订单取消同一个接口
+    // return instance.delete(`/Api/Order/Cancle?orderID=${OrderID}`);
+    return instance.delete(`/Api/Order/Cancle?orderID=${OrderID}`, { closeTip });
+  },
+  getOrderPrePay(data) { // POST /Api/Order/PrePay  直接下单 - 预下单
+    const { closeTip } = data;
+    return instance.post('/Api/Order/PrePay', data, { closeTip });
+  },
+  getPaymentOrderCreate(data) { // POST /Api/PaymentOrder/Create  直接下单 - 最终下单支付
+    const { closeTip } = data;
+    return instance.post('/Api/PaymentOrder/Create', data, { closeTip });
+  },
 };
 
 export default api;

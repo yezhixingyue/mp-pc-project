@@ -137,7 +137,7 @@ export default {
       // 图片下载出错
       if (e.type === 'error' && this.isShow2PayDialog) {
         this.messageBox.failSingleError({
-          msg: '[ 获取不到二维码，请检查网络或稍后再试 ]',
+          msg: '[ 获取二维码失败，请到未付款订单中选择该订单付款 ]',
           title: '图片获取失败',
         });
       }

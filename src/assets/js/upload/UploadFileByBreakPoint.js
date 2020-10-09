@@ -93,10 +93,13 @@ async function breakPointUpload(data, uniqueName, onUploadProgressFunc, finalPer
 
     const chunkCount = Math.ceil((data.size - hasUploadedInfo.data.Data) / (chunkSize)); // 计算出总共需要上传的次数
     const curChunkNum = +hasUploadedInfo.data.Data; // 获取到当前已上传的节点位置
-
+    let key = true;
     await uploadFile(chunkCount, curChunkNum, {
       data, uniqueName, onUploadProgressFunc, finalPercentage,
-    }).catch(() => false); // 上传
+    }).catch(() => {
+      key = false;
+    }); // 上传
+    if (!key) return false;
     if (checkIsTrue(data, uniqueName)) return true;
   }
   onUploadProgressFunc(+finalPercentage);

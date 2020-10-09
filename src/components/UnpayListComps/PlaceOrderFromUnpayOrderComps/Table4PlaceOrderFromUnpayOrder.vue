@@ -1,15 +1,15 @@
 <template>
   <RetractableDisplayComp
-    class="mp-pc-order-list-page-table-comp-wrap"
+    class="mp-pc-shopping-car-create-order-list-wrap"
     :isScrollStyle="false"
     :widthObj="widthObj"
     :onWidthChange="onWidthChange"
     :titleList="titleList"
   >
-    <template v-if="orderData && orderData.length > 0">
+    <template v-if="orderData">
       <ul>
-        <li v-for="(data, i) in orderData" :key='"orderlistitem-" + i'
-          :class="i === orderData.length - 1 ? 'hide-border' : ''" >
+        <li v-for="(data, i) in orderData.PackageList" :key="data.ID"
+          :class="i === orderData.PackageList.length - 1 ? 'hide-border' : ''" >
           <ItemListComp :data="data" :widthObj="widthObj"
           />
         </li>
@@ -21,7 +21,7 @@
 
 <script>
 import RetractableDisplayComp from '@/components/common/RetractableDisplayComp/Index.vue';
-import ItemListComp from './OrderListItemComp.vue';
+import ItemListComp from './ItemListComp.vue';
 
 export default {
   components: {
@@ -30,45 +30,29 @@ export default {
   },
   props: {
     orderData: {
-      type: Array,
-      default: () => ([]),
+      type: Object,
+      default: () => ({}),
     },
   },
   data() {
     return {
       widthObj: {
-        w1: 80,
-        w2: 80,
-        w3: 80,
-        w4: 68,
-        w5: 67,
-        w6: 80,
-        w7: 118,
-        w8: 65,
-        w9: 75,
-        w10: 65,
-        w11: 65,
-        w12: 65,
-        w13: 60,
-        w14: 110,
-        w15: 120,
+        w1: 270,
+        w2: 105,
+        w3: 105,
+        w4: 105,
+        w5: 105,
+        w6: 105,
+        w7: 402,
       },
       titleList: [
-        '订单号',
-        '电商单号',
-        '产品名称',
-        '尺寸',
-        '工艺',
+        '产品',
         '数量',
-        '文件内容',
+        '原价',
         '优惠券',
         '成交价',
-        '已付',
-        '未付',
-        '退款',
-        '状态',
-        '下单时间',
-        '操作',
+        '订金',
+        '文件内容',
       ],
       curSelectedList: [],
       unPayTableData: [],
@@ -86,21 +70,17 @@ export default {
       this.widthObj[w] = newW;
     },
   },
-  mounted() {
-    this.$store.dispatch('order/getOrderList');
-  },
 };
 </script>
 
 <style lang='scss'>
-.mp-pc-order-list-page-table-comp-wrap {
+.mp-pc-shopping-car-create-order-list-wrap {
   height: 100%;
   // padding-top: 8px;
   box-sizing: border-box;
   // min-height: 360px;
   padding-bottom: 15px;
   border: 1px solid #eee;
-  position: relative;
   > header {
     height: 40px;
     // border: 1px solid #eee;
@@ -123,15 +103,13 @@ export default {
     }
   }
   .no-data-show {
-    font-size: 12px;
     text-align: center;
-    display: block;
-    position: absolute;
-    left: calc(50% - 24px);
-    top: calc(50% - 9px);
+    font-size: 13px;
+    margin-top: 6vh;
+    margin-bottom: 6vh;
   }
   > main {
-    min-height: calc(100vh - 135px - 175px - 205px);
+    height: calc(100% - 36px);
     // border-left: 1px solid #eee;
     // border-right: 1px solid #eee;
     overflow-x: hidden;

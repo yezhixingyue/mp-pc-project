@@ -1019,6 +1019,11 @@ export default {
       if (res.data.Status !== 1000) {
         throw new Error(res.data.Message);
       }
+      if (res.data.Data) {
+        const _b = rootState.common.customerBalance;
+        const { FundBalance } = res.data.Data;
+        if (FundBalance !== +_b) commit('common/setCustomerBalance', FundBalance, { root: true });
+      }
       commit('setCurPayInfo2Code', res.data.Data);
       commit('clearStateAfterPlaceOrderSuccess');
       // 成功后清除优惠券等信息
@@ -1029,6 +1034,33 @@ export default {
           successFunc: () => {
             if (FilePath) commit('setPaySuccessOrderDataStatus');
             if (cb) cb(); // 清除购物车中一些数据 然后跳转购物车列表页面 该方法目前只在购物车提交时使用
+            commit('setIsShow2PayDialog', false);
+          },
+        });
+      }
+    },
+    async placeOrderFromPrePay({ commit, rootState }, { PayInFull, cb }) {
+      const _obj = { OrderType: 2, PayInFull, List: [] };
+      console.log(rootState.unpayList, rootState.unpayList.curUnpayListDataBeforeFirstPlace);
+      _obj.List = rootState.unpayList.curUnpayListDataBeforeFirstPlace.map(it => ({ ID: it.OrderID }));
+      console.log('placeOrderFromPrePay');
+      const res = await api.getPaymentOrderCreate(_obj);
+      if (res.data.Status !== 1000) {
+        throw new Error(res.data.Message);
+      }
+      if (res.data.Data) {
+        const _b = rootState.common.customerBalance;
+        const { FundBalance } = res.data.Data;
+        if (FundBalance !== +_b) commit('common/setCustomerBalance', FundBalance, { root: true });
+      }
+      commit('setCurPayInfo2Code', res.data.Data);
+      commit('clearStateAfterPlaceOrderSuccess');
+      // 成功后清除优惠券等信息
+      if (!res.data.Data) {
+        massage.successSingle({
+          title: '支付成功!',
+          successFunc: () => {
+            if (cb) cb(); // 清除购物车中一些数据 然后跳转购物车列表页面 该方法目前只在未付款单提交时使用
             commit('setIsShow2PayDialog', false);
           },
         });

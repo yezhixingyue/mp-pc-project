@@ -135,7 +135,6 @@ export default {
       this.initData();
     },
     onImgLoad() {
-      console.log('图片加载完成');
       if (this.showRechange) this.getPayStatus();
     },
     onError() {

@@ -14,7 +14,7 @@
       <li class="address-box">
         <p>
           <span>订单编号：{{info4OrderSummary.OrderID}}</span>
-          <span class="ml-50">平台单号：{{info4OrderSummary.OutPlate}}</span>
+          <span class="ml-50" v-if="info4OrderSummary.OutPlate">平台单号：{{info4OrderSummary.OutPlate}}</span>
         </p>
         <p class="mid">
           <span><i class="title">收件人：</i>{{info4OrderSummary.Consignee}}</span>
@@ -73,7 +73,8 @@ export default {
         padding-top: 95px;
         text-align: center;
         color: #f4a307;
-        font-size: 16px;
+        font-size: 14px;
+        font-weight: 700;
         &.moving {
           background: url(../../../assets/images/moving.png) no-repeat 20px 13px/113px 66px;
         }
@@ -81,12 +82,16 @@ export default {
           background: url(../../../assets/images/normal-status.png) no-repeat 20px 13px/113px 66px;
         }
         &.cancel {
-          background: url(../../../assets/images/normal-status.png) no-repeat 20px 13px/113px 66px;
-          color: #989898;
+          background: url(../../../assets/images/unpay-status.png) no-repeat 20px 13px/115px 71px;
+          color: #cbcbcb;
         }
         &.success {
-          background: url(../../../assets/images/normal-status.png) no-repeat 20px 13px/113px 66px;
+          background: url(../../../assets/images/order-complete.png) no-repeat 41.4px 13px/91.6px 66px;
           color: #80c269;
+        }
+        &.unPay {
+          background: url(../../../assets/images/unpay-status.png) no-repeat 20px 13px/115px 71px;
+          color: #ff3769;
         }
       }
       &.address-box {

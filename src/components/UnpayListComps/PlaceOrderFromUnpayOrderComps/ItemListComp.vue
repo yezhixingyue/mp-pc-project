@@ -1,5 +1,5 @@
 <template>
-    <div class="mp-pc-pre-create-order-list-item-wrap">
+    <div class="mp-pc-pre-create-order-list-item-for-unpay-order-wrap">
       <div class="product-item-header">
         <div class="product-item-header-left">
           <span class="product-item-header-amount-box gray is-font-14">产品金额：<i class="is-pink"
@@ -27,7 +27,7 @@
           <div :style="wStyles[3]">{{ getCoupon(item.OrderID)}}</div>
           <div :style="wStyles[4]">{{item.FinalPrice}}元</div> <!-- 成交价 -->
           <div :style="wStyles[5]">{{item.DepositAmount}}元</div> <!-- 订金 -->
-          <div :style="wStyles[6]" class="is-font-12 gray">{{getContent(item.OrderID)}}</div>
+          <div :style="wStyles[6]" class="is-font-12 gray">{{item.Content}}</div>
         </li>
       </TransitionGroupCollapse4ShopCar>
     </div>
@@ -72,7 +72,7 @@ export default {
     TransitionGroupCollapse4ShopCar,
   },
   computed: {
-    ...mapState('shoppingCar', ['curShoppingCarDataBeforeFirstPlace']),
+    ...mapState('unpayList', ['curUnpayListDataBeforeFirstPlace']),
     // ...mapState('common', ['Permission']),
     wStyles() {
       return Object.values(this.widthObj).map((item) => `width: ${item}px`);
@@ -91,29 +91,29 @@ export default {
       return `${FirstLevelName}-${SecondLevelName}-${ProductName}`;
     },
     getProductCount(OrderID) {
-      if (!this.curShoppingCarDataBeforeFirstPlace) return '';
-      const _t = this.curShoppingCarDataBeforeFirstPlace.find(it => it.OrderID === OrderID);
+      if (!this.curUnpayListDataBeforeFirstPlace) return '';
+      const _t = this.curUnpayListDataBeforeFirstPlace.find(it => it.OrderID === OrderID);
       if (!_t) return '';
-      const { ProductAmount, KindCount, Attributes } = _t.ProductParams;
-      const { Unit } = Attributes;
+      const { ProductAmount, KindCount, Unit } = _t;
       return `${ProductAmount}${Unit}${KindCount}款`;
     },
     getCoupon(OrderID) {
-      if (!this.curShoppingCarDataBeforeFirstPlace) return '';
-      const _t = this.curShoppingCarDataBeforeFirstPlace.find(it => it.OrderID === OrderID);
+      if (!this.curUnpayListDataBeforeFirstPlace) return '';
+      const _t = this.curUnpayListDataBeforeFirstPlace.find(it => it.OrderID === OrderID);
+
       if (!_t) return '';
       const { CouponAmount } = _t.Funds;
       if (CouponAmount > 0) return `-${CouponAmount}元`;
       return '0元';
     },
-    getContent(OrderID) {
-      if (!this.curShoppingCarDataBeforeFirstPlace) return '';
-      const _t = this.curShoppingCarDataBeforeFirstPlace.find(it => it.OrderID === OrderID);
-      if (!_t) return '';
-      const { Content } = _t;
-      if (Content) return Content;
-      return '';
-    },
+    // getContent(OrderID) {
+    //   if (!this.curUnpayListDataBeforeFirstPlace) return '';
+    //   const _t = this.curUnpayListDataBeforeFirstPlace.find(it => it.OrderID === OrderID);
+    //   if (!_t) return '';
+    //   const { Content } = _t;
+    //   if (Content) return Content;
+    //   return '';
+    // },
     // eslint-disable-next-line object-curly-newline
     getAddress({ AddressDetail, Consignee, Mobile, ExpressArea }) {
       const { RegionalName, CityName, CountyName } = ExpressArea;
@@ -127,7 +127,7 @@ export default {
 </script>
 
 <style lang='scss'>
-.mp-pc-pre-create-order-list-item-wrap {
+.mp-pc-pre-create-order-list-item-for-unpay-order-wrap {
   margin-top: 20px;
   // margin-bottom: 20px;
   font-size: 12px;
@@ -207,17 +207,18 @@ export default {
     border-bottom: none;
     // border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
+    // transition: backgroundColor 0.2s;
     &:hover > div {
       background-color: rgb(216, 239, 252);
     }
     > div {
+      transition: .2s;
       white-space: nowrap;
       display: block;
       overflow: hidden;
       text-overflow: ellipsis;
       text-align: center;
       // padding: 20px 0;
-      transition: 0.2s;
       padding-right: 6px;
       box-sizing: border-box;
       flex: none;
@@ -225,6 +226,7 @@ export default {
       color: #585858;
       line-height: 30px;
       padding-top: 20px;
+      margin-top: 0;
     }
   }
 }

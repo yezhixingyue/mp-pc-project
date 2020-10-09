@@ -114,6 +114,54 @@ const routes = [
         ],
       },
       {
+        path: '/unpay',
+        name: 'order',
+        component: CommonViewPage,
+        redirect: '/unpay/list',
+        meta: {
+          requiresAuth: true,
+          title: '名片之家 - 未付款单',
+        },
+        children: [
+          {
+            path: '/unpay/list',
+            name: 'unpayList',
+            meta: {
+              requiresAuth: true,
+              title: '名片之家 - 未付款单',
+            },
+            component: () => import('../views/UnpayList/UnpayListPage.vue'),
+          },
+          // {
+          //   path: '/order/detail',
+          //   name: 'orderDetail',
+          //   meta: {
+          //     requiresAuth: true,
+          //     title: '名片之家 - 未付款单详情',
+          //   },
+          //   component: () => import('../views/OrderPages/OrderDetailPage.vue'),
+          // },
+          {
+            path: '/unpay/detail',
+            name: 'unpayOrderDetail',
+            meta: {
+              requiresAuth: true,
+              title: '名片之家 - 购物车产品详情',
+            },
+            component: () => import('../views/UnpayList/UnpayOrderDetailPage.vue'),
+          },
+          {
+            path: '/unpay/submit',
+            name: 'unpayOrderSubmit',
+            meta: {
+              requiresAuth: true,
+              title: '名片之家 - 购物车订单提交',
+            },
+            component: () => import('../views/UnpayList/UnpayOrderSubmitPage.vue'),
+          },
+        ],
+      },
+      {
         path: '/serviceAfterSales',
         name: 'serviceAfterSales',
         meta: {

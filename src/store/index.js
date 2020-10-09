@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import order from './order';
 import common from './common';
 import summary from './summary';
+import unpayList from './unpayList';
 import shoppingCar from './shoppingCar';
 import timeSelectModule from './timeSelectModule';
 import Quotation from './Quotation/Quotation';
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     common,
     summary,
     Quotation,
+    unpayList,
     shoppingCar,
     timeSelectModule,
   },

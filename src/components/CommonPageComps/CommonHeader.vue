@@ -25,7 +25,7 @@
             <i class="iconfont icon-gouwuche"></i>
             <span>购物车</span>
           </router-link>
-          <router-link tag="li" to="/nonPayment">
+          <router-link tag="li" to="/unpay">
             <i class="iconfont icon-weifukuan"></i>
             <span>未付款</span>
           </router-link>
@@ -46,7 +46,7 @@
           <span>
             <span>{{customerInfo.CustomerName}} </span>
             <i class="title">/ 余额：</i>
-            <i class="price">￥{{customerBalance}}</i>
+            <i class="price">￥{{customerBalance?customerBalance:0}}</i>
           </span>
           <el-button round @click="setShowRechange">在线充值</el-button>
           <el-dropdown trigger="click" @command='onCommand'>
@@ -128,7 +128,7 @@ export default {
       }
     },
     onRemarkClick() {
-      console.log('onRemarkClick');
+      this.setShowRechange();
     },
     onCommand(command) {
       let _path = '';

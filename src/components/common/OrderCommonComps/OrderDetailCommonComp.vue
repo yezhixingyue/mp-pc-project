@@ -40,6 +40,7 @@
         <ul v-if="PartList.length === 1">
           <li v-for="item in PartList" :key="item.PartID">
             <!-- 部件名称 -->
+            <i class="line"></i>
             <p class="is-bold" :class="PartList.length > 1 ? '' : 'is-opacity0'">
               <i class="is-origin">//</i> {{item.Attributes.Name}}</p>
             <div v-for="(part, i) in item.PartList" :key="part.PartID + i">
@@ -288,6 +289,7 @@ export default {
   },
   async mounted() {
     this.pageName = this.$route.name;
+    if (this.pageName === 'unpayOrderDetail') this.pageName = 'orderDetail';
     if (this.pageName !== 'orderDetail') return;
     const res = await this.api.getOrderDetail(this.orderDetail.OrderID);
     if (res.data.Status === 1000) {
@@ -450,6 +452,10 @@ export default {
         width: 765px;
         padding-left: 60px;
         padding-top: 30px;
+        min-height: 360px;
+        // > p.product-name {
+        //   margin-bottom: 20px;
+        // }
         > ul {
           width: 100%;
           position: relative;
@@ -471,6 +477,20 @@ export default {
                   }
                 }
               }
+            }
+            > p {
+              &.is-opacity0 {
+                margin-bottom: 8px;
+
+              }
+            }
+            >i.line {
+              width: 100%;
+              height: 1px;
+              background-image: linear-gradient(to right, #e6e6e6 0%, #e6e6e6 80%, transparent 20%);
+              background-repeat: repeat-x;
+              background-size: 7px 1px;
+              display: inline-block;
             }
           }
           // &::after {

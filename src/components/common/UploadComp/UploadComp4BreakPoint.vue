@@ -187,6 +187,7 @@ export default { // 上传图片按钮
         };
         if (file && _name) {
           const key = await UploadFileByBreakPoint(file, _name, onUploadProgressFunc, 100);
+          console.log(key, 'key');
           if (key) {
             // 上传成功
             this.successFunc({ compiledName: _name, initialName: this.fileName });
