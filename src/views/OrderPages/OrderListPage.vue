@@ -38,7 +38,7 @@
         </li>
       </ul>
     </section>
-    <section class="content-wrap">
+    <section class="content-wrap" v-if="computedOrderlist.length > 0 || OrderListNumber > 0">
       <section class="content">
         <Table4OrderList :orderData='computedOrderlist' />
         <footer>
@@ -51,6 +51,10 @@
             />
         </footer>
       </section>
+    </section>
+    <section class="show-empty-bg" v-else>
+      <img src="../../assets/images/order-empty.png" alt="">
+      <p class="is-gray">当前您暂无任何订单，快去下单吧...</p>
     </section>
   </article>
 </template>
@@ -108,6 +112,9 @@ export default {
       this.$store.dispatch('order/getOrderList', page);
     },
   },
+  mounted() {
+    this.$store.dispatch('order/getOrderList');
+  },
 };
 </script>
 
@@ -161,6 +168,19 @@ export default {
           height: 65px;
           padding-top: 19px;
         }
+      }
+    }
+    &.show-empty-bg {
+      background-color: rgb(245, 245, 245);
+      text-align: center;
+      padding-top: 50px;
+      > p {
+        margin-top: 15px;
+      }
+      > img {
+        height: 266px;
+        width: 545px;
+        user-select: none;
       }
     }
   }

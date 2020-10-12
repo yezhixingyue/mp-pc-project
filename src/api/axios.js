@@ -66,6 +66,7 @@ axios.interceptors.response.use(
       if (_url === '/Api/Coupon/Activate') _msg = '激活失败';
       if (_url === '/Api/Order/Create' || _url === '/Api/Order/PreCreate') _msg = '下单失败';
       if (_url === '/Api/FindPassword/CheckCode') _msg = '验证码错误';
+      if (_url === '/Api/Coupon/Receive') _msg = '领取失败';
 
       _obj.title = _msg;
       messageBox.failSingleError(_obj);

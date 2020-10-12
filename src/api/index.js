@@ -102,6 +102,12 @@ const api = {
   getCouponRemove(couponCode) { // DELETE /Api/Customer/Coupon/Remove 优惠券删除
     return instance.delete(`/Api/Customer/Coupon/Remove?couponCode=${couponCode}`);
   },
+  getCouponReceiveableList(Page, PageSize) { // GET /Api/Coupon/ReceiveableList  获取可领取优惠券列表
+    return instance.get(`/Api/Coupon/ReceiveableList?Page=${Page}&PageSize=${PageSize}`);
+  },
+  getCouponReceive(data) { // POST /Api/Coupon/Receive 优惠券领取
+    return instance.post('/Api/Coupon/Receive', data);
+  },
 
   /* 客户信息 配送方式 等公共部分api
   ----------------------------------------------------------------------------------- */

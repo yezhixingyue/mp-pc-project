@@ -86,9 +86,6 @@ export default {
       this.widthObj[w] = newW;
     },
   },
-  mounted() {
-    this.$store.dispatch('order/getOrderList');
-  },
 };
 </script>
 

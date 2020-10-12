@@ -16,7 +16,7 @@
         />
       </div>
     </header>
-    <div class="content-wrap" v-if="1">
+    <div class="content-wrap" v-if="FundBillList.length > 0 || FundBillListNumber > 0">
       <!-- FundBillListNumber -->
       <div class="content">
         <FundBillTable :dataList='FundBillList' />
@@ -125,7 +125,10 @@ export default {
   > .empty {
     text-align: center;
     > img {
-      margin: 98px 0 100px;
+      margin: 72px 0 15px;
+      height: 266px;
+      width: 545px;
+      user-select: none;
     }
     > p {
       color: #888;

@@ -9,7 +9,11 @@
         <span class="iconfont icon-wancheng is-success"></span>
         <span>{{initPageText}}</span>
       </div>
-      <div v-else class="bg-empty-wrap"></div>
+      <!-- <div v-else class="bg-empty-wrap"></div> -->
+      <div class="show-empty-bg" v-else>
+        <img src="../../assets/images/placeorderisempty.png" alt="">
+        <p class="is-gray">当前尚未选择产品，请通过上方产品分类选择产品吧...</p>
+      </div>
     </div>
   </section>
 </template>
@@ -50,6 +54,18 @@ export default {
       height: 266px;
       width: 545px;
       margin: 80px auto 0;
+    }
+    > .show-empty-bg {
+      text-align: center;
+      padding-top: 60px;
+      > p {
+        padding-top: 15px;
+      }
+      > img {
+        height: 266px;
+        width: 545px;
+        user-select: none;
+      }
     }
   }
 }

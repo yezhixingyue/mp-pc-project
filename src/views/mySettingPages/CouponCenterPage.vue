@@ -1,18 +1,217 @@
 <template>
-  <section>
+  <section class="mp-pc-my-setting-pages-coupon-center-page-wrap">
     <header>
       <span class="blue-v-line is-bold is-black">领券中心</span>
-      <span class="is-font-12">（ 共检测出 <i class="is-pink is-font-16">15</i> 张优惠券 ）</span>
+      <span class="is-font-12">（ 共检测出 <i class="is-pink is-font-16">{{couponCount}}</i> 张优惠券 ）</span>
     </header>
+    <ul class="content">
+      <li class="coupon-item" v-for="(item, i) of couponList" :key="item.CouponID + i">
+        <div class="left-content">
+          <div class="amount-box">
+            <p class="f center">
+              <span class="is-font-18">¥ </span><span class="is-font-28 is-bold">{{item.Data.Amount}}</span>
+            </p>
+            <p class="center is-font-12">满<i class="is-font-14">{{item.Data.MinPayAmount}}</i>元可用</p>
+          </div>
+          <div class="info">
+            <p class="f">
+              <span class="is-gray">限产品：</span>
+              <el-tooltip popper-class="table-item" :enterable='false'
+                :content="item.ProductString" placement="top-start">
+                <span>{{item.ProductString}}</span>
+              </el-tooltip>
+            </p>
+            <p class="is-gray">
+              <span>{{item.ValidStartTime | format2MiddleLangTypeDate}}</span>
+              <i> - </i>
+              <span>{{item.ValidEndTime | format2MiddleLangTypeDate}}</span>
+            </p>
+          </div>
+        </div>
+        <div class="right-botton" @click="handleCouponReceive(item)">
+          立即领取
+        </div>
+      </li>
+    </ul>
+    <footer>
+      <Count
+        :watchPage='Page'
+        :handlePageChange='handlePageChange'
+        :count='couponCount'
+        :pageSize='PageSize'
+      />
+    </footer>
   </section>
 </template>
 
 <script>
-export default {
+import Count from '@/components/common/Count.vue';
 
+export default {
+  components: {
+    Count,
+  },
+  data() {
+    return {
+      couponList: [],
+      couponCount: 0,
+      Page: 1,
+      PageSize: 12,
+    };
+  },
+  methods: {
+    async getCouponList(Page, PageSize) {
+      if (Page) this.Page = Page;
+      if (PageSize) this.PageSize = PageSize;
+      const res = await this.api.getCouponReceiveableList(this.Page, this.PageSize);
+      if (res.data.Status === 1000) {
+        this.couponList = res.data.Data;
+        this.couponCount = res.data.DataNumber;
+      }
+    },
+    handlePageChange(page) {
+      this.getCouponList(page);
+    },
+    async receiveCoupon(data) {
+      const res = await this.api.getCouponReceive(data);
+      if (res.data.Status === 1000) {
+        this.messageBox.successSingle({
+          title: '领取成功',
+        });
+      }
+    },
+    handleCouponReceive({ CouponID }) {
+      if (!CouponID) return;
+      this.messageBox.warnCancelNullMsg({
+        title: '确认领取该优惠券吗?',
+        successFunc: () => { this.receiveCoupon({ CouponID }); },
+      });
+    },
+  },
+  mounted() {
+    this.getCouponList();
+  },
 };
 </script>
 
-<style>
+<style lang='scss'>
+.mp-pc-my-setting-pages-coupon-center-page-wrap {
+  > .content {
+    padding-top: 35px;
+    margin-right: -25px;
+    > li.coupon-item {
+      width: 470px;
+      height: 120px;
+      margin-right: 20px;
+      margin-bottom: 40px;
+      border-radius: 5px;
+      border: solid 1px #eeeeee;
+      transition: 0.3s;
+      // overflow: hidden;
+      position: relative;
+      box-sizing: border-box;
+      display: inline-block;
+      > .left-content {
+        height: 95px;
+        width: 410px;
+        padding-top: 14px;
+        padding-bottom: 11px;
+        display: inline-block;
+        > div {
+          display: inline-block;
+          height: 100%;
+          &.amount-box {
+            color: #9399ff;
+            width: 125px;
+            height: 100%;
+            border-right: 1px dashed #eee;
+            transition: color 0.3s;
+          }
+          &.info {
+            width: 284px;
+          }
+          > p {
+            padding: 0 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            &.f {
+              padding: 16px 12px;
+              margin-bottom: 10px;
+              line-height: 28px;
+              height: 28px;
+            }
+            &.center {
+              text-align: center;
+            }
+            > .el-tooltip {
+              max-width: 203px;
+              display: inline-block;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+            > .is-gray {
+              display: inline-block;
+              line-height: 28px;
+              height: 28px;
+              vertical-align: top;
+            }
+          }
 
+        }
+      }
+      > .right-botton {
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        width: 60px;
+        height: 110px;
+        font-size: 16px;
+        vertical-align: top;
+        writing-mode: vertical-rl;
+        text-align: center;
+        line-height: 60px;
+        letter-spacing: 8px;
+        padding-top: 10px;
+        user-select: none;
+        cursor: pointer;
+        background-color: #9399ff;
+        color: #fff;
+        border-radius: 5px;
+        transition: 0.3s;
+        &::before {
+          content: '';
+          position: absolute;
+          width: 4px;
+          height: 120px;
+          left: 0;
+          top: 0;
+          background: url('../../assets/images/sawtooth-2.png') left bottom/ 4px 120px repeat-y ;
+        }
+      }
+      &:hover {
+        border-color: #7a80e7;
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+        > .right-botton {
+          background-color: #5e66fa;
+          &:active {
+            background-color: #3b4096;
+          }
+        }
+        > .left-content > div.amount-box {
+          color: #5e66fa;
+        }
+      }
+    }
+  }
+  > footer {
+    margin-bottom: 50px;
+    > .count-wrap {
+      > .count {
+        display: none;
+      }
+    }
+  }
+}
 </style>

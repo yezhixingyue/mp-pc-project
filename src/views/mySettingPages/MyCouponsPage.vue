@@ -8,7 +8,7 @@
         <el-button type="primary" :disabled='!computedCouponCode2Add' @click="getCouponActivate">激活</el-button>
       </div>
       <div class="jump-btn">
-        <el-button>
+        <el-button @click="jumpToCouponCenter">
           <i class="iconfont icon-lingquan"></i>
           <span>领券中心</span>
         </el-button>
@@ -206,6 +206,7 @@ export default {
           this.curSelectedOption = 0;
           setTimeout(() => {
             if (_list.length > 9) this.unusedCouponList = _list.splice(0, 9);
+            else this.unusedCouponList = _list;
           }, 30);
         },
       });
@@ -281,7 +282,7 @@ export default {
       const res = await this.api.getCouponRemove(CouponCode);
       if (res.data.Status !== 1000) return;
       this.messageBox.successSingle({
-        title: '取消成功',
+        title: '删除成功',
         successFunc: () => {
           if (Status === 0) this.unusedCouponList = this.unusedCouponList.filter(it => it.CouponCode !== CouponCode);
           if (Status === 1) this.usedCouponList = this.usedCouponList.filter(it => it.CouponCode !== CouponCode);
@@ -290,6 +291,9 @@ export default {
           _t.Second -= 1;
         },
       });
+    },
+    jumpToCouponCenter() {
+      this.$router.push('/mySetting/couponCenter');
     },
   },
   mounted() {
@@ -457,7 +461,7 @@ export default {
           &::after {
             content: '';
             position: absolute;
-            width: 120%;
+            width: 100%;
             height: 6px;
             left: 0px;
             bottom: -0;

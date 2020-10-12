@@ -12,9 +12,9 @@
         <router-link tag="li" to="/mySetting/changeMobile">修改手机号</router-link>
       </ul>
       <div class="right">
-        <keep-alive>
+        <!-- <keep-alive> -->
           <router-view></router-view>
-        </keep-alive>
+        <!-- </keep-alive> -->
       </div>
     </div>
     <footer></footer>

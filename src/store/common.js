@@ -249,13 +249,11 @@ export default {
       state.customerInfo.Address = state.customerInfo.Address.filter(it => it.AddressID !== AddressID);
     },
     handleAddOrEditAddressOnStore(state, [obj, type]) {
-      if (!state.customerInfo || !state.customerInfo.Address || state.customerInfo.Address.length === 0 || !obj) return;
-      console.log(obj, 'handleAddOrEditAddressOnStore');
+      if (!state.customerInfo || !state.customerInfo.Address || !obj) return;
       if (type === 'add') state.customerInfo.Address.push(JSON.parse(JSON.stringify(obj)));
       else if (type === 'edit') {
         const { AddressID } = obj;
         const _t = state.customerInfo.Address.find(it => it.AddressID === AddressID);
-        console.log(_t.Latitude);
         // eslint-disable-next-line max-len
         const { AddressDetail, Consignee, ExpressArea, CustomerID, HavePosition, IsDefault, Latitude, Longitude, Mobile } = obj;
         _t.Consignee = Consignee;
@@ -266,7 +264,6 @@ export default {
         _t.IsDefault = IsDefault;
         _t.Latitude = Latitude;
         _t.Longitude = Longitude;
-        console.log(_t, 'sasasa');
         const { RegionalName, RegionalID, CityName, CityID, CountyName, CountyID } = ExpressArea;
         _t.ExpressArea.RegionalName = RegionalName;
         _t.ExpressArea.RegionalID = RegionalID;
@@ -274,7 +271,6 @@ export default {
         _t.ExpressArea.CityID = CityID;
         _t.ExpressArea.CountyName = CountyName;
         _t.ExpressArea.CountyID = CountyID;
-        console.log(_t.Latitude, 'sasasa');
       }
     },
     /** 设置客户子账号列表

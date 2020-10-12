@@ -16,7 +16,7 @@
         />
         </div>
       </header>
-      <div class="content-wrap">
+      <div class="content-wrap" v-if="ServiceAfterSaleList.length > 0 || ServiceAfterSaleListNumber > 0">
         <div class="content">
           <el-table :max-height="h" :height="h" stripe border
              :data="ServiceAfterSaleList" style="width: 100%" class="ft-14-table">
@@ -53,6 +53,10 @@
             />
           </div>
         </div>
+      </div>
+      <div class="show-empty-bg" v-else>
+        <img src="../../assets/images/order-empty.png" alt="">
+        <p class="is-gray">当前暂无售后单信息</p>
       </div>
     </section>
   </article>
@@ -139,6 +143,19 @@ export default {
         > .content-footer {
           margin-top: 19px;
         }
+      }
+    }
+    > .show-empty-bg {
+      background-color: rgb(245, 245, 245);
+      text-align: center;
+      padding-top: 50px;
+      > p {
+        margin-top: 15px;
+      }
+      > img {
+        height: 266px;
+        width: 545px;
+        user-select: none;
       }
     }
   }
