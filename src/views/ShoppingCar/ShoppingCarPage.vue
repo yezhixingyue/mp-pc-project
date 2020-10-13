@@ -21,6 +21,10 @@ export default {
   computed: {
     ...mapState('shoppingCar', ['shoppingDataNumber', 'shoppingDataList']),
   },
+  mounted() {
+    this.$store.dispatch('shoppingCar/getQuotationList');
+    this.$store.dispatch('common/getExpressList');
+  },
 };
 </script>
 

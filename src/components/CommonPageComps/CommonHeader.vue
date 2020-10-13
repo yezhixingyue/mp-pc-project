@@ -1,5 +1,5 @@
 <template>
-  <section class="mp-pc-common-page-header-common-wrap float">
+  <section class="mp-pc-common-page-header-common-wrap float" :style="oStyles">
     <header>
       <div>
         <img src="../../assets/images/logo-color.png" alt />
@@ -75,16 +75,29 @@
               <el-dropdown-item
                 :class="{active: $route.name === 'mySettingChangeMobile'}"
                 command='changeMobile' icon="el-icon-s-order">修改手机号</el-dropdown-item>
+              <el-dropdown-item command='loginOut'>
+                <span class="iconfont icon-tuichudenglu"></span>退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
       </div>
     </footer>
-    <div class="recharge-remark" :class="{ show:showRemark, showBg: showRechange }"  @click.self='onRemarkClick'>
+    <el-drawer
+      :visible.sync="showRechange"
+      :with-header="false"
+      size='350px'
+      direction="ttb"
+      custom-class="mp-recharge-drawer-wrap"
+      :before-close="setShowRechange">
       <div class="recharge-box" :class="showRechange? 'showRechange' : ''">
         <RechargeComp :showRechange='showRechange' @handleClose='setShowRechange' />
       </div>
-    </div>
+    </el-drawer>
+    <!-- <div class="recharge-remark" :class="{ show:showRemark, showBg: showRechange }"  @click.self='onRemarkClick'>
+      <div class="recharge-box" :class="showRechange? 'showRechange' : ''">
+        <RechargeComp :showRechange='showRechange' @handleClose='setShowRechange' />
+      </div>
+    </div> -->
   </section>
 </template>
 
@@ -103,6 +116,9 @@ export default {
     return {
       showRechange: false,
       showRemark: false,
+      oStyles: {
+        zIndex: 1000,
+      },
     };
   },
   methods: {
@@ -120,8 +136,11 @@ export default {
       if (this.showRechange) {
         this.$store.dispatch('common/getCustomerFundBalance');
         this.showRemark = true;
+        // console.log('kai');
+        this.oStyles.zIndex = 3000;
       }
       if (!this.showRechange) {
+        this.oStyles.zIndex = 1000;
         setTimeout(() => {
           this.showRemark = false;
         }, 200);
@@ -131,6 +150,18 @@ export default {
       this.setShowRechange();
     },
     onCommand(command) {
+      console.log(command);
+      if (command === 'loginOut') {
+        this.messageBox.warnCancelNullMsg({
+          title: '确定退出登录吗?',
+          successFunc: () => {
+            this.$router.replace('/login');
+            sessionStorage.removeItem('token');
+            // 另外再需清除状态
+          },
+        });
+        return;
+      }
       let _path = '';
       switch (command) {
         case 'account':
@@ -386,12 +417,41 @@ export default {
       background-color: #fff;
       overflow: hidden;
       z-index: -1;
-      transition: 0.2s;
-      // opacity: 0;
+      transition: height .3s cubic-bezier(0.78, 0.14, 0.15, 0.86), opacity .3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
+      opacity: 0;
       &.showRechange {
         height: 348px;
-        // opacity: 1;
+        opacity: 1;
         box-shadow: 0 8px 10px -5px rgba(0,0,0,.2), 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12);
+      }
+    }
+  }
+  .recharge-box {
+      // position: absolute;
+      // top: 0;
+      // left: 0;
+      // right: 0;
+      // height: 0px;
+      background-color: #fff;
+      overflow: hidden;
+      // z-index: -1;
+      // transition: height .3s cubic-bezier(0.78, 0.14, 0.15, 0.86), opacity .3s cubic-bezier(0.78, 0.14, 0.15, 0.86);
+      opacity: 0;
+      height: 348px;
+      opacity: 1;
+      &.showRechange {
+        height: 348px;
+        opacity: 1;
+        // box-shadow: 0 8px 10px -5px rgba(0,0,0,.2), 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12);
+      }
+  }
+  > .el-drawer__wrapper {
+    top: 135px;
+    outline: none;
+    > div {
+      outline: none;
+      > div {
+        outline: none;
       }
     }
   }
@@ -405,6 +465,11 @@ export default {
       font-size: 16px;
       margin-right: 8px;
       vertical-align: -8%;
+    }
+    > span {
+      font-size: 17px;
+      vertical-align: -2%;
+      margin-right: 8px;
     }
     &.active {
       color: #428dfa;

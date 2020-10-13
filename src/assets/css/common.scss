@@ -26,7 +26,7 @@ html, body, #app {
   color: #585858;
   overflow: overlay;
   min-width: 1200px;
-  overflow: auto;
+  // overflow: auto;
 }
 
 .span-title-pink {
@@ -457,4 +457,9 @@ body .el-radio__inner, body .el-checkbox__inner {
     top: 11px;
     height: 15px;
   }
+}
+
+
+.el-message-box__wrapper {
+  z-index: 4000 !important;
 }

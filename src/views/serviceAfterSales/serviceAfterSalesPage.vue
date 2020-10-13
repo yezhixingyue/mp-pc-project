@@ -118,7 +118,7 @@ export default {
 .mp-pc-service-after-sales-page-wrap {
   width: 100%;
   // background-color: #fff;
-  margin-bottom: 25px;
+  margin-bottom: 17px;
   // min-height: calc(100vh - 135px - 45px);
   > section {
     width: 100%;

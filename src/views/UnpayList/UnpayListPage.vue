@@ -21,6 +21,9 @@ export default {
   computed: {
     ...mapState('unpayList', ['unpayDataList', 'unpayDataNumber']),
   },
+  mounted() {
+    this.$store.dispatch('unpayList/getUnpayList');
+  },
 };
 </script>
 

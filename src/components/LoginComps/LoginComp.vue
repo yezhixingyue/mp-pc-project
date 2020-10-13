@@ -74,6 +74,7 @@ export default {
       },
       isRemember: false,
       // msg: '123',
+      repath: '/placeOrder',
     };
   },
   computed: {
@@ -103,9 +104,13 @@ export default {
   },
   methods: {
     handleSuccessLogin(token, rememberPwd, pwd) {
+      this.$store.commit('Quotation/clearStateForNewCustomer');
+      this.$store.commit('common/clearStateForNewCustomer');
+      this.$store.commit('order/clearStateForNewCustomer');
+      this.$store.commit('shoppingCar/clearStateForNewCustomer');
+      this.$store.commit('summary/clearStateForNewCustomer');
+      this.$store.commit('unpayList/clearStateForNewCustomer');
       sessionStorage.setItem('token', token);
-      console.log(pwd);
-      // this.$router.push('/offer');
       if (rememberPwd) {
         const _obj2Keep = { ...this.ruleForm };
         _obj2Keep.Password = pwd;
@@ -114,7 +119,7 @@ export default {
       } else {
         localStorage.removeItem('info');
       }
-      this.$router.push('/placeOrder');
+      this.$router.push(`${this.repath}`);
     },
     handleFailLogin(status) {
       localStorage.removeItem('info');
@@ -178,6 +183,9 @@ export default {
           this.isRemember = true;
         }
       }
+    }
+    if (this.$route.query.redirect) {
+      this.repath = this.$route.query.redirect;
     }
   },
 };

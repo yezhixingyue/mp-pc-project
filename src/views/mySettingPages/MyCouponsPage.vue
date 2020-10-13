@@ -29,6 +29,7 @@
          :class="{
            'add-new': item.CouponCode === newCouponCode,
            'old': item.CouponCode !== newCouponCode && newCouponCode,
+           'disabled': curSelectedOption === 1 || curSelectedOption === 2,
            }">
           <div class="top">
             <p class="amount">
@@ -63,6 +64,14 @@
           <div class="will-out-time" v-if="item.WillBeExpired">
             <span class="iconfont icon-fengtiao is-pink"></span>
             <span class="text">即将过期</span>
+          </div>
+          <div class="disabled-status" v-if="curSelectedOption === 1">
+            <span class="iconfont icon-fengtiao"></span>
+            <span class="text">{{curStatusText}}</span>
+          </div>
+          <div class="disabled-status" v-if="curSelectedOption === 2">
+            <span class="iconfont icon-fengtiao"></span>
+            <span class="text">{{curStatusText}}</span>
           </div>
         </li>
       </ul>
@@ -493,7 +502,7 @@ export default {
             user-select: none;
           }
         }
-        > .will-out-time {
+        > .will-out-time, .disabled-status {
           width: 90px;
           height: 90px;
           position: absolute;
@@ -506,9 +515,18 @@ export default {
             display: block;
             position: absolute;
             top: 48px;
-            left: 25px;
+            left: 24px;
             transform: rotate(-45deg);
             color: #fff;
+          }
+        }
+        > .disabled-status {
+          > span.text {
+            top: 46px;
+            left: 33px
+          }
+          > span.iconfont {
+            color: rgb(203, 203, 203);
           }
         }
         &:hover {
@@ -526,6 +544,11 @@ export default {
         }
         &.old {
           animation: new-add-item-opacity 2s;
+        }
+        &.disabled {
+          > .top {
+            background-color: #cbcbcb;
+          }
         }
       }
     }

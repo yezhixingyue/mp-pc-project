@@ -248,9 +248,11 @@ export default {
         return;
       }
       const title = item ? '确定删除该订单吗' : '确定删除选中订单吗';
+      // eslint-disable-next-line max-len
+      const msg = item ? `订单产品：[ ${item.SecondLevelName} - ${item.ProductName} ]` : `[ 总共 ${this.multipleSelection.length} 条订单被选中 ]`;
       this.messageBox.warnCancelBox({
         title,
-        msg: `订单产品：[ ${item.ProductParams.Attributes.SecondLevelName} - ${item.ProductParams.Attributes.Name} ]`,
+        msg,
         successFunc: () => {
           const list = item ? [item] : this.multipleSelection;
           this.$store.dispatch('shoppingCar/getQuotationRemove', list);
@@ -264,8 +266,6 @@ export default {
   mounted() {
     this.$nextTick(() => this.setHeight());
     window.addEventListener('resize', this.setHeight);
-    this.$store.dispatch('shoppingCar/getQuotationList');
-    this.$store.dispatch('common/getExpressList');
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.setHeight);

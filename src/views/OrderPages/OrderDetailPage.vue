@@ -99,6 +99,7 @@ export default {
   },
   methods: {
     onReturnClick() {
+      this.$store.commit('order/setShouldGetNewListData', false);
       this.$router.replace('/order/list');
     },
     async handleSubmit() {

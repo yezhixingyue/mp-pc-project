@@ -42,10 +42,11 @@ export default {
 
 <style lang='scss'>
 .mp-pc-find-password-page-wrap {
-  height: 100%;
+  height: 100vh;
   width: 100%;
   padding-top: 80px;
   box-sizing: border-box;
+  min-height: 800px;
   > header {
     position: fixed;
     height: 80px;
@@ -90,6 +91,7 @@ export default {
     height: calc(100% - 144px);
     padding-top: 150px;
     box-sizing: border-box;
+    background-color: #fff;
   }
 }
 </style>

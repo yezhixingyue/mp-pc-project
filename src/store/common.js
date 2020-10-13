@@ -293,6 +293,14 @@ export default {
     setAddressList(state, data) {
       state.addressList = data;
     },
+    /* 注销及登录状态清理
+    -------------------------------*/
+    clearStateForNewCustomer(state) {
+      state.CraftRelationList = [];
+      state.customerInfo = null;
+      state.customerAccountList = [];
+      state.customerBalance = null;
+    },
   },
   actions: {
     async getCraftRelationList({ state, commit }) {

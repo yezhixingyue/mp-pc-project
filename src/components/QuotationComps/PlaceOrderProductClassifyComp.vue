@@ -13,46 +13,88 @@
         </li>
       </ul>
     </header>
-    <div
-      class="content"
-      :class="isOpen ? 'active' : ''"
-      @mouseenter="onMouseEnter(null)"
-      @mouseleave="onMouseLeave"
-    >
-      <ul v-if="curMenus">
-        <li v-for="item in curMenus.children" :key="item.ID" class="float">
-          <span class="title float">{{item.ClassName}} <i class="iconfont icon-iconfontyoujiantou"></i> </span>
-          <div class="products">
-            <el-link
-             v-for="sub in item.children"
-             :key="sub.ProductID"
-             @click="selectProduct(sub)"
-             :class="curProduct && curProduct.ProductID === sub.ProductID ? 'active' : ''"
-             >
-              <el-checkbox :value='sub.isCollected' @change="onCheckChange(sub)" v-show="curMenus.canCollect">
-              </el-checkbox>{{sub.ProductName}}</el-link>
-             <!-- :underline="false" -->
+    <!-- <transition name="el-fade-in-linear">
+      <section v-show="isOpen" class="transition-box">
+        <div
+          class="content"
+          @mouseenter="onMouseEnter(null)"
+          @mouseleave="onMouseLeave"
+        >
+          <ul v-if="curMenus" class="mp-scroll-wrap" :class="isOpen?'active':''">
+            <li v-for="item in curMenus.children" :key="item.ID" class="float">
+              <span class="title float">{{item.ClassName}} <i class="iconfont icon-iconfontyoujiantou"></i> </span>
+              <div class="products">
+                <el-link
+                v-for="sub in item.children"
+                :key="sub.ProductID"
+                @click="selectProduct(sub)"
+                :class="curProduct && curProduct.ProductID === sub.ProductID ? 'active' : ''"
+                >
+                  <el-checkbox :value='sub.isCollected' @change="onCheckChange(sub)" v-show="curMenus.canCollect">
+                  </el-checkbox>{{sub.ProductName}}</el-link>
+              </div>
+            </li>
+          </ul>
+          <div class="shortcut">
+            <p v-if="curMenus && !curMenus.canCollect">
+              <el-button type="primary" @click="setCanCollect">设置快捷方式</el-button>
+            </p>
+            <p v-else class="r">
+              <el-button type="primary" class="submit linear-bg-color" @click="onSubmit">保存</el-button>
+              <el-button @click="onCancel">取消</el-button>
+            </p>
           </div>
-        </li>
-      </ul>
-      <div class="shortcut">
-        <p v-if="curMenus && !curMenus.canCollect">
-          <el-button type="primary" @click="setCanCollect">设置快捷方式</el-button>
-        </p>
-        <p v-else class="r">
-          <el-button type="primary" class="submit linear-bg-color" @click="onSubmit">保存</el-button>
-          <el-button @click="onCancel">取消</el-button>
-        </p>
-      </div>
-    </div>
-    <ul class="shortcut-list float">
+        </div>
+      </section>
+    </transition> -->
+    <el-popover
+      placement="top"
+      width="100%"
+      transition="el-zoom-in-top"
+      popper-class='mp-classify-pop'
+      v-model="isOpen">
+      <div
+          class="content"
+          @mouseleave="onMouseLeave"
+          @mouseenter="onMouseEnter(null)"
+        >
+          <ul v-if="curMenus" class="mp-scroll-wrap" :class="isOpen?'active':''">
+            <li v-for="item in curMenus.children" :key="item.ID" class="float">
+              <span class="title float">{{item.ClassName}} <i class="iconfont icon-iconfontyoujiantou"></i> </span>
+              <div class="products">
+                <el-link
+                v-for="sub in item.children"
+                :key="sub.ProductID"
+                @click="selectProduct(sub)"
+                :class="curProduct && curProduct.ProductID === sub.ProductID ? 'active' : ''"
+                >
+                  <el-checkbox :value='sub.isCollected' @change="onCheckChange(sub)" v-show="curMenus.canCollect">
+                  </el-checkbox>{{sub.ProductName}}</el-link>
+              </div>
+            </li>
+          </ul>
+          <div class="shortcut">
+            <p v-if="curMenus && !curMenus.canCollect">
+              <el-button type="primary" @click="setCanCollect">设置快捷方式</el-button>
+            </p>
+            <p v-else class="r">
+              <el-button type="primary" class="submit linear-bg-color" @click="onSubmit">保存</el-button>
+              <el-button @click="onCancel">取消</el-button>
+            </p>
+          </div>
+        </div>
+    </el-popover>
+
+    <ul class="shortcut-list float" v-show="!isOpen">
       <li v-for="item in hasCollectList" :key="item.ID || item.ProductID" @click="onShortcutClick(item)">
         <el-link :underline="false"
          :class="curProduct && curProduct.ProductID === item.ID ? 'active' : ''"
          >{{item.Name || item.ProductName}}</el-link>
       </li>
     </ul>
-    <div class="mark" v-show="isOpen"></div>
+    <transition name="el-fade-in-linear">
+      <div  v-show="isOpen" class="mark transition-box"></div>
+    </transition>
   </section>
 </template>
 
@@ -64,6 +106,7 @@ export default {
     return {
       isOpen: false,
       timer: null,
+      timer2: null, // 进入时的定时器
       index: null,
       curProduct: null,
       hasCollectList: [],
@@ -118,7 +161,12 @@ export default {
   },
   methods: {
     onMouseEnter(i) {
-      if (!this.isOpen) this.isOpen = true;
+      if (!this.isOpen) {
+        this.timer2 = setTimeout(() => {
+          this.isOpen = true;
+          this.timer2 = null;
+        }, 140);
+      }
       if (this.timer) {
         clearTimeout(this.timer);
         this.timer = null;
@@ -129,6 +177,10 @@ export default {
       this.timer = setTimeout(() => {
         if (this.isOpen) this.isOpen = false;
       }, 50);
+      if (this.timer2) {
+        clearTimeout(this.timer2);
+        this.timer2 = null;
+      }
       //   if (this.isOpen) this.isOpen = false;
     },
     selectProduct(sub) {
@@ -224,20 +276,39 @@ export default {
         position: relative;
         color: #333;
         padding-right: 20px;
+        transition: 0.1s;
+        > span {
+          display: block;
+          width: 100%;
+          height: 100%;
+          user-select: none;
+          transition: 0.2s;
+        }
         &:last-of-type{
           padding-right: 0px;
         }
-        &.active {
-          color: #428dfa;
-          font-size: 16px;
-          &::after {
+        &::after {
             height: 3px;
             content: "";
             width: 80px;
             position: absolute;
             background-color: #428dfa;
             left: 0;
+            // left: 0;
             bottom: 0;
+            transition: 0.2s;
+            opacity: 0;
+
+          }
+        &.active {
+          color: #428dfa;
+          font-size: 16px;
+          > span {
+            background-color: rgba($color: #428dfa, $alpha: 0.1);
+          }
+          &::after {
+            width: 80px;
+            opacity: 1;
           }
         }
         &.selected {
@@ -252,88 +323,100 @@ export default {
       border-bottom: 1px dashed #eee;
     }
   }
-  > .content {
-    width: 100%;
-    margin: 0 auto;
-    min-height: 160px;
-    position: absolute;
-    background-color: #fff;
-    display: none;
-    z-index: 999;
-    &.active {
-      display: block;
-    }
-    > ul {
-      width: 1200px;
+  > section {
+    // z-index: 999;
+    // opacity: 1 !important;
+    > .content {
+      width: 100%;
       margin: 0 auto;
-      padding: 14px 0;
-      height: 100%;
-      max-height: 385px;
-      overflow-y: auto;
-      > li {
-        display: flex;
-        > .products {
-        //   float: left;
-          margin-left: 35px;
-          white-space: normal;
-          > .el-link {
-            color: #888;
-            margin: 10px 0;
-            margin-right: 25px;
-            &.active {
-              color: #428dfa;
-              font-weight: 600;
-            }
-            &:last-of-type {
-              margin-right: 0;
-            }
-            .el-link--inner {
-              font-size: 14px;
-              &:hover {
-                color: #428dfa;
-              }
-              > .el-checkbox {
-                margin-right: 6px;
-              }
-            }
-          }
-        }
-        > .title {
-          color: #444;
-          font-weight: 600;
-          font-size: 14px;
-          min-width: 4em;
-        //   float: left;
-          margin: 10px 0;
-          height: 100%;
-          flex: none;
-          > i {
-            font-size: 5px;
-            margin-left: 2px;
-            transform: scale(0.5);
-          }
-        }
-        line-height: 22px;
+      min-height: 160px;
+      position: absolute;
+      background-color: #fff;
+      display: block;
+      z-index: 999;
+      transition: 0.2s;
+      box-shadow: 0 5px 12px 0 rgba(0,0,0,.1);
+      &.active {
+        display: block;
       }
-    }
-    > div {
-      width: 1200px;
-      margin: 0 auto;
-      margin-top: 25px;
-      text-align: center;
-      margin-bottom: 18px;
-      display: block;
-      > p {
-        > button {
-          width: 130px;
-          &.submit {
-            margin-right: 30px;
-            transition: 0.1s;
-          }
+      > ul {
+        width: 1200px;
+        margin: 0 auto;
+        padding: 14px 0;
+        height: 100%;
+        height: 280px;
+        overflow-y: auto;
+        transition: 0.2s;
+        &.active {
+          height: 280px;
         }
-        &.r {
-          text-align: right;
-          padding-right: 80px;
+        > li {
+          display: flex;
+          > .products {
+          //   float: left;
+            margin-left: 35px;
+            white-space: normal;
+            > .el-link {
+              color: #888;
+              margin: 10px 0;
+              margin-right: 25px;
+              transition: 0.2s;
+              &.active {
+                color: #428dfa;
+                font-weight: 600;
+              }
+              &:last-of-type {
+                margin-right: 0;
+              }
+              .el-link--inner {
+                font-size: 13px;
+                transition: 0.2s;
+                &:hover {
+                  color: #428dfa;
+                }
+                > .el-checkbox {
+                  margin-right: 6px;
+                }
+              }
+            }
+          }
+          > .title {
+            color: #444;
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 4em;
+          //   float: left;
+            margin: 10px 0;
+            height: 100%;
+            flex: none;
+            > i {
+              font-size: 5px;
+              margin-left: 2px;
+              transform: scale(0.5);
+            }
+          }
+          line-height: 22px;
+        }
+      }
+      > div {
+        width: 1200px;
+        margin: 0 auto;
+        margin-top: 25px;
+        text-align: center;
+        margin-bottom: 18px;
+        display: block;
+        > p {
+          > button {
+            width: 130px;
+            &.submit {
+              margin-right: 30px;
+              transition: 0.1s;
+            }
+          }
+          &.r {
+            text-align: right;
+            padding-right: 80px;
+          }
         }
       }
     }
@@ -344,7 +427,7 @@ export default {
     top: 0;
     right: 0;
     left: 0;
-    background-color: rgba(0,0,0, 0.6);
+    background-color: rgba(0,0,0, 0.4);
     z-index: 888;
   }
   > .shortcut-list {
@@ -361,6 +444,107 @@ export default {
         color: #888;
         &.active {
           color: #428dfa;
+        }
+      }
+    }
+  }
+  .mp-classify-pop {
+    width: 100vw;
+    left: 0;
+    padding: 0;
+    top: 69px;
+    box-shadow: none;
+    > .content {
+      width: 100%;
+      margin: 0 auto;
+      min-height: 160px;
+      position: absolute;
+      background-color: #fff;
+      display: block;
+      z-index: 999;
+      transition: 0.2s;
+      box-shadow: 0 5px 12px 0 rgba(66,141,250,.1);
+      &.active {
+        display: block;
+      }
+      > ul {
+        width: 1200px;
+        margin: 0 auto;
+        padding: 14px 0;
+        height: 100%;
+        height: 280px;
+        overflow-y: auto;
+        transition: 0.2s;
+        &.active {
+          height: 280px;
+        }
+        > li {
+          display: flex;
+          > .products {
+          //   float: left;
+            margin-left: 35px;
+            white-space: normal;
+            > .el-link {
+              color: #888;
+              margin: 10px 0;
+              margin-right: 25px;
+              transition: 0.2s;
+              &.active {
+                color: #428dfa;
+                font-weight: 600;
+              }
+              &:last-of-type {
+                margin-right: 0;
+              }
+              .el-link--inner {
+                font-size: 13px;
+                transition: 0.2s;
+                &:hover {
+                  color: #428dfa;
+                }
+                > .el-checkbox {
+                  margin-right: 6px;
+                }
+              }
+            }
+          }
+          > .title {
+            color: #444;
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 4em;
+          //   float: left;
+            margin: 10px 0;
+            height: 100%;
+            flex: none;
+            > i {
+              font-size: 5px;
+              margin-left: 2px;
+              transform: scale(0.5);
+            }
+          }
+          line-height: 22px;
+        }
+      }
+      > div {
+        width: 1200px;
+        margin: 0 auto;
+        margin-top: 25px;
+        text-align: center;
+        margin-bottom: 18px;
+        display: block;
+        > p {
+          > button {
+            width: 130px;
+            &.submit {
+              margin-right: 30px;
+              transition: 0.1s;
+            }
+          }
+          &.r {
+            text-align: right;
+            padding-right: 80px;
+          }
         }
       }
     }

@@ -32,8 +32,9 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
-html,body, #app{
+html,body {
 	height: 100%;
+	overflow: auto;
 }
 body {
 	line-height: 1;

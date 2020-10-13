@@ -9,15 +9,11 @@ let closeTip = false;
 axios.interceptors.request.use(
   (config) => {
     const curConfig = config;
-    // console.log(curConfig);
     const token = sessionStorage.getItem('token');
     closeTip = curConfig.closeTip;
-    // console.log(closeTip);
     const url = curConfig.url.split('?')[0];
     const arrWithOutToken = ['/Api/Customer/Reg', '/Api/Customer/Login'];
-    // console.log(curConfig, `Bearer ${token}`);
     if (token && !arrWithOutToken.includes(url)) curConfig.headers.common.Authorization = `Bearer ${token}`;
-    // console.log(curConfig);
     let key = true;
     const arr = ['/Api/Order/Create', '/Api/PaymentOrder/PayResult']; // 不需要展示loading的api地址
     for (let i = 0; i < arr.length; i += 1) {
@@ -51,12 +47,26 @@ axios.interceptors.response.use(
     // 包含以上的状态码 或 以上的请求路径  不会弹窗报错  其余以外都会报错出来
 
     const _url = response.config.url.split('?')[0];
-    console.log(response.data.Status);
+    if ([7025, 8037].includes(response.data.Status)) {
+      Message({
+        showClose: true,
+        message: `${response.data.Message}`,
+        type: 'error',
+      });
+      router.replace('/login');
+      sessionStorage.removeItem('token');
+      return response;
     // eslint-disable-next-line max-len
-    if ((!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && (!closeTip)) || [7025, 8037].includes(response.data.Status)) {
+    } if ((!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && (!closeTip)) || [7025, 8037].includes(response.data.Status)) {
       const _obj = { msg: `[ ${response.data.Message} ]` };
-      if ([7025, 8037].includes(response.data.Status)) _obj.successFunc = () => router.replace('/login');
-      else _obj.successFunc = undefined;
+      if ([7025, 8037].includes(response.data.Status)) {
+        _obj.successFunc = () => {
+          router.replace('/login');
+          sessionStorage.removeItem('token');
+        };
+      } else {
+        _obj.successFunc = undefined;
+      }
       let _msg = '出错啦';
       if (_url === '/Api/Customer/Login') _msg = '登录失败';
       if (_url === '/Api/Customer/Reg') _msg = '注册失败';
@@ -84,7 +94,20 @@ axios.interceptors.response.use(
         let buffterErr = '文件导出数据过大，请缩小导出时间区间或精确筛选条件';
         switch (error.response.status) {
           case 401:
-            messageBox.failSingleError({ msg: '[ 错误 401：请重新登录! ]', successFunc: () => router.replace('/login') });
+            // messageBox.failSingleError({
+            //   msg: '[ 错误 401：请重新登录! ]',
+            //   successFunc: () => {
+            //     router.replace('/login');
+            //     sessionStorage.removeItem('token');
+            //   },
+            // });
+            Message({
+              showClose: true,
+              message: '请重新登录!',
+              type: 'error',
+            });
+            router.replace('/login');
+            sessionStorage.removeItem('token');
             key = true;
             break;
           case 413: // 处理文件导出错误

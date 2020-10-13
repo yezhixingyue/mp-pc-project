@@ -66,6 +66,34 @@ export default {
     // setDate4ConditionDate(state, key) {
     //   ClassType.setDate(state[key]);
     // },
+    /* 注销及登录状态清理
+    -------------------------------*/
+    clearStateForNewCustomer(state) {
+      state.FundBillList = [];
+      state.FundBillListNumber = 0;
+      state.condition4FundBillList = {
+        Date: {
+          First: '',
+          Second: '',
+        },
+        DateType: 'today',
+        Page: 1,
+        PageSize: 20,
+        Type: '',
+      };
+      state.ServiceAfterSaleList = [];
+      state.ServiceAfterSaleListNumber = 0;
+      state.condition4ServiceAfterSaleList = {
+        Date: {
+          First: '',
+          Second: '',
+        },
+        DateType: 'today',
+        Page: 1,
+        PageSize: 20,
+        FieldType: 3,
+      };
+    },
   },
   actions: {
     /** 账单页面相关

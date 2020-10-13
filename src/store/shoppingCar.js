@@ -74,6 +74,15 @@ export default {
       state.shoppingDataList = _list.filter(it => it.FileErrorMessage !== '订单已提交');
       state.shoppingDataNumber = state.shoppingDataList.length;
     },
+    /* 注销及登录状态清理
+    -------------------------------*/
+    clearStateForNewCustomer(state) {
+      state.shoppingDataList = [];
+      state.shoppingDataNumber = 0;
+      state.curShoppingCarDetailData = null;
+      state.curShoppingCarDataBeforeFirstPlace = null;
+      state.curShoppingCarData4FirstPlace = null;
+    },
   },
   actions: {
     /** 获取购物车信息列表

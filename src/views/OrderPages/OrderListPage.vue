@@ -115,6 +115,9 @@ export default {
   mounted() {
     this.$store.dispatch('order/getOrderList');
   },
+  beforeDestroy() {
+    this.$store.commit('order/setShouldGetNewListData', true);
+  },
 };
 </script>
 

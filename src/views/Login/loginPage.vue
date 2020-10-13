@@ -56,9 +56,10 @@ export default {
 
 <style lang='scss'>
 .mp-pc-login-page-wrap {
-  height: 100%;
+  height: 100vh;
   width: 100%;
-  overflow: hidden;
+  min-height: 660px;
+  overflow: auto;
   // padding-top: 25px;
   box-sizing: border-box;
   background: url('../../assets/images/login-bg.png') no-repeat center center/cover;

@@ -7,21 +7,30 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    redirect: '/login',
+    name: 'home',
+    redirect: '/placeOrder',
   },
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-  },
+  // {
+  //   path: '/about',
+  //   name: 'About',
+  //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+  // },
   {
     path: '/login',
     name: 'login',
+    meta: {
+      y: 0,
+      title: '注册登录 - 郑州名片之家电子商务有限公司',
+    },
     component: () => import('../views/Login/loginPage.vue'),
   },
   {
     path: '/findPassword',
     name: 'FindPassword',
+    meta: {
+      y: 0,
+      title: '找回密码 - 郑州名片之家电子商务有限公司',
+    },
     component: () => import('../views/Login/FindPasswordPage.vue'),
   },
   {
@@ -35,7 +44,8 @@ const routes = [
         name: 'placeOrder',
         meta: {
           requiresAuth: true,
-          title: '名片之家 - 下单',
+          y: 0,
+          title: '报价下单 - 郑州名片之家电子商务有限公司',
         },
         component: () => import('../views/PlaceOrder/PlaceOrderPage.vue'),
       },
@@ -44,7 +54,8 @@ const routes = [
         name: 'OrderPreCreate',
         meta: {
           requiresAuth: true,
-          title: '名片之家 - 下单',
+          y: 0,
+          title: '订单提交 - 郑州名片之家电子商务有限公司',
         },
         component: () => import('../views/PlaceOrder/OrderPreCreatePage.vue'),
       },
@@ -59,7 +70,8 @@ const routes = [
             name: 'shoppingCar',
             meta: {
               requiresAuth: true,
-              title: '名片之家 - 购物车',
+              y: 0,
+              title: '我的购物车 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/ShoppingCar/ShoppingCarPage.vue'),
           },
@@ -68,7 +80,8 @@ const routes = [
             name: 'shoppingCarDetail',
             meta: {
               requiresAuth: true,
-              title: '名片之家 - 购物车产品详情',
+              y: 0,
+              title: '购物车产品详情 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/ShoppingCar/ShoppingCarDetailPage.vue'),
           },
@@ -77,7 +90,8 @@ const routes = [
             name: 'shoppingCar/submit',
             meta: {
               requiresAuth: true,
-              title: '名片之家 - 购物车订单提交',
+              y: 0,
+              title: '购物车订单提交 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/ShoppingCar/ShoppingCarSubmitPage.vue'),
           },
@@ -90,7 +104,8 @@ const routes = [
         redirect: '/order/list',
         meta: {
           requiresAuth: true,
-          title: '名片之家 - 我的订单',
+          y: 0,
+          title: '我的订单 - 郑州名片之家电子商务有限公司',
         },
         children: [
           {
@@ -98,7 +113,9 @@ const routes = [
             name: 'orderList',
             meta: {
               requiresAuth: true,
-              title: '名片之家 - 我的订单列表',
+              y: 0,
+              title: '我的订单列表 - 郑州名片之家电子商务有限公司',
+              // record: true, // 是否记录滚动位置
             },
             component: () => import('../views/OrderPages/OrderListPage.vue'),
           },
@@ -107,7 +124,8 @@ const routes = [
             name: 'orderDetail',
             meta: {
               requiresAuth: true,
-              title: '名片之家 - 我的订单详情',
+              y: 0,
+              title: '我的订单详情 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/OrderPages/OrderDetailPage.vue'),
           },
@@ -120,7 +138,8 @@ const routes = [
         redirect: '/unpay/list',
         meta: {
           requiresAuth: true,
-          title: '名片之家 - 未付款单',
+          y: 0,
+          title: '未付款单 - 郑州名片之家电子商务有限公司',
         },
         children: [
           {
@@ -128,7 +147,8 @@ const routes = [
             name: 'unpayList',
             meta: {
               requiresAuth: true,
-              title: '名片之家 - 未付款单',
+              y: 0,
+              title: '未付款单 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/UnpayList/UnpayListPage.vue'),
           },
@@ -137,7 +157,8 @@ const routes = [
           //   name: 'orderDetail',
           //   meta: {
           //     requiresAuth: true,
-          //     title: '名片之家 - 未付款单详情',
+          //     y: 0,
+          //     title: '未付款单详情',
           //   },
           //   component: () => import('../views/OrderPages/OrderDetailPage.vue'),
           // },
@@ -146,7 +167,8 @@ const routes = [
             name: 'unpayOrderDetail',
             meta: {
               requiresAuth: true,
-              title: '名片之家 - 购物车产品详情',
+              y: 0,
+              title: '购物车产品详情 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/UnpayList/UnpayOrderDetailPage.vue'),
           },
@@ -155,7 +177,8 @@ const routes = [
             name: 'unpayOrderSubmit',
             meta: {
               requiresAuth: true,
-              title: '名片之家 - 购物车订单提交',
+              y: 0,
+              title: '购物车订单提交 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/UnpayList/UnpayOrderSubmitPage.vue'),
           },
@@ -166,7 +189,8 @@ const routes = [
         name: 'serviceAfterSales',
         meta: {
           requiresAuth: true,
-          title: '名片之家 - 账单',
+          y: 0,
+          title: '售后单列表 - 郑州名片之家电子商务有限公司',
         },
         component: () => import('../views/serviceAfterSales/serviceAfterSalesPage.vue'),
       },
@@ -175,7 +199,8 @@ const routes = [
         name: 'bill',
         meta: {
           requiresAuth: true,
-          title: '名片之家 - 账单',
+          y: 0,
+          title: '我的账单 - 郑州名片之家电子商务有限公司',
         },
         component: () => import('../views/Bill/BillPage.vue'),
       },
@@ -190,7 +215,8 @@ const routes = [
             name: 'mySettingAccount',
             meta: {
               requiresAuth: true,
-              title: '账户信息',
+              y: 0,
+              title: '账户信息 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/mySettingPages/AccountPage.vue'),
           },
@@ -199,7 +225,8 @@ const routes = [
             name: 'mySettingAddress',
             meta: {
               requiresAuth: true,
-              title: '收货地址',
+              y: 0,
+              title: '收货地址 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/mySettingPages/AddressPage.vue'),
           },
@@ -208,7 +235,8 @@ const routes = [
             name: 'mySettingCouponCenter',
             meta: {
               requiresAuth: true,
-              title: '领券中心',
+              y: 0,
+              title: '领券中心 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/mySettingPages/CouponCenterPage.vue'),
           },
@@ -217,7 +245,8 @@ const routes = [
             name: 'mySettingMyCoupons',
             meta: {
               requiresAuth: true,
-              title: '我的优惠券',
+              y: 0,
+              title: '我的优惠券 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/mySettingPages/MyCouponsPage.vue'),
           },
@@ -226,7 +255,8 @@ const routes = [
             name: 'subAccountManage',
             meta: {
               requiresAuth: true,
-              title: '子账号管理',
+              y: 0,
+              title: '子账号管理 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/mySettingPages/SubAccountManagePage.vue'),
           },
@@ -235,7 +265,8 @@ const routes = [
             name: 'mySettingChangePwd',
             meta: {
               requiresAuth: true,
-              title: '修改密码',
+              y: 0,
+              title: '修改密码 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/mySettingPages/ChangePwdPage.vue'),
           },
@@ -244,7 +275,8 @@ const routes = [
             name: 'mySettingChangeMobile',
             meta: {
               requiresAuth: true,
-              title: '修改手机号',
+              y: 0,
+              title: '修改手机号 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/mySettingPages/ChangeMobilePage.vue'),
           },
@@ -252,12 +284,80 @@ const routes = [
       },
     ],
   },
+  {
+    path: '/NotFind',
+    name: 'NotFind',
+    meta: {
+      title: '未找到页面',
+    },
+    component: () => import('../views/Sys/NotFind.vue'),
+  },
 ];
 
 const router = new VueRouter({
   mode: 'hash',
   base: process.env.BASE_URL,
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    console.log(to, savedPosition);
+    if (savedPosition) {
+      return savedPosition;
+    }
+    if (to.hash) {
+      return { selector: to.hash };
+    }
+    return { x: 0, y: 100 };
+  },
 });
+
+router.beforeEach(async (to, from, next) => {
+  const _auth = sessionStorage.getItem('token');
+  if (to.meta.title) {
+    document.title = to.meta.title;
+  }
+  if (from.name === 'orderList') {
+    // eslint-disable-next-line no-param-reassign
+    from.meta.y = document.body.scrollTop;
+  }
+  // 判断该路由是否需要登录权限
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (to.name === 'login') {
+      next();
+    } else if (_auth) {
+      next();
+    } else {
+      next({
+        path: '/login',
+        query: { redirect: to.path },
+      });
+    }
+  } else {
+    next();
+  }
+});
+
+router.afterEach((to, from) => {
+  if (from.name === 'orderDetail' && to.name === 'orderList') {
+    setTimeout(() => {
+      document.body.scrollTop = to.meta.y;
+    }, 0);
+    return;
+  }
+  const bodySrcollTop = document.body.scrollTop;
+  if (bodySrcollTop !== 0) {
+    document.body.scrollTop = 0;
+    return;
+  }
+  const docSrcollTop = document.documentElement.scrollTop;
+  if (docSrcollTop !== 0) {
+    document.documentElement.scrollTop = 0;
+  }
+});
+
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject);
+  return originalPush.call(this, location).catch(err => err);
+};
 
 export default router;

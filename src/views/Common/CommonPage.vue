@@ -11,7 +11,7 @@
         <div class="contact-us-wrap" @click="handleDrawerOpen">
           <i class="iconfont icon-dianhua1"></i>
         </div>
-        <el-backtop target="#app" :visibility-height='50'>
+        <el-backtop target="body" :visibility-height='50'>
           <i class="iconfont icon-xiangshang"></i>
         </el-backtop>
       </div>
@@ -172,6 +172,7 @@ export default {
         text-align: center;
         border: 1px solid #fff;
         transition: 0.2s;
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,.15);
         // box-sizing: border-box;
         > i {
           font-size: 22px;
@@ -193,6 +194,13 @@ export default {
     @media screen and (max-width:1350px){
       > .back-wrapper {
         width: calc(100vw - 150px);
+      }
+    }
+    @media screen and (max-width:1200px){
+      > .back-wrapper {
+        // width: calc(100vw);
+        left: unset;
+        right: 120px;
       }
     }
     > .el-drawer__wrapper {

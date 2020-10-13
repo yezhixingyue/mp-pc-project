@@ -186,7 +186,6 @@ export default {
   mounted() {
     this.$nextTick(() => this.setHeight());
     window.addEventListener('resize', this.setHeight);
-    this.$store.dispatch('unpayList/getUnpayList');
     // this.$store.dispatch('common/getExpressList');
   },
   beforeDestroy() {

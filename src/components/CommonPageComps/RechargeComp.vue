@@ -302,8 +302,8 @@ export default {
           }
         }
         > .el-image {
-          width: 245px;
-          height: 245px;
+          width: 230px;
+          height: 230px;
         }
         > p {
           position: absolute;

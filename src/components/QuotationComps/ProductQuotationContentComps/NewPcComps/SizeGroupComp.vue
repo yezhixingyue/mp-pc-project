@@ -19,7 +19,7 @@
         v-model="inpValue"
         :defaultProps="{ text: 'SizeName', value: 'SizeID' }"
       />
-      <ul class="size-inp-wrap" v-else-if="AllowCustomSize">
+      <ul class="size-inp-wrap" v-if="AllowCustomSize && !(!isSelectedInp && SizePropertyList.length > 0)">
         <template v-for="(it, i) in SizeGroup.PropertyList">
           <size-group-single-input-comp
             :key="it.PropertyID"
@@ -137,6 +137,7 @@ export default {
       isSelectedInp: false,
       sizeInputValueList: [],
       curSelectedSize: '',
+      initSizePropertyListLen: 0,
     };
   },
   computed: {
@@ -222,6 +223,7 @@ export default {
       }
     },
     init() {
+      this.initSizePropertyListLen = this.SizePropertyList.length;
       if (this.SizePropertyList.length > 0) {
         this.sizeInputValueList = this.SizePropertyList;
         if (this.value === '') this.isSelectedInp = true;

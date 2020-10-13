@@ -33,9 +33,7 @@ export default {
     curProductInfo2Quotation: null,
     /* 获取产品报价请求信息
     -------------------------------*/
-    obj2GetProductPrice: {
-      ProductParams: {},
-    },
+    obj2GetProductPrice: { ProductParams: {} },
     /* 获取产品报价结果信息
     -------------------------------*/
     ProductQuotationResult: null,
@@ -804,7 +802,7 @@ export default {
     /* 设置订单付款成功后的状态
     -------------------------------*/
     setPaySuccessOrderDataStatus(state) {
-      console.log(state, '设置订单付款成功后的状态,清除一些数据的状态值');
+      // '设置订单付款成功后的状态,清除一些数据的状态值');
       state.PreCreateData = null;
       state.orderFile4PreCreateData = null;
       state.curProductID = '';
@@ -844,6 +842,31 @@ export default {
     -------------------------------*/
     setCustomerShortCutList(state, data) {
       state.customerShortCutList = data;
+    },
+    /* 注销及登录状态清理
+    -------------------------------*/
+    clearStateForNewCustomer(state) {
+      state.isShowClassifyDia = false;
+      state.curProductID = '';
+      state.curProductName = '';
+      state.curProductClass = null;
+      state.curProductInfo2Quotation = null;
+      state.obj2GetProductPrice = { ProductParams: {} };
+      state.ProductQuotationResult = null;
+      state.ProductQuotationDetail = null;
+      state.watchTarget2DelCraft = 0;
+      state.addressInfo4PlaceOrder = null;
+      state.selectedCoupon = null;
+      state.curSelectStatus = '报价';
+      state.curFileContent = '';
+      state.PreCreateData = null;
+      state.orderFile4PreCreateData = null;
+      state.curPayInfo2Code = null;
+      state.curReqObj4PreCreate = null;
+      state.isShow2PayDialog = false;
+      state.isFullPayoutDisabled = false;
+      state.initPageText = '';
+      state.customerShortCutList = [];
     },
   },
   actions: {

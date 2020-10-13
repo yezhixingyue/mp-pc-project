@@ -32,6 +32,9 @@ export default {
     /** 当前订单详情数据
     ---------------------------------------- */
     curOrderDetailData: null,
+    /** 是否重新获取当前订单列表数据 (从详情返回不需要)
+    ---------------------------------------- */
+    shouldGetNewListData: true,
   },
   getters: {
     /** 合包后的订单列表信息
@@ -97,11 +100,42 @@ export default {
       _t.Status = 254;
       // state.OrderList = state.OrderList.filter(it => it.OrderID !== OrderID);
     },
+    /** 是否重新获取当前订单列表数据 (从详情返回不需要)
+    ---------------------------------------- */
+    setShouldGetNewListData(state, bool) {
+      state.shouldGetNewListData = bool;
+    },
+    /* 注销及登录状态清理
+    -------------------------------*/
+    clearStateForNewCustomer(state) {
+      state.OrderList = [];
+      state.OrderListNumber = 0;
+      state.condition4OrderList = {
+        Date: {
+          First: '',
+          Second: '',
+        },
+        DateType: 'today',
+        ProductClass: {
+          First: '',
+          Second: '',
+        },
+        ProductID: '',
+        Page: 1,
+        PageSize: 20,
+        Status: '',
+        KeyWords: '',
+        FieldType: 3,
+      };
+      state.curOrderDetailData = null;
+      state.shouldGetNewListData = true;
+    },
   },
   actions: {
     /** 获取订单列表数据
     ---------------------------------------- */
     async getOrderList({ state, commit }, page = 1) {
+      if (!state.shouldGetNewListData) return;
       commit('setCondition4OrderList', [['Page', ''], page]);
       commit('setOrderList', [[], undefined]);
       commit('setDate4ConditionDate', 'condition4OrderList');

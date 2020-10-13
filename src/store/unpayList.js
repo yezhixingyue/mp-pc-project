@@ -84,6 +84,15 @@ export default {
       state.unpayDataList = _list.filter(it => it.Status === 10);
       state.unpayDataNumber = state.unpayDataList.length;
     },
+    /* 注销及登录状态清理
+    -------------------------------*/
+    clearStateForNewCustomer(state) {
+      state.unpayDataList = [];
+      state.unpayDataNumber = 0;
+      state.curUnpayListDetailData = null;
+      state.curUnpayListDataBeforeFirstPlace = null;
+      state.curUnpayListData4FirstPlace = null;
+    },
   },
   actions: {
     /** 获取未付款单信息列表
