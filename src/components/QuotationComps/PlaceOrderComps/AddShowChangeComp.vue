@@ -17,9 +17,11 @@
           <div  class="express-box">
             <span class="title">配送：</span>
             <el-radio-group v-model="Express.First" @change='onRadioChange'>
-              <el-radio :label="1">名片之家</el-radio>
-              <el-radio :label="3">
-                <el-select v-model="secondExValFor3" @visible-change='onVisibleChangeFor3'>
+              <el-radio :label="1" :disabled='radioDisabled.f'>
+                <span :class="radioDisabled.f?'is-cancel':''">名片之家</span>
+              </el-radio>
+              <el-radio :label="3" :disabled='radioDisabled.s'>
+                <el-select v-model="secondExValFor3" @visible-change='onVisibleChangeFor3' :disabled='radioDisabled.s'>
                   <el-option
                     v-for="item in secondExpressList"
                     :key="item.ID"
@@ -28,8 +30,8 @@
                   </el-option>
                 </el-select>
               </el-radio>
-              <el-radio :label="2">
-                <el-select v-model="thirdExValFor2" @visible-change='onVisibleChangeFor2'>
+              <el-radio :label="2" :disabled='radioDisabled.t'>
+                <el-select v-model="thirdExValFor2" @visible-change='onVisibleChangeFor2' :disabled='radioDisabled.t'>
                   <el-option
                     v-for="item in thirdExpressList"
                     :key="item.ID"
@@ -112,7 +114,8 @@
                   </div>
                   <div class="add-2">
                     <el-form-item prop="AddressDetail">
-                    <el-input v-model.trim="newAdd.AddressDetail" placeholder="详细地址 (不包含省市区)"></el-input>
+                    <el-input v-model.trim="newAdd.AddressDetail"
+                     @change="handleDetailChange" placeholder="详细地址 (不包含省市区)"></el-input>
                     </el-form-item>
                     <!-- <el-button type="primary" :disabled='!newAdd.AddressDetail || !newAdd.ExpressArea.CountyID'
                     >地图定位</el-button> -->
@@ -146,16 +149,22 @@
       </el-dialog> -->
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSubmit('ruleForm')">确定</el-button>
-        <el-button @click="outerVisible = false">取消</el-button>
+        <el-button @click="handleCancel">取消</el-button>
       </div>
     </el-dialog>
+    <AddMapComp openType='tempAdd' :curEditInfo='newAdd' v-if="showMap" ref="mapComp"
+      @changeProps='changeProps' @changeStatus='changeDiaStatus' :visible='diaVisible'/>
   </section>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import AddMapComp from '@/components/MySettingComps/AddMapComp.vue';
 
 export default {
+  components: {
+    AddMapComp,
+  },
   data() {
     const validateMobile = (rule, value, callback) => {
       if (this.validateCheck(value, this.defineRules.Mobile, callback)) callback();
@@ -182,7 +191,9 @@ export default {
         Second: 1,
       },
       outerVisible: false, // 修改地址
-      innerVisible: false, // 地图定位
+      diaVisible: false, // 地图定位
+      callbackForLasted: null, // 最终加入购物车 或 下单时如果没有定位补充定位时的回调函数 -- 只在此处使用 其它地方不用
+      showMap: true,
       newAdd: {
         Consignee: '',
         Mobile: '',
@@ -201,12 +212,14 @@ export default {
         Longitude: '',
         CustomerID: '',
         isSaved: false,
+        isSelected: true,
       },
       selectdAddress: '', //  new | 地址数组索引号
       RegionalList: [],
       CityList: [],
       CountyList: [],
       addRadio: '',
+      ExpressValidList: [1, 2, 3], // 当前可用物流方式
       rules: {
         Consignee: [
           { required: true, message: '请输入收货人姓名', trigger: 'blur' },
@@ -300,21 +313,31 @@ export default {
         this.newAdd.Mobile = newVal.replace(/[^\d.]/g, '');
       },
     },
+    radioDisabled() {
+      return {
+        f: !this.ExpressValidList.includes(1), // 名片之家
+        s: !this.ExpressValidList.includes(3), // 快递
+        t: !this.ExpressValidList.includes(2), // 物流
+      };
+    },
   },
   methods: {
     onVisibleChangeFor2(bool) {
-      if (!bool) return;
+      if (!bool || this.radioDisabled.t) return;
       if (this.Express.First === 2 && this.Express.Second === this.thirdExVal) return;
       this.Express.First = 2;
       this.Express.Second = this.thirdExVal;
       this.setInfo4ReqObj();
     },
     onVisibleChangeFor3(bool) {
-      if (!bool) return;
+      if (!bool || this.radioDisabled.s) return;
       if (this.Express.First === 3 && this.Express.Second === this.secondExVal) return;
       this.Express.First = 3;
       this.Express.Second = this.secondExVal;
       this.setInfo4ReqObj();
+    },
+    changeDiaStatus(bool) {
+      this.diaVisible = bool;
     },
     onRadioChange(num) {
       switch (num) {
@@ -330,7 +353,29 @@ export default {
         default:
           break;
       }
+      if (this.Express.First !== num) this.Express.First = num;
       this.setInfo4ReqObj();
+    },
+    async changeProps({ Latitude, Longitude }) {
+      this.newAdd.Latitude = Latitude;
+      this.newAdd.Longitude = Longitude;
+      this.newAdd.HavePosition = true;
+      this.setInfo4ReqObj();
+      // const res = this.setInfo4ReqObj();
+      // if (this.callbackForLasted && res) {
+      //   this.callbackForLasted();
+      //   this.callbackForLasted = null;
+      // }
+      const resp = await this.api.getExpressValidList(this.newAdd);
+      if (resp.data.Status === 1000) {
+        this.ExpressValidList = resp.data.Data;
+        if (this.ExpressValidList.length === 0) {
+          this.messageBox.failSingleError({
+            title: '地址添加失败',
+            msg: '当前地址没有可用配送方式，请更换地址',
+          });
+        }
+      }
     },
     setInfo4ReqObj() {
       const _temp = {};
@@ -343,6 +388,7 @@ export default {
       _temp.OutPlate = OutPlate;
       console.log('_temp', _temp.Address.Express.First, _temp.Address.Express.Second);
       this.$store.commit('Quotation/setAddressInfo4PlaceOrder', JSON.parse(JSON.stringify(_temp)));
+      return true;
     },
     async handleChangeAdd() {
       this.addRadio = this.selectdAddress;
@@ -363,6 +409,7 @@ export default {
       this.newAdd.ExpressArea.CountyName = '';
       this.CityList = [];
       this.CountyList = [];
+      this.newAdd.HavePosition = false;
 
       if (this.CityList.length === 0 || this.CityList[0].ParentID !== e) {
         const res = await this.api.getAddressIDList(e);
@@ -377,6 +424,7 @@ export default {
       this.newAdd.ExpressArea.CountyID = '';
       this.newAdd.ExpressArea.CountyName = '';
       this.CountyList = [];
+      this.newAdd.HavePosition = false;
 
       if (this.CountyList.length === 0 || this.CountyList[0].ParentID !== e) {
         const res = await this.api.getAddressIDList(e);
@@ -386,25 +434,39 @@ export default {
       }
     },
     handleCountyChange(e) {
-      console.log(e);
+      // console.log(e);
+      this.newAdd.HavePosition = false;
       const _t = this.CountyList.find(it => it.ID === e);
       this.newAdd.ExpressArea.CountyName = _t.Name;
     },
+    handleDetailChange() {
+      this.newAdd.HavePosition = false;
+    },
     handleSubmit(formName) {
-      console.log(this.addRadio);
       if (this.addRadio === 'new') {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.newAdd.isSaved = true;
             this.selectdAddress = this.addRadio;
             this.outerVisible = false;
-            if (!this.newAdd.HavePosition) console.log('应弹窗选择');
+            this.changeDiaStatus(true);
+            // this.handleSetPositionOnMap();
           }
         });
       } else {
         this.selectdAddress = this.addRadio;
         this.outerVisible = false;
       }
+    },
+    handleSetPositionOnMap(callback) { // 方法作废
+      console.log(this.newAdd.HavePosition);
+      if (this.addRadio === 'new') {
+        this.changeDiaStatus(true);
+        if (callback) this.callbackForLasted = callback;
+      } else if (callback) callback();
+    },
+    handleCancel() {
+      this.outerVisible = false;
     },
     getAddressInfoDetail(item) {
       if (!item) return '';
@@ -420,10 +482,32 @@ export default {
     },
     newAdd: {
       handler() {
-        // console.log(21321321, this.addRadio);
         if (this.addRadio !== 'new') this.addRadio = 'new';
       },
       deep: true,
+    },
+    ExpressValidList(newVal) {
+      if (newVal.length === 3) return;
+      if (newVal.length === 0) {
+        this.messageBox.failSingleError({
+          title: '地址匹配失败',
+          msg: '当前地址没有可用配送方式，请更换地址',
+        });
+      }
+      if (newVal.length > 0 && newVal.length < 3) {
+        if (newVal.includes(this.Express.First)) return;
+        const _t = newVal[0];
+        this.onRadioChange(_t);
+      }
+    },
+    async selectdAddress(newVal) {
+      if (newVal === 'new') return;
+      const _t = this.customerInfo.Address.find((it, i) => i === this.selectdAddress);
+      if (!_t) return;
+      const res = await this.api.getExpressValidList(_t);
+      if (res.data.Status === 1000) {
+        this.ExpressValidList = res.data.Data;
+      }
     },
   },
   async mounted() {

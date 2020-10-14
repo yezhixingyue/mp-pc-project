@@ -12,7 +12,7 @@
         </li>
         <li class="upload-box">
           <UploadComp4BreakPoint ref='UploadComp4BreakPoint' :validateFunc='getProductPriceLocal'
-            :msgTitle='title' @fillFileContent='fillFileContent'
+            :msgTitle='title' @fillFileContent='fillFileContent' @handleMapPosition='handleMapPosition'
             :successFunc="successFunc" @saveFile2Store='saveFile2Store' />
         </li>
       </ul>
@@ -116,6 +116,10 @@ export default {
     },
     saveFile2Store(file) {
       this.$store.commit('Quotation/setOrderFile4PreCreateData', file);
+      // handleMapPosition $emit  可调用地图定位
+    },
+    handleMapPosition(cb) {
+      this.$emit('handleMapPosition', cb);
     },
   },
 };

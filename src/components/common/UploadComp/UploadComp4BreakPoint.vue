@@ -245,6 +245,10 @@ export default { // 上传图片按钮
         return;
       }
       if (msg === true) {
+        // this.$emit('handleMapPosition', () => {
+        //   const file = this.fileList[0].raw;
+        //   this.upLoadSingleFile(file);
+        // });
         const file = this.fileList[0].raw;
         this.upLoadSingleFile(file);
       }
@@ -261,6 +265,12 @@ export default { // 上传图片按钮
         return;
       }
       if (msg === true) {
+        // this.$emit('handleMapPosition', () => {
+        //   const file = this.fileList[0].raw;
+        //   // this.upLoadSingleFile(file);
+        //   this.$emit('saveFile2Store', file);
+        //   this.successFunc({ compiledName: '', initialName: this.fileName });
+        // });
         const file = this.fileList[0].raw;
         // this.upLoadSingleFile(file);
         this.$emit('saveFile2Store', file);

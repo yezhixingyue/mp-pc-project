@@ -129,6 +129,9 @@ const api = {
   getCustomerRecharge(data) { // POST /Api/Customer/Recharge 客户充值
     return instance.post('/Api/Customer/Recharge', data);
   },
+  getExpressValidList(data) { // POST /Api/Express/ValidList 查询可用物料列表
+    return instance.post('/Api/Express/ValidList', data);
+  },
 
   /* 图片与文件上传api
    ----------------------------------------------------------------------------------- */

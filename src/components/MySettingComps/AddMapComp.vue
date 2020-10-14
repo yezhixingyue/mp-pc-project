@@ -11,12 +11,12 @@
    >
     <header slot="title">
       <i class="iconfont icon-shezhi is-primary-blue"></i>
-      <span>{{ openType === 'edit' ? '更改配送地址' : '新增配送地址' }}</span>
+      <span>{{title}}</span>
     </header>
 
-    <ul class="change-add-dia-content">
+    <ul class="change-add-dia-content"  :class="openType==='tempAdd'?'tempAdd':''">
       <li>
-        <section>
+        <section v-show="openType !== 'tempAdd'">
           <el-form :model="newAdd" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
             <header>
               <div>
@@ -83,12 +83,13 @@
         </section>
       </li>
       <li class="map-wrap">
-        <div class="map-content" v-show="newAdd.HavePosition" v-loading="mapIsLoading">
+        <div class="map-content" v-show="newAdd.HavePosition || openType==='tempAdd'" v-loading="mapIsLoading">
           <el-amap-search-box
             class="search-box"
             ref="amapSearchBox"
             :search-option="searchOption"
             :on-search-result="onSearchResult"
+            :on-error='onSearchResult'
           ></el-amap-search-box>
           <el-amap
             vid="amapDemo"
@@ -105,10 +106,13 @@
         </div>
         <!-- <div class="map-loading"></div> -->
       </li>
+      <li v-if="openType === 'tempAdd'">
+        <span class="is-gray is-font-13">为了产品能够准确的送达，选择使用新地址时，请在地图上选择准确的收货地址地图坐标 !</span>
+      </li>
     </ul>
     <div slot="footer" class="dialog-footer">
       <el-button type="primary" @click="handleSubmit('ruleForm')">确定</el-button>
-      <el-button @click="handleBeforeDiaClose">取消</el-button>
+      <el-button v-if="openType !== 'tempAdd'" @click="handleBeforeDiaClose">取消</el-button>
     </div>
   </el-dialog>
 </template>
@@ -136,7 +140,7 @@ export default {
     },
     openType: {
       type: String,
-      default: 'new', // edit | new
+      default: 'new', // edit | new | tempAdd
     },
     curEditInfo: {
       type: Object,
@@ -219,11 +223,13 @@ export default {
         city: '河南',
         citylimit: false,
       },
+      canClose: true, // 是否可关闭地图窗口 下单添加新地址时可用
       mapCenter: [113.625351, 34.746303],
       events: {
         init: () => {
           if (this.openType === 'edit') {
             const { Latitude, Longitude } = this.curEditInfo;
+            if (!Latitude || !Longitude) return;
             this.lng = Longitude;
             this.lat = Latitude;
             this.mapCenter = [Longitude, Latitude];
@@ -234,7 +240,16 @@ export default {
           this.setPositionIndex(e.lnglat.lng, e.lnglat.lat);
         },
       },
-      plugin: [],
+      plugin: [
+        {
+          pName: 'PlaceSearch',
+          events: {
+            error: e => {
+              console.log(e, 'errpr map');
+            },
+          },
+        },
+      ],
     };
   },
   computed: {
@@ -245,6 +260,18 @@ export default {
       set(newVal) {
         this.newAdd.Mobile = newVal.replace(/[^\d.]/g, '');
       },
+    },
+    title() {
+      if (this.openType === 'edit') {
+        return '更改配送地址';
+      }
+      if (this.openType === 'add') {
+        return '新增配送地址';
+      }
+      if (this.openType === 'tempAdd') {
+        return '地图定位';
+      }
+      return '';
     },
   },
   methods: {
@@ -314,6 +341,14 @@ export default {
             }
           }
         });
+      } else if (this.openType === 'tempAdd') {
+        this.$emit('changeProps', this.newAdd);
+        this.canClose = true;
+        this.$message({
+          message: '已定位',
+          type: 'success',
+        });
+        this.handleBeforeDiaClose(true);
       } else {
         // 编辑地址
         const _obj = JSON.parse(JSON.stringify(this.newAdd));
@@ -345,6 +380,7 @@ export default {
       // console.log(this.newAdd.Longitude, _lat);
     },
     onSearchResult(pois) {
+      console.log(pois);
       this.mapIsLoading = false;
       if (pois.length > 0) {
         const { lng, lat } = pois[0];
@@ -355,12 +391,15 @@ export default {
       const { AddressDetail, ExpressArea } = this.newAdd;
       const { RegionalName, CityName, CountyName } = ExpressArea;
       const _str = `${RegionalName}${CityName}${CountyName}${AddressDetail}`;
+      console.log(_str);
       if (_str === this.lastSearchWords) return;
       this.newAdd.HavePosition = true;
-      this.$refs.amapSearchBox.keyword = _str;
-      this.$refs.amapSearchBox.search();
-      this.mapIsLoading = true;
-      this.lastSearchWords = _str;
+      setTimeout(() => {
+        this.$refs.amapSearchBox.keyword = _str;
+        this.$refs.amapSearchBox.search();
+        this.mapIsLoading = true;
+        this.lastSearchWords = _str;
+      }, 30);
     },
     async handleDialogOpen() {
       if (this.openType === 'edit') {
@@ -401,6 +440,29 @@ export default {
           this.CityList = [..._list[1]];
           this.CountyList = [..._list[2]];
         }
+      } else if (this.openType === 'tempAdd') {
+        if (!this.curEditInfo) return;
+        // eslint-disable-next-line max-len
+        const { AddressDetail, isSaved, Consignee, ExpressArea, CustomerID, HavePosition, IsDefault, Latitude, Longitude, Mobile } = this.curEditInfo;
+        this.newAdd.Consignee = Consignee;
+        this.newAdd.Mobile = Mobile;
+        this.newAdd.isSaved = isSaved;
+        this.newAdd.CustomerID = CustomerID;
+        this.newAdd.AddressDetail = AddressDetail;
+        this.newAdd.HavePosition = HavePosition;
+        this.newAdd.IsDefault = IsDefault;
+        this.newAdd.Latitude = Latitude;
+        this.newAdd.Longitude = Longitude;
+        // console.log(this.newAdd.Latitude, Latitude, this.newAdd.Longitude, Longitude);
+        const { RegionalName, RegionalID, CityName, CityID, CountyName, CountyID } = ExpressArea;
+        this.newAdd.ExpressArea.RegionalName = RegionalName;
+        this.newAdd.ExpressArea.RegionalID = RegionalID;
+        this.newAdd.ExpressArea.CityName = CityName;
+        this.newAdd.ExpressArea.CityID = CityID;
+        this.newAdd.ExpressArea.CountyName = CountyName;
+        this.newAdd.ExpressArea.CountyID = CountyID;
+        this.handleMapLocationClick();
+        this.canClose = false;
       } else {
         if (this.RegionalList.length > 0) return;
         const res = await this.api.getAddressIDList(-1);
@@ -410,6 +472,10 @@ export default {
       }
     },
     handleBeforeDiaClose() {
+      if (this.openType === 'tempAdd' && !this.canClose) {
+        this.$message.error('请在地图中保存收货地址定位!');
+        return;
+      }
       // ---------------------- 在此应设置数据还原
       this.newAdd = {
         Consignee: '',
@@ -434,6 +500,15 @@ export default {
       this.$refs.ruleForm.resetFields();
       this.handleClose();
     },
+    // mapInit() {
+    //   AMap.initAMapApiLoader({
+    //     // 高德key
+    //     key: '09966c2b866f9783b49969af19102d91',
+    //     // 插件集合 （插件按需引入）
+    //     plugin: ['PlaceSearch'],
+    //     // plugin: ['AMap.Geolocation', 'AMap.Autocomplete', 'PlaceSearch', 'ToolBar'],
+    //   });
+    // },
   },
   watch: {
     visible(newVal) {
@@ -461,6 +536,13 @@ export default {
       min-height: 188px;
       > .change-add-dia-content {
         height: 655px;
+        &.tempAdd {
+          height: 538px;
+          > .map-wrap {
+            margin-top: 5px;
+            margin-bottom: 16px;
+          }
+        }
         > li {
           > section {
                 > .demo-ruleForm {

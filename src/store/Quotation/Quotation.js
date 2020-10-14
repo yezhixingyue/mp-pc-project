@@ -950,6 +950,7 @@ export default {
         _itemObj.Address.AddressID = state.addressInfo4PlaceOrder.Address.AddressID;
       } else {
         _itemObj.Address.Address = state.addressInfo4PlaceOrder.Address.Address;
+        console.log(state.addressInfo4PlaceOrder.Address.Address.Latitude);
         // if (!state.addressInfo4PlaceOrder.Address.Address.Latitude) alert('未定位')
       }
       _itemObj.Content = fileContent;

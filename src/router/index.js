@@ -306,7 +306,7 @@ const router = new VueRouter({
     if (to.hash) {
       return { selector: to.hash };
     }
-    return { x: 0, y: 100 };
+    return { x: 0, y: 0 };
   },
 });
 
@@ -316,8 +316,9 @@ router.beforeEach(async (to, from, next) => {
     document.title = to.meta.title;
   }
   if (from.name === 'orderList') {
+    const oApp = document.getElementById('app');
     // eslint-disable-next-line no-param-reassign
-    from.meta.y = document.body.scrollTop;
+    from.meta.y = oApp.scrollTop;
   }
   // 判断该路由是否需要登录权限
   if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -337,15 +338,18 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.afterEach((to, from) => {
+  const oApp = document.getElementById('app');
   if (from.name === 'orderDetail' && to.name === 'orderList') {
     setTimeout(() => {
-      document.body.scrollTop = to.meta.y;
+      oApp.scrollTop = to.meta.y;
     }, 0);
     return;
   }
-  const bodySrcollTop = document.body.scrollTop;
+  const bodySrcollTop = oApp.scrollTop;
   if (bodySrcollTop !== 0) {
-    document.body.scrollTop = 0;
+    setTimeout(() => {
+      oApp.scrollTop = 0;
+    }, 0);
     return;
   }
   const docSrcollTop = document.documentElement.scrollTop;

@@ -266,10 +266,12 @@ export default {
   }
   > footer {
     width: 100%;
-    height: 55px;
+    height: 53px;
     overflow: hidden;
     background-color: #428dfa;
+    border: 1px solid #428dfa;
     position: relative;
+    box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.15);
     > .common-header-menus-wrap {
       width: 1200px;
       margin: 0 auto;
@@ -292,12 +294,19 @@ export default {
           }
           &.router-link-active {
             > span {
-              font-weight: 600;
+              // font-weight: 600;
+              text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
             }
             background-color: #2260ff;
+            box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
           }
           &:hover {
             background-color: rgba($color: #2260ff, $alpha: 0.35);
+            box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
+          }
+          &:active {
+            box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
           }
         }
       }

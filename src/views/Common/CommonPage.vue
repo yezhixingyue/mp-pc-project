@@ -11,7 +11,7 @@
         <div class="contact-us-wrap" @click="handleDrawerOpen">
           <i class="iconfont icon-dianhua1"></i>
         </div>
-        <el-backtop target="body" :visibility-height='50'>
+        <el-backtop target="#app" :visibility-height='50'>
           <i class="iconfont icon-xiangshang"></i>
         </el-backtop>
       </div>

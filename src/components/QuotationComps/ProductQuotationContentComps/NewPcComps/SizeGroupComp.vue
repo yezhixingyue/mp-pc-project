@@ -228,7 +228,10 @@ export default {
         this.sizeInputValueList = this.SizePropertyList;
         if (this.value === '') this.isSelectedInp = true;
       } else {
-        if (this.SizeList.length === 0) return;
+        if (this.SizeList.length === 0) {
+          this.isSelectedInp = true;
+          return;
+        }
         const _target = this.SizeList[0];
         const _list = _target.ValueList.map(it => ({
           PropertyID: it.First,

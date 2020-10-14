@@ -140,9 +140,11 @@
       </footer>
     </section>
 
-    <AddShowChangeComp />
+    <AddShowChangeComp ref="AddShowChangeComp" />
 
-    <OrderSubmitComp />
+    <!-- <button @click="handleMapPosition">12312312</button> -->
+
+    <OrderSubmitComp @handleMapPosition='handleMapPosition' />
   </article>
 </template>
 
@@ -285,6 +287,10 @@ export default {
     ...mapMutations('Quotation', ['setProductParams', 'setProductParamsPropertyList', 'setProductParamsCraftList']),
     ...mapActions('Quotation', ['getProductPrice']),
     ...mapActions('common', ['getCraftRelationList']),
+    handleMapPosition(cb) {
+      console.log(cb, 'cb func ----');
+      this.$refs.AddShowChangeComp.handleSetPositionOnMap(cb);
+    },
     async go2GetProductPrice() {
       this.getProductPriceLocal();
     },

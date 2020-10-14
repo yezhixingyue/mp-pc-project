@@ -165,7 +165,7 @@ export default {
         this.timer2 = setTimeout(() => {
           this.isOpen = true;
           this.timer2 = null;
-        }, 140);
+        }, 100);
       }
       if (this.timer) {
         clearTimeout(this.timer);
@@ -302,7 +302,7 @@ export default {
           }
         &.active {
           color: #428dfa;
-          font-size: 16px;
+          // font-size: 16px;
           > span {
             background-color: rgba($color: #428dfa, $alpha: 0.1);
           }
@@ -314,7 +314,7 @@ export default {
         &.selected {
           color: #428dfa;
           // font-weight: 600;
-          font-size: 16px;
+          // font-size: 16px;
         }
         &:hover {
           color: #428dfa;

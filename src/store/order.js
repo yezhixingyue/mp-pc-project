@@ -135,7 +135,10 @@ export default {
     /** 获取订单列表数据
     ---------------------------------------- */
     async getOrderList({ state, commit }, page = 1) {
-      if (!state.shouldGetNewListData) return;
+      if (!state.shouldGetNewListData) {
+        commit('setShouldGetNewListData', true);
+        return;
+      }
       commit('setCondition4OrderList', [['Page', ''], page]);
       commit('setOrderList', [[], undefined]);
       commit('setDate4ConditionDate', 'condition4OrderList');
