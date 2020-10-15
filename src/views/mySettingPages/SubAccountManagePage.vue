@@ -19,8 +19,10 @@
           <p class="add-date">添加时间：{{item.CreateTime | format2MiddleLangTypeDate}}</p>
         </div>
         <div class="account-item-footer">
-          <span class="span-title-blue" @click="handleEdit(item)">编辑</span>
-          <span class="span-title-pink" @click="handleDel(item)">删除</span>
+          <span class="span-title-blue"  @click="handleEdit(item)" v-if="!customerInfo.Account.IsBranch">编辑</span>
+          <span class="span-title-blue disabled" v-else>编辑</span>
+          <span class="span-title-pink" @click="handleDel(item)" v-if="!customerInfo.Account.IsBranch">删除</span>
+          <span class="span-title-pink disabled" v-else>删除</span>
         </div>
         <div class="account-item-sign">主账号</div>
       </li>
@@ -42,16 +44,16 @@
       <!-- 弹窗表单区域 -->
       <el-form :model="subAccountForm" ref="subAccountForm" :rules="rules" label-width="100px" class="account-ruleForm">
         <el-form-item label="登录手机号：" prop="Mobile">
-          <el-input v-model="Mobile"></el-input>
+          <el-input v-model.trim="Mobile" :disabled='!subAccountForm.IsBranch'></el-input>
         </el-form-item>
         <el-form-item label="姓名：" prop="NickName">
-          <el-input v-model="subAccountForm.NickName"></el-input>
+          <el-input v-model.trim="subAccountForm.NickName"></el-input>
         </el-form-item>
         <el-form-item label="密码：" prop="Password">
-          <el-input type="password" :placeholder="placeholder" v-model="subAccountForm.Password"></el-input>
+          <el-input type="password" :placeholder="placeholder" v-model.trim="subAccountForm.Password"></el-input>
         </el-form-item>
         <el-form-item label="确认密码：" prop="rePassword">
-          <el-input type="password" :placeholder="placeholder" v-model="subAccountForm.rePassword"></el-input>
+          <el-input type="password" :placeholder="placeholder" v-model.trim="subAccountForm.rePassword"></el-input>
         </el-form-item>
       </el-form>
 
@@ -68,7 +70,7 @@ import { mapState } from 'vuex';
 
 export default {
   computed: {
-    ...mapState('common', ['customerAccountList']),
+    ...mapState('common', ['customerAccountList', 'customerInfo']),
     placeholder() {
       if (!this.dialogVisible) return '';
       if (this.isEdit) return '不修改密码则不用填写';
@@ -184,12 +186,15 @@ export default {
       this.subAccountForm.rePassword = '';
     },
     handleAddNewAccount() {
+      if (this.customerInfo.Account.IsBranch) {
+        this.messageBox.failSingle({ msg: '无操作权限' });
+        return;
+      }
       this.isEdit = false;
       this.dialogTitle = '添加子账号';
       this.initSubAccountForm('', true, '', '');
 
       this.dialogVisible = !this.dialogVisible;
-      console.log('handleAddNewAccount 新增子账号');
     },
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
@@ -293,6 +298,9 @@ export default {
             &.span-title-pink {
               margin-left: 4px;
               margin-right: -6px;
+            }
+            &.disabled {
+              cursor: not-allowed !important;
             }
           }
         }

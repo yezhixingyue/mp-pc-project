@@ -70,7 +70,7 @@ Validator.prototype.strategies = {
     return true;
   },
   hasNotRung: (value, errorMsg) => {
-    // 不能有空格
+    // 不能有 横杠
     if (value.includes('-')) {
       return errorMsg;
     }

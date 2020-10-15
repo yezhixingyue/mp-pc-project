@@ -87,7 +87,8 @@
       </el-drawer>
     </div>
     <footer>
-      <BlueInfoFooter cancollapse />
+      <BlueInfoFooter  />
+      <!-- <BlueInfoFooter cancollapse /> -->
     </footer>
   </article>
 </template>
@@ -145,13 +146,14 @@ export default {
         position: absolute;
         right: -85px !important;
         bottom: 0px !important;
-        width: 55px;
-        height: 55px;
+        width: 50px;
+        height: 50px;
         background-color: #428dfa;
         border-radius: 5px;
         color: #fff;
         > i {
-          font-size: 13px;
+          font-size: 10px;
+          transform: scale(0.9);
         }
         &:hover {
           background-color: mix(#fff, #428dfa, 20%);
@@ -166,8 +168,8 @@ export default {
         bottom: 65px;
         color: #428dfa;
         background-color: #fff;
-        width: 53px;
-        height: 53px;
+        width: 48px;
+        height: 48px;
         border-radius: 5px;
         text-align: center;
         border: 1px solid #fff;
@@ -175,19 +177,24 @@ export default {
         box-shadow: 0 2px 12px 0 rgba(0,0,0,.15);
         // box-sizing: border-box;
         > i {
-          font-size: 22px;
+          font-size: 20px;
           position: absolute;
-          left: 16.5px;
-          top: 16.5px;
+          left: 15px;
+          top: 15px;
         }
         cursor: pointer;
         &:hover {
           // background-color: #eee;
           // border-color: #428dfa;
-          border: 1px solid #428dfa
+          border: 1px solid #428dfa;
+          background-color: #428dfa;
+          color: #fff;
         }
         &:active {
-          background-color: #eee;
+          // background-color: #eee;
+          border: 1px solid #1d5ab6;
+          // color: #428dfa;
+          background-color: #1d5ab6;
         }
       }
     }

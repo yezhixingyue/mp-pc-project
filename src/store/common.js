@@ -230,7 +230,9 @@ export default {
     /** 设置客户信息
     ---------------------------------------- */
     setCustomerInfo(state, data) {
-      state.customerInfo = data;
+      const Address = data.Address.map(it => ({ ...it, isSelected: it.IsDefault }));
+      state.customerInfo = { ...data, Address };
+      console.log(state.customerInfo);
       if (!data || !data.FundInfo) return;
       const { Amount } = data.FundInfo;
       if ((Amount || Amount === 0) && Amount !== state.customerBalance) state.customerBalance = Amount;
@@ -250,8 +252,16 @@ export default {
     },
     handleAddOrEditAddressOnStore(state, [obj, type]) {
       if (!state.customerInfo || !state.customerInfo.Address || !obj) return;
-      if (type === 'add') state.customerInfo.Address.push(JSON.parse(JSON.stringify(obj)));
-      else if (type === 'edit') {
+      if (type === 'add') {
+        // state.customerInfo.Address.push(JSON.parse(JSON.stringify(obj)));
+        let isSelected = false;
+        let IsDefault = false;
+        if (state.customerInfo.Address.length === 0) {
+          isSelected = true;
+          IsDefault = true;
+        }
+        state.customerInfo.Address.push(JSON.parse(JSON.stringify({ ...obj, isSelected, IsDefault })));
+      } else if (type === 'edit') {
         const { AddressID } = obj;
         const _t = state.customerInfo.Address.find(it => it.AddressID === AddressID);
         // eslint-disable-next-line max-len
@@ -300,6 +310,16 @@ export default {
       state.customerInfo = null;
       state.customerAccountList = [];
       state.customerBalance = null;
+    },
+    /* 修改默认选择地址
+    -------------------------------*/
+    changeSelectedAdd(state, item) {
+      state.customerInfo.Address.forEach(it => {
+        const _it = it;
+        _it.isSelected = false;
+      });
+      const _t = state.customerInfo.Address.find(it => it.AddressID === item.AddressID);
+      _t.isSelected = true;
     },
   },
   actions: {

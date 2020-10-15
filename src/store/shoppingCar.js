@@ -125,7 +125,7 @@ export default {
       const hasWrongList = _res.filter(it => it.data.Status !== 1000);
 
       if (hasWrongList.length === 0) { // 如果没有取消失败的项则提示成功
-        massage.successSingle({ title: '取消成功!' });
+        massage.successSingle({ title: '删除成功!' });
         commit('setMultipleOrderDataStatus', { allList: list, failList: [] });
         return;
       }

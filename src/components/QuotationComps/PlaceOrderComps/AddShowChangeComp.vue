@@ -12,7 +12,7 @@
         <li>
           <div class="platform-code-box">
             <span class="title">平台单号：</span>
-            <el-input v-model.trim="outPlaceCode" placeholder="平台单号"></el-input>
+            <el-input v-model.trim="outPlaceCode" maxlength="20" show-word-limit placeholder="平台单号"></el-input>
           </div>
           <div  class="express-box">
             <span class="title">配送：</span>
@@ -114,7 +114,7 @@
                   </div>
                   <div class="add-2">
                     <el-form-item prop="AddressDetail">
-                    <el-input v-model.trim="newAdd.AddressDetail"
+                    <el-input v-model.trim="newAdd.AddressDetail" maxlength="60" show-word-limit
                      @change="handleDetailChange" placeholder="详细地址 (不包含省市区)"></el-input>
                     </el-form-item>
                     <!-- <el-button type="primary" :disabled='!newAdd.AddressDetail || !newAdd.ExpressArea.CountyID'
@@ -504,6 +504,7 @@ export default {
       if (newVal === 'new') return;
       const _t = this.customerInfo.Address.find((it, i) => i === this.selectdAddress);
       if (!_t) return;
+      this.$store.commit('common/changeSelectedAdd', _t);
       const res = await this.api.getExpressValidList(_t);
       if (res.data.Status === 1000) {
         this.ExpressValidList = res.data.Data;
@@ -513,7 +514,7 @@ export default {
   async mounted() {
     this.$store.dispatch('common/getExpressList');
     await this.$store.dispatch('common/getCustomerDetail');
-    const _i = this.customerInfo.Address.findIndex(it => it.IsDefault);
+    const _i = this.customerInfo.Address.findIndex(it => it.isSelected);
     if (_i > -1) this.selectdAddress = _i;
     else this.selectdAddress = 'new';
   },

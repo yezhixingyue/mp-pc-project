@@ -87,7 +87,12 @@ export default {
           { strategy: 'minLength:6', errorMsg: '密码最小长度为6位' },
           { strategy: 'maxLength:16', errorMsg: '密码最大长度为16位' },
         ],
-        nameRules: [{ strategy: 'isNotEmpty', errorMsg: '请输入企业简称' }],
+        nameRules: [
+          { strategy: 'isNotEmpty', errorMsg: '请输入企业简称' },
+          { strategy: 'maxLength:20', errorMsg: '企业简称最大长度为20位' },
+          { strategy: 'hasNotSpace', errorMsg: '企业简称不能含有空格' },
+          { strategy: 'hasNotRung', errorMsg: '企业简称不能含有-符号' },
+        ],
         VertifyCodeRules: [
           { strategy: 'isNotEmpty', errorMsg: '请输入短信验证码' },
           { strategy: 'shouldLength:6', errorMsg: '短信验证码长度为6位' },

@@ -58,6 +58,21 @@ export function getDateFormat2Date(date) {
   return date ? date.split('T')[0] : '';
 }
 
+// export function MP(ak) {
+//   return new Promise(((resolve, reject) => {
+//     window.onload = () => {
+//       resolve(window.BMap);
+//     };
+//     if (!window.BMap) {
+//       const script = document.createElement('script');
+//       script.type = 'text/javascript';
+//       script.src = `http://api.map.baidu.com/api?v=1.4.15&ak=${ak}&callback=init`;
+//       script.onerror = reject;
+//       document.head.appendChild(script);
+//     }
+//   }));
+// }
+
 export default {
   isNumber,
   getUnit,

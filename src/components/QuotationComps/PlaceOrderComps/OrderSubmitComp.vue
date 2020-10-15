@@ -8,7 +8,7 @@
       <ul>
         <li class="file-content-box">
           <span class="title">文件内容：</span>
-          <el-input v-model="fileContent" placeholder="文件内容"></el-input>
+          <el-input v-model.trim="fileContent" maxlength="100" show-word-limit  placeholder="文件内容"></el-input>
         </li>
         <li class="upload-box">
           <UploadComp4BreakPoint ref='UploadComp4BreakPoint' :validateFunc='getProductPriceLocal'
@@ -109,7 +109,12 @@ export default {
       this.fileContent = name;
     },
     async getProductPriceLocal() { // 校验函数  用来判断是否可以进行下单
+      if (!this.fileContent) return '请输入文件内容';
       if (!this.addressInfo4PlaceOrder || !this.addressInfo4PlaceOrder.Address.Address.Consignee) return '请选择配送地址';
+      if (this.addressInfo4PlaceOrder.OutPlate
+        && this.addressInfo4PlaceOrder.OutPlate.Second
+        && this.addressInfo4PlaceOrder.OutPlate.Second.length > 20) return '平台单号不能超出20个字符';
+
       // const key = await this.$store.dispatch('Quotation/getProductPrice', this.title);
       // return key;
       return true;

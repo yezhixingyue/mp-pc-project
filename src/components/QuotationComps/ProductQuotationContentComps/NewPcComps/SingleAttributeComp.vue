@@ -6,7 +6,7 @@
 
     <!-- 1 单输入框 -->
     <template v-if="ValueType === 1">
-      <el-input v-model="inpValue" key="type-1"  @focus='onFocus' :disabled='disabled' ></el-input>
+      <el-input v-model.trim="inpValue" key="type-1"  @focus='onFocus' :disabled='disabled' ></el-input>
       <span v-if="ValueType === 1 && remark" class="gray remark">{{remark}}</span>
     </template>
 
@@ -19,7 +19,7 @@
       placement='bottom'
       :disabled='disabled'
      >
-      <el-input v-model="CustomizedValue" :disabled='disabled' @focus='onFocus' suffix-icon="el-icon-caret-bottom">
+      <el-input v-model.trim="CustomizedValue" :disabled='disabled' @focus='onFocus' suffix-icon="el-icon-caret-bottom">
       </el-input>
       <el-dropdown-menu slot="dropdown" class="count-model-comp-dropdown-wrap">
         <el-dropdown-item
@@ -127,6 +127,11 @@ export default {
           this.$emit('changeFunc', newVal);
           return;
         }
+        if (this.ValueType === 1) {
+          const _val = newVal.replace(/[^\d.]/g, '');
+          this.$emit('changeFunc', [_val, false]);
+          return;
+        }
         this.$emit('changeFunc', [newVal, false]);
       },
     },
@@ -138,7 +143,8 @@ export default {
         return '';
       },
       set(newVal) {
-        this.$emit('changeFunc', [newVal, true]);
+        const _val = newVal.replace(/[^\d.]/g, '');
+        this.$emit('changeFunc', [_val, true]);
       },
     },
     watchTarget() {

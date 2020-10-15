@@ -4,9 +4,8 @@
       ref="multipleTable"
       :data="shoppingDataList"
       tooltip-effect="dark"
-      :max-height="h"
-      :height="h"
       stripe
+      key="mp-pc-shopcar-page-table-comp-wrap"
       border
       style="width: 100%"
       @selection-change="handleSelectionChange"
@@ -75,6 +74,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { throttle } from '@/assets/js/utils/throttle';
 
 export default {
   data() {
@@ -248,8 +248,9 @@ export default {
         return;
       }
       const title = item ? '确定删除该订单吗' : '确定删除选中订单吗';
-      // eslint-disable-next-line max-len
-      const msg = item ? `订单产品：[ ${item.SecondLevelName} - ${item.ProductName} ]` : `[ 总共 ${this.multipleSelection.length} 条订单被选中 ]`;
+      const _nameInfo = item.ProductParams.Attributes;
+      const { SecondLevelName, Name } = _nameInfo;
+      const msg = item ? `订单产品：[ ${SecondLevelName} - ${Name} ]` : `[ 总共 ${this.multipleSelection.length} 条订单被选中 ]`;
       this.messageBox.warnCancelBox({
         title,
         msg,
@@ -270,6 +271,30 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize', this.setHeight);
   },
+  watch: {
+    shoppingDataList: {
+      handler() {
+        this.$nextTick(() => {
+          if (this.oBtn) return;
+          const oBtn = document.querySelector('.mp-pc-shopcar-page-table-comp-wrap .el-table__header .check-row');
+          if (!oBtn) return;
+          this.oBtn = oBtn;
+          oBtn.click = null;
+          const _func = throttle((e) => {
+            if (e.target.nodeName === 'TH') {
+              if (!this.checkedAll) {
+                this.$refs.multipleTable.toggleAllSelection();
+              } else {
+                this.$refs.multipleTable.clearSelection();
+              }
+            }
+          }, 10);
+          oBtn.addEventListener('click', _func, false);
+        });
+      },
+      immediate: true,
+    },
+  },
 };
 </script>
 
@@ -279,6 +304,7 @@ export default {
     .has-gutter > tr > th {
       &.check-row {
         padding-right: 20px;
+        cursor: pointer;
         &::after{
           top: 13px;
           height: 15px;
@@ -288,6 +314,9 @@ export default {
           font-size: 12px;
           background-color: rgb(245, 245, 245);
           color: #39588a;
+        }
+        > .cell {
+          pointer-events: none;
         }
       }
     }

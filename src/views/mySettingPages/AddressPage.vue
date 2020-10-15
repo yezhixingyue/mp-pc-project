@@ -6,7 +6,10 @@
     </header>
     <ul class="content" v-if="customerInfo">
       <li v-for="(item,i) in customerInfo.Address" :key="item.AddressID + i"
-          class="address-item" :class="item.IsDefault?'active':''">
+          class="address-item" :class="{
+            active: item.IsDefault,
+            selected: item.isSelected,
+          }">
         <div class="address-item-header">
           <i class="iconfont icon-yonghu1"></i>
           <span>{{item.Consignee}}</span>
@@ -62,11 +65,12 @@
 
 <script>
 import { mapState } from 'vuex';
-import AddMapComp from '@/components/MySettingComps/AddMapComp.vue';
+// import AddMapComp from '@/components/MySettingComps/AddMapComp.vue';
 
 export default {
   components: {
-    AddMapComp,
+    // AddMapComp,
+    AddMapComp: () => import('@/components/MySettingComps/AddMapComp.vue'),
   },
   computed: {
     ...mapState('common', ['customerInfo']),
@@ -236,7 +240,7 @@ export default {
         }
         > .address-item-footer {
           margin-top: 9px;
-          padding-right: 13px;
+          padding-right: 8px;
           padding-left: 5px;
           > p {
             float: left;
@@ -245,7 +249,7 @@ export default {
             float: right;
             >.span-title-pink {
               margin-left: 4px;
-              margin-right: -6px;
+              margin-right: 0px;
             }
           }
         }
@@ -291,12 +295,18 @@ export default {
             }
           }
         }
+        &.selected {
+          > .address-item-sign-img {
+            display: block;
+            opacity: 1;
+          }
+        }
         &.active {
           i.iconfont {
             color: #428dfa;
             transition: color 0.2s;
           }
-          > .address-item-sign, > .address-item-sign-img {
+          > .address-item-sign,{
             display: block;
             opacity: 1;
           }

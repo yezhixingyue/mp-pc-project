@@ -1,6 +1,7 @@
 <template>
   <section>
-    <el-table :max-height="h" :height="h" stripe border :data="dataList" style="width: 100%" class="ft-14-table">
+    <el-table stripe border :data="dataList" style="width: 100%" class="ft-14-table">
+      <!--  :max-height="h" :height="h" -->
       <el-table-column prop="BillID" label="流水号" width="220" show-overflow-tooltip></el-table-column>
       <el-table-column label="金额" width="150" show-overflow-tooltip>
         <template slot-scope="scope">{{ scope.row.Amount }}元</template>

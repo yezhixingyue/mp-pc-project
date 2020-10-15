@@ -18,7 +18,7 @@
       </header>
       <div class="content-wrap" v-if="ServiceAfterSaleList.length > 0 || ServiceAfterSaleListNumber > 0">
         <div class="content">
-          <el-table :max-height="h" :height="h" stripe border
+          <el-table stripe border
              :data="ServiceAfterSaleList" style="width: 100%" class="ft-14-table">
             <el-table-column prop="ID" label="售后单号" width="125" show-overflow-tooltip></el-table-column>
             <el-table-column prop="Order.OrderID" label="订单号" width="140" show-overflow-tooltip>

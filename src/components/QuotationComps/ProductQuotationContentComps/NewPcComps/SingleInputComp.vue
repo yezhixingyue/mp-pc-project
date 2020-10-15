@@ -10,7 +10,7 @@
   >
     <span class="title gray">{{title}}：</span>
     <!-- <div class="kind-content"> -->
-      <el-input v-model="inpValue" @focus='utils.handleSelect' :disabled="disabled"></el-input>
+      <el-input v-model.trim="inpValue" @focus='utils.handleSelect' :disabled="disabled"></el-input>
     <!-- </div> -->
     <span class="remark gray">{{ remark }}</span>
   </section>

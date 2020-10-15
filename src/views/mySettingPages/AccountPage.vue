@@ -249,7 +249,7 @@ export default {
           if ((imgInfo.width < 900 || imgInfo.height < 1280) && (imgInfo.width < 1280 || imgInfo.height < 900)) {
             this.messageBox.warnSingleError({
               title: '图片尺寸太小',
-              msg: '请上传大于900×1280像素的图片',
+              msg: '请上传大于等于900×1280像素的图片',
             });
             return;
           }

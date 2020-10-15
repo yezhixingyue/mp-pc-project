@@ -16,7 +16,7 @@
           <div class="price-box" v-if="PreCreateData">
             <div class="price-left">
               <p>在线支付：</p>
-              <p class="gray">货到款付：</p>
+              <p class="gray">货到付款：</p>
               <p class="gray" v-if="PreCreateData.MinimumCost !== PreCreateData.FullPayout">支付方式：</p>
               <p class="final-price gray">当前可用余额：</p>
             </div>

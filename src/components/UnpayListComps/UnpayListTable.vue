@@ -4,10 +4,9 @@
       ref="multipleTable"
       :data="unpayDataList"
       tooltip-effect="dark"
-      :max-height="h"
-      :height="h"
       stripe
       border
+      key="mp-pc-unpay-list-page-table-comp-wrap"
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
@@ -81,6 +80,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { throttle } from '@/assets/js/utils/throttle';
 
 export default {
   data() {
@@ -191,6 +191,30 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize', this.setHeight);
   },
+  watch: {
+    unpayDataList: {
+      handler() {
+        this.$nextTick(() => {
+          if (this.oBtn) return;
+          const oBtn = document.querySelector('.mp-pc-unpay-list-page-table-comp-wrap .el-table__header .check-row');
+          if (!oBtn) return;
+          this.oBtn = oBtn;
+          oBtn.click = null;
+          const _func = throttle((e) => {
+            if (e.target.nodeName === 'TH') {
+              if (!this.checkedAll) {
+                this.$refs.multipleTable.toggleAllSelection();
+              } else {
+                this.$refs.multipleTable.clearSelection();
+              }
+            }
+          }, 10);
+          oBtn.addEventListener('click', _func, false);
+        });
+      },
+      immediate: true,
+    },
+  },
 };
 </script>
 
@@ -200,6 +224,7 @@ export default {
     .has-gutter > tr > th {
       &.check-row {
         padding-right: 20px;
+        cursor: pointer;
         &::after{
           top: 13px;
           height: 15px;
@@ -209,6 +234,9 @@ export default {
           font-size: 12px;
           background-color: rgb(245, 245, 245);
           color: #39588a;
+        }
+        > .cell {
+          pointer-events: none;
         }
       }
     }

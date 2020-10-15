@@ -27,6 +27,7 @@
         :file-list="fileList"
         :class="fileList.length > 0 ? '' : 'empty' "
         :limit='1'
+        :on-exceed='exceed'
         :on-change='handleElChange'
         :auto-upload="false">
         <el-button slot="trigger" size="small" type="primary">{{showTitle}}</el-button>
@@ -229,10 +230,15 @@ export default { // 上传图片按钮
         }, duration);
       });
     },
-    // exceed(...args) {
-    //   console.log(args);
-    //   massage.failSingleError({ title: '已上传订单文件', msg: '如需更换，请删除订单文件后重新上传' });
-    // },
+    exceed(fileList, arr) {
+      console.log(this.fileList, fileList, arr);
+      const file = fileList[0];
+      this.fileList[0].raw = file;
+      this.fileList[0].name = file.name;
+      this.$emit('fillFileContent', file.name.split('.')[0]);
+      // this.fileList = fileList;
+      // massage.failSingleError({ title: '已上传订单文件', msg: '如需更换，请删除订单文件后重新上传' });
+    },
     async handleElUpload() {
       await this.delay(0);
       if (this.fileList.length === 0) {

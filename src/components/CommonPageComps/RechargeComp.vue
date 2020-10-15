@@ -39,7 +39,7 @@
         <p>
           <span class="gray is-font-12">请使用微信或支付宝扫码支付 </span>
           <span class="is-font-16"
-           > 扫码支付：<i class="is-font-18 is-pink"> ¥<em class="is-font-26 is-bold"> {{reCharge}}</em></i></span>
+           > 扫码支付：<i class="is-font-18 is-pink"> ¥<em class="is-font-26 is-bold"> {{Amount}}</em></i></span>
         </p>
       </li>
       <li v-if="curStep===2" class="step-three">
@@ -97,6 +97,7 @@ export default {
       curPayInfo2Code: null,
       codeSrc: '',
       timer: null,
+      Amount: 0,
     };
   },
   methods: {
@@ -115,8 +116,9 @@ export default {
         });
         return;
       }
-      const Amount = this.reCharge;
-      const res = await this.api.getCustomerRecharge({ Amount });
+      const _num = +this.reCharge;
+      this.Amount = _num.toFixed(2);
+      const res = await this.api.getCustomerRecharge({ Amount: this.Amount });
       if (res.data.Status === 1000) {
         this.curStep = 1;
         this.codeSrc = res.data.Data.PayWay.AllinPay;

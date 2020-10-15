@@ -214,7 +214,7 @@ export default {
       &.last-item {
         padding-bottom: 95px;
       }
-      box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045);
+      // box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045);
     }
   }
 }
