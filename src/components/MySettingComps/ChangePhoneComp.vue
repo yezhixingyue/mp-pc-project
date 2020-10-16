@@ -144,6 +144,11 @@ export default {
       },
     },
   },
+  watch: {
+    customerInfo(newVal) {
+      console.log(newVal, 'customerInfo');
+    },
+  },
   methods: {
     next() {
       if (this.active === 0) {
@@ -175,8 +180,8 @@ export default {
             const res = await this.api.getCustomerChangeMobile(_obj);
             if (res.data.Status === 1000) {
               this.active += 1;
-              this.$store.commit('common/setCustomerInfo', null);
-              this.$store.dispatch('common/getCustomerDetail');
+              this.$store.commit('common/changeCustomerPhone', newMobile);
+              // this.$store.dispatch('common/getCustomerDetail');
             }
           }
           return false;

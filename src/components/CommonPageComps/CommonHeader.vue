@@ -191,6 +191,11 @@ export default {
       if (this.$route.path !== _path) this.$router.push(_path);
     },
   },
+  watch: {
+    customerInfo(newVal) {
+      sessionStorage.setItem('customerInfo', JSON.stringify(newVal));
+    },
+  },
   mounted() {
     this.$store.dispatch('common/getCustomerDetail');
     this.$store.dispatch('common/getCustomerFundBalance');

@@ -4,7 +4,7 @@
     <div class="comp-title float">
       <span class="left is-bold">收货信息</span>
       <span class="right span-title-blue" @click="handleChangeAdd">
-        {{ currentAddInfo && !newAdd.isSaved ? '更改配送地址' : '添加配送地址' }}
+        {{ addCompTitle }}
       </span>
     </div>
     <div class="content">
@@ -43,7 +43,7 @@
             </el-radio-group>
           </div>
         </li>
-        <li class="consignee-wrap" v-if="currentAddInfo">
+        <li class="consignee-wrap" v-if="customerInfo.Address.length > 0 || newAdd.isSaved">
           <div class="consignee-box">
             <span class="title">收货人：</span>
             <span class="consignee">{{currentAddInfo.Consignee}}</span>
@@ -59,19 +59,20 @@
         </li>
       </ul>
     </div>
-    <el-dialog :visible.sync="outerVisible" top='10vh' width="750px" v-dialogDrag custom-class="set-craft-dia">
+    <el-dialog :visible.sync="outerVisible" top='10vh'
+      v-dialogDrag custom-class="set-craft-dia" :before-close='handleBeforeClose'>
        <header slot="title">
         <i class="iconfont icon-shezhi is-primary-blue"></i>
-        <span>{{ currentAddInfo && !newAdd.isSaved ? '更改配送地址' : '添加配送地址' }}</span>
+        <span>{{ addCompTitle }}</span>
       </header>
 
       <ul class="change-add-dia-content">
         <li>
           <section v-if="customerInfo">
             <el-radio v-model="addRadio" :label="i" v-for="(item, i) in customerInfo.Address" :key="item.AddressID">
-              <span class="is-font-12">{{getAddressInfoDetail(item)}}</span>
+              <span class="is-font-12 address">{{getAddressInfoDetail(item)}}</span>
               <span class="is-bold consig is-font-12">{{item.Consignee}}</span>
-              <span class="is-bold is-font-12">({{item.Mobile}})</span>
+              <span class="is-bold is-font-12 radio-phone">({{item.Mobile}})</span>
               <span class="is-success mgleft" v-if="item.IsDefault">/ 默认地址</span>
             </el-radio>
             <el-radio v-model="addRadio" label="new" class="new-address-radio">
@@ -125,13 +126,13 @@
                   <div>
                     <span class="title">收货人：</span>
                     <el-form-item prop="Consignee">
-                      <el-input v-model.trim="newAdd.Consignee" placeholder="收货人姓名"></el-input>
+                      <el-input v-model.trim="newAdd.Consignee" maxlength="12" placeholder="收货人姓名"></el-input>
                     </el-form-item>
                   </div>
                   <div>
                     <span class="title">手机号：</span>
                     <el-form-item prop="Mobile">
-                      <el-input el-input v-model.trim="Mobile" placeholder="手机号"></el-input>
+                      <el-input el-input v-model.trim="Mobile" maxlength="11" placeholder="手机号"></el-input>
                     </el-form-item>
                   </div>
                 </header>
@@ -214,6 +215,7 @@ export default {
         isSaved: false,
         isSelected: true,
       },
+      recordAddInfo: null,
       selectdAddress: '', //  new | 地址数组索引号
       RegionalList: [],
       CityList: [],
@@ -267,7 +269,7 @@ export default {
 
       if (this.selectdAddress === 'new') _t = this.newAdd;
       else _t = this.customerInfo.Address.find((it, i) => i === this.selectdAddress);
-
+      console.log(this.selectdAddress, _t);
       if (!_t) return '';
 
       const { ExpressArea, AddressDetail } = _t;
@@ -319,6 +321,11 @@ export default {
         s: !this.ExpressValidList.includes(3), // 快递
         t: !this.ExpressValidList.includes(2), // 物流
       };
+    },
+    addCompTitle() {
+      if (!this.customerInfo) return '';
+      if (this.customerInfo.Address.length === 0 && !this.newAdd.isSaved) return '添加配送地址';
+      return '更改配送地址';
     },
   },
   methods: {
@@ -393,6 +400,8 @@ export default {
     async handleChangeAdd() {
       this.addRadio = this.selectdAddress;
       this.outerVisible = true;
+      this.recordAddInfo = JSON.stringify(this.newAdd);
+
       if (this.RegionalList.length > 0) return;
       const res = await this.api.getAddressIDList(-1);
       if (res.data.Status === 1000) {
@@ -458,6 +467,11 @@ export default {
         this.outerVisible = false;
       }
     },
+    handleBeforeClose(done) {
+      this.newAdd = JSON.parse(this.recordAddInfo);
+      this.setInfo4ReqObj();
+      done();
+    },
     handleSetPositionOnMap(callback) { // 方法作废
       console.log(this.newAdd.HavePosition);
       if (this.addRadio === 'new') {
@@ -466,6 +480,8 @@ export default {
       } else if (callback) callback();
     },
     handleCancel() {
+      this.newAdd = JSON.parse(this.recordAddInfo);
+      this.setInfo4ReqObj();
       this.outerVisible = false;
     },
     getAddressInfoDetail(item) {
@@ -554,6 +570,8 @@ export default {
         }
         &.consignee-wrap {
           margin-top: 22px;
+          overflow: hidden;
+          white-space: nowrap;
           > .consignee-box {
             width: 317px;
             margin-right: 52px;
@@ -581,6 +599,8 @@ export default {
   }
   .set-craft-dia {
     // height: 400px;
+    min-width: 750px;
+    max-height: 1050px;
     box-sizing: border-box;
     .title {
       min-width: 4em;
@@ -597,6 +617,12 @@ export default {
               margin-bottom: 20px;
               > .el-radio__label {
                 display: inline-block;
+                .address {
+                  max-width: 380px;
+                  display: inline-block;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                }
                 > .demo-ruleForm {
                   font-size: 12px;
                   > header {
@@ -697,6 +723,15 @@ export default {
                 .consig {
                   margin-right: 12px;
                   margin-left: 16px;
+                  max-width: 80px;
+                  display: inline-block;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                }
+                .radio-phone {
+                  display: inline-block;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
                 }
                 .is-success.mgleft {
                   margin-left: 8px;

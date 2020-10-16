@@ -4,7 +4,7 @@
       <span class="blue-v-line is-bold is-black">子账号管理</span>
       <span class="is-font-12">（ 共检测出<i class="is-pink is-font-16"> {{customerAccountList.length}} </i>条记录 ）</span>
     </header>
-    <ul class="content">
+    <ul class="content" v-if="customerInfo">
       <li v-for="item in customerAccountList" :key="item.AccountID"
           class="account-item" :class="!item.IsBranch?'active':''">
         <div class="account-item-header">
@@ -20,13 +20,13 @@
         </div>
         <div class="account-item-footer">
           <span class="span-title-blue"  @click="handleEdit(item)" v-if="!customerInfo.Account.IsBranch">编辑</span>
-          <span class="span-title-blue disabled" v-else>编辑</span>
+          <!-- <span class="span-title-blue disabled" v-else>编辑</span> -->
           <span class="span-title-pink" @click="handleDel(item)" v-if="!customerInfo.Account.IsBranch">删除</span>
-          <span class="span-title-pink disabled" v-else>删除</span>
+          <!-- <span class="span-title-pink disabled" v-else>删除</span> -->
         </div>
         <div class="account-item-sign">主账号</div>
       </li>
-      <li class="add-new-account-box" @click="handleAddNewAccount">
+      <li class="add-new-account-box" @click="handleAddNewAccount" v-if="!customerInfo.Account.IsBranch">
         <i class="el-icon-plus"></i>
         <span>新增子账号</span>
       </li>
@@ -44,7 +44,8 @@
       <!-- 弹窗表单区域 -->
       <el-form :model="subAccountForm" ref="subAccountForm" :rules="rules" label-width="100px" class="account-ruleForm">
         <el-form-item label="登录手机号：" prop="Mobile">
-          <el-input v-model.trim="Mobile" :disabled='!subAccountForm.IsBranch'></el-input>
+          <el-input v-model.trim="Mobile" ></el-input>
+          <!-- <el-input v-model.trim="Mobile" :disabled='!subAccountForm.IsBranch'></el-input> -->
         </el-form-item>
         <el-form-item label="姓名：" prop="NickName">
           <el-input v-model.trim="subAccountForm.NickName"></el-input>

@@ -539,11 +539,11 @@ export default class QuotationClassType {
           },
           {
             strategy: `Maximum:${_max}`,
-            errorMsg: `${_PartName}值最大为${_max}`,
+            errorMsg: `${_PartName}数量最大为${_max}`,
           },
           {
             strategy: `Minimum:${Part.MinNumber}`,
-            errorMsg: `${_PartName}值最小为${Part.MinNumber}`,
+            errorMsg: `${_PartName}数量最小为${Part.MinNumber}`,
           },
           {
             strategy: `isMultiple:${_Multiple}`,

@@ -1,5 +1,5 @@
 <template>
-  <section v-show="shouldShow">
+  <section v-show="shouldShow" class="mp-pc-quotation-sm-comp-single-att-comp-wrap">
     <span class="title gray">{{title}}：</span>
 
     <!-- 4种表现形式 -->
@@ -19,7 +19,8 @@
       placement='bottom'
       :disabled='disabled'
      >
-      <el-input v-model.trim="CustomizedValue" :disabled='disabled' @focus='onFocus' suffix-icon="el-icon-caret-bottom">
+      <el-input class="select-and-white-inp" v-model.trim="CustomizedValue"
+       :disabled='disabled' maxlength="20" @focus='onFocus' suffix-icon="el-icon-caret-bottom">
       </el-input>
       <el-dropdown-menu slot="dropdown" class="count-model-comp-dropdown-wrap">
         <el-dropdown-item
@@ -137,14 +138,15 @@ export default {
     },
     CustomizedValue: {
       get() {
-        if (this.CustomizedOptionValue) return this.CustomizedOptionValue;
+        if (this.CustomizedOptionValue || this.inputType === 'CustomizedValue') return this.CustomizedOptionValue;
         const _t = this.optionList.find(it => it[this.defaultProps.value] === this.value);
         if (_t) return _t[this.defaultProps.text];
         return '';
       },
       set(newVal) {
-        const _val = newVal.replace(/[^\d.]/g, '');
-        this.$emit('changeFunc', [_val, true]);
+        // const _val = newVal.replace(/[^\d.]/g, '');
+        this.inputType = 'CustomizedValue';
+        this.$emit('changeFunc', [newVal, true]);
       },
     },
     watchTarget() {
@@ -196,6 +198,7 @@ export default {
   methods: {
     onCommand(e) {
       const newVal = e[this.defaultProps.value];
+      this.inputType = 'option';
       if (!this.ValueType && this.ValueType !== 0) {
         this.$emit('changeFunc', newVal);
       } else {
@@ -208,6 +211,7 @@ export default {
       e.target.select();
     },
     initIsSelectedInp() {
+      // eslint-disable-next-line max-len
       if (this.option.length > 0 && !this.CustomizedOptionValue) {
         this.isSelectedInp = false;
       } else if (this.ValueType === 2) {
@@ -218,6 +222,11 @@ export default {
         this.isCustomizedOptionValue = false;
       }
     },
+  },
+  data() {
+    return {
+      inputType: 'option',
+    };
   },
   watch: {
     watchTarget(newVal) {
@@ -230,8 +239,9 @@ export default {
       if (!newVal) return;
       this.initIsSelectedInp();
     },
-    watch2Dia() {
-      if (!this.isSelectedInp) {
+    watch2Dia() { // 作用? 关闭窗口时
+      if (!this.isSelectedInp && this.inputType !== 'CustomizedValue') {
+        console.log('changeFunc', 'watch2Dia');
         this.$emit('changeFunc', [
           '',
           !this.isSelectedInp && this.ValueType === 2,
@@ -246,6 +256,15 @@ export default {
 };
 </script>
 
-<style>
+<style lang='scss'>
+.mp-pc-quotation-sm-comp-single-att-comp-wrap {
+  .select-and-white-inp {
+    .el-input__suffix {
+      .el-input__icon {
+        line-height: 30px;
+      }
+    }
+  }
+}
 
 </style>

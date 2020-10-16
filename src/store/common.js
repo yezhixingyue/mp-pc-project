@@ -232,7 +232,6 @@ export default {
     setCustomerInfo(state, data) {
       const Address = data.Address.map(it => ({ ...it, isSelected: it.IsDefault }));
       state.customerInfo = { ...data, Address };
-      console.log(state.customerInfo);
       if (!data || !data.FundInfo) return;
       const { Amount } = data.FundInfo;
       if ((Amount || Amount === 0) && Amount !== state.customerBalance) state.customerBalance = Amount;
@@ -283,6 +282,13 @@ export default {
         _t.ExpressArea.CountyID = CountyID;
       }
     },
+    /** 修改客户手机信息  修改手机号后进行该操作
+    ---------------------------------------- */
+    changeCustomerPhone(state, mobile) {
+      if (!state.customerInfo) return;
+      state.customerInfo.Account.Mobile = mobile;
+      if (!state.customerInfo.Account.IsBranch) state.customerInfo.Mobile = mobile;
+    },
     /** 设置客户子账号列表
     ---------------------------------------- */
     setCustomerAccountList(state, data) {
@@ -330,11 +336,17 @@ export default {
         commit('setCraftRelationList', res.data.Data);
       }
     },
-    async getCustomerDetail({ state, commit }) { // 获取账号基本信息
-      if (state.customerInfo) return;
+    async getCustomerDetail({ state, commit }, key = false) { // 获取账号基本信息
+      if (state.customerInfo && !key) return;
+      const sessionCust = sessionStorage.getItem('customerInfo');
+      if (sessionCust) {
+        commit('setCustomerInfo', JSON.parse(sessionCust));
+        return;
+      }
       const res = await api.getCustomerDetail();
       if (res.data.Status === 1000) {
         commit('setCustomerInfo', res.data.Data);
+        sessionStorage.setItem('customerInfo', JSON.stringify(res.data.Data));
       }
     },
     async getCustomerFundBalance({ commit }) {

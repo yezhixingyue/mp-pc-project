@@ -271,6 +271,7 @@ export default {
     async onConfirm() {
       // 判断值 如果通过则emit 如果不通过则done(false);
       let key = true;
+      console.log(this.curCraftData.PropertyList[0].CustomizedOptionValue);
       this.curCraftData.PropertyList.forEach((item) => {
         item.forEach(it => {
           if (!key) return;
@@ -307,6 +308,7 @@ export default {
       this.watch2Dia = true;
       await this.utils.delay(10);
       this.curCraftData.historyData = JSON.parse(JSON.stringify(this.curCraftData.PropertyList));
+      console.log(this.curCraftData);
       this.$emit('setCraftList', [
         'maybeEdit',
         this.curCraftData,
@@ -320,8 +322,10 @@ export default {
       if (!type) {
         this.curCraftData.PropertyList[i][index].CustomerInputValue = data;
       } else {
+        console.log(this.curCraftData.PropertyList[i][index].CustomizedOptionValue, data);
         this.curCraftData.PropertyList[i][index].CustomizedOptionValue = data;
       }
+      console.log(this.curCraftData.PropertyList);
     },
     addCraft() {
       const _temp = JSON.parse(JSON.stringify(this.addTemplateDate));

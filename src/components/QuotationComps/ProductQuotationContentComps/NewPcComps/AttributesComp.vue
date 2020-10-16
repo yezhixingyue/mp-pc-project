@@ -108,7 +108,7 @@ export default {
   },
   methods: {
     handleChange([data, type], index) {
-      console.log('handleChangehandleChangehandleChange*-----');
+      console.log('handleChangehandleChangehandleChange*-----', data, type);
       this.$emit('change', [data, index, type]);
     },
     handleAttributeDel() {

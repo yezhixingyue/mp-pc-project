@@ -248,9 +248,18 @@ export default {
         return;
       }
       const title = item ? '确定删除该订单吗' : '确定删除选中订单吗';
-      const _nameInfo = item.ProductParams.Attributes;
-      const { SecondLevelName, Name } = _nameInfo;
-      const msg = item ? `订单产品：[ ${SecondLevelName} - ${Name} ]` : `[ 总共 ${this.multipleSelection.length} 条订单被选中 ]`;
+      // console.log(item);
+      let msg = '';
+      if (item) {
+        if (!item.ProductParams || !item.ProductParams.Attributes) return;
+        const _nameInfo = item.ProductParams.Attributes;
+        const { SecondLevelName, Name } = _nameInfo;
+        if (!SecondLevelName || !Name) return;
+        msg = `订单产品：[ ${SecondLevelName} - ${Name} ]`;
+      } else {
+        if (!this.multipleSelection) return;
+        msg = `[ 共有 ${this.multipleSelection.length} 条订单被选中 ]`;
+      }
       this.messageBox.warnCancelBox({
         title,
         msg,
