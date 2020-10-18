@@ -281,6 +281,7 @@ export default {
         _t.ExpressArea.CountyName = CountyName;
         _t.ExpressArea.CountyID = CountyID;
       }
+      sessionStorage.setItem('customerInfo', JSON.stringify(state.customerInfo));
     },
     /** 修改客户手机信息  修改手机号后进行该操作
     ---------------------------------------- */

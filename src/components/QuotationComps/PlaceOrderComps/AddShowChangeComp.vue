@@ -154,6 +154,7 @@
       </div>
     </el-dialog>
     <AddMapComp openType='tempAdd' :curEditInfo='newAdd' v-if="showMap" ref="mapComp"
+      @handleMapSearchError='handleMapSearchError'
       @changeProps='changeProps' @changeStatus='changeDiaStatus' :visible='diaVisible'/>
   </section>
 </template>
@@ -345,6 +346,10 @@ export default {
     },
     changeDiaStatus(bool) {
       this.diaVisible = bool;
+    },
+    handleMapSearchError() {
+      this.changeDiaStatus(false);
+      this.outerVisible = true;
     },
     onRadioChange(num) {
       switch (num) {

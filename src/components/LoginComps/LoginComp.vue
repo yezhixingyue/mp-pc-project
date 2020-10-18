@@ -110,6 +110,7 @@ export default {
       this.$store.commit('shoppingCar/clearStateForNewCustomer');
       this.$store.commit('summary/clearStateForNewCustomer');
       this.$store.commit('unpayList/clearStateForNewCustomer');
+      // sessionStorage.removeItem('customerInfo');
       sessionStorage.setItem('token', token);
       if (rememberPwd) {
         const _obj2Keep = { ...this.ruleForm };
@@ -127,6 +128,7 @@ export default {
       if (this.isRemember) this.isRemember = false;
     },
     async submitForm(formName) {
+      sessionStorage.removeItem('customerInfo');
       if (this.isRemember) {
         const { Mobile, rememberPwd } = this.ruleForm;
         const Password = `${this.rememberInfo.Password}`;

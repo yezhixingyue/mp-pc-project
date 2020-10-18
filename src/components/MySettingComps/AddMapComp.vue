@@ -47,7 +47,7 @@
                 </el-form-item>
                 <el-form-item prop="City">
                   <el-select v-model="newAdd.ExpressArea.CityID"
-                  :disabled="CityList.length === 0 || !newAdd.ExpressArea.RegionalID" @change='handleCityChange'>
+                  :disabled="CityList.length === 0" @change='handleCityChange'>
                     <el-option
                       v-for="item in CityList"
                       :key="item.ID"
@@ -58,7 +58,7 @@
                 </el-form-item>
                 <el-form-item prop="County">
                   <el-select v-model="newAdd.ExpressArea.CountyID"
-                    :disabled="CountyList.length === 0 || !newAdd.ExpressArea.CityID" @change='handleCountyChange'>
+                    :disabled="CountyList.length === 0" @change='handleCountyChange'>
                     <el-option
                       v-for="item in CountyList"
                       :key="item.ID"
@@ -70,8 +70,7 @@
               </div>
               <div class="add-2">
                 <el-form-item prop="AddressDetail">
-                <el-input v-model.trim="newAdd.AddressDetail" maxlength="60"
-                   show-word-limit placeholder="详细地址 (不包含省市区)"></el-input>
+                <el-input v-model.trim="newAdd.AddressDetail" placeholder="详细地址 (不包含省市区)"></el-input>
                 </el-form-item>
                 <el-button
                   type="primary" class="map-location-btn"
@@ -84,32 +83,12 @@
         </section>
       </li>
       <li class="map-wrap">
-        <div class="map-content" v-show="newAdd.HavePosition || openType==='tempAdd'" v-loading="mapIsLoading">
-          <el-amap-search-box
-            class="search-box"
-            ref="amapSearchBox"
-            :search-option="searchOption"
-            :on-search-result="onSearchResult"
-            :on-error='onSearchResult'
-          ></el-amap-search-box>
-          <el-amap
-            vid="amapDemo"
-            :center="mapCenter"
-            :plugin="plugin"
-            :zoom="zoom"
-            :events="events"
-            ref="map"
-            :style="{ width: '100%', height: '485px' }"
-            class="amap-demo"
-          >
-            <el-amap-marker :position="mapCenter"></el-amap-marker>
-          </el-amap>
-          <!-- <button @click="onSelfSearch">1223213123</button> -->
+        <div class="map-content" id="map-container"
+         v-show="newAdd.HavePosition || openType==='tempAdd'" v-loading="mapIsLoading">
         </div>
-        <!-- <div class="map-loading"></div> -->
       </li>
       <li v-if="openType === 'tempAdd'">
-        <span class="is-gray is-font-13">为了产品能够准确的送达，选择使用新地址时，请在地图上选择准确的收货地址地图坐标 !</span>
+        <span class="is-gray is-font-13">使用新增地址时，需要在地图上定位准确的地址坐标 !</span>
       </li>
     </ul>
     <div slot="footer" class="dialog-footer">
@@ -120,19 +99,9 @@
 </template>
 
 <script>
+/* eslint-disable consistent-return */
+/* eslint-disable no-undef */
 /* eslint-disable object-curly-newline */
-import Vue from 'vue';
-import AMap from 'vue-amap';
-
-Vue.use(AMap);
-// 初始化vue-amap
-AMap.initAMapApiLoader({
-  // 高德key
-  key: '09966c2b866f9783b49969af19102d91',
-  // 插件集合 （插件按需引入）
-  plugin: ['PlaceSearch'],
-  // plugin: ['AMap.Geolocation', 'AMap.Autocomplete', 'PlaceSearch', 'ToolBar'],
-});
 
 export default {
   props: {
@@ -188,14 +157,12 @@ export default {
       rules: {
         Consignee: [
           { required: true, message: '请输入收货人姓名', trigger: 'blur' },
-          { min: 1, max: 12, message: '姓名不能超过12个字', trigger: 'blur' },
         ],
         Mobile: [
           { validator: validateMobile, trigger: 'blur' },
         ],
         AddressDetail: [
           { required: true, message: '请填写详细地址(不包含省市区)', trigger: 'blur' },
-          { min: 1, max: 60, message: '详细地址长度不能超过60个字符', trigger: 'blur' },
         ],
         Regional: [
           { validator: validateRegional, trigger: 'change' },
@@ -223,37 +190,15 @@ export default {
       zoom: 14,
       mapIsLoading: false,
       lastSearchWords: '',
+      isMapLoaded: false,
       searchOption: {
         // city: '河南',
         // citylimit: false,
       },
       canClose: true, // 是否可关闭地图窗口 下单添加新地址时可用
       mapCenter: [113.625351, 34.746303],
-      events: {
-        init: () => {
-          if (this.openType === 'edit') {
-            const { Latitude, Longitude } = this.curEditInfo;
-            if (!Latitude || !Longitude) return;
-            this.lng = Longitude;
-            this.lat = Latitude;
-            this.mapCenter = [Longitude, Latitude];
-            this.setPositionIndex(+Longitude, +Latitude, false);
-          }
-        },
-        click: e => {
-          this.setPositionIndex(e.lnglat.lng, e.lnglat.lat);
-        },
-      },
-      plugin: [
-        {
-          pName: 'PlaceSearch',
-          events: {
-            error: e => {
-              console.log(e, 'errpr map');
-            },
-          },
-        },
-      ],
+      map: null,
+      initNum: 0,
     };
   },
   computed: {
@@ -267,9 +212,9 @@ export default {
     },
     title() {
       if (this.openType === 'edit') {
-        return '更改配送地址';
+        return '编辑配送地址';
       }
-      if (this.openType === 'add') {
+      if (this.openType === 'new') {
         return '新增配送地址';
       }
       if (this.openType === 'tempAdd') {
@@ -277,9 +222,6 @@ export default {
       }
       return '';
     },
-    // _placeSearch() {
-    //   return new AMap.PlaceSearch(this.searchOption || {});
-    // },
   },
   methods: {
     async handleRegionalChange(e) {
@@ -314,20 +256,12 @@ export default {
       }
     },
     handleCountyChange(e) {
-      // console.log(e);
       const _t = this.CountyList.find(it => it.ID === e);
       this.newAdd.ExpressArea.CountyName = _t.Name;
     },
     handleClose() {
       this.$emit('changeStatus', false);
     },
-    // onSelfSearch() {
-    //   console.log(AMap, AMap.PlaceSearch, AMap.Amap.PlaceSearch);
-    //   // const placeSearch = new AMap.PlaceSearch({
-    //   //   // city 指定搜索所在城市，支持传入格式有：城市名、citycode和adcode
-    //   //   city: '010',
-    //   // });
-    // },
     async handleSubmit(formName) {
       if (this.openType === 'new') {
         this.$refs[formName].validate(async (valid) => {
@@ -365,6 +299,13 @@ export default {
         this.handleBeforeDiaClose(true);
       } else {
         // 编辑地址
+        // if (!this.newAdd.HavePosition) {
+        //   this.messageBox.failSingleError({
+        //     title: '定位不成功',
+        //     msg: '请重新定位',
+        //   });
+        //   return;
+        // }
         const _obj = JSON.parse(JSON.stringify(this.newAdd));
         const res = await this.api.getCustomerAddress(_obj);
         // console.log(res);
@@ -391,10 +332,11 @@ export default {
       }
       this.newAdd.Latitude = _lat;
       this.newAdd.Longitude = _lng;
-      // console.log(this.newAdd.Longitude, _lat);
+    },
+    handleMapClick(e) {
+      this.setPositionIndex(e.lnglat.lng, e.lnglat.lat);
     },
     onSearchResult(pois) {
-      console.log(pois, 'onSearchResult');
       this.mapIsLoading = false;
       if (pois.length > 0) {
         const { lng, lat } = pois[0];
@@ -405,22 +347,57 @@ export default {
       const { AddressDetail, ExpressArea } = this.newAdd;
       const { RegionalName, CityName, CountyName } = ExpressArea;
       const _str = `${RegionalName}${CityName}${CountyName}${AddressDetail}`;
-      console.log(_str);
       if (_str === this.lastSearchWords) return;
+      // this.lastSearchWords = '';
       this.newAdd.HavePosition = true;
-      setTimeout(() => {
-        this.$refs.amapSearchBox.keyword = _str;
-        // console.log(this.$refs.amapSearchBox.search);
-        try {
-          this.$refs.amapSearchBox.search();
-        } catch (e) {
-          console.log(e);
+      this._PlaceSearch.search(_str, (status, result) => {
+        this.mapIsLoading = false;
+        if (result && result.poiList && result.poiList.count) {
+          const { poiList: { pois } } = result;
+          const LngLats = pois.map(poi => {
+            const _point = poi;
+            _point.lat = poi.location.lat;
+            _point.lng = poi.location.lng;
+            return _point;
+          });
+          this.onSearchResult(LngLats);
+          this.initNum += 1;
+        } else if (status === 'error' || result.poiList === undefined) {
+          this.messageBox.failSingleError({
+            title: '定位失败',
+            msg: '搜索不到地址，请尝试修改搜索关键词!',
+            successFunc: () => {
+              this.$emit('handleMapSearchError');
+            },
+          });
+          if (!this.initNum && this.openType === 'new') this.newAdd.HavePosition = false;
+          throw new Error('定位搜索错误!');
         }
-        this.mapIsLoading = true;
-        this.lastSearchWords = _str;
-      }, 30);
+      });
+      this.mapIsLoading = true;
+      this.lastSearchWords = _str;
     },
     async handleDialogOpen() {
+      this.initNum = 0;
+      this.lastSearchWords = '';
+      this.$nextTick(() => {
+        this.map = new AMap.Map('map-container', {
+          center: [this.lng, this.lat],
+          resizeEnable: true,
+          zoom: 14,
+        });
+        this._PlaceSearch = new AMap.PlaceSearch(this.searchOption);
+        this.marker = new AMap.Marker({
+          position: [this.lng, this.lat], // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+          title: '北京',
+        });
+
+        // 将创建的点标记添加到已有的地图实例：
+        this.map.add(this.marker);
+        this.map.on('click', this.handleMapClick);
+        if (this.openType === 'tempAdd') this.handleMapLocationClick();
+      });
+      // }
       if (this.openType === 'edit') {
         if (!this.curEditInfo) return;
         // eslint-disable-next-line max-len
@@ -434,7 +411,6 @@ export default {
         this.newAdd.IsDefault = IsDefault;
         this.newAdd.Latitude = Latitude;
         this.newAdd.Longitude = Longitude;
-        // console.log(this.newAdd.Latitude, Latitude, this.newAdd.Longitude, Longitude);
         const { RegionalName, RegionalID, CityName, CityID, CountyName, CountyID } = ExpressArea;
         this.newAdd.ExpressArea.RegionalName = RegionalName;
         this.newAdd.ExpressArea.RegionalID = RegionalID;
@@ -442,7 +418,12 @@ export default {
         this.newAdd.ExpressArea.CityID = CityID;
         this.newAdd.ExpressArea.CountyName = CountyName;
         this.newAdd.ExpressArea.CountyID = CountyID;
-        // console.log(AMap);
+        if (Latitude && Longitude) {
+          this.lng = Longitude;
+          this.lat = Latitude;
+          this.mapCenter = [Longitude, Latitude];
+          this.setPositionIndex(+Longitude, +Latitude, false);
+        }
         if (ExpressArea) {
           const res = await Promise.all([
             this.api.getAddressIDList(-1),
@@ -472,7 +453,6 @@ export default {
         this.newAdd.IsDefault = IsDefault;
         this.newAdd.Latitude = Latitude;
         this.newAdd.Longitude = Longitude;
-        // console.log(this.newAdd.Latitude, Latitude, this.newAdd.Longitude, Longitude);
         const { RegionalName, RegionalID, CityName, CityID, CountyName, CountyID } = ExpressArea;
         this.newAdd.ExpressArea.RegionalName = RegionalName;
         this.newAdd.ExpressArea.RegionalID = RegionalID;
@@ -480,7 +460,6 @@ export default {
         this.newAdd.ExpressArea.CityID = CityID;
         this.newAdd.ExpressArea.CountyName = CountyName;
         this.newAdd.ExpressArea.CountyID = CountyID;
-        this.handleMapLocationClick();
         this.canClose = false;
       } else {
         if (this.RegionalList.length > 0) return;
@@ -492,7 +471,10 @@ export default {
     },
     handleBeforeDiaClose() {
       if (this.openType === 'tempAdd' && !this.canClose) {
-        this.$message.error('请在地图中保存收货地址定位!');
+        this.messageBox.failSingleError({
+          title: '新增地址需要定位',
+          msg: '请在地图中保存收货地址定位!',
+        });
         return;
       }
       // ---------------------- 在此应设置数据还原
@@ -519,20 +501,37 @@ export default {
       this.$refs.ruleForm.resetFields();
       this.handleClose();
     },
-    // mapInit() {
-    //   AMap.initAMapApiLoader({
-    //     // 高德key
-    //     key: '09966c2b866f9783b49969af19102d91',
-    //     // 插件集合 （插件按需引入）
-    //     plugin: ['PlaceSearch'],
-    //     // plugin: ['AMap.Geolocation', 'AMap.Autocomplete', 'PlaceSearch', 'ToolBar'],
-    //   });
-    // },
   },
   watch: {
     visible(newVal) {
       if (newVal) this.handleDialogOpen();
     },
+    mapCenter() {
+      if (this.map) this.map.setCenter(this.mapCenter);
+      if (this.marker) this.marker.setPosition(this.mapCenter);
+    },
+  },
+  mounted() {
+    // eslint-disable-next-line max-len
+    const url = 'https://webapi.amap.com/maps?v=1.4.15&key=09966c2b866f9783b49969af19102d91&plugin=AMap.PlaceSearch&callback=initMap';
+
+    let key = true;
+    const oSrc = document.getElementsByTagName('script');
+    oSrc.forEach(it => {
+      if (!key) return;
+      if (it.src === url) {
+        key = false;
+        this.isMapLoaded = true;
+      }
+    });
+    if (!key) return;
+    window.initMap = () => {
+      this.isMapLoaded = true;
+    };
+    const jsapi = document.createElement('script');
+    jsapi.charset = 'utf-8';
+    jsapi.src = url;
+    document.head.appendChild(jsapi);
   },
 };
 </script>
@@ -711,6 +710,10 @@ export default {
           }
         }
       }
+    }
+    #map-container {
+      width: 956px;
+      height: 485px;
     }
 }
 </style>

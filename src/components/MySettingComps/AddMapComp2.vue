@@ -47,7 +47,7 @@
                 </el-form-item>
                 <el-form-item prop="City">
                   <el-select v-model="newAdd.ExpressArea.CityID"
-                  :disabled="CityList.length === 0" @change='handleCityChange'>
+                  :disabled="CityList.length === 0 || !newAdd.ExpressArea.RegionalID" @change='handleCityChange'>
                     <el-option
                       v-for="item in CityList"
                       :key="item.ID"
@@ -58,7 +58,7 @@
                 </el-form-item>
                 <el-form-item prop="County">
                   <el-select v-model="newAdd.ExpressArea.CountyID"
-                    :disabled="CountyList.length === 0" @change='handleCountyChange'>
+                    :disabled="CountyList.length === 0 || !newAdd.ExpressArea.CityID" @change='handleCountyChange'>
                     <el-option
                       v-for="item in CountyList"
                       :key="item.ID"
@@ -70,7 +70,8 @@
               </div>
               <div class="add-2">
                 <el-form-item prop="AddressDetail">
-                <el-input v-model.trim="newAdd.AddressDetail" placeholder="详细地址 (不包含省市区)"></el-input>
+                <el-input v-model.trim="newAdd.AddressDetail" maxlength="60"
+                   show-word-limit placeholder="详细地址 (不包含省市区)"></el-input>
                 </el-form-item>
                 <el-button
                   type="primary" class="map-location-btn"
@@ -83,9 +84,8 @@
         </section>
       </li>
       <li class="map-wrap">
-        <div class="map-content" id="map-container" v-loading="mapIsLoading">
-         <!-- v-show="newAdd.HavePosition || openType==='tempAdd'" v-loading="mapIsLoading"> -->
-          <!-- <el-amap-search-box
+        <div class="map-content" v-show="newAdd.HavePosition || openType==='tempAdd'" v-loading="mapIsLoading">
+          <el-amap-search-box
             class="search-box"
             ref="amapSearchBox"
             :search-option="searchOption"
@@ -103,7 +103,7 @@
             class="amap-demo"
           >
             <el-amap-marker :position="mapCenter"></el-amap-marker>
-          </el-amap> -->
+          </el-amap>
           <!-- <button @click="onSelfSearch">1223213123</button> -->
         </div>
         <!-- <div class="map-loading"></div> -->
@@ -120,21 +120,19 @@
 </template>
 
 <script>
-/* eslint-disable consistent-return */
-/* eslint-disable no-undef */
 /* eslint-disable object-curly-newline */
-// import Vue from 'vue';
-// import AMap from 'vue-amap';
+import Vue from 'vue';
+import AMap from 'vue-amap';
 
-// Vue.use(AMap);
-// // 初始化vue-amap
-// AMap.initAMapApiLoader({
-//   // 高德key
-//   key: '09966c2b866f9783b49969af19102d91',
-//   // 插件集合 （插件按需引入）
-//   plugin: ['PlaceSearch'],
-//   // plugin: ['AMap.Geolocation', 'AMap.Autocomplete', 'PlaceSearch', 'ToolBar'],
-// });
+Vue.use(AMap);
+// 初始化vue-amap
+AMap.initAMapApiLoader({
+  // 高德key
+  key: '09966c2b866f9783b49969af19102d91',
+  // 插件集合 （插件按需引入）
+  plugin: ['PlaceSearch'],
+  // plugin: ['AMap.Geolocation', 'AMap.Autocomplete', 'PlaceSearch', 'ToolBar'],
+});
 
 export default {
   props: {
@@ -190,12 +188,14 @@ export default {
       rules: {
         Consignee: [
           { required: true, message: '请输入收货人姓名', trigger: 'blur' },
+          { min: 1, max: 12, message: '姓名不能超过12个字', trigger: 'blur' },
         ],
         Mobile: [
           { validator: validateMobile, trigger: 'blur' },
         ],
         AddressDetail: [
           { required: true, message: '请填写详细地址(不包含省市区)', trigger: 'blur' },
+          { min: 1, max: 60, message: '详细地址长度不能超过60个字符', trigger: 'blur' },
         ],
         Regional: [
           { validator: validateRegional, trigger: 'change' },
@@ -223,39 +223,37 @@ export default {
       zoom: 14,
       mapIsLoading: false,
       lastSearchWords: '',
-      isMapLoaded: false,
       searchOption: {
         // city: '河南',
         // citylimit: false,
       },
       canClose: true, // 是否可关闭地图窗口 下单添加新地址时可用
       mapCenter: [113.625351, 34.746303],
-      map: null,
-      // events: {
-      //   init: () => {
-      //     if (this.openType === 'edit') {
-      //       const { Latitude, Longitude } = this.curEditInfo;
-      //       if (!Latitude || !Longitude) return;
-      //       this.lng = Longitude;
-      //       this.lat = Latitude;
-      //       this.mapCenter = [Longitude, Latitude];
-      //       this.setPositionIndex(+Longitude, +Latitude, false);
-      //     }
-      //   },
-      //   click: e => {
-      //     this.setPositionIndex(e.lnglat.lng, e.lnglat.lat);
-      //   },
-      // },
-      // plugin: [
-      //   {
-      //     pName: 'PlaceSearch',
-      //     events: {
-      //       error: e => {
-      //         console.log(e, 'errpr map');
-      //       },
-      //     },
-      //   },
-      // ],
+      events: {
+        init: () => {
+          if (this.openType === 'edit') {
+            const { Latitude, Longitude } = this.curEditInfo;
+            if (!Latitude || !Longitude) return;
+            this.lng = Longitude;
+            this.lat = Latitude;
+            this.mapCenter = [Longitude, Latitude];
+            this.setPositionIndex(+Longitude, +Latitude, false);
+          }
+        },
+        click: e => {
+          this.setPositionIndex(e.lnglat.lng, e.lnglat.lat);
+        },
+      },
+      plugin: [
+        {
+          pName: 'PlaceSearch',
+          events: {
+            error: e => {
+              console.log(e, 'errpr map');
+            },
+          },
+        },
+      ],
     };
   },
   computed: {
@@ -279,11 +277,9 @@ export default {
       }
       return '';
     },
-    _placeSearch() {
-      if (!this.isMapLoaded) return;
-      console.log(AMap, AMap.PlaceSearch);
-      return new AMap.PlaceSearch(this.searchOption || {});
-    },
+    // _placeSearch() {
+    //   return new AMap.PlaceSearch(this.searchOption || {});
+    // },
   },
   methods: {
     async handleRegionalChange(e) {
@@ -406,61 +402,25 @@ export default {
       }
     },
     handleMapLocationClick() {
-      // eslint-disable-next-line no-constant-condition
-      if (true) {
-        this.setPositionIndex(113.625351, 34.746303);
-        return;
-      }
       const { AddressDetail, ExpressArea } = this.newAdd;
       const { RegionalName, CityName, CountyName } = ExpressArea;
       const _str = `${RegionalName}${CityName}${CountyName}${AddressDetail}`;
       console.log(_str);
       if (_str === this.lastSearchWords) return;
       this.newAdd.HavePosition = true;
-      // setTimeout(() => {
-      //   this.$refs.amapSearchBox.keyword = _str;
-      //   // console.log(this.$refs.amapSearchBox.search);
-      //   try {
-      //     this.$refs.amapSearchBox.search();
-      //   } catch (e) {
-      //     console.log(e);
-      //   }
-      //   this.mapIsLoading = true;
-      //   this.lastSearchWords = _str;
-      // }, 30);
-      console.log(this._placeSearch);
-      this._placeSearch.search(this.keyword, (status, result) => {
-        console.log(this.keyword, status, result, 'this._placeSearch.search---- vue amap haveSearch');
-        if (result && result.poiList && result.poiList.count) {
-          const { poiList: { pois } } = result;
-          const LngLats = pois.map(poi => {
-            const _point = poi;
-            _point.lat = poi.location.lat;
-            _point.lng = poi.location.lng;
-            return _point;
-          });
-          this.onSearchResult(LngLats);
-        } else if (result.poiList === undefined) {
-          console.log(this.keyword, status, result, 'this._placeSearch.search---- vue amap haveSearch throw error');
-          throw new Error(result);
+      setTimeout(() => {
+        this.$refs.amapSearchBox.keyword = _str;
+        // console.log(this.$refs.amapSearchBox.search);
+        try {
+          this.$refs.amapSearchBox.search();
+        } catch (e) {
+          console.log(e);
         }
-      });
-      this.mapIsLoading = true;
-      this.lastSearchWords = _str;
+        this.mapIsLoading = true;
+        this.lastSearchWords = _str;
+      }, 30);
     },
     async handleDialogOpen() {
-      if (!this.map) {
-        setTimeout(() => {
-        // eslint-disable-next-line no-undef
-          this.map = new AMap.Map('map-container', {
-            center: [this.lng, this.lat],
-            resizeEnable: true,
-            zoom: 14,
-          });
-          console.log(this.map, 'handleDialogOpen');
-          AMap.plugin(['AMap.PlaceSearch']);
-        }, 1000);
-      }
       if (this.openType === 'edit') {
         if (!this.curEditInfo) return;
         // eslint-disable-next-line max-len
@@ -573,27 +533,6 @@ export default {
     visible(newVal) {
       if (newVal) this.handleDialogOpen();
     },
-  },
-  mounted() {
-    const url = 'https://webapi.amap.com/maps?v=1.4.15&key=09966c2b866f9783b49969af19102d91&callback=initMap';
-
-    let key = true;
-    const oSrc = document.getElementsByTagName('script');
-    oSrc.forEach(it => {
-      if (!key) return;
-      if (it.src === url) {
-        key = false;
-        this.isMapLoaded = true;
-      }
-    });
-    if (!key) return;
-    window.initMap = () => {
-      this.isMapLoaded = true;
-    };
-    const jsapi = document.createElement('script');
-    jsapi.charset = 'utf-8';
-    jsapi.src = url;
-    document.head.appendChild(jsapi);
   },
 };
 </script>
@@ -772,10 +711,6 @@ export default {
           }
         }
       }
-    }
-    #map-container {
-      width: 956px;
-      height: 485px;
     }
 }
 </style>

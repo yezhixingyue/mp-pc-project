@@ -193,6 +193,7 @@ export default {
   },
   watch: {
     customerInfo(newVal) {
+      // console.log('customerInfo new');
       sessionStorage.setItem('customerInfo', JSON.stringify(newVal));
     },
   },
