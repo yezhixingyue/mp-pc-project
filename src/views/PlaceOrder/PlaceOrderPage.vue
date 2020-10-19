@@ -57,7 +57,7 @@ export default {
     }
     > .show-empty-bg {
       text-align: center;
-      padding-top: 60px;
+      padding-top: 80px;
       > p {
         padding-top: 15px;
       }

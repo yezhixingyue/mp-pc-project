@@ -145,8 +145,9 @@ export default {
     handleSuccessPay() {
       // 轮询到付款成功后的处理函数
       if (this.pageType === 'placeOrderPage') this.setPaySuccessOrderDataStatus();
-      else if (this.pageType === 'shoppingCarPage') {
-        this.$router.push('/shopping/car');
+      else if (this.pageType === 'shoppingCarPage' || this.pageType === 'unpayPage') {
+        if (this.pageType === 'shoppingCarPage') this.$router.push('/shopping/car');
+        else if (this.pageType === 'unpayPage') this.$router.push('/unpay/list');
         this.$store.commit('shoppingCar/setCurShoppingCarDetailData', null);
         this.$store.commit('shoppingCar/setCurShoppingCarDataBeforeFirstPlace', null);
         this.$store.commit('shoppingCar/setCurShoppingCarData4FirstPlace', null);

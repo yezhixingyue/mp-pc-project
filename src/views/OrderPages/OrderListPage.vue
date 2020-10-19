@@ -136,7 +136,8 @@ export default {
     > .header-content {
       margin: 0 auto;
       width: 1200px;
-      padding: 25px 0 22px;
+      padding: 25px 0 0px;
+      border-top: 1px dashed #eee;
       > li {
         > section {
           vertical-align: top;
@@ -147,12 +148,15 @@ export default {
           padding-left: 12px;
         }
         &.second {
-          padding-top: 30px;
+          padding-top: 28px;
           .mp-line-date-selector-wrap > .box {
             width: 600px;
+            &::after {
+              display: none;
+            }
           }
           .mp-common-comps-search-box {
-            vertical-align: 108%;
+            vertical-align: 25px;
             margin-left: 64px;
             // margin-right: -10px;
           }
@@ -176,7 +180,7 @@ export default {
     &.show-empty-bg {
       background-color: rgb(245, 245, 245);
       text-align: center;
-      padding-top: 50px;
+      padding-top: 65px;
       > p {
         margin-top: 15px;
       }

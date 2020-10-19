@@ -132,7 +132,7 @@ export default {
       cursor: pointer;
       display: inline-block;
       padding: 4px 15px 4px 8px;
-      border-radius: 2px;
+      border-radius: 5px;
       &:hover {
         background-color: rgb(230, 230, 230);
         // box-shadow: 0 0px 1px 1px rgba(38, 188, 249, 0.2);

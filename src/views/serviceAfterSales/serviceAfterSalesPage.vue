@@ -128,7 +128,8 @@ export default {
       > div {
         margin: 0 auto;
         width: 1200px;
-        padding: 38px 0 30px 0;
+        padding: 35px 0 0px 0;
+        border-top: 1px dashed #eee;
       }
       margin-bottom: 22px;
     }
@@ -148,7 +149,7 @@ export default {
     > .show-empty-bg {
       background-color: rgb(245, 245, 245);
       text-align: center;
-      padding-top: 50px;
+      padding-top: 70px;
       > p {
         margin-top: 15px;
       }

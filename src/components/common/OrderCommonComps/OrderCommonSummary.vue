@@ -107,7 +107,7 @@ export default {
 
 <style lang='scss'>
 .mp-pc-common-comp-order-common-summary-comp-wrap {
-  background: url('../../../assets/images/sawtooth-1.png') bottom left/ 390px 6px repeat-x ;
+  background: url('../../../assets/images/detail-saw.png') bottom left/ 1200px 5px repeat-x ;
   position: relative;
   // &::after {
   //   display: block;

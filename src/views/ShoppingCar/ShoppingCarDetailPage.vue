@@ -101,7 +101,7 @@ export default {
       cursor: pointer;
       display: inline-block;
       padding: 4px 15px 4px 8px;
-      border-radius: 2px;
+      border-radius: 5px;
       &:hover {
         background-color: rgb(230, 230, 230);
       }

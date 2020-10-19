@@ -75,12 +75,17 @@ html, body, #app {
 .button-title-pink {
   color: $--color-pink !important;
   border-color: $--color-pink !important;
+  transition: 0.2s;
   &:hover {
-    // background-color: rgba($color: $--color-pink, $alpha: 0.05) !important;
-    background-color: #fff !important;
+    background-color: $--color-pink !important;
+    color: #fff !important;
   }
   &:active {
-    background-color: rgba($color: $--color-pink, $alpha: 0.12) !important;
+    background-color: #e62152 !important;
+  }
+  &:focus {
+    color: $--color-pink !important;
+    border-color: $--color-pink !important;
   }
 }
 
@@ -117,7 +122,7 @@ html, body, #app {
     cursor: pointer;
     display: inline-block;
     padding: 4px 15px 4px 8px;
-    border-radius: 2px;
+    border-radius: 5px;
     &:hover {
       background-color: rgb(230, 230, 230);
     }

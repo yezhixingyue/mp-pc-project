@@ -147,6 +147,9 @@ export default {
               font-size: 13px;
             }
           }
+          > .title {
+            margin-right: 7px;
+          }
         }
         &.upload-box {
           text-align: right;
@@ -189,6 +192,7 @@ export default {
         height: 45px;
         padding: 0;
         line-height: 43px;
+        font-size: 15px;
         > span > i {
           font-size: 19px;
           vertical-align: middle;

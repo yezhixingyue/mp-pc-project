@@ -172,6 +172,7 @@ export default {
     white-space: nowrap;
     display: flex;
     border-bottom: none;
+    padding: 13px 0;
     // border-top: 1px solid #eee;
 
     > div {

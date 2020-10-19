@@ -218,6 +218,11 @@ export default {
       { label: '已过期', value: 255 },
       { label: '问题件', value: 35 },
     ],
+    /* 系统滚动状态 #app元素
+    -------------------------------*/
+    scrollTop: 0,
+    scrollHeight: 0,
+    offsetHeight: 0,
   },
   getters: {
   },
@@ -281,7 +286,7 @@ export default {
         _t.ExpressArea.CountyName = CountyName;
         _t.ExpressArea.CountyID = CountyID;
       }
-      sessionStorage.setItem('customerInfo', JSON.stringify(state.customerInfo));
+      // sessionStorage.setItem('customerInfo', JSON.stringify(state.customerInfo));
     },
     /** 修改客户手机信息  修改手机号后进行该操作
     ---------------------------------------- */
@@ -289,6 +294,11 @@ export default {
       if (!state.customerInfo) return;
       state.customerInfo.Account.Mobile = mobile;
       if (!state.customerInfo.Account.IsBranch) state.customerInfo.Mobile = mobile;
+      // customerAccountList
+      if (state.customerAccountList.length > 0) {
+        const _t = state.customerAccountList.find(it => it.AccountID === state.customerInfo.Account.AccountID);
+        _t.Mobile = mobile;
+      }
     },
     /** 设置客户子账号列表
     ---------------------------------------- */
@@ -327,6 +337,13 @@ export default {
       });
       const _t = state.customerInfo.Address.find(it => it.AddressID === item.AddressID);
       _t.isSelected = true;
+    },
+    /* 设置系统滚动状态 #app元素
+    -------------------------------*/
+    setScrollInfo(state, { scrollTop, scrollHeight, offsetHeight }) {
+      state.scrollTop = scrollTop;
+      state.scrollHeight = scrollHeight;
+      state.offsetHeight = offsetHeight;
     },
   },
   actions: {

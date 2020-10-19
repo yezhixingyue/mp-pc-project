@@ -300,15 +300,25 @@ export default {
         }
       }
       &:first-of-type {
-        .el-step__line {
-          // width: 270px;
+        .el-step__main {
+          .el-step__title {
+            margin-left: -12px;
+          }
         }
       }
       &:nth-of-type(2) {
         position: relative;
-        // left: -50px;
-        .el-step__line {
-          // width: 370px;
+        .el-step__main {
+          .el-step__title {
+            margin-left: -18px;
+          }
+        }
+      }
+      &:last-of-type {
+        .el-step__main {
+          .el-step__title {
+            margin-left: 2px;
+          }
         }
       }
     }

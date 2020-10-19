@@ -37,13 +37,14 @@ export default {
     margin: 0 auto;
     width: 1200px;
     padding-top: 25px;
+    border-top: 1px dashed #eee;
   }
   > .show-empty-bg {
     width: 100%;
     background-color: rgb(245, 245, 245);
-    min-height: calc(100vh - 255px - 22px);
+    min-height: calc(100vh - 255px - 42px);
     text-align: center;
-    padding-top: 120px;
+    padding-top: 140px;
     > p {
       margin-top: 15px;
     }

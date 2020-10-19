@@ -411,7 +411,7 @@ export default { // 上传图片按钮
     }
     > .upload-box {
       float: right;
-      width: 1050px;
+      width: 1063px;
       > .el-upload {
         > .el-button {
           min-width: 100px;
@@ -434,6 +434,9 @@ export default { // 上传图片按钮
             font-size: 13px;
           }
         }
+        .el-upload-list__item-name {
+          padding: 0;
+        }
         position: relative;
         &::before {
           content: '请选择订单文件';
@@ -444,7 +447,7 @@ export default { // 上传图片按钮
           // display: block;
           position: absolute;
           width: 8em;
-          left: 0;
+          left: -10px;
           top: -30px;
           // opacity: 0;
           // display: block;

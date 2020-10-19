@@ -8,6 +8,27 @@
   </div>
 </template>
 
+<script>
+// import { throttle } from '@/assets/js/utils/throttle';
+
+export default {
+  // methods: {
+  //   handleScroll(oEl) {
+  //     if (!oEl) return;
+  //     const { scrollTop, scrollHeight, offsetHeight } = oEl;
+  //     console.log(scrollTop, scrollHeight, offsetHeight);
+  //   },
+  // },
+  // mounted() {
+  //   const oApp = document.getElementById('app');
+  //   const _func = throttle(this.handleScroll, 30);
+  //   if (oApp) {
+  //     oApp.addEventListener('scroll', () => _func(oApp));
+  //   }
+  // },
+};
+</script>
+
 <style lang="scss">
 #app {
   font-family:MicrosoftYaHei,'微软雅黑' , Avenir, Helvetica, Arial, sans-serif;

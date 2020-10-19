@@ -79,6 +79,9 @@ export default {
     /* 客户设置快捷方式
     -------------------------------*/
     customerShortCutList: [],
+    /** 当前选中的用于报价的产品
+    ---------------------------------------- */
+    curProduct: null,
   },
   getters: {
     /* 全部产品分类结构树，用于报价目录展示
@@ -867,6 +870,11 @@ export default {
       state.isFullPayoutDisabled = false;
       state.initPageText = '';
       state.customerShortCutList = [];
+    },
+    /** 设置当前选中的用于报价的产品
+    ---------------------------------------- */
+    setCurProduct(state, data) {
+      state.curProduct = data;
     },
   },
   actions: {

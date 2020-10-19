@@ -59,7 +59,7 @@ export default {
 
 <style lang='scss'>
 .mp-pc-order-detail-page-header-wrap {
-  background: url('../../../assets/images/sawtooth-1.png') bottom left/ 390px 6px repeat-x ;
+  background: url('../../../assets/images/detail-saw.png') bottom left/ 1200px 5px repeat-x ;
   > ul.content {
     height: 147px;
     padding-top: 13px;
@@ -82,11 +82,11 @@ export default {
           background: url(../../../assets/images/normal-status.png) no-repeat 20px 13px/113px 66px;
         }
         &.cancel {
-          background: url(../../../assets/images/unpay-status.png) no-repeat 20px 13px/115px 71px;
+          background: url(../../../assets/images/cancel-status.png) no-repeat 20px 13px/115px 70px;
           color: #cbcbcb;
         }
         &.success {
-          background: url(../../../assets/images/order-complete.png) no-repeat 41.4px 13px/91.6px 66px;
+          background: url(../../../assets/images/success-status.png) no-repeat 21px 15px/112px 61px;
           color: #80c269;
         }
         &.unPay {

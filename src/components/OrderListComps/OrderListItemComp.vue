@@ -5,7 +5,7 @@
           <span class="product-item-header-amount-box gray is-font-14">产品金额：<i class="is-pink"
             >{{totalOriginalPrice}}元</i></span>
           <span class="freight-box"> <i class="gray">运费：</i>{{totalFreight}}元</span>
-          <span>
+          <span class="add-detail">
             <i class="express-box">{{data[0].Express}}</i>
             <i class="gray">配送地址：</i>{{getAddress(data[0].Package.Address.Address).First}}
             <!-- <i class="gray"> {{getAddress(data.Address.Address).Second}}</i> -->
@@ -63,7 +63,7 @@
             'is-success': item.Status === 200,
           }">{{item.Status | formatStatus}}</div>
           <div :style="wStyles[13]" class="is-font-12 gray">{{item.CreateTime | format2MiddleLangTypeDate}}</div>
-          <div :style="wStyles[14]" class="is-font-12 gray">
+          <div :style="wStyles[14]" class="is-font-12 gray btn-wrap">
             <span class="span-title-blue" @click="goToDetailPage(item)">订单详情</span>
             <span class="span-title-pink" @click="handleOrderCancel(item)"
                v-if="[20, 30, 35, 40].includes(item.Status)">取消</span>
@@ -237,6 +237,9 @@ export default {
           margin-right: 50px;
           font-size: 14px;
         }
+        &.add-detail {
+          max-width: 800px;
+        }
         > i.express-box {
           margin-right: 32px;
         }
@@ -300,6 +303,11 @@ export default {
       margin-top: 20px;
       &.yellow-color {
         color: #f4a307;
+      }
+      &.btn-wrap {
+        > .span-title-blue {
+          margin-right: 6px;
+        }
       }
     }
   }

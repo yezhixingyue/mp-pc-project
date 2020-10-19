@@ -97,10 +97,11 @@ export default {
     > .header-content {
       margin: 0 auto;
       width: 1200px;
-      padding: 30px 0;
+      padding: 28px 0 0;
+      border-top: 1px dashed #eee;
       > section {
         display: inline-block;
-        vertical-align: 50%;
+        vertical-align: 14px;
         margin-right: 80px;
       }
       > div {
@@ -125,7 +126,7 @@ export default {
   > .empty {
     text-align: center;
     > img {
-      margin: 72px 0 15px;
+      margin: 93px 0 15px;
       height: 266px;
       width: 545px;
       user-select: none;

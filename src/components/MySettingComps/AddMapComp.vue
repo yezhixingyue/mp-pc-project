@@ -70,7 +70,8 @@
               </div>
               <div class="add-2">
                 <el-form-item prop="AddressDetail">
-                <el-input v-model.trim="newAdd.AddressDetail" placeholder="详细地址 (不包含省市区)"></el-input>
+                <el-input v-model.trim="newAdd.AddressDetail" maxlength="60"
+                  show-word-limit placeholder="详细地址 (不包含省市区)"></el-input>
                 </el-form-item>
                 <el-button
                   type="primary" class="map-location-btn"
@@ -163,6 +164,7 @@ export default {
         ],
         AddressDetail: [
           { required: true, message: '请填写详细地址(不包含省市区)', trigger: 'blur' },
+          { min: 1, max: 60, message: '最多60个字符', trigger: 'blur' },
         ],
         Regional: [
           { validator: validateRegional, trigger: 'change' },
@@ -462,6 +464,8 @@ export default {
         this.newAdd.ExpressArea.CountyID = CountyID;
         this.canClose = false;
       } else {
+        this.CityList = [];
+        this.CountyList = [];
         if (this.RegionalList.length > 0) return;
         const res = await this.api.getAddressIDList(-1);
         if (res.data.Status === 1000) {

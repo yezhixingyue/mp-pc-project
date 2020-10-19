@@ -82,10 +82,11 @@ export default {
     },
     handleCouponReceive({ CouponID }) {
       if (!CouponID) return;
-      this.messageBox.warnCancelNullMsg({
-        title: '确认领取该优惠券吗?',
-        successFunc: () => { this.receiveCoupon({ CouponID }); },
-      });
+      this.receiveCoupon({ CouponID });
+      // this.messageBox.warnCancelNullMsg({
+      //   title: '确认领取该优惠券吗?',
+      //   successFunc: () => { this.receiveCoupon({ CouponID }); },
+      // });
     },
   },
   mounted() {

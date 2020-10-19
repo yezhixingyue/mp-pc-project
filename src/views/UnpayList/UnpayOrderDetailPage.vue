@@ -1,7 +1,7 @@
 <template>
   <section class="mp-pc-unpay-list-order-detail-page-wrap" v-if="curUnpayListDetailData">
     <header class="gray">
-      <span @click="onReturnClick"><i class="el-icon-arrow-left is-font-24 is-cancel"></i> 返回购物车列表</span>
+      <span @click="onReturnClick"><i class="el-icon-arrow-left is-font-24 is-cancel"></i> 返回未付款单列表</span>
     </header>
     <ul class="content">
       <li>
@@ -117,7 +117,7 @@ export default {
       cursor: pointer;
       display: inline-block;
       padding: 4px 15px 4px 8px;
-      border-radius: 2px;
+      border-radius: 5px;
       &:hover {
         background-color: rgb(230, 230, 230);
       }

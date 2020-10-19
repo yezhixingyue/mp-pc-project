@@ -209,6 +209,10 @@ export default {
 .mp-line-date-selector-wrap {
   min-width: 712px;
   display: inline-block;
+  .el-tabs__active-bar {
+    height: 3px;
+    // bottom: -1px;
+  }
   > .title {
     font-size: 14px;
     width: 5em;
@@ -222,22 +226,22 @@ export default {
     display: inline-block;
     position: relative;
     width: 745px;
-    &::after {
-      height: 1px;
-      content: "";
-      width: 100%;
-      position: absolute;
-      background-color: #eee;
-      left: 0;
-      bottom: 1px;
-    }
+    // &::after {
+    //   height: 1px;
+    //   content: "";
+    //   width: 100%;
+    //   position: absolute;
+    //   background-color: #eee;
+    //   left: 0;
+    //   bottom: 1px;
+    // }
     > div {
       display: inline-block;
       > .el-tabs__header {
         margin: 0;
         .el-tabs__item {
           line-height: unset;
-          height: 30px;
+          height: 38px;
           color: #585858;
           &.is-active, &:hover {
             color: #428DFA;
@@ -264,7 +268,7 @@ export default {
   .manual-select-date-box {
     font-size: 13px;
     min-width: 110px;
-    height: 30px;
+    height: 38px;
     display: inline-block;
     text-align: center;
     margin-left: 12px;
@@ -302,7 +306,7 @@ export default {
   }
   > span {
     flex: none;
-    vertical-align: top;
+    // vertical-align: top;
   }
   }
   > .box > div > .el-tabs__header .el-tabs__item {

@@ -187,6 +187,7 @@ export default {
 .mp-pc-common-page-header-recharge-comp-wrap {
   margin: 0 auto;
   width: 1200px;
+  border-top: 1px dashed #eee;
   > header {
     height: 50px;
     padding-top: 28px;

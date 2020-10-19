@@ -33,7 +33,7 @@
         <div class="btn-wrap">
           <el-button type="danger" @click="handleSubmit">支付订单</el-button>
         </div>
-        <Dialog2Pay pageType='shoppingCarPage' :needClear='false' />
+        <Dialog2Pay pageType='unpayPage' :needClear='false' />
       </footer>
     </section>
   </article>
@@ -141,6 +141,7 @@ export default {
     width: 1200px;
     margin: 0 auto;
     min-height: calc(100vh - 135px - 22px);
+    border-top: 1px dashed #eee;
     > footer {
       padding: 30px;
       font-size: 14px;
@@ -208,6 +209,12 @@ export default {
               color: #888;
             }
           }
+        }
+        > button {
+          font-size: 16px;
+          padding: 0;
+          line-height: 40px;
+          width: 140px;
         }
       }
     }

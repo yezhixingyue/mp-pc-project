@@ -281,7 +281,7 @@ export default {
 
       this.messageBox.warnCancelBox({
         title: '确定删除该优惠券吗?',
-        msg: `优惠券状态：${_text}`,
+        msg: `选中优惠券状态：[ ${_text} ]`,
         successFunc: () => {
           this.getCouponRemove(CouponCode, Status);
         },

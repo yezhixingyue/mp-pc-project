@@ -2,42 +2,55 @@
   <section class="mp-pc-common-page-header-common-wrap float" :style="oStyles">
     <header>
       <div>
-        <img src="../../assets/images/logo-color.png" alt />
-        <span>会员中心</span>
+        <img src="../../assets/images/logo-white.png" alt />
+        <!-- <span>会员中心</span> -->
       </div>
       <ul>
         <li>
-          <a href="http://www.mpzj.cn/">首页</a>
+          <a href="http://www.mpzj.cn/" target="_blank">首页</a>
+        </li>
+        <li class="active">
+          <a>快捷下单</a>
         </li>
         <li>
-          <a href="http://www.mpzj.cn/about_complex.aspx">关于我们</a>
+          <a href="http://www.mpzj.cn/about_complex.aspx" target="_blank">关于我们</a>
         </li>
       </ul>
     </header>
-    <footer>
+    <footer :class="showBoxShadow?'show':''">
       <div class="common-header-menus-wrap float">
         <ul class="menu-list float">
-          <router-link tag="li" to="/placeOrder">
+          <router-link tag="li"
+            to="/placeOrder"
+            class="placeorder"
+            showClassify
+            :class="{
+              active: $route.name === 'OrderPreCreate',
+              showClassify: showClassify,
+            }"
+           >
             <!-- <i class="iconfont icon-xiadan"></i> -->
-            <span>下单</span>
+            <div @mouseleave="onMouseLeave" @mouseenter="onMouseEnter">
+              <span>下单</span>
+            </div>
           </router-link>
-          <router-link tag="li" to="/shopping">
+          <router-link class="normal-item" tag="li" to="/shopping">
             <!-- <i class="iconfont icon-gouwuche"></i> -->
             <span>购物车</span>
           </router-link>
-          <router-link tag="li" to="/unpay">
+          <router-link class="normal-item" tag="li" to="/unpay">
             <!-- <i class="iconfont icon-weifukuan"></i> -->
             <span>未付款</span>
           </router-link>
-          <router-link tag="li" to="/order">
+          <router-link class="normal-item" tag="li" to="/order">
             <!-- <i class="iconfont icon-dingdan"></i> -->
             <span>订单</span>
           </router-link>
-          <router-link tag="li" to="/serviceAfterSales">
+          <router-link class="normal-item" tag="li" to="/serviceAfterSales">
             <!-- <i class="iconfont icon-shouhoudan"></i> -->
             <span>售后单</span>
           </router-link>
-          <router-link tag="li" to="/bill">
+          <router-link class="normal-item" tag="li" to="/bill">
             <!-- <i class="iconfont icon-zhangdan"></i> -->
             <span>账单</span>
           </router-link>
@@ -45,7 +58,7 @@
         <div class="customer-box" v-if="customerInfo">
           <span>
             <span>{{customerInfo.CustomerName}} </span>
-            <i class="title">/ 余额：</i>
+            <i class="title"><i class="r-5">/ </i> 余额：</i>
             <i class="price">￥{{customerBalance?customerBalance:0}}</i>
           </span>
           <el-button round @click="setShowRechange">在线充值</el-button>
@@ -93,6 +106,10 @@
         <RechargeComp :showRechange='showRechange' @handleClose='setShowRechange' />
       </div>
     </el-drawer>
+    <PlaceOrderProductClassifyComp isComHeader @handleMouseLeave='onMouseLeave'
+      @handleMouseEnter='onMouseEnter' :showClassify='showClassify'
+      @mouseleave.native="onMouseLeave" @mouseenter.native="onMouseEnter"
+      v-show="!($route.name === 'placeOrder' || !showClassify)" />
     <!-- <div class="recharge-remark" :class="{ show:showRemark, showBg: showRechange }"  @click.self='onRemarkClick'>
       <div class="recharge-box" :class="showRechange? 'showRechange' : ''">
         <RechargeComp :showRechange='showRechange' @handleClose='setShowRechange' />
@@ -103,14 +120,16 @@
 
 <script>
 import { mapState } from 'vuex';
+import PlaceOrderProductClassifyComp from '@/components/QuotationComps/PlaceOrderProductClassifyComp.vue';
 import RechargeComp from './RechargeComp.vue';
 
 export default {
   components: {
     RechargeComp,
+    PlaceOrderProductClassifyComp,
   },
   computed: {
-    ...mapState('common', ['customerInfo', 'customerBalance']),
+    ...mapState('common', ['customerInfo', 'customerBalance', 'scrollTop']),
   },
   data() {
     return {
@@ -119,6 +138,9 @@ export default {
       oStyles: {
         zIndex: 1000,
       },
+      showClassify: false,
+      timer: null,
+      showBoxShadow: false,
     };
   },
   methods: {
@@ -148,6 +170,29 @@ export default {
     },
     onRemarkClick() {
       this.setShowRechange();
+    },
+    onMouseEnter() {
+      this.showClassify = true;
+      // if (!this.isOpen) {
+      //   this.timer2 = setTimeout(() => {
+      //     this.isOpen = true;
+      //     this.timer2 = null;
+      //   }, 100);
+      // }
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      // if (i || i === 0) this.index = i;
+    },
+    onMouseLeave() {
+      this.timer = setTimeout(() => {
+        if (this.showClassify) this.showClassify = false;
+      }, 80);
+      // if (this.timer2) {
+      //   clearTimeout(this.timer2);
+      //   this.timer2 = null;
+      // }
     },
     onCommand(command) {
       console.log(command);
@@ -192,9 +237,25 @@ export default {
     },
   },
   watch: {
-    customerInfo(newVal) {
-      // console.log('customerInfo new');
-      sessionStorage.setItem('customerInfo', JSON.stringify(newVal));
+    // customerInfo(newVal) {
+    //   // console.log('customerInfo new');
+    //   sessionStorage.setItem('customerInfo', JSON.stringify(newVal));
+    // },
+    customerInfo: {
+      handler(newVal) {
+        sessionStorage.setItem('customerInfo', JSON.stringify(newVal));
+      },
+      deep: true,
+    },
+    scrollTop(newVal) {
+      // console.log(newVal);
+      if (newVal > 0) {
+        if (this.showBoxShadow) return;
+        this.showBoxShadow = true;
+      } else {
+        if (!this.showBoxShadow) return;
+        this.showBoxShadow = false;
+      }
     },
   },
   mounted() {
@@ -210,19 +271,22 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #fff;
+  background-color: #428dfa;
   width: 100%;
   z-index: 1000;
   > header {
     width: 1200px;
-    height: 80px;
+    height: 60px;
     margin: 0 auto;
     > div {
-      float: left;
+      display: inline-block;
+      vertical-align: top;
+      height: 100%;
+      margin-right: 78px;
       > img {
         width: 143px;
         height: 34px;
-        margin-top: 23px;
+        margin-top: 13px;
         margin-right: 25px;
         vertical-align: -66%;
       }
@@ -232,21 +296,24 @@ export default {
       }
     }
     > ul {
-      float: right;
+      // float: right;
+      display: inline-block;
       padding-right: 75px;
       > li {
         float: left;
-        height: 80px;
-        width: 120px;
+        height: 60px;
+        // width: 120px;
+        padding: 0 24px;
+        margin-right: 0 10px;
         > a {
           height: 100%;
           width: 100%;
-          color: #333;
+          color: #fff;
           text-decoration: unset;
           font-size: 16px;
           text-align: center;
           display: block;
-          line-height: 78px;
+          line-height: 58px;
           transition: 0.3s;
         //   &::after {
         //     height: 2px;
@@ -259,67 +326,122 @@ export default {
         //     bottom: 16px;
         //     transform: translateX(-50%);
         //   }
-          &:hover {
-            position: relative;
-            color: rgb(66, 141, 250);
-            // &::after {
-            //   width: 100%;
-            // }
-          }
+        }
+        &:hover {
+          background-color: #3d69ce;
+          box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
+        }
+        &.active {
+          background-color: #3d69ce;
+          // text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+          // box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
         }
       }
     }
   }
   > footer {
     width: 100%;
-    height: 53px;
+    height: 70px;
     overflow: hidden;
-    background-color: #428dfa;
-    border: 1px solid #428dfa;
+    background-color: #fff;
+    &.show {
+      box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045);
+    }
+    // border: 1px solid #fff;
     position: relative;
-    box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.15);
+    // box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.15);
     > .common-header-menus-wrap {
       width: 1200px;
       margin: 0 auto;
+      box-sizing: border-box;
+      // height: 69px;
+      // border-bottom: 1px dashed #eee;
       > .menu-list {
         float: left;
         > li {
           float: left;
           height: 100%;
-          line-height: 55px;
-          width: 105px;
-          color: #fff;
-          font-size: 14px;
+          line-height: 15px;
+          // width: 105px;
+          border-radius: 5px;
+          color: #333;
+          font-size: 15px;
           text-align: center;
           transition: 0.2s;
+          padding: 10px 20px 10px;
+          margin-top: 19px;
+          margin-bottom: 16px;
+          box-sizing: border-box;
+          margin-right: 20px;
           cursor: pointer;
           > i {
             font-size: 19px;
             margin-right: 8px;
             vertical-align: bottom;
           }
-          &.router-link-active {
-            > span {
-              // font-weight: 600;
+          &.normal-item {
+            &.router-link-active, &.active, &:hover {
+              color: #fff;
+              background-color: #428dfa;
+            }
+            &:active {
+              color: #fff;
+              box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
               text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
             }
-            background-color: #2260ff;
-            box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
           }
-          &:hover {
-            background-color: rgba($color: #2260ff, $alpha: 0.35);
-            box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
-          }
-          &:active {
-            box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
-            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+          &.placeorder {
+            // position: relative;
+            padding: 0;
+            margin: 0;
+            margin-right: 20px;
+            height: 70px;
+            width: 80px;
+            &.showClassify {
+              // background-color: rgb(236, 243, 254);
+              // color: #428dfa;
+              > div > span {
+                color: #fff;
+                background-color: #428dfa;
+              }
+            }
+            > div {
+              height: 35px;
+              padding: 19px 0px 16px;
+              > span {
+                display: inline-block;
+                padding: 10px 20px;
+                border-radius: 5px;
+              }
+            }
+            &.router-link-active, &.active, &:hover {
+              background-color: #fff;
+              > div > span {
+                color: #fff;
+                background-color: #428dfa;
+              }
+            }
+            //  &:hover {
+            //    > div > span {
+            //     color: #fff;
+            //     background-color: rgba($color: #428dfa, $alpha: 0.8);
+            //   }
+            //  }
+            &:active {
+              > div > span {
+                color: #fff;
+                // color: #428dfa;
+                box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
+                text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+              }
+            }
           }
         }
       }
       > div.customer-box {
         float: right;
-        color: #fff;
-        line-height: 55px;
+        color: #888;
+        line-height: 70px;
         max-width: 560px;
         text-align: right;
         white-space: nowrap;
@@ -358,8 +480,14 @@ export default {
             display: inline-block;
             vertical-align: top;
             &.price {
-              font-weight: 600;
+              // font-weight: 600;
+              color: #ff3769;
               font-size: 16px;
+            }
+            &.title {
+              > .r-5 {
+                margin-right: 5px;
+              }
             }
           }
         }
@@ -367,12 +495,19 @@ export default {
           height: 35px;
           margin: 0 25px 1px;
           padding: 9px 16px;
-          background-color: #428dfa;
-          color: #fff;
+          background-color: #fff;
+          color: #ff3769;
           width: 90px;
+          border-color: #ff3769;
+          transition: 0.2s;
           &:hover {
-            box-shadow: 0 0 3px #fff;
-            text-shadow: 0 0 1px #fff;
+            // box-shadow: 0 0 3px #fff;
+            // text-shadow: 0 0 1px #fff;
+            background-color: #ff3769;
+            color: #fff;
+          }
+          &:active {
+            background-color: #e62152;
           }
         }
         // .customer-btn {
@@ -383,13 +518,13 @@ export default {
         //   }
         // }
         > div {
-          color: #fff;
+          color: #585858;
           > span {
             cursor: pointer;
             line-height: 30px;
             display: inline-block;
             padding: 0 6px;
-            border-radius: 3px;
+            border-radius: 5px;
             outline: none;
             z-index: 3;
             transition: 0.2s;
@@ -397,9 +532,15 @@ export default {
             &:hover {
               // background-color: rgba($color: #428dfa, $alpha: 0.3) !important;
               // border-color: #000;
-              background-color:  mix(#428dfa, #000, 90%);;
+              // background-color:  mix(#428dfa, #000, 90%);;
+              color: #333;
+              background-color: #eee;
               // color: mix(#f4a307, #fff, 40%);
               // color: #428dfa;
+            }
+            &:active {
+              color: #35dff9;
+              background-color: #eee;
             }
           }
         }
@@ -408,7 +549,7 @@ export default {
   }
   > .recharge-remark {
     position: fixed;
-    top: 135px;
+    top: 130px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -461,7 +602,7 @@ export default {
       }
   }
   > .el-drawer__wrapper {
-    top: 135px;
+    top: 130px;
     outline: none;
     > div {
       outline: none;

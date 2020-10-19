@@ -131,10 +131,12 @@ export default {
 .mp-pc-order-pre-create-page-comp-wrap {
   width: 100%;
   margin-bottom: 25px;
+  min-height: calc(100vh - 130px - 30px);
   background-color: #fff;
   > section {
     width: 1200px;
     margin: 0 auto;
+    border-top: 1px dashed #eee;
     > header {
       padding-top: 4px;
       > span {
@@ -145,7 +147,7 @@ export default {
         cursor: pointer;
         display: inline-block;
         padding: 4px 15px 4px 8px;
-        border-radius: 2px;
+        border-radius: 5px;
         &:hover {
           background-color: rgb(230, 230, 230);
         }
@@ -224,6 +226,12 @@ export default {
               color: #888;
             }
           }
+        }
+        > button {
+          width: 140px;
+          font-size: 16px;
+          padding: 0;
+          line-height: 40px;
         }
       }
     }

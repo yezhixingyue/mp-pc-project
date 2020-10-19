@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-03-18 14:51:56
- * @LastEditTime: 2020-06-11 11:11:52
+ * @LastEditTime: 2020-10-19 18:04:27
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /src/assets/js/utils/throttle.js
@@ -39,20 +39,22 @@ export function debounce(func, wait, immediate) {
    * @returns
    */
 export function throttle(func, delay) {
-  // let timer = null;
+  let timer = null;
   let startTime = Date.now();
   return function b(...args) {
     const curTime = Date.now();
     const remaining = delay - (curTime - startTime);
     const context = this;
-    // clearTimeout(timer);
-    // timer = null;
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
     if (remaining <= 0) {
       func.apply(context, args);
       startTime = Date.now();
     } else {
       // console.log(timer, 'timer');
-      // timer = setTimeout(func, remaining);
+      timer = setTimeout(func, remaining);
     }
   };
 }
