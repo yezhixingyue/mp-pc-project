@@ -345,6 +345,21 @@ export default {
       state.scrollHeight = scrollHeight;
       state.offsetHeight = offsetHeight;
     },
+    /* 修改账号基础信息成功后的数据处理方法
+    -------------------------------*/
+    setCustomerAuthenInfo(state, AuthenInfo4Submit) {
+      const { QQ, CustomerName, AllowEdit, AuthenInfo } = AuthenInfo4Submit;
+      const { TaxID, LicensePath, CompanyName, SellArea, DetailAddress } = AuthenInfo;
+      state.customerInfo.QQ = QQ;
+      state.customerInfo.CustomerName = CustomerName;
+      state.customerInfo.AllowEdit = AllowEdit;
+      state.customerInfo.AuthenInfo.TaxID = TaxID;
+      state.customerInfo.AuthenInfo.LicensePath = LicensePath;
+      state.customerInfo.AuthenInfo.CompanyName = CompanyName;
+      state.customerInfo.AuthenInfo.DetailAddress = DetailAddress;
+      state.customerInfo.AuthenInfo.SellArea = { ...SellArea };
+    },
+
   },
   actions: {
     async getCraftRelationList({ state, commit }) {

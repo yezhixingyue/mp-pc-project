@@ -19,7 +19,8 @@
 
     <div v-if="show" class="comp-content-wrap">
       <!-- 数量 物料-->
-      <section class="part-count-material-box">
+      <section class="part-count-material-box"
+        v-show="!(data.MinNumber && data.MinNumber === data.MaxNumber) || data.MaterialList.length > 1">
         <single-input-comp
           title="数量"
           :remark="data.Unit"

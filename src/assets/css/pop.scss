@@ -268,6 +268,10 @@
 // 没有信息内容的警告提示框                                             类名：mp-order-del-pop-reverse-warn-null
 .el-message-box.mp-order-del-pop-reverse-warn-null {
     @include reverse-warn;
+    width: 330px !important;
+    min-height: 188px !important;
+    padding-top: 20px;
+    padding-bottom: 26px !important;
     .el-message-box__content{
         display: none;
     }
@@ -279,6 +283,9 @@
             > span::before {
                 vertical-align: -12%;
             }
+        }
+        > .el-message-box__headerbtn {
+            top: -18px;
         }
     }
 }

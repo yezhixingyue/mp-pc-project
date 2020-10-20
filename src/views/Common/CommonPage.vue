@@ -140,7 +140,8 @@ export default {
       margin: 0 auto;
       height: 1px;
       position: fixed;
-      bottom: 50px;
+      z-index: 20;
+      bottom: 80px;
       left: calc(50% - 600px);
       > .el-backtop {
         position: absolute;

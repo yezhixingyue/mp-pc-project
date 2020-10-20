@@ -95,7 +95,7 @@
           <template slot="title">
             <span class="gray no-cursor" v-if="selectedCoupon" @click.stop="null">已选择满
               {{selectedCoupon.MinPayAmount}}元减{{selectedCoupon.Amount}}元
-              <i class="is-font-12 is-cyan">{{ couponConditionText }}</i>
+              <i class="is-font-12 is-pink">{{ couponConditionText }}</i>
             </span>
             <el-button class="button-title-pink" @click="onBtnClick">
               使用优惠券<i class="el-icon-arrow-down el-icon--right"></i>
@@ -258,7 +258,8 @@ export default {
       return this.ProductQuotationResult.CurrentCost;
     },
     couponConditionText() {
-      if (!this.coupon) return '(当前未满足使用条件)';
+      if (!this.ProductQuotationResult) return '(点击 计算价格 查看是否可使用)';
+      if (!this.coupon) return '(尚未满足使用条件)';
       return '';
     },
     // 产品属性

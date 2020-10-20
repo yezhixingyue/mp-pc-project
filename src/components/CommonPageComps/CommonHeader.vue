@@ -494,7 +494,7 @@ export default {
         > button {
           height: 35px;
           margin: 0 25px 1px;
-          padding: 9px 16px;
+          padding: 9px 14px;
           background-color: #fff;
           color: #ff3769;
           width: 90px;
@@ -523,8 +523,8 @@ export default {
             cursor: pointer;
             line-height: 30px;
             display: inline-block;
-            padding: 0 6px;
-            border-radius: 5px;
+            padding: 0 8px;
+            border-radius: 3px;
             outline: none;
             z-index: 3;
             transition: 0.2s;
@@ -534,13 +534,14 @@ export default {
               // border-color: #000;
               // background-color:  mix(#428dfa, #000, 90%);;
               color: #333;
-              background-color: #eee;
+              // background-color: #eee;
+              box-shadow: 0 0px 2px 1px rgba(66, 141, 250, 0.8);
               // color: mix(#f4a307, #fff, 40%);
               // color: #428dfa;
             }
             &:active {
-              color: #35dff9;
-              background-color: #eee;
+              color: #428dfa;
+              background-color:  rgba(66, 141, 250, 0.1);
             }
           }
         }

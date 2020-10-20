@@ -42,6 +42,8 @@ export default {
   width: 100%;
   height: 144px;
   background-color: #1D7AD9;
+  position: relative;
+  z-index: 18;
   .content {
     width: 1200px;
     height: 100%;

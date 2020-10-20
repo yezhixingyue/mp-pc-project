@@ -39,11 +39,13 @@ export default {
   line-height: 31px;
   padding: 0 7px;
   font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
   // color: $--color-text-primary;
 
-  &.active {
+  &:hover {
     // color: $--color-blue;
-    // border-color: $--color-blue;
+    border-color: rgba($color: #428dfa, $alpha: 1);
   }
   &.disabled {
     // color: $--color-text-light;

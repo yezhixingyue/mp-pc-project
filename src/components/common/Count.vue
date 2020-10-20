@@ -15,16 +15,19 @@
           </el-pagination>
         </div>
         <slot></slot>
-        <span class="count">共检索出<i class="is-pink is-font-16">{{count}}</i>条记录</span>
+        <span class="count" :class="DownLoadConfigObj?'exc':''"
+          >共检索出<i class="is-pink is-font-16">{{count}}</i>条记录</span>
+        <!-- <el-butto v-if="configObj" type="primary" class="export-btn">导出Excel</el-butto> -->
+        <DownLoadExcelComp :configObj="DownLoadConfigObj" v-if="DownLoadConfigObj" />
 </div>
 </template>
 
 <script>
-// import LoadingMiniSpinner from '@/components/common/LoadingMiniSpinner.vue';
+import DownLoadExcelComp from '@/components/common/UploadComp/DownLoadExcelComp.vue';
 
 export default {
   components: {
-    // LoadingMiniSpinner,
+    DownLoadExcelComp,
   },
   props: {
     /**
@@ -55,6 +58,13 @@ export default {
     pageSize: {
       default: 30,
       type: Number,
+    },
+    /**
+     * 导出excel相关信息
+     */
+    DownLoadConfigObj: {
+      type: Object,
+      default: null,
     },
   },
   watch: {
@@ -121,12 +131,22 @@ export default {
     text-align: left;
   }
   .count{
-    color: #585858;
+    color: #888;
     position: absolute;
     right: 25px;
     i {
         margin: 0 3px;
     }
+    &.exc {
+      right: 182px;
+    }
+  }
+  > button {
+    position: absolute;
+    right: 0;
+    top: 2px;
+    width: 140px;
+    height: 40px;
   }
   .mp-pagination-wrap{
     display: inline-block;

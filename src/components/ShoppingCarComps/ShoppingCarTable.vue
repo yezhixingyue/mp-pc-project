@@ -58,29 +58,49 @@
         </div>
       </el-table-column>
     </el-table>
-    <footer class="float is-font-14">
-      <div class="left">
-        <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll">全选</el-checkbox>
-        <span class="gray">共检测出 <i class="is-pink">{{shoppingDataNumber}}</i> 个订单</span>
-      </div>
-      <div class="right">
-        <span class="span-title-blue" @click="handleClearList">清除已上传订单</span>
-        <span class="span-title-pink" @click="handleDel(null)">删除选中订单</span>
-        <el-button type="primary" @click="handleSelectedSubmit">上传选中订单</el-button>
+    <footer class="is-font-14">
+      <div class="float">
+        <div class="left">
+          <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll">全选</el-checkbox>
+          <span class="gray">共检测出 <i class="is-pink">{{shoppingDataNumber}}</i> 个订单</span>
+        </div>
+        <div class="right">
+          <!-- <span class="span-title-blue" @click="handleClearList">清除已上传订单</span> -->
+          <span class="span-title-pink" @click="handleDel(null)">删除选中订单</span>
+          <el-button type="primary" @click="handleSelectedSubmit">上传选中订单</el-button>
+        </div>
       </div>
     </footer>
+    <transition name="el-fade-in-linear">
+      <footer class="is-font-14 floating" v-show="isFootFixed">
+        <div class="float">
+          <div class="left">
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkedAll">全选</el-checkbox>
+            <span class="gray">共检测出 <i class="is-pink">{{shoppingDataNumber}}</i> 个订单</span>
+          </div>
+          <div class="right">
+            <!-- <span class="span-title-blue" @click="handleClearList">清除已上传订单</span> -->
+            <span class="span-title-pink" @click="handleDel(null)">删除选中订单</span>
+            <el-button type="primary" @click="handleSelectedSubmit">上传选中订单</el-button>
+          </div>
+        </div>
+      </footer>
+    </transition>
   </section>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { throttle } from '@/assets/js/utils/throttle';
+import { debounce, throttle } from '@/assets/js/utils/throttle';
 
 export default {
   data() {
     return {
       multipleSelection: [],
       h: 0,
+      // difference: 0,
+      // scrollTop: 0,
+      isFootFixed: false,
     };
   },
   computed: {
@@ -101,6 +121,10 @@ export default {
     isIndeterminate() {
       return this.multipleSelection.length < this.shoppingDataNumber && this.multipleSelection.length > 0;
     },
+    // isFootFixed() {
+    //   // 140
+    //   return this.difference - 140 - this.scrollTop > 0;
+    // },
   },
   methods: {
     getHeight() {
@@ -272,13 +296,35 @@ export default {
     handleClearList() {
       this.$store.commit('shoppingCar/clearShoppingDataList');
     },
+    handleScroll(oEl) {
+      if (!oEl) return;
+      const { scrollTop, scrollHeight, offsetHeight } = oEl;
+      const difference = scrollHeight - offsetHeight;
+      // this.scrollTop = scrollTop;
+      // console.log(scrollTop, scrollHeight, offsetHeight);
+      // console.log(difference, scrollTop, difference - 140 - scrollTop);
+      if (difference - 140 - scrollTop > 0) this.isFootFixed = true;
+      else this.isFootFixed = false;
+    },
   },
   mounted() {
-    this.$nextTick(() => this.setHeight());
-    window.addEventListener('resize', this.setHeight);
+    // this.$nextTick(() => this.setHeight());
+    // window.addEventListener('resize', this.setHeight);
+    this.oApp = document.getElementById('app');
+    const _func = debounce(this.handleScroll, 30);
+    if (this.oApp) {
+      // this.oApp.addEventListener('scroll', () => _func(this.oApp));
+      this.oApp.onscroll = () => _func(this.oApp);
+    }
+    this.$nextTick(() => {
+      this.handleScroll(this.oApp);
+    });
+    // console.log('mounted');
+    // window.addEventListener('resize', _func());
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.setHeight);
+    // window.removeEventListener('resize', this.setHeight);
+    this.oApp.onscroll = null;
   },
   watch: {
     shoppingDataList: {
@@ -353,25 +399,42 @@ export default {
     }
   }
   > footer {
-    height: 65px;
     width: 100%;
-    padding: 15px 0 10px 0;
-    box-sizing: border-box;
-    line-height: 40px;
-    // box-shadow: 0px 0px 14px 7px rgba(136, 136, 136, 0.3);
-    // z-index: 10;
-    > .left {
-      float: left;
-      padding-left: 10px;
-      > .gray {
-        margin-left: 16px;
+    > div {
+      height: 65px;
+      width: 1200px;
+      padding: 15px 0 10px 0;
+      box-sizing: border-box;
+      line-height: 40px;
+      margin: 0 auto;
+      > .left {
+        float: left;
+        padding-left: 10px;
+        > .gray {
+          margin-left: 16px;
+        }
+      }
+      > .right {
+        float: right;
+        padding-right: 5px;
+        > .span-title-pink {
+          margin: 0 35px;
+        }
       }
     }
-    > .right {
-      float: right;
-      padding-right: 5px;
-      > .span-title-pink {
-        margin: 0 35px;
+
+    &.floating {
+      position: fixed;
+      bottom: 0;
+      background-color: #fff;
+      left: 0;
+      right: 10px;
+      box-shadow: 0px 0px 14px 7px rgba(136, 136, 136, 0.3);
+      z-index: 10;
+      // transition: 0.3s;
+      > div {
+        position: relative;
+        left: -8px;
       }
     }
   }

@@ -118,8 +118,13 @@ export default {
       width: 1200px;
       margin: 0 auto;
       padding-top: 25px;
+      margin-bottom: 15px;
       > div {
         margin-top: 19px;
+        height: 55px;
+      }
+      > section {
+        min-height: calc(100vh - 135px - 45px - 193px);
       }
     }
   }

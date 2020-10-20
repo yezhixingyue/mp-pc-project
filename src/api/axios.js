@@ -42,7 +42,8 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => {
     if (loadingInstance) loadingInstance.close();
-    const _list2NotNeed2Toast = ['/Api/Calculate/ProductPrice', '/Api/Order/Create'];
+    // eslint-disable-next-line max-len
+    const _list2NotNeed2Toast = ['/Api/Calculate/ProductPrice', '/Api/Order/Create', '/Api/AfterSales/Excel', '/Api/Customer/OrderExcel'];
     const _statusList2NotNeed2Toast = [1000, 9062];
     // 包含以上的状态码 或 以上的请求路径  不会弹窗报错  其余以外都会报错出来
 

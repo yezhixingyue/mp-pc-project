@@ -7,7 +7,7 @@
     <div class="content">
       <ul>
         <li class="file-content-box">
-          <span class="title">文件内容：</span>
+          <span class="title gray">文件内容：</span>
           <el-input v-model.trim="fileContent" maxlength="100" show-word-limit  placeholder="文件内容"></el-input>
         </li>
         <li class="upload-box">

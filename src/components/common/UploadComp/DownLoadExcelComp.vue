@@ -1,8 +1,7 @@
 <template>
-  <button class="mp-common-download-to-excel-comp-wrap is-blue" @click="onClick">
-    导出Excel表格
-    <i class="el-icon-download"></i>
-  </button>
+  <el-button type='primary' class="mp-common-download-to-excel-comp-wrap" @click="onClick">
+    导出Excel
+  </el-button>
 </template>
 
 <script>
@@ -26,12 +25,16 @@ export default {
   },
   methods: {
     onClick() {
-      if (this.configObj.condition.Page === 1 && this.configObj.count === 0) {
-        this.messageBox.warnSingleError({ msg: '[ 当前条件没有可导出的列表数据! ]', title: '注意' });
+      // eslint-disable-next-line max-len
+      if (((this.configObj.condition.Page && this.configObj.condition.Page === 1) || !this.configObj.condition.Page) && this.configObj.count === 0) {
+        this.messageBox.warnSingleError({ msg: '[ 当前条件没有可导出的数据 ]', title: '暂无数据' });
         return;
       }
-      // this.messageBox.warnCancelNullMsg('确定导出表格数据吗?', () => this.handleDownFunc());
-      this.handleDownFunc();
+      this.messageBox.warnCancelNullMsg({
+        title: '确定导出Excel数据吗?',
+        successFunc: this.handleDownFunc,
+      });
+      // this.handleDownFunc();
     },
     async handleDownFunc() {
       const config = JSON.parse(JSON.stringify(this.configObj.condition)); // 获取经过处理过的请求头配置对象
@@ -48,8 +51,8 @@ export default {
 
       const { data } = res;
       const blobData = new Blob([data]);
-
-      let fileName = `${this.configObj.fileDefaultName}(全部).xls`;
+      const _d = ConvertTimeFormat(new Date());
+      let fileName = `${this.configObj.fileDefaultName}(截止到${_d}日全部订单).xls`;
       if (this.configObj.fileDate) {
         const { First, Second } = this.configObj.fileDate;
         if (First && Second) {
@@ -89,19 +92,4 @@ export default {
 </script>
 
 <style lang='scss'>
-// @import "@/assets/css/common/var.scss";
-.mp-common-download-to-excel-comp-wrap {
-  border: none;
-  background-color: #fff;
-  cursor: pointer;
-  height: 100%;
-  font-size: 13px;
-  outline: none;
-  &:hover {
-    color: #35dff9 !important;
-  }
-  &:active {
-    // color: $--color-primary-lighter !important;
-  }
-}
 </style>

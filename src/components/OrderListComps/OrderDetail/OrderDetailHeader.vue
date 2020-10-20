@@ -83,7 +83,7 @@ export default {
         }
         &.cancel {
           background: url(../../../assets/images/cancel-status.png) no-repeat 20px 13px/115px 70px;
-          color: #cbcbcb;
+          color: #989898;
         }
         &.success {
           background: url(../../../assets/images/success-status.png) no-repeat 21px 15px/112px 61px;

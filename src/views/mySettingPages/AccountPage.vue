@@ -72,7 +72,7 @@
       </div>
     </div>
     <footer>
-      <span class="is-cyan" v-if="customerInfo&&customerInfo.RefuseTips&&!AllowEdit">{{customerInfo.RefuseTips}}</span>
+      <span class="is-pink" v-if="customerInfo&&customerInfo.RefuseTips&&!AllowEdit">{{customerInfo.RefuseTips}}</span>
       <el-button type="primary" :disabled='!AllowEdit' @click="handleSubmit">保存</el-button>
     </footer>
   </section>
@@ -121,6 +121,9 @@ export default {
     },
   },
   data() {
+    // const validateQQ = (rule, value, callback) => {
+    //   if (this.validateCheck(value, this.QQRules, callback)) callback();
+    // };
     return {
       RegionalList: [],
       CityList: [],
@@ -330,6 +333,10 @@ export default {
           this.reportError('QQ号长度最少为5位');
           return false;
         }
+        if (QQ < 10000) {
+          this.reportError('QQ号最小为10000');
+          return false;
+        }
         if (length > 13) {
           this.reportError('QQ号长度不应超过13位');
           return false;
@@ -346,6 +353,7 @@ export default {
           title: '修改成功',
           successFunc: () => {
             this.AuthenInfo4Submit.AllowEdit = false;
+            this.$store.commit('common/setCustomerAuthenInfo', this.AuthenInfo4Submit);
           },
         });
       }
@@ -403,7 +411,7 @@ export default {
 <style lang='scss'>
 .mp-pc-my-setting-account-page-wrap {
   > .basic-info {
-    padding-top: 10px;
+    // padding-top: 10px;
     > div {
       margin-top: 20px;
       // &.second {

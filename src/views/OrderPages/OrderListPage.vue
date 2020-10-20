@@ -47,9 +47,24 @@
             :handlePageChange='handlePageChange'
             :count='OrderListNumber'
             :pageSize='20'
+            :DownLoadConfigObj='DownLoadConfigObj'
             class="float"
             />
         </footer>
+        <transition name="el-fade-in-linear">
+          <footer  v-show="isFootFixed" class="floating">
+            <div>
+              <Count
+              :watchPage='condition4OrderList.Page'
+              :handlePageChange='handlePageChange'
+              :count='OrderListNumber'
+              :pageSize='20'
+              :DownLoadConfigObj='DownLoadConfigObj'
+              class="float"
+              />
+            </div>
+          </footer>
+        </transition>
       </section>
     </section>
     <section class="show-empty-bg" v-else>
@@ -60,6 +75,7 @@
 </template>
 
 <script>
+import { debounce } from '@/assets/js/utils/throttle';
 import SingleSelector from '@/components/common/Selector/SingleSelector.vue';
 import ProductSelector from '@/components/common/Selector/ProductSelectorIndex.vue';
 import LineDateSelectorComp from '@/components/common/Selector/LineDateSelectorComp.vue';
@@ -81,6 +97,7 @@ export default {
   },
   data() {
     return {
+      isFootFixed: false,
       // eslint-disable-next-line max-len
       dateList: [{ label: '全部', value: 'all' }, { label: '今日', value: 'today' }, { label: '昨日', value: 'yesterday' }, { label: '本月', value: 'curMonth' }, { label: '上月', value: 'lastMonth' }],
     };
@@ -89,6 +106,15 @@ export default {
     ...mapState('common', ['OrderStatusList']),
     ...mapState('order', ['condition4OrderList', 'OrderList', 'OrderListNumber']),
     ...mapGetters('order', ['computedOrderlist']),
+    DownLoadConfigObj() {
+      return {
+        condition: this.condition4OrderList,
+        count: this.OrderListNumber,
+        fileDefaultName: '名片之家订单列表',
+        fileDate: this.condition4OrderList.Date,
+        downFunc: data => this.api.getCustomerOrderList4Excel(data),
+      };
+    },
     OrderStatus: {
       get() {
         return this.condition4OrderList.Status;
@@ -111,12 +137,37 @@ export default {
     handlePageChange(page) {
       this.$store.dispatch('order/getOrderList', page);
     },
+    handleScroll(oEl) {
+      if (!oEl) return;
+      const { scrollTop, scrollHeight, offsetHeight } = oEl;
+      const difference = scrollHeight - offsetHeight;
+      if (difference - 149 - scrollTop > 0) this.isFootFixed = true;
+      else this.isFootFixed = false;
+    },
+  },
+  watch: {
+    computedOrderlist() {
+      this.$nextTick(() => {
+        this.handleScroll(this.oApp);
+      });
+    },
   },
   mounted() {
     this.$store.dispatch('order/getOrderList');
+    this.oApp = document.getElementById('app');
+    const _func = debounce(this.handleScroll, 30);
+    if (this.oApp) {
+      // this.oApp.addEventListener('scroll', () => _func(this.oApp));
+      this.oApp.onscroll = () => _func(this.oApp);
+    }
+    this.$nextTick(() => {
+      this.handleScroll(this.oApp);
+    });
   },
   beforeDestroy() {
     this.$store.commit('order/setShouldGetNewListData', true);
+    // console.log('beforeDestroy orderListpage');
+    this.oApp.onscroll = null;
   },
 };
 </script>
@@ -172,8 +223,24 @@ export default {
         width: 1200px;
         padding-top: 25px;
         > footer {
-          height: 65px;
+          height: 55px;
           padding-top: 19px;
+          &.floating {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            z-index: 10;
+            padding-top: 10px;
+            right: 0px;
+            box-shadow: 0px 0px 14px 7px rgba(136, 136, 136, 0.3);
+            > div {
+              width: 1200px;
+              margin: 0 auto;
+              position: relative;
+              left: -8px;
+            }
+          }
         }
       }
     }

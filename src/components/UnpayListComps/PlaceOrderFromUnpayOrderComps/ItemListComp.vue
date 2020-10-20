@@ -5,7 +5,7 @@
           <span class="product-item-header-amount-box gray is-font-14">产品金额：<i class="is-pink"
             >{{data.ProductPrice}}元</i></span>
           <span class="freight-box"> <i class="gray">运费：</i>{{data.Freight}}元</span>
-          <span>
+          <span class="add-detail">
             <i class="gray">配送地址：</i>{{getAddress(data.Address.Address).First}}
             <i class="gray"> {{getAddress(data.Address.Address).Second}}</i></span>
         </div>
@@ -163,6 +163,9 @@ export default {
         &.freight-box {
           margin-right: 50px;
           font-size: 14px;
+        }
+        &.add-detail {
+          max-width: 800px;
         }
       }
     }

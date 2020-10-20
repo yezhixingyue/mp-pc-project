@@ -318,7 +318,7 @@ export default {
     position: relative;
     padding-bottom: 50px;
     width: 930px;
-    padding-top: 10px;
+    // padding-top: 10px;
     > .add-box {
       // margin-bottom: 50px;
       padding-top: 45px;

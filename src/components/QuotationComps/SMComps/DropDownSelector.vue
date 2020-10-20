@@ -96,7 +96,7 @@ export default {
       );
       if (!this.show || !oWrap) return;
       // eslint-disable-next-line no-shadow
-      this.$utils.animateScroll(oWrap.scrollTop, oWrap.scrollHeight, num => {
+      this.utils.animateScroll(oWrap.scrollTop, oWrap.scrollHeight, num => {
         oWrap.scrollTop = num;
       });
     },

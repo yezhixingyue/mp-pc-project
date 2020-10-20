@@ -297,7 +297,7 @@ export default {
           }
         &.active {
           color: #428dfa;
-          // font-size: 16px;
+          // font-size: 15px;
           > span {
             background-color: rgba($color: #428dfa, $alpha: 0.1);
           }
@@ -305,7 +305,7 @@ export default {
         &.selected {
           color: #428dfa;
           // font-weight: 600;
-          // font-size: 16px;
+          font-size: 15px;
           &::after {
             width: 80px;
             opacity: 1;

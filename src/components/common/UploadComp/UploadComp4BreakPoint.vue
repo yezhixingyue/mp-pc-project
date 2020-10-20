@@ -17,7 +17,7 @@
       {{showTitle}}
     </div>
     <div v-else class="el-comp">
-      <span>印品文件：</span>
+      <span class="gray">印品文件：</span>
       <el-upload
         class="upload-box"
         ref="upload"
@@ -27,6 +27,7 @@
         :file-list="fileList"
         :class="fileList.length > 0 ? '' : 'empty' "
         :limit='1'
+        :accept='accept'
         :on-exceed='exceed'
         :on-change='handleElChange'
         :auto-upload="false">
@@ -40,6 +41,11 @@
         @click="e => {e.stopPropagation(); return false;}"
         v-if="showLoading || showProgress"
        >
+    <!-- <div
+        class="loading-box"
+        @click="e => {e.stopPropagation(); return false;}"
+        v-if="1"
+       > -->
         <div v-if="showLoading">
           <i class="el-icon-loading"></i>
           <p>文件正在上传中...</p>
@@ -97,7 +103,7 @@ export default { // 上传图片按钮
     accept: {
       type: String,
       // default: 'image/png,image/jpeg,image/gif,image/jpg,image/bmp',
-      default: '*',
+      default: '.cdr,.eps,.jpg,.jpeg,.tiff,.tif,.rar,.zip,.pdf',
       // default: '.png,.jpeg,.gif,.jpg,.bmp',
       // default: '',
     },
@@ -382,6 +388,7 @@ export default { // 上传图片按钮
       left: 50%;
       font-size: 14px;
       transform: translate(-50%, -135%);
+      text-align: center;
       > i {
         font-size: 32px;
         margin-bottom: 10px;
@@ -439,15 +446,15 @@ export default { // 上传图片按钮
         }
         position: relative;
         &::before {
-          content: '请选择订单文件';
+          content: '请选择订单文件 ( 请上传cdr, eps, jpg, jpeg, tiff, tif, rar, zip, pdf等格式的设计文件 )';
           display: inline-block;
           line-height: 35px;
           color: #989898;
           font-size: 12px;
           // display: block;
           position: absolute;
-          width: 8em;
-          left: -10px;
+          width: 38em;
+          left: -6px;
           top: -30px;
           // opacity: 0;
           // display: block;

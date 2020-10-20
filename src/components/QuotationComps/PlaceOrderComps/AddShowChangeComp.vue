@@ -55,7 +55,7 @@
           </div>
         </li>
         <li v-else class="has-none-consignee">
-          <span class="is-cyan">当前未设置收货地址，请点击右上方进行添加</span>
+          <span class="is-pink">尚未设置收货地址，请点击右上方进行添加</span>
         </li>
       </ul>
     </div>
@@ -589,7 +589,7 @@ export default {
           line-height: 28px;
           margin-top: 20px;
           font-size: 12px;
-          text-align: center;
+          text-align: left;
           color: #cbcbcb;
         }
       }

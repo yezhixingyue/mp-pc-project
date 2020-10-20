@@ -205,11 +205,17 @@ const api = {
   getOrderCancle(OrderID) {
     return instance.delete(`/Api/Order/Cancle?orderID=${OrderID}`);
   },
+  getCustomerOrderList4Excel(data) { // 导出客户订单列表 POST /Api/Customer/OrderExcel
+    return instance.post('/Api/Customer/OrderExcel', data, { responseType: 'arraybuffer' });
+  },
 
   /* 售后单部分 api
    ----------------------------------------------------------------------------------- */
   getAfterSalesList(data) { // POST /Api/AfterSales/List 获取售后单列表
     return instance.post('/Api/AfterSales/List', data);
+  },
+  getServiceListData2Excel(data) { // POST /Api/AfterSales/Excel
+    return instance.post('/Api/AfterSales/Excel', data, { responseType: 'arraybuffer' });
   },
 
   /* 未付款订单部分 api

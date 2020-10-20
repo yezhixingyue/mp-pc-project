@@ -8,14 +8,15 @@
         <OrderDetailHeader :info4OrderSummary='info4OrderSummary' />
       </li>
       <li>
-        <OrderProgress :OrderID='this.curOrderDetailData.OrderID' />
+        <OrderProgress @setProgressDataCompleted='setProgressDataCompleted' :OrderID='this.curOrderDetailData.OrderID'/>
       </li>
       <li>
         <OrderPackageList :OrderID='this.curOrderDetailData.OrderID' :Unit='this.curOrderDetailData.Unit'
+        @setPackDataCompleted='setPackDataCompleted'
         :Express='this.curOrderDetailData.Express' />
       </li>
       <li class="last-item">
-        <OrderDetailCommonComp :orderDetail='curOrderDetailData'>
+        <OrderDetailCommonComp @setDetailDataCompleted='setDetailDataCompleted' :orderDetail='curOrderDetailData'>
           <div class="price-wrap">
             <div class="price-box"  v-if="curOrderDetailData">
               <div class="price-left">
@@ -52,6 +53,7 @@
         </OrderDetailCommonComp>
       </li>
     </ul>
+    <AsideIndexComp ref="AsideIndexComp" />
   </section>
 </template>
 
@@ -62,13 +64,22 @@ import OrderDetailHeader from '@/components/OrderListComps/OrderDetail/OrderDeta
 import OrderProgress from '@/components/OrderListComps/OrderDetail/OrderProgress.vue';
 import OrderPackageList from '@/components/OrderListComps/OrderDetail/OrderPackageList.vue';
 import OrderDetailCommonComp from '@/components/common/OrderCommonComps/OrderDetailCommonComp.vue';
+import AsideIndexComp from '@/components/OrderListComps/OrderDetail/AsideIndexComp.vue';
 
 export default {
+  data() {
+    return {
+      progressDataCompleted: false,
+      packDataCompleted: false,
+      detailDataCompleted: false,
+    };
+  },
   components: {
     OrderDetailHeader,
     OrderProgress,
     OrderPackageList,
     OrderDetailCommonComp,
+    AsideIndexComp,
   },
   computed: {
     ...mapState('order', ['curOrderDetailData']),
@@ -106,6 +117,26 @@ export default {
       // eslint-disable-next-line max-len
       const res = await this.$store.dispatch('shoppingCar/getOrderPreCreateFromShoppingCar', [this.curOrderDetailData]);
       if (res) this.$router.push('/shopping/submit');
+    },
+    handleGetDataSuccess() {
+      if (this.progressDataCompleted && this.packDataCompleted && this.detailDataCompleted) {
+        this.$refs.AsideIndexComp.getElesInfo();
+      }
+    },
+    setProgressDataCompleted(bool) {
+      this.progressDataCompleted = bool;
+      if (bool) this.handleGetDataSuccess();
+      // console.log(this.$refs.AsideIndexComp);
+    },
+    setPackDataCompleted(bool) {
+      this.packDataCompleted = bool;
+      if (bool) this.handleGetDataSuccess();
+      // console.log(this.$refs.AsideIndexComp);
+    },
+    setDetailDataCompleted(bool) {
+      this.detailDataCompleted = bool;
+      if (bool) this.handleGetDataSuccess();
+      // console.log(this.$refs.AsideIndexComp);
     },
   },
   mounted() {

@@ -33,7 +33,9 @@ export default {
   },
   async mounted() {
     if (!this.OrderID) return;
+    // this.$emit('setProgressDataCompleted', false);
     const res = await this.api.getOrderProgress(this.OrderID);
+    this.$emit('setProgressDataCompleted', true);
     if (res.data.Status === 1000) {
       this.progressData = res.data.Data.filter(it => it.FinishPercent !== 0 || it.ShowFocus).reverse();
     }
