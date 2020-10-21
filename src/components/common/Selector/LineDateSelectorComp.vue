@@ -243,6 +243,7 @@ export default {
           line-height: unset;
           height: 38px;
           color: #585858;
+          line-height: 12px\0;
           &.is-active, &:hover {
             color: #428DFA;
           }

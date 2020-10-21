@@ -328,6 +328,7 @@ export default {
         > input {
           height: 30px;
           // line-height: 26px;
+          line-height: 26px\0;
           &::placeholder {
             font-size: 12px;
             color: #cbcbcb;
@@ -530,6 +531,8 @@ export default {
           }
         }
         &:hover {
+          // box-shadow: 0 -3px 3px 0 rgba(0, 0, 0, 0.3);
+          transform: scale(1.01);
           > .top {
             > .to-del {
               // display: block;
@@ -585,7 +588,7 @@ export default {
       box-shadow: 0px 0px 10px #ff3769;
     }
     100%{
-      box-shadow: 0px 0px 3px #ff3769;
+      box-shadow: 0px 0px 0px #ff3769;
     }
   }
   @keyframes new-add-item-opacity{

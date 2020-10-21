@@ -52,19 +52,24 @@ export default {
         margin: 13px 0;
         // box-sizing: border-box;
         transition: 0.2s;
+        &::after {
+          content: '';
+          height: 100%;
+          width: 3px;
+          position: absolute;
+          background-color: #428dfa;
+          top: 0;
+          right: 0;
+          opacity: 0;
+          transition: 0.2s;
+        }
         &.router-link-exact-active {
           color: #428dfa;
           font-weight: 700;
           background-color: #e9f0fa;
           position: relative;
           &::after {
-            content: '';
-            height: 100%;
-            width: 3px;
-            position: absolute;
-            background-color: #428dfa;
-            top: 0;
-            right: 0;
+            opacity: 1;
           }
         }
         cursor: pointer;

@@ -97,6 +97,7 @@ export default {
     }
     this.$nextTick(() => {
       window.onresize = debounce(this.getElesInfo, 30);
+      this.getElesInfo();
     });
   },
   beforeDestroy() {

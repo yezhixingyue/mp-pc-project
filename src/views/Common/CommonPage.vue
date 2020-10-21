@@ -135,6 +135,7 @@ export default {
     margin: 0 auto;
     box-sizing: border-box;
     min-height: calc(100vh - 130px - 22px);
+    min-height: calc(100vh - 130px - 42px)\0;
     > .back-wrapper {
       width: 1200px;
       margin: 0 auto;

@@ -39,7 +39,7 @@
     <div
         class="loading-box"
         @click="e => {e.stopPropagation(); return false;}"
-        v-if="showLoading || showProgress"
+        v-if="showLoading || showProgress || showReadMsg"
        >
     <!-- <div
         class="loading-box"
@@ -51,10 +51,14 @@
           <p>文件正在上传中...</p>
         </div>
         <div v-if="showProgress" class="progress-box">
-          <p>正在上传中... </p>
+          <p>文件正在上传中... </p>
           <el-progress stroke-linecap="square"
            :text-inside="true" :stroke-width="13" :percentage="percentageNum">
           </el-progress>
+        </div>
+        <div v-if="showReadMsg">
+          <i class="el-icon-loading"></i>
+          <p>{{upLoadTitle}}</p>
         </div>
       </div>
   </div>
@@ -133,6 +137,7 @@ export default { // 上传图片按钮
       percentage: 0,
       showProgress: false,
       showLoading: false,
+      showReadMsg: false,
       fileName: '',
       files: null,
       fileList: [],
@@ -165,13 +170,15 @@ export default { // 上传图片按钮
     },
     upLoadSingleFile(file) {
       if (!file) return;
-      this.upLoadTitle = '读取文件中...';
+      this.upLoadTitle = '读取文件中...  ( 文件过大时速度会较慢 )';
+      this.showReadMsg = true;
       const reader = new FileReader();
       reader.readAsArrayBuffer(file);
       console.log(file, 12345);
       reader.onerror = () => {
         this.messageBox.failSingleError({ title: '文件解析错误！', msg: '请检查文件并重新上传' });
         this.upLoadTitle = '读取失败请重新选择';
+        this.showReadMsg = false;
         const oInput = document.querySelector('.mp-phone-upload-comp-break-point-type-wrap > input');
         if (oInput) oInput.value = '';
       };
@@ -186,6 +193,8 @@ export default { // 上传图片按钮
         } else {
           this.showLoading = true;
         }
+        this.showReadMsg = false;
+        this.upLoadTitle = '';
         // this.setReplenishFileUniqueName(`${sha1(reader.result)}.${ext}`);
         // this.setReplenishFile(file);
         const onUploadProgressFunc = progress => {
@@ -194,7 +203,6 @@ export default { // 上传图片按钮
         };
         if (file && _name) {
           const key = await UploadFileByBreakPoint(file, _name, onUploadProgressFunc, 100);
-          console.log(key, 'key');
           if (key) {
             // 上传成功
             this.successFunc({ compiledName: _name, initialName: this.fileName });

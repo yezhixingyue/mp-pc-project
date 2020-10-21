@@ -310,6 +310,7 @@ export default {
           width: 100%;
           color: #fff;
           text-decoration: unset;
+          text-decoration: none\0;
           font-size: 16px;
           text-align: center;
           display: block;
@@ -538,6 +539,9 @@ export default {
               box-shadow: 0 0px 2px 1px rgba(66, 141, 250, 0.8);
               // color: mix(#f4a307, #fff, 40%);
               // color: #428dfa;
+              > i {
+                color: #428dfa;
+              }
             }
             &:active {
               color: #428dfa;

@@ -56,8 +56,10 @@ async function uploadFile(chunkCount, curChunkNum, {
   const file = data.slice(beginNode, beginNode + chunkSize); // 切片
   let lastedPercentage = _getPercentage(beginNode + chunkSize, data.size); // 当次最终百分比
   lastedPercentage = lastedPercentage > finalPercentage ? +finalPercentage : lastedPercentage;
-  await api.UploadFileBreakpointResume(file, uniqueName, beginNode, beginNode + chunkSize, data.size, (e) => _onUploadProgressFunc(e, { initPercentage, lastedPercentage, onUploadProgressFunc })); // 上传(传入header Content-Range中所需要的信息)
-  await uploadFile(chunkCount - 1, beginNode + chunkSize, { data, uniqueName, onUploadProgressFunc }); // 递归调用
+  const res = await api.UploadFileBreakpointResume(file, uniqueName, beginNode, beginNode + chunkSize, data.size, (e) => _onUploadProgressFunc(e, { initPercentage, lastedPercentage, onUploadProgressFunc })); // 上传(传入header Content-Range中所需要的信息)
+  console.log(res);
+  if (res.data.Status === 1000) await uploadFile(chunkCount - 1, beginNode + chunkSize, { data, uniqueName, onUploadProgressFunc }); // 递归调用
+  else throw new Error(res.data.Message);
 }
 
 /**
@@ -69,9 +71,13 @@ async function uploadFile(chunkCount, curChunkNum, {
  */
 async function checkIsTrue(data, uniqueName) {
   console.log('checkIsTrue');
-  const hasUploadedInfo = await api.getUploadedProgress(uniqueName).catch(() => false);
+  let key = true;
+  const hasUploadedInfo = await api.getUploadedProgress(uniqueName).catch(() => {
+    key = false;
+  });
   if (hasUploadedInfo.data.Status !== 1000) return false;
   if (hasUploadedInfo.data.Data < data.size) return false;
+  if (!key) return false;
   return true;
 }
 
@@ -85,7 +91,11 @@ async function checkIsTrue(data, uniqueName) {
  */
 async function breakPointUpload(data, uniqueName, onUploadProgressFunc, finalPercentage = 98) {
   console.log('breakPointUpload');
-  const hasUploadedInfo = await api.getUploadedProgress(uniqueName).catch(() => false);
+  let key = true;
+  const hasUploadedInfo = await api.getUploadedProgress(uniqueName).catch(() => {
+    key = false;
+  });
+  if (!key) return false;
   if (hasUploadedInfo.data.Status !== 1000) return false; // 获取已上传信息
 
   if (+hasUploadedInfo.data.Data < +data.size) {
@@ -93,14 +103,15 @@ async function breakPointUpload(data, uniqueName, onUploadProgressFunc, finalPer
 
     const chunkCount = Math.ceil((data.size - hasUploadedInfo.data.Data) / (chunkSize)); // 计算出总共需要上传的次数
     const curChunkNum = +hasUploadedInfo.data.Data; // 获取到当前已上传的节点位置
-    let key = true;
+    let key2 = true;
     await uploadFile(chunkCount, curChunkNum, {
       data, uniqueName, onUploadProgressFunc, finalPercentage,
     }).catch(() => {
-      key = false;
+      key2 = false;
     }); // 上传
-    if (!key) return false;
+    if (!key2) return false;
     if (checkIsTrue(data, uniqueName)) return true;
+    return false;
   }
   onUploadProgressFunc(+finalPercentage);
   return true;

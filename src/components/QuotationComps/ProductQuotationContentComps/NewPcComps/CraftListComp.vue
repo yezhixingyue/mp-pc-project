@@ -729,6 +729,7 @@ export default {
   > .el-dialog__wrapper {
     > .el-dialog.set-craft-dia {
       width: unset;
+      width: auto\0;
       min-width: 450px;
       display: table;
       border-radius: 5px;
@@ -737,6 +738,8 @@ export default {
         // max-height: 360px;
         padding-bottom: 25px;
         // overflow-y: auto;
+        margin-left: 15px\0;
+        margin-right: 15px\0;
         > .mp-duotation-content-comps-attribute-wrap {
           > .attribute-list {
             > section {

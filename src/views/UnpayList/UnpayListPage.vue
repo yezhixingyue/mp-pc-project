@@ -42,9 +42,15 @@ export default {
   > .show-empty-bg {
     width: 100%;
     background-color: rgb(245, 245, 245);
-    min-height: calc(100vh - 255px - 42px);
+    min-height: calc(100vh - 135px - 22px);
     text-align: center;
-    padding-top: 140px;
+    padding-top: 180px\0;
+    padding-bottom: 20px\0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     > p {
       margin-top: 15px;
     }

@@ -39,6 +39,8 @@ export default class ClassType {
 
   static filter(obj) {
     const _tempObj = {};
+    console.log(obj);
+    if (!obj) return {};
     Object.keys(obj).forEach(key => {
       if (Object.prototype.toString.call(obj[key]) !== '[object Object]') {
         if (obj[key] && key !== 'DateType') _tempObj[key] = obj[key];

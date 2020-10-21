@@ -130,14 +130,22 @@ export default {
   }
   > .empty {
     text-align: center;
+    min-height: calc(100vh - 135px - 94px);
+    text-align: center;
+    padding-top: 141px\0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     > img {
-      margin: 93px 0 15px;
       height: 266px;
       width: 545px;
       user-select: none;
     }
     > p {
-      color: #888;
+      color: #989898;
+      margin-top: 15px;
     }
   }
 }

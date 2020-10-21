@@ -71,6 +71,9 @@ export default {
 .mp-pc-quotation-product-count-comp-wrap {
   .el-input {
     width: unset;
+    .el-input__icon {
+      line-height: 30px;
+    }
   }
 }
 .count-model-comp-dropdown-wrap {

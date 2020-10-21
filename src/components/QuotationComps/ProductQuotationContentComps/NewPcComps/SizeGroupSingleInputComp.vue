@@ -89,8 +89,9 @@ export default {
     bottom: 10px;
     transition: 0.3s;
     &.h {
-      bottom: 28px;
-      transform: scale(0.9);
+      bottom: 30px;
+      // transform: scale(0.9);
+      font-size: 12px;
     }
   }
 }

@@ -117,6 +117,7 @@ export default {
           width: 240px;
           > input {
             height: 35px;
+            line-height: 33px\0;
           }
         }
       }

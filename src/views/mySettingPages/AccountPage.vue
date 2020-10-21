@@ -438,6 +438,7 @@ export default {
                 height: 30px;
                 > input {
                   height: 30px;
+                  line-height: 26px\0;
                 }
               }
             }
@@ -448,6 +449,7 @@ export default {
               width: 700px;
               > input {
                 height: 30px;
+                line-height: 26px\0;
                 &::placeholder {
                   color: #cbcbcb;
                 }

@@ -1,63 +1,65 @@
 <template>
   <section class="mp-pc-shopcar-page-table-comp-wrap">
-    <el-table
-      ref="multipleTable"
-      :data="shoppingDataList"
-      tooltip-effect="dark"
-      stripe
-      key="mp-pc-shopcar-page-table-comp-wrap"
-      border
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column type="selection" class-name="check-row" width="54"></el-table-column>
-      <el-table-column label="产品" width="130" show-overflow-tooltip>
-        <template slot-scope="scope">{{getName(scope.row)}}</template>
-      </el-table-column>
-      <el-table-column label="尺寸" width="70" show-overflow-tooltip>
-        <template slot-scope="scope">{{getSize(scope.row)}}</template>
-      </el-table-column>
-      <el-table-column label="数量" width="78" show-overflow-tooltip>
-        <template slot-scope="scope">{{ getNumber(scope.row.ProductParams) }}</template>
-      </el-table-column>
-      <el-table-column label="工艺" width="70" show-overflow-tooltip>
-        <template slot-scope="scope">{{ getCraft(scope.row.ProductParams) }}</template>
-      </el-table-column>
-      <el-table-column label="原价" width="65" show-overflow-tooltip>
-        <template slot-scope="scope">{{ scope.row.Funds.OriginalPrice }}元</template>
-      </el-table-column>
-      <el-table-column label="优惠券" show-overflow-tooltip width="65">
-        <template slot-scope="scope"
-          >{{ scope.row.Funds.CouponAmount > 0 ? '-' + scope.row.Funds.CouponAmount : 0 }}元</template>
-      </el-table-column>
-      <el-table-column label="成交价" width="65" show-overflow-tooltip>
-        <template slot-scope="scope">{{ scope.row.Funds.FinalPrice }}元</template>
-      </el-table-column>
-      <el-table-column label="定金" width="65" show-overflow-tooltip>
-        <template slot-scope="scope">{{ scope.row.Funds.Deposit }}元</template>
-      </el-table-column>
-      <el-table-column prop="Content" label="文件内容" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="Address.Address.Consignee" label="收货人" width="60" show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column prop="Address.Address.Mobile" label="收货人手机" width="90" show-overflow-tooltip>
-      </el-table-column>
-      <el-table-column label="配送方式" show-overflow-tooltip width="78">
-        <template slot-scope="scope">{{ getExpress(scope.row.Address.Express) }}</template>
-      </el-table-column>
-      <el-table-column label="状态" show-overflow-tooltip width="75">
-        <span
-         slot-scope="scope"
-         :class="{ 'is-pink': getStatus(scope.row).warn, 'is-success': getStatus(scope.row).success }"
-        >{{ getStatus(scope.row).text }}</span>
-      </el-table-column>
-      <el-table-column label="操作" width="150" >
-        <div class="menu-list" slot-scope="scope">
-          <span class="span-title-blue" @click="handleSingleSubmit(scope.row)">下单</span>
-          <span @click="onDetailClick(scope.row)" class="span-title-blue detail">详情</span>
-          <span class="span-title-pink" @click="handleDel(scope.row)">删除</span>
-        </div>
-      </el-table-column>
-    </el-table>
+    <div class="table-wrap">
+      <el-table
+        ref="multipleTable"
+        :data="shoppingDataList"
+        tooltip-effect="dark"
+        stripe
+        key="mp-pc-shopcar-page-table-comp-wrap"
+        border
+        style="width: 100%"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column type="selection" class-name="check-row" width="54"></el-table-column>
+        <el-table-column label="产品" width="130" show-overflow-tooltip>
+          <template slot-scope="scope">{{getName(scope.row)}}</template>
+        </el-table-column>
+        <el-table-column label="尺寸" width="70" show-overflow-tooltip>
+          <template slot-scope="scope">{{getSize(scope.row)}}</template>
+        </el-table-column>
+        <el-table-column label="数量" width="78" show-overflow-tooltip>
+          <template slot-scope="scope">{{ getNumber(scope.row.ProductParams) }}</template>
+        </el-table-column>
+        <el-table-column label="工艺" width="70" show-overflow-tooltip>
+          <template slot-scope="scope">{{ getCraft(scope.row.ProductParams) }}</template>
+        </el-table-column>
+        <el-table-column label="原价" width="65" show-overflow-tooltip>
+          <template slot-scope="scope">{{ scope.row.Funds.OriginalPrice }}元</template>
+        </el-table-column>
+        <el-table-column label="优惠券" show-overflow-tooltip width="65">
+          <template slot-scope="scope"
+            >{{ scope.row.Funds.CouponAmount > 0 ? '-' + scope.row.Funds.CouponAmount : 0 }}元</template>
+        </el-table-column>
+        <el-table-column label="成交价" width="65" show-overflow-tooltip>
+          <template slot-scope="scope">{{ scope.row.Funds.FinalPrice }}元</template>
+        </el-table-column>
+        <el-table-column label="定金" width="65" show-overflow-tooltip>
+          <template slot-scope="scope">{{ scope.row.Funds.Deposit }}元</template>
+        </el-table-column>
+        <el-table-column prop="Content" label="文件内容" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="Address.Address.Consignee" label="收货人" width="60" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column prop="Address.Address.Mobile" label="收货人手机" width="90" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column label="配送方式" show-overflow-tooltip width="78">
+          <template slot-scope="scope">{{ getExpress(scope.row.Address.Express) }}</template>
+        </el-table-column>
+        <el-table-column label="状态" show-overflow-tooltip width="75">
+          <span
+          slot-scope="scope"
+          :class="{ 'is-pink': getStatus(scope.row).warn, 'is-success': getStatus(scope.row).success }"
+          >{{ getStatus(scope.row).text }}</span>
+        </el-table-column>
+        <el-table-column label="操作" width="150" >
+          <div class="menu-list" slot-scope="scope">
+            <span class="span-title-blue" @click="handleSingleSubmit(scope.row)">下单</span>
+            <span @click="onDetailClick(scope.row)" class="span-title-blue detail">详情</span>
+            <span class="span-title-pink" @click="handleDel(scope.row)">删除</span>
+          </div>
+        </el-table-column>
+      </el-table>
+    </div>
     <footer class="is-font-14">
       <div class="float">
         <div class="left">
@@ -355,49 +357,53 @@ export default {
 
 <style lang="scss">
 .mp-pc-shopcar-page-table-comp-wrap {
-  > .el-table {
-    .has-gutter > tr > th {
-      &.check-row {
-        padding-right: 20px;
-        cursor: pointer;
-        &::after{
-          top: 13px;
-          height: 15px;
-          width: 30px;
-          left: 25px;
-          content: '全选';
-          font-size: 12px;
-          background-color: rgb(245, 245, 245);
-          color: #39588a;
-        }
-        > .cell {
-          pointer-events: none;
-        }
-      }
-    }
-    .el-table__body {
-     tbody {
-      tr {
-        td {
-          &.check-row {
-            padding-right: 20px;
+  > .table-wrap {
+    min-height: calc(100vh - 130px - 140px);
+    > .el-table {
+      .has-gutter > tr > th {
+        &.check-row {
+          padding-right: 20px;
+          cursor: pointer;
+          &::after{
+            top: 13px;
+            height: 15px;
+            width: 30px;
+            left: 25px;
+            content: '全选';
+            font-size: 12px;
+            background-color: rgb(245, 245, 245);
+            color: #39588a;
           }
           > .cell {
-            padding: 0 2px;
-            > .menu-list {
-              > span {
-                font-size: 12px;
-                &.detail {
-                  margin: 0 15px;
+            pointer-events: none;
+          }
+        }
+      }
+      .el-table__body {
+      tbody {
+        tr {
+          td {
+            &.check-row {
+              padding-right: 20px;
+            }
+            > .cell {
+              padding: 0 2px;
+              > .menu-list {
+                > span {
+                  font-size: 12px;
+                  &.detail {
+                    margin: 0 15px;
+                  }
                 }
               }
             }
           }
         }
       }
-     }
+      }
     }
   }
+
   > footer {
     width: 100%;
     > div {

@@ -870,6 +870,7 @@ export default {
       state.isFullPayoutDisabled = false;
       state.initPageText = '';
       state.customerShortCutList = [];
+      state.curProduct = null;
     },
     /** 设置当前选中的用于报价的产品
     ---------------------------------------- */

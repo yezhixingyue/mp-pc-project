@@ -580,6 +580,7 @@ export default {
                             > input {
                               height: 30px !important;
                               font-size: 14px;
+                              line-height: 26px\0;
                               padding-left: 12px;
                               // padding-right: 12px;
                               &::placeholder {
@@ -614,6 +615,7 @@ export default {
                                 height: 30px;
                                 font-size: 13px;
                                 padding-left: 12px;
+                                line-height: 26px\0;
                                 padding-right: 22px;
                                 &::placeholder {
                                   color: #cbcbcb;
@@ -646,6 +648,7 @@ export default {
                             width: 700px;
                             > input {
                               height: 30px;
+                              line-height: 26px\0;
                               font-size: 14px;
                               padding-left: 12px;
                               &::placeholder {

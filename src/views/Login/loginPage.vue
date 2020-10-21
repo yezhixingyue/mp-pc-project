@@ -243,6 +243,7 @@ export default {
               .el-input__suffix {
                 width: 120px;
                 text-align: center;
+                pointer-events: auto;
                 &::before {
                   height: 25px;
                   width: 1px;

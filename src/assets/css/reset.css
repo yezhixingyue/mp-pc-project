@@ -39,6 +39,9 @@ html,body {
 body {
 	line-height: 1;
 }
+/* a {
+	font-style: normal;
+} */
 ol, ul {
 	list-style: none;
 }

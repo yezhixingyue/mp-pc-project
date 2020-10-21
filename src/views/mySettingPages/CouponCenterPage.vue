@@ -5,7 +5,10 @@
       <span class="is-font-12">（ 共检测出 <i class="is-pink is-font-16">{{couponCount}}</i> 张优惠券 ）</span>
     </header>
     <ul class="content">
-      <li class="coupon-item" v-for="(item, i) of couponList" :key="item.CouponID + i">
+      <li class="coupon-item"
+        v-for="(item, i) of couponList"
+        :key="item.CouponID + i"
+        :class="item.Receivable?item.Data.TotalNumber>item.Data.GenerateNumber?'receivable':'hasnone':'disabled'">
         <div class="left-content">
           <div class="amount-box">
             <p class="f center">
@@ -29,8 +32,9 @@
           </div>
         </div>
         <div class="right-botton" @click="handleCouponReceive(item)">
-          立即领取
+          {{item.Receivable?item.Data.TotalNumber>item.Data.GenerateNumber?'立即领取':'已抢光':'已领取'}}
         </div>
+        <div class="receivable-box"></div>
       </li>
     </ul>
     <footer>
@@ -61,13 +65,24 @@ export default {
   },
   methods: {
     async getCouponList(Page, PageSize) {
+      // const couponCenterData = sessionStorage.getItem('couponCenterData');
+      // if (couponCenterData) {
+      //   this.couponList = JSON.parse(couponCenterData).couponList;
+      //   this.couponCount = JSON.parse(couponCenterData).couponCount;
+      //   return;
+      // }
       if (Page) this.Page = Page;
       if (PageSize) this.PageSize = PageSize;
       const res = await this.api.getCouponReceiveableList(this.Page, this.PageSize);
       if (res.data.Status === 1000) {
         this.couponList = res.data.Data;
         this.couponCount = res.data.DataNumber;
+        // this.setSsionStorage();
       }
+    },
+    setSsionStorage() {
+      const _couponCenterData = { couponList: this.couponList, couponCount: this.couponCount };
+      sessionStorage.setItem('couponCenterData', JSON.stringify(_couponCenterData));
     },
     handlePageChange(page) {
       this.getCouponList(page);
@@ -75,13 +90,18 @@ export default {
     async receiveCoupon(data) {
       const res = await this.api.getCouponReceive(data);
       if (res.data.Status === 1000) {
+        const { CouponID } = data;
+        const _t = this.couponList.find(it => it.CouponID === CouponID);
+        _t.Receivable = false;
+        // this.setSsionStorage();
         this.messageBox.successSingle({
           title: '领取成功',
+          successFunc: () => { this.getCouponList(); },
         });
       }
     },
-    handleCouponReceive({ CouponID }) {
-      if (!CouponID) return;
+    handleCouponReceive({ CouponID, Receivable, Data }) {
+      if (!CouponID || !Receivable || Data.TotalNumber === Data.GenerateNumber) return;
       this.receiveCoupon({ CouponID });
       // this.messageBox.warnCancelNullMsg({
       //   title: '确认领取该优惠券吗?',
@@ -162,6 +182,33 @@ export default {
 
         }
       }
+      > .receivable-box {
+        position: absolute;
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+        top: 12px;
+        right: 72px;
+        overflow: hidden;
+        background: url('../../assets/images/couponed.png') no-repeat center/100% 100%;
+        z-index: 20;
+        background-color: rgba($color: #fff, $alpha: 0.85);
+        display: none;
+      }
+      &.disabled, &.hasnone {
+        > div {
+          opacity: 0.6;
+        }
+        > .receivable-box {
+          display: block;
+          opacity: 1;
+        }
+      }
+      &.hasnone {
+        > .receivable-box {
+          background: url('../../assets/images/lootAll.png') no-repeat center/100% 100%;
+        }
+      }
       > .right-botton {
         position: absolute;
         top: -1px;
@@ -176,7 +223,6 @@ export default {
         letter-spacing: 8px;
         padding-top: 10px;
         user-select: none;
-        cursor: pointer;
         background-color: #9399ff;
         color: #fff;
         border-radius: 5px;
@@ -191,7 +237,12 @@ export default {
           background: url('../../assets/images/sawtooth-2.png') left bottom/ 4px 120px repeat-y ;
         }
       }
-      &:hover {
+      &.receivable {
+        > .right-botton {
+          cursor: pointer;
+        }
+      }
+      &.receivable:hover {
         border-color: #7a80e7;
         box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
         > .right-botton {

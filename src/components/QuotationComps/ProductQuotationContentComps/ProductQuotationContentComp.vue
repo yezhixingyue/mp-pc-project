@@ -131,7 +131,7 @@
                   </p>
                 </div>
                 <div class="aside" @click="addCouponCode(item)">点击选择</div>
-                <div class="icon-box"></div>
+                <div class="icon-box" @click="addCouponCode(item)"></div>
               </li>
             </ul>
           </section>
@@ -434,6 +434,7 @@ export default {
     }
     .el-input {
       width: unset;
+      width: auto\0;
     }
     input {
       width: 140px;
@@ -536,7 +537,7 @@ export default {
                     width: 300px;
                     > input {
                       height: 30px;
-                      // line-height: 26px;
+                      line-height: 26px\0;
                     }
                   }
                   > span {
@@ -614,7 +615,7 @@ export default {
                       display: none;
                       user-select: none;
                       z-index: 9;
-                      transition: 0.2s;
+                      transition: 2s;
                       &:hover {
                         background-color: rgba($color: #428dfa, $alpha: 0.72);
                       }
@@ -629,7 +630,11 @@ export default {
                       right: 0;
                       bottom: 0;
                       display: none;
+                      cursor: pointer;
                       background: url('../../../assets/images/coupon-selected.png') no-repeat right bottom / 100% 100%;
+                      &:hover {
+                        opacity: 0.75;
+                      }
                     }
                     &:hover > .aside {
                       display: block;
@@ -638,9 +643,9 @@ export default {
                       > .icon-box {
                         display: block;
                       }
-                      // &:hover > .aside {
-                      //   display: none;
-                      // }
+                      &:hover > .aside {
+                        display: none;
+                      }
                     }
                   }
                 }

@@ -33,6 +33,7 @@ export default {
   width: 100%;
   background-color: #fff;
   min-height: calc(100vh - 135px - 22px);
+  // position: relative;
   > section {
     margin: 0 auto;
     width: 1200px;
@@ -42,9 +43,15 @@ export default {
   > .show-empty-bg {
     width: 100%;
     background-color: rgb(245, 245, 245);
-    min-height: calc(100vh - 255px - 42px);
+    min-height: calc(100vh - 135px - 22px);
     text-align: center;
-    padding-top: 140px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 180px\0;
+    padding-bottom: 20px\0;
     > p {
       margin-top: 15px;
     }

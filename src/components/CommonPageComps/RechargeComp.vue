@@ -270,6 +270,7 @@ export default {
             width: 300px;
             > input {
               height: 35px;
+              line-height: 33px\0;
             }
           }
           > i {

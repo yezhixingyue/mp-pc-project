@@ -57,7 +57,13 @@ export default {
     }
     > .show-empty-bg {
       text-align: center;
-      padding-top: 80px;
+      padding-top: 80px\9\0;
+      height: calc(100vh - 130px - 93px);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       > p {
         padding-top: 15px;
       }

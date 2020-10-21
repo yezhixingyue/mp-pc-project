@@ -131,14 +131,17 @@ export default {
     handleSwitch1(e) {
       if (e === this.first) return;
       this.first = e;
-      this.second = '';
-      this.third = '';
+      // this.TypeID = '';
+      // this.ProductID = '';
+      this.changePropsFunc([this.typeList[1], '']);
+      this.changePropsFunc([this.typeList[2], '']);
       this.products = [{ ProductID: '', ProductName: '不限' }];
     },
     handleSwitch2(e) {
       if (e === this.second) return;
       this.second = e;
-      this.third = '';
+      // this.ProductID = '';
+      this.changePropsFunc([this.typeList[2], '']);
       // this.getProductThird();
     },
     handleSwitch3(e) {

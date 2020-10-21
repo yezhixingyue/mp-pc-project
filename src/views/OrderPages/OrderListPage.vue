@@ -85,6 +85,7 @@ import Table4OrderList from '@/components/OrderListComps/Table4OrderList.vue';
 import {
   mapState, mapGetters, mapMutations, mapActions,
 } from 'vuex';
+import CommonClassType from '../../store/CommonClassType';
 
 export default {
   components: {
@@ -108,12 +109,23 @@ export default {
     ...mapGetters('order', ['computedOrderlist']),
     DownLoadConfigObj() {
       return {
-        condition: this.condition4OrderList,
+        condition: this.condition,
         count: this.OrderListNumber,
         fileDefaultName: '名片之家订单列表',
         fileDate: this.condition4OrderList.Date,
         downFunc: data => this.api.getCustomerOrderList4Excel(data),
       };
+    },
+    condition() {
+      if (!this.condition4OrderList) return {};
+      let _t = JSON.parse(JSON.stringify(this.condition4OrderList));
+      CommonClassType.setDate(_t);
+      _t = CommonClassType.filter(_t);
+      if (_t.Date) {
+        _t.PlaceDate = _t.Date;
+        delete _t.Date;
+      }
+      return _t;
     },
     OrderStatus: {
       get() {
@@ -148,6 +160,7 @@ export default {
   watch: {
     computedOrderlist() {
       this.$nextTick(() => {
+        this.oApp.scrollTop = 0;
         this.handleScroll(this.oApp);
       });
     },
@@ -247,7 +260,14 @@ export default {
     &.show-empty-bg {
       background-color: rgb(245, 245, 245);
       text-align: center;
-      padding-top: 65px;
+      // padding-top: 65px;
+      padding-top: 80px\9\0;
+      height: calc(100vh - 130px - 195px);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       > p {
         margin-top: 15px;
       }

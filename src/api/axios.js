@@ -15,7 +15,7 @@ axios.interceptors.request.use(
     const arrWithOutToken = ['/Api/Customer/Reg', '/Api/Customer/Login'];
     if (token && !arrWithOutToken.includes(url)) curConfig.headers.common.Authorization = `Bearer ${token}`;
     let key = true;
-    const arr = ['/Api/Order/Create', '/Api/PaymentOrder/PayResult']; // 不需要展示loading的api地址
+    const arr = ['/Api/Order/Create', '/Api/PaymentOrder/PayResult', '/Api/Upload/File']; // 不需要展示loading的api地址
     for (let i = 0; i < arr.length; i += 1) {
       if (curConfig.url.includes(arr[i]) || store.state.common.isLoading) {
         key = false;
@@ -78,6 +78,7 @@ axios.interceptors.response.use(
       if (_url === '/Api/Order/Create' || _url === '/Api/Order/PreCreate') _msg = '下单失败';
       if (_url === '/Api/FindPassword/CheckCode') _msg = '验证码错误';
       if (_url === '/Api/Coupon/Receive') _msg = '领取失败';
+      if (_url === '/Api/Quotation/Save') _msg = '添加失败';
 
       _obj.title = _msg;
       messageBox.failSingleError(_obj);

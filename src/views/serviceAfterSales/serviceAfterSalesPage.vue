@@ -84,6 +84,7 @@ import { mapState, mapMutations, mapActions } from 'vuex';
 import { debounce } from '@/assets/js/utils/throttle';
 import Count from '@/components/common/Count.vue';
 import LineDateSelectorComp from '@/components/common/Selector/LineDateSelectorComp.vue';
+import CommonClassType from '../../store/CommonClassType';
 
 export default {
   components: {
@@ -97,9 +98,20 @@ export default {
           && !!this.condition4ServiceAfterSaleList.Date.First
           && !!this.condition4ServiceAfterSaleList.Date.Second;
     },
+    condition() {
+      if (!this.condition4ServiceAfterSaleList) return {};
+      let _t = JSON.parse(JSON.stringify(this.condition4ServiceAfterSaleList));
+      CommonClassType.setDate(_t);
+      _t = CommonClassType.filter(_t);
+      if (_t.Date) {
+        _t.CreateTime = _t.Date;
+        delete _t.Date;
+      }
+      return _t;
+    },
     DownLoadConfigObj() {
       return {
-        condition: this.condition4ServiceAfterSaleList,
+        condition: this.condition,
         count: this.ServiceAfterSaleListNumber,
         fileDefaultName: '名片之家售后单',
         fileDate: this.condition4ServiceAfterSaleList.Date,
@@ -171,7 +183,7 @@ export default {
   width: 100%;
   // background-color: #fff;
   margin-bottom: 17px;
-  // min-height: calc(100vh - 135px - 45px);
+  // min-height: calc(100vh - 135px - 180px);
   > section {
     width: 100%;
     > header {
@@ -222,7 +234,14 @@ export default {
     > .show-empty-bg {
       background-color: rgb(245, 245, 245);
       text-align: center;
-      padding-top: 70px;
+      min-height: calc(100vh - 135px - 158px);
+      text-align: center;
+      padding-top: 118px\0;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       > p {
         margin-top: 15px;
       }

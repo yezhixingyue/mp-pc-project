@@ -566,6 +566,7 @@ export default {
               width: 110px;
               .el-input__inner {
                 height: 30px;
+                line-height: 26px\0;
               }
             }
             .el-radio__label {
@@ -642,6 +643,7 @@ export default {
                             width: 120px;
                             > input {
                               height: 25px;
+                              line-height: 22px\0;
                               font-size: 12px;
                               &::placeholder {
                                 color: #cbcbcb;
@@ -670,6 +672,7 @@ export default {
                               width: 100px;
                               > input {
                                 height: 25px;
+                                line-height: 22px\0;
                                 font-size: 12px;
                                 &::placeholder {
                                   color: #cbcbcb;
@@ -699,6 +702,7 @@ export default {
                             width: 600px;
                             > input {
                               height: 25px;
+                              line-height: 22px\0;
                               font-size: 12px;
                               &::placeholder {
                                 color: #cbcbcb;

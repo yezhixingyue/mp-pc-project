@@ -111,6 +111,7 @@ export default {
       this.$store.commit('summary/clearStateForNewCustomer');
       this.$store.commit('unpayList/clearStateForNewCustomer');
       // sessionStorage.removeItem('customerInfo');
+      sessionStorage.removeItem('couponCenterData');
       sessionStorage.setItem('token', token);
       if (rememberPwd) {
         const _obj2Keep = { ...this.ruleForm };

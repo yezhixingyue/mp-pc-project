@@ -182,6 +182,7 @@ export default {
       // this.curProduct = sub;
       this.$store.commit('Quotation/setCurProductInfo', sub);
       this.$store.dispatch('Quotation/getProductDetail');
+      this.$store.commit('Quotation/setSelectedCoupon', null);
     },
     onCheckChange(item) {
       if (this.curMenus.canCollect) {

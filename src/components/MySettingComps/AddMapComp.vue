@@ -582,6 +582,7 @@ export default {
                             width: 120px;
                             > input {
                               height: 30px !important;
+                              line-height: 26px\0;
                               font-size: 14px;
                               padding-left: 12px;
                               // padding-right: 12px;
@@ -618,6 +619,7 @@ export default {
                                 font-size: 13px;
                                 padding-left: 12px;
                                 padding-right: 22px;
+                                line-height: 26px\0;
                                 &::placeholder {
                                   color: #cbcbcb;
                                 }
@@ -651,6 +653,7 @@ export default {
                               height: 30px;
                               font-size: 14px;
                               padding-left: 12px;
+                              line-height: 26px\0;
                               &::placeholder {
                                 color: #cbcbcb;
                               }

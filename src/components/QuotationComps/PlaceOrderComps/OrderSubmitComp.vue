@@ -145,6 +145,7 @@ export default {
             > input {
               height: 30px;
               font-size: 13px;
+              line-height: 26px\0;
             }
           }
           > .title {

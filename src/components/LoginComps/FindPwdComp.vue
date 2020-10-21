@@ -286,7 +286,7 @@ export default {
               color: #cbcbcb;
             }
             height: 35px;
-            line-height: 35px;
+            line-height: 33px;
           }
           .el-input__suffix {
             display: none;
