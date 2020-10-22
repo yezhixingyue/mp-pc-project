@@ -621,6 +621,7 @@ export default {
           > section {
             >.el-radio {
               margin-bottom: 20px;
+              display: block;
               > .el-radio__label {
                 display: inline-block;
                 .address {

@@ -96,7 +96,7 @@ export default {
         // this.setSsionStorage();
         this.messageBox.successSingle({
           title: '领取成功',
-          successFunc: () => { this.getCouponList(); },
+          // successFunc: () => { this.getCouponList(); },
         });
       }
     },

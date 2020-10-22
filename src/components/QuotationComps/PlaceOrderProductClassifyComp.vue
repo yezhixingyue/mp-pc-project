@@ -484,9 +484,20 @@ export default {
         > li {
           display: flex;
           > .products {
-          //   float: left;
+            float: right;
             margin-left: 35px;
+            float: right\0;
+            width: 1050px\0;
+            // line-height: 25px\0;
+            // line-height: 40px\9\0;
+            padding-top: 2px\0;
+            padding-top: 10px\9\0;
+            // padding-bottom: 8px\9\0;
+            text-align: left\0;
             white-space: normal;
+            @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+              padding-top: 2px\0;
+            }
             > .el-link {
               color: #888;
               margin: 10px 0;
@@ -516,7 +527,8 @@ export default {
             font-weight: 600;
             font-size: 14px;
             min-width: 4em;
-          //   float: left;
+            // max-width: 80px\9\0;
+            float: left\0;
             margin: 10px 0;
             height: 100%;
             flex: none;

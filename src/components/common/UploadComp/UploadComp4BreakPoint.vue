@@ -31,6 +31,16 @@
         :on-exceed='exceed'
         :on-change='handleElChange'
         :auto-upload="false">
+        <!-- <input
+        type="file"
+          :multiple='multiple'
+          :accept="accept"
+          @change="onChange"
+          @click.stop="onInputClick"
+          class="upload-inp"
+          ref="uploadInp"
+          :disabled='onlyShow'
+        /> -->
         <el-button slot="trigger" size="small" type="primary">{{showTitle}}</el-button>
         <!-- <el-button  size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
         <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
@@ -169,6 +179,7 @@ export default { // 上传图片按钮
       }
     },
     upLoadSingleFile(file) {
+      console.log('upLoadSingleFile');
       if (!file) return;
       this.upLoadTitle = '读取文件中...  ( 文件过大时速度会较慢 )';
       this.showReadMsg = true;
@@ -254,6 +265,9 @@ export default { // 上传图片按钮
       // massage.failSingleError({ title: '已上传订单文件', msg: '如需更换，请删除订单文件后重新上传' });
     },
     async handleElUpload() {
+      console.log('handleElUpload');
+      const oInpFile = document.querySelector('.upload-box .el-upload__input');
+      console.log(oInpFile.files);
       await this.delay(0);
       if (this.fileList.length === 0) {
         massage.failSingleError({ title: `${this.msgTitle}失败`, msg: '请选择订单文件!', failFunc: this.failFunc });
@@ -304,6 +318,19 @@ export default { // 上传图片按钮
         return false;
       }
     },
+  },
+  mounted() {
+    // 下面代码用于兼容ie9;
+    const oInpFile = document.querySelector('.upload-box .el-upload__input');
+    if (!oInpFile) return;
+    oInpFile.onchange = e => {
+      if (!e.target.files) {
+        this.messageBox.failSingleError({
+          title: '文件获取错误',
+          msg: '当前浏览器版本不支持文件上传，请更换或升级浏览器尝试',
+        });
+      }
+    };
   },
 };
 </script>

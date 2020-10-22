@@ -44,8 +44,8 @@
       <!-- 弹窗表单区域 -->
       <el-form :model="subAccountForm" ref="subAccountForm" :rules="rules" label-width="100px" class="account-ruleForm">
         <el-form-item label="登录手机号：" prop="Mobile">
-          <el-input v-model.trim="Mobile" ></el-input>
-          <!-- <el-input v-model.trim="Mobile" :disabled='!subAccountForm.IsBranch'></el-input> -->
+          <!-- <el-input v-model.trim="Mobile" ></el-input> -->
+          <el-input v-model.trim="Mobile" :disabled='!subAccountForm.IsBranch'></el-input>
         </el-form-item>
         <el-form-item label="姓名：" prop="NickName">
           <el-input v-model.trim="subAccountForm.NickName"></el-input>

@@ -262,6 +262,8 @@ export default {
         border-width: 1px;
         width: 30px;
         height: 30px;
+        line-height: 28px\9\0;
+        text-align: center\0;
         > div {
           font-weight: 400;
           font-size: 18px;
@@ -300,6 +302,7 @@ export default {
         }
       }
       &:first-of-type {
+        width: 280px;
         .el-step__main {
           .el-step__title {
             margin-left: -12px;
@@ -308,6 +311,7 @@ export default {
       }
       &:nth-of-type(2) {
         position: relative;
+        width: 280px;
         .el-step__main {
           .el-step__title {
             margin-left: -18px;

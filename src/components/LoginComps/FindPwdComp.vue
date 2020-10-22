@@ -1,6 +1,6 @@
 <template>
   <section class="mp-pc-login-find-pass-comp-wrap">
-    <el-steps :active="active" align-center>
+    <el-steps :active="active">
       <el-step title="验证身份"></el-step>
       <el-step title="重置登录密码"></el-step>
       <el-step title="完成"></el-step>
@@ -210,7 +210,7 @@ export default {
   width: 1200px;
   margin: 0 auto;
   > .el-steps {
-    width: 1108px;
+    width: 808px;
     margin: 0 auto;
     > .el-step {
       font-size: 14px;
@@ -220,6 +220,8 @@ export default {
         border-width: 1px;
         width: 30px;
         height: 30px;
+        text-align: center\0;
+        line-height: 28px\9\0;
         > div {
           font-weight: 400;
           font-size: 18px;
@@ -258,15 +260,26 @@ export default {
         }
       }
       &:first-of-type {
+        width: 390px\9\0;
         .el-step__line {
-          width: 270px;
+          width: 285px;
+          margin-left: 40px;
+          // margin-right: 60px;
+        }
+        .el-step__main .el-step__title {
+          margin-left: -12px;
         }
       }
       &:nth-of-type(2) {
         position: relative;
         left: -50px;
+        width: 385px\9\0;
         .el-step__line {
-          width: 370px;
+          width: 380px;
+          margin-left: 45px;
+        }
+        .el-step__main .el-step__title {
+          margin-left: -26px;
         }
       }
     }

@@ -96,6 +96,8 @@ export default {
   overflow: hidden;
   padding-right: 6px;
   box-sizing: border-box;
+  display: inline-block\0;
+  white-space: \0;
   &::after {
     content: '';
     width: 1px;

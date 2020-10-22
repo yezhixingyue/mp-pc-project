@@ -67,7 +67,10 @@ export default {
     },
   },
   methods: {
-    onReturnClick() {
+    onReturnClick(e) {
+      console.log('onReturnClick');
+      console.log(e.target);
+      e.target.blur();
       this.$router.replace('/shopping/car');
       // this.$store.commit('Quotation/setIsFullPayoutDisabled', false);
     },
@@ -79,6 +82,9 @@ export default {
   },
   mounted() {
     if (!this.curShoppingCarDetailData) this.$router.replace('/shopping/car');
+  },
+  destroyed() {
+    console.log('destroyed');
   },
 };
 </script>
@@ -93,6 +99,7 @@ export default {
     line-height: 24px;
     background-color: rgb(245, 245, 245);
     padding-left: 26px;
+    user-select: none;
     > span {
       font-size: 14px;
       > i {

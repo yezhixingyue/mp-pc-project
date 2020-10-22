@@ -153,6 +153,8 @@ export default {
         background-color: #428dfa;
         border-radius: 5px;
         color: #fff;
+        text-align: center\0;
+        line-height: 40px\9\0;
         > i {
           font-size: 10px;
           transform: scale(0.9);

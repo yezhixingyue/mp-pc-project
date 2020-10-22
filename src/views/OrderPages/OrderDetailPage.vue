@@ -155,6 +155,7 @@ export default {
     line-height: 24px;
     background-color: rgb(245, 245, 245);
     padding-left: 26px;
+    user-select: none;
     > span {
       font-size: 14px;
       > i {

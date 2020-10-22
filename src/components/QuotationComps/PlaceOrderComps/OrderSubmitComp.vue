@@ -12,7 +12,7 @@
         </li>
         <li class="upload-box">
           <UploadComp4BreakPoint ref='UploadComp4BreakPoint' :validateFunc='getProductPriceLocal'
-            :msgTitle='title' @fillFileContent='fillFileContent' @handleMapPosition='handleMapPosition'
+            :msgTitle='title' @fillFileContent='fillFileContent'
             :successFunc="successFunc" @saveFile2Store='saveFile2Store' />
         </li>
       </ul>

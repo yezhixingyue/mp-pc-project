@@ -137,7 +137,7 @@ export default {
       // 图片下载出错
       if (e.type === 'error' && this.isShow2PayDialog) {
         this.messageBox.failSingleError({
-          msg: '[ 获取二维码失败，请到未付款订单中选择该订单付款 ]',
+          msg: '[ 获取二维码失败 ]',
           title: '图片获取失败',
         });
       }
@@ -249,6 +249,8 @@ export default {
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            box-sizing: border-box;
+            padding-top: 80px\9\0;
             background-color: rgb(238, 238, 238);
             border-radius: 5px;
             i:first-of-type {
@@ -275,10 +277,12 @@ export default {
           text-align: right;
           margin-right: 10px;
           margin-left: -10px;
+          display: inline-block\0;
         }
         > .right {
           margin-top: -3px;
           text-align: right;
+          display: inline-block\0;
         }
         p {
           font-size: 12px;

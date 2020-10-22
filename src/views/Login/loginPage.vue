@@ -174,6 +174,9 @@ export default {
                 background-color: #fff;
                 z-index: 99;
               }
+              &:after, &:before {
+                opacity: 0\9\0;
+              };
             }
             &::after {
               height: 1px;

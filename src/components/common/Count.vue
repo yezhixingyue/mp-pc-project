@@ -17,7 +17,6 @@
         <slot></slot>
         <span class="count" :class="DownLoadConfigObj?'exc':''"
           >共检索出<i class="is-pink is-font-16">{{count}}</i>条记录</span>
-        <!-- <el-butto v-if="configObj" type="primary" class="export-btn">导出Excel</el-butto> -->
         <DownLoadExcelComp :configObj="DownLoadConfigObj" v-if="DownLoadConfigObj" />
 </div>
 </template>

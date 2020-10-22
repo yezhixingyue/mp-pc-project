@@ -22,7 +22,7 @@ export default {
 
 .mp-group-collapse-enter-active,
 .mp-group-collapse-leave-active {
-  transition: all .2s;
+  transition: all .3s;
 }
 
 .mp-group-collapse-enter-to,

@@ -149,11 +149,15 @@ export default {
       display: flex;
       overflow: hidden;
       width: calc(100% - 32px);
+      width: calc(100% - 82px)\0;
+      display: inline-block\0;
+      white-space: nowrap\0;
       > span {
         text-align: center;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        display: inline-block\0;
         > .is-pink {
           font-size: 14px;
         }
@@ -176,14 +180,15 @@ export default {
       position: relative;
       flex: none;
       cursor: pointer;
+      display: inline-block\0;
       > div {
         height: 12px;
         width: 7px;
         position: absolute;
         top: 50%;
         left: 50%;
-        transition: 0.1s linear !important;
-        transform: translate(-50%, -50%) rotate(90deg);
+        transition: 0.25s linear !important;
+        transform: translate(-50%, -50%) rotate(0deg);
         background: url("../../../assets/images/right-arrow.png") center
           no-repeat;
         background-size: 100% 100%;
@@ -227,7 +232,8 @@ export default {
       font-size: 14px;
       color: #585858;
       line-height: 30px;
-      padding-top: 20px;
+      padding: 20px 0;
+      display: inline-block\0;
     }
   }
 }

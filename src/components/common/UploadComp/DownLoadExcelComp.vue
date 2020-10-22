@@ -41,16 +41,19 @@ export default {
 
       delete config.Page;
       delete config.PageSize;
-
+      console.log('导出-1', 'fileName----fileName');
       const res = await this.configObj.downFunc(config);
+      console.log('导出-2', 'fileName----fileName', res);
+
       // console.log(res, config);
       if (res.status !== 200) {
         this.messageBox.failSingleError({ title: '导出失败', msg: `[ 失败原因：${res.statusText} ]` });
         return;
       }
-
+      console.log('导出-3', 'fileName----fileName');
       const { data } = res;
       const blobData = new Blob([data]);
+      console.log('blob', 'fileName----fileName');
       const _d = ConvertTimeFormat(new Date());
       let fileName = `${this.configObj.fileDefaultName}(截止到${_d}日全部订单).xls`;
       if (this.configObj.fileDate) {
@@ -68,7 +71,7 @@ export default {
           if (f) fileName = `${this.configObj.fileDefaultName}(${f}至${t2}).xls`;
         }
       }
-
+      console.log(fileName, 'fileName----fileName');
       if (window.navigator && window.navigator.msSaveOrOpenBlob) {
         window.navigator.msSaveOrOpenBlob(blobData, fileName);
       } else {

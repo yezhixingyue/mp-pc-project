@@ -84,6 +84,7 @@ export default {
   > header {
     background-color: #f8f8f8;
     display: flex;
+    white-space: nowrap;
     > div {
       flex: none;
     }

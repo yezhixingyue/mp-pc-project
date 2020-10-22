@@ -118,11 +118,15 @@ export default {
       display: flex;
       overflow: hidden;
       width: calc(100% - 32px);
+      width: calc(100% - 82px)\0;
+      display: inline-block\0;
+      white-space: nowrap\0;
       > span {
         text-align: center;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        display: inline-block\0;
         > .is-pink {
           font-size: 14px;
         }
@@ -144,6 +148,7 @@ export default {
       margin-right: 22px;
       position: relative;
       flex: none;
+      display: inline-block\0;
       cursor: pointer;
       > div {
         height: 12px;
@@ -151,8 +156,8 @@ export default {
         position: absolute;
         top: 50%;
         left: 50%;
-        transition: 0.1s linear !important;
-        transform: translate(-50%, -50%) rotate(90deg);
+        transition: 0.25s !important;
+        transform: translate(-50%, -50%) rotate(0deg);
         background: url("../../../assets/images/right-arrow.png") center
           no-repeat;
         background-size: 100% 100%;
@@ -170,14 +175,16 @@ export default {
     }
   }
   .product-item-content {
-    height: 44px;
-    line-height: 44px;
+    height: 70px;
+    // line-height: 44px;
     white-space: nowrap;
     display: flex;
     border-bottom: none;
-    padding: 13px 0;
+    // padding: 13px 0;
     // border-top: 1px solid #eee;
-
+    &:hover > div {
+      background-color: rgb(216, 239, 252);
+    }
     > div {
       white-space: nowrap;
       display: block;
@@ -189,6 +196,9 @@ export default {
       flex: none;
       font-size: 14px;
       color: #585858;
+      line-height: 30px;
+      padding: 20px 0;
+      display: inline-block\0;
     }
   }
 }

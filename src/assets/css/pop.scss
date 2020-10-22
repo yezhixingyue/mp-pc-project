@@ -139,12 +139,16 @@
         display: flex;
         justify-content: center;
         flex-direction: row-reverse;
+        // display: inline-block\9\0;
         button {
             margin-left: 35px;
+            margin-left: 15px\9\0;
         }
         button + button {
             margin-left: 0;
+            margin-left: 15px\9\0;
         }
+
     }
 }
 // 白底颜色单按钮

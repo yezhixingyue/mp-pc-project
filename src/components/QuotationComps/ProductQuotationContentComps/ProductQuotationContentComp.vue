@@ -634,6 +634,9 @@ export default {
                       background: url('../../../assets/images/coupon-selected.png') no-repeat right bottom / 100% 100%;
                       &:hover {
                         opacity: 0.75;
+                        // width: 42px;
+                        // height: 43px;
+                        // transform: scale(1.05);
                       }
                     }
                     &:hover > .aside {

@@ -139,6 +139,7 @@ export default {
     border-top: 1px dashed #eee;
     > header {
       padding-top: 4px;
+      user-select: none;
       > span {
         font-size: 14px;
         > i {
