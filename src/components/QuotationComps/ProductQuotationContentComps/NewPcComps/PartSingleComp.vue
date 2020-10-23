@@ -334,12 +334,12 @@ export default {
       color: #333;
       padding-right: 10px;
     }
-    .line {
-      height: 1px;
-      display: inline-block;
-      background-color: #eee;
-      vertical-align: middle;
-    }
+    // .line {
+    //   height: 1px;
+    //   display: inline-block;
+    //   background-color: #eee;
+    //   vertical-align: middle;
+    // }
   }
   > .comp-content-wrap {
     > section {

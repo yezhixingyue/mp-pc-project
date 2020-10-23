@@ -138,7 +138,7 @@ export default {
     margin: 0 auto;
     border-top: 1px dashed #eee;
     > header {
-      padding-top: 4px;
+      padding-top: 8px;
       user-select: none;
       > span {
         font-size: 14px;

@@ -10,7 +10,7 @@ Vue.filter('format2MiddleLangTypeDate', date => {
 });
 
 Vue.filter('numToFixed2', num => {
-  console.log(num);
+  // console.log(num);
   if (!num && num !== 0) return '';
   return num.toFixed(2);
 });
@@ -20,9 +20,9 @@ Vue.filter('numToFixed2', num => {
  */
 const { TransactionTypeList } = store.state.common;
 Vue.filter('formatTransactionType', Type => {
-  console.log(Type);
+  // console.log(Type);
   const _t = TransactionTypeList.find(_it => +_it.value === +Type);
-  console.log(TransactionTypeList, _t);
+  // console.log(TransactionTypeList, _t);
   if (_t) return _t.label;
   return '';
 });

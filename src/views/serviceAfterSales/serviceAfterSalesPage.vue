@@ -81,7 +81,6 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex';
-import { debounce } from '@/assets/js/utils/throttle';
 import Count from '@/components/common/Count.vue';
 import LineDateSelectorComp from '@/components/common/Selector/LineDateSelectorComp.vue';
 import CommonClassType from '../../store/CommonClassType';
@@ -92,7 +91,11 @@ export default {
     LineDateSelectorComp,
   },
   computed: {
+    ...mapState('common', ['ScrollInfo']),
     ...mapState('summary', ['condition4ServiceAfterSaleList', 'ServiceAfterSaleList', 'ServiceAfterSaleListNumber']),
+    scrollChange() {
+      return this.ScrollInfo.scrollTop + this.ScrollInfo.scrollHeight + this.ScrollInfo.offsetHeight;
+    },
     UserDefinedTimeIsActive() {
       return this.condition4ServiceAfterSaleList.DateType === ''
           && !!this.condition4ServiceAfterSaleList.Date.First
@@ -130,24 +133,13 @@ export default {
   methods: {
     ...mapMutations('summary', ['setCondition4ServiceAfterSaleList']),
     ...mapActions('summary', ['getServiceAfterSaleList']),
-    getHeight() {
-      const oBody = document.getElementsByTagName('body')[0];
-      return oBody.offsetHeight - 410;
-    },
-    setHeight() {
-      const tempHeight = this.getHeight();
-      this.h = tempHeight;
-    },
     handlePageChange(page) {
       this.$store.dispatch('summary/getServiceAfterSaleList', page);
     },
     handleScroll(oEl) {
       if (!oEl) return;
       const { scrollTop, scrollHeight, offsetHeight } = oEl;
-      const difference = scrollHeight - offsetHeight;
-      if (difference - 154 - scrollTop > 0) this.isFootFixed = true;
-      else this.isFootFixed = false;
-      console.log(difference - 147 - scrollTop, this.isFootFixed);
+      this.$store.commit('common/setScrollInfo', { scrollTop, scrollHeight, offsetHeight });
     },
   },
   watch: {
@@ -156,24 +148,19 @@ export default {
         this.handleScroll(this.oApp);
       });
     },
+    scrollChange() {
+      const { scrollTop, scrollHeight, offsetHeight } = this.ScrollInfo;
+      const difference = scrollHeight - offsetHeight;
+      if (difference - 154 - scrollTop > 0) this.isFootFixed = true;
+      else this.isFootFixed = false;
+    },
   },
   mounted() {
-    // this.$nextTick(() => this.setHeight());
-    // window.addEventListener('resize', this.setHeight);
     this.$store.dispatch('summary/getServiceAfterSaleList');
     this.oApp = document.getElementById('app');
-    const _func = debounce(this.handleScroll, 30);
-    if (this.oApp) {
-      // this.oApp.addEventListener('scroll', () => _func(this.oApp));
-      this.oApp.onscroll = () => _func(this.oApp);
-    }
     this.$nextTick(() => {
       this.handleScroll(this.oApp);
     });
-  },
-  beforeDestroy() {
-    // window.removeEventListener('resize', this.setHeight);
-    this.oApp.onscroll = null;
   },
 };
 </script>

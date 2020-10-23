@@ -479,3 +479,16 @@ body .el-radio__inner, body .el-checkbox__inner {
   line-height: 20px\9\0;
   margin-top: 1px\9\0;
 }
+
+.mp-pc-my-set-drop-down-wrap {
+  width: 150px;
+  > li {
+    > i, > span {
+      color: #aaa;
+      transition: 0.2s;
+    }
+    &:hover > i,&:hover > span {
+      color: #428dfa;
+    }
+  }
+}

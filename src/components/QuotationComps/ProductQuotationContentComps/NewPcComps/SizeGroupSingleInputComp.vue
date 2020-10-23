@@ -1,6 +1,6 @@
 <template>
   <li class="mp-pc-size-group-single-size-comp-wrap">
-    <el-input v-model="inpVal" class="size-box" @focus="onFocus" @blur="onBlur" />
+    <el-input v-model="inpVal" ref="oInp" class="size-box" @focus="onFocus" @blur="onBlur" />
     <span class="gray" :class="inpVal || isFocue ? 'h' : ''">{{sizeData.PropertyName}}</span>
   </li>
 </template>
@@ -50,11 +50,12 @@ export default {
         return this.newVal;
       },
       set(newVal) {
-        if (newVal.includes('.')) {
-          this.messageBox.failSingleError({ title: '参数设置不正确', msg: '尺寸必须为整数' });
-          return;
-        }
-        const _v = newVal.replace(/[^\d.]/g, '');
+        // if (newVal.includes('.')) {
+        //   this.$refs.oInp.$el.children[0].blur();
+        //   this.messageBox.failSingleError({ title: '参数设置不正确', msg: '尺寸必须为整数' });
+        //   return;
+        // }
+        const _v = newVal.replace(/[^\d]/g, '');
         // eslint-disable-next-line radix
         const _str = _v ? parseInt(_v) : _v;
         const _obj = {

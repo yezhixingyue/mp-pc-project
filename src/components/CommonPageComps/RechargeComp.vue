@@ -172,6 +172,10 @@ export default {
     handleCloseClick() {
       this.$emit('handleClose');
     },
+    handleBodyClick() {
+      // console.log('handleBodyClick', e.target);
+      this.handleCloseClick();
+    },
   },
   watch: {
     // eslint-disable-next-line no-unused-vars
@@ -179,6 +183,18 @@ export default {
       // if (newVal && this.curStep === 1) this.getPayStatus();
       this.initData();
     },
+  },
+  mounted() {
+    this.oHeader = document.querySelector('.mp-pc-common-page-header-common-wrap > header');
+    this.oFooter = document.querySelector('.mp-pc-common-page-header-common-wrap > footer');
+    // console.log(this.oHeader, 'oBody mounted');
+    this.oHeader.addEventListener('click', this.handleBodyClick);
+    this.oFooter.addEventListener('click', this.handleBodyClick);
+  },
+  destroyed() {
+    // console.log(this.oHeader, 'oBody destroyed');
+    this.oHeader.removeEventListener('click', this.handleBodyClick);
+    this.oFooter.removeEventListener('click', this.handleBodyClick);
   },
 };
 </script>

@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { debounce } from '@/assets/js/utils/throttle';
+// import { debounce } from '@/assets/js/utils/throttle';
 import SingleSelector from '@/components/common/Selector/SingleSelector.vue';
 import ProductSelector from '@/components/common/Selector/ProductSelectorIndex.vue';
 import LineDateSelectorComp from '@/components/common/Selector/LineDateSelectorComp.vue';
@@ -104,9 +104,12 @@ export default {
     };
   },
   computed: {
-    ...mapState('common', ['OrderStatusList']),
+    ...mapState('common', ['OrderStatusList', 'ScrollInfo']),
     ...mapState('order', ['condition4OrderList', 'OrderList', 'OrderListNumber']),
     ...mapGetters('order', ['computedOrderlist']),
+    scrollChange() {
+      return this.ScrollInfo.scrollTop + this.ScrollInfo.scrollHeight + this.ScrollInfo.offsetHeight;
+    },
     DownLoadConfigObj() {
       return {
         condition: this.condition,
@@ -152,9 +155,7 @@ export default {
     handleScroll(oEl) {
       if (!oEl) return;
       const { scrollTop, scrollHeight, offsetHeight } = oEl;
-      const difference = scrollHeight - offsetHeight;
-      if (difference - 149 - scrollTop > 0) this.isFootFixed = true;
-      else this.isFootFixed = false;
+      this.$store.commit('common/setScrollInfo', { scrollTop, scrollHeight, offsetHeight });
     },
   },
   watch: {
@@ -164,23 +165,22 @@ export default {
         this.handleScroll(this.oApp);
       });
     },
+    scrollChange() {
+      const { scrollTop, scrollHeight, offsetHeight } = this.ScrollInfo;
+      const difference = scrollHeight - offsetHeight;
+      if (difference - 149 - scrollTop > 0) this.isFootFixed = true;
+      else this.isFootFixed = false;
+    },
   },
   mounted() {
     this.$store.dispatch('order/getOrderList');
     this.oApp = document.getElementById('app');
-    const _func = debounce(this.handleScroll, 30);
-    if (this.oApp) {
-      // this.oApp.addEventListener('scroll', () => _func(this.oApp));
-      this.oApp.onscroll = () => _func(this.oApp);
-    }
     this.$nextTick(() => {
       this.handleScroll(this.oApp);
     });
   },
   beforeDestroy() {
     this.$store.commit('order/setShouldGetNewListData', true);
-    // console.log('beforeDestroy orderListpage');
-    this.oApp.onscroll = null;
   },
 };
 </script>

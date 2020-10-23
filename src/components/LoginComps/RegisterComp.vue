@@ -20,6 +20,15 @@
           <i slot="prefix" class="iconfont icon-mima"></i>
       </el-input>
     </el-form-item>
+    <el-form-item prop="VertifyImgCode" class="code-box img-code-box">
+      <el-input placeholder="请输入验证码" v-model.trim="regForm.VertifyImgCode">
+          <i slot="prefix" class="iconfont icon-xinxi"></i>
+          <img slot="suffix" v-if='!imgLoading' @click="getImgCode" :src="imgSrc" alt="图片校验码">
+          <i slot="suffix" v-else >加载中...</i>
+          <!-- <i
+           class="span-title-blue" :class="canGetCode?'':'disabled'" @click="getVertifyCode">{{ codeTitle }}</i> -->
+      </el-input>
+    </el-form-item>
     <el-form-item prop="VertifyCode" class="code-box">
       <el-input placeholder="请输入短信验证码" v-model.trim="VertifyCode">
           <i slot="prefix" class="iconfont icon-xinxi"></i>
@@ -35,6 +44,8 @@
 </template>
 
 <script>
+import Cookie from '../../assets/js/Cookie';
+
 export default {
   data() {
     const validateMobile = (rule, value, callback) => {
@@ -75,6 +86,12 @@ export default {
         VertifyCode: [
           { validator: validateVertifyCode, trigger: 'blur' },
         ],
+        VertifyImgCode: [
+          { required: true, message: '请输入图片验证码', trigger: 'blur' },
+          {
+            min: 2, max: 2, message: '请输入2个字符验证码', trigger: 'blur',
+          },
+        ],
       },
       defineRules: {
         Mobile: [
@@ -104,10 +121,13 @@ export default {
         Password: '',
         rePassword: '',
         VertifyCode: '',
+        VertifyImgCode: '',
       },
       codeTitle: '获取验证码',
       timer: null,
       canGetCode: true,
+      imgSrc: '', // 图片验证码地址
+      imgLoading: false,
     };
   },
   computed: {
@@ -163,8 +183,16 @@ export default {
       if (this.validateCheck(this.Mobile, this.defineRules.Mobile, msg => {
         this.messageBox.failSingle({ msg });
       })) {
+        if (!this.regForm.VertifyImgCode || this.regForm.VertifyImgCode.length !== 2) {
+          this.messageBox.failSingle({ msg: '请输入准确图片验证码' });
+          return;
+        }
         // can
-        const res = await this.api.getSmsCode(this.Mobile);
+        const res = await this.api.getVerificationCode({
+          Mobile: this.Mobile,
+          Code: this.regForm.VertifyImgCode,
+          Type: 0,
+        });
         if (res.data.Status === 1000) {
           this.changeCodeTitleAtSecond();
         }
@@ -185,6 +213,29 @@ export default {
         }
       }, 1000);
     },
+    async getImgCode() {
+      const _imgObj = {
+        width: 138,
+        height: 38,
+        fontSize: 20,
+        closeLoading: true,
+      };
+      // this.setShouldShow(false);
+      this.imgLoading = true;
+      const res = await this.api.getCaptcha(_imgObj);
+      this.imgLoading = false;
+      if (res.data.Status === 1000) {
+        this.imgSrc = res.data.Data.Image;
+        this.setImgCodeCookie(res.data.Data);
+        // this.$refs.ImgCodeCmp.clearMsg();
+      }
+    },
+    setImgCodeCookie(data) {
+      Cookie.setCookie('SessionID', data.SessionID, 600);
+    },
+  },
+  mounted() {
+    this.getImgCode();
   },
 };
 </script>

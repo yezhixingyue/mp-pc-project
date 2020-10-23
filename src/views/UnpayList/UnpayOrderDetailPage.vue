@@ -29,7 +29,7 @@
                       {{(curUnpayListDetailData.Funds.CouponAmount?curUnpayListDetailData.Funds.CouponAmount:0)}}
                     </template>
                   </p>
-                  <p class="final-price is-pink">¥ <i class="is-font-24 is-bold"
+                  <p class="final-price is-pink">¥ <i class="is-font-18 is-bold"
                     >{{curUnpayListDetailData.Funds.FinalPrice}}</i></p>
                   <p>¥ {{curUnpayListDetailData.Funds.Deposit}}</p>
                   <p>¥ {{curUnpayListDetailData.Funds.Freight}}</p>

@@ -20,6 +20,9 @@
         :with-header="false"
         size='350px'
         :before-close="handleClose">
+        <section class="icon-wrap" @click="handleDrawerClose">
+          <span class="iconfont icon-yincangxiangqing"></span>
+        </section>
         <section>
           <header>
             <span class="iconfont icon-dianhua"></span>
@@ -50,37 +53,37 @@
             <li>
               <p>
                 <img src="../../assets/images/qq.png" alt="">
-                <span>800131899</span>
+                <span>4006363006</span>
               </p>
               <p>西安、石家庄、山东</p>
             </li>
             <li>
               <p>
                 <img src="../../assets/images/qq.png" alt="">
-                <span>800131899</span>
+                <span>800131808</span>
               </p>
-              <p>南阳、运城、长治、晋城、洛阳、三门峡</p>
+              <p>南阳、许昌、驻马店、信阳、平顶山、漯河</p>
+            </li>
+            <li>
+              <p>
+                <img src="../../assets/images/qq.png" alt="">
+                <span>800050507</span>
+              </p>
+              <p>安阳、新乡、鹤壁、濮阳、邯郸、邢台、聊城</p>
+            </li>
+            <li>
+              <p>
+                <img src="../../assets/images/qq.png" alt="">
+                <span>800131866</span>
+              </p>
+              <p>开封、周口、商丘、蚌埠、菏泽、亳州</p>
             </li>
             <li>
               <p>
                 <img src="../../assets/images/qq.png" alt="">
                 <span>800131899</span>
               </p>
-              <p>安阳、运城、长治、晋城、洛阳、邢台、聊城</p>
-            </li>
-            <li>
-              <p>
-                <img src="../../assets/images/qq.png" alt="">
-                <span>800131899</span>
-              </p>
-              <p>开封、周口、长治、晋城、洛阳、亳州</p>
-            </li>
-            <li>
-              <p>
-                <img src="../../assets/images/qq.png" alt="">
-                <span>800131899</span>
-              </p>
-              <p>焦作、运城、长治、晋城、洛阳、三门峡、临汾</p>
+              <p>焦作、运城、长治、晋城、洛阳、济源、三门峡、临汾</p>
             </li>
           </ul>
         </section>
@@ -118,6 +121,9 @@ export default {
     },
     handleDrawerOpen() {
       this.drawer = true;
+    },
+    handleDrawerClose() {
+      this.drawer = false;
     },
   },
 };
@@ -214,14 +220,29 @@ export default {
         right: 120px;
       }
     }
+    @media screen and (max-width:1000px){
+      > .back-wrapper {
+        // width: calc(100vw);
+        left: unset;
+        right: 15px\0;
+      }
+    }
+    @media screen and (max-width:880px){
+      > .back-wrapper {
+        width: calc(100vw);
+        left: unset;
+        right: 0\0;
+      }
+    }
     > .el-drawer__wrapper {
       .el-drawer {
         width: 350px;
         outline: none;
         > .el-drawer__body {
           outline: none;
-          padding-top: 30px;
+          padding-top: 48px;
           overflow-y: auto;
+          position: relative;
           > section {
             padding-left: 25px;
             padding-right: 23px;
@@ -246,6 +267,23 @@ export default {
                 font-size: 16px;
                 line-height: 20px;
                 padding: 7px 0;
+              }
+            }
+            &.icon-wrap {
+              position: absolute;
+              top: 0;
+              left: 3px;
+              font-size: 16px;
+              color: #888;
+              padding: 7px 8px;
+              cursor: pointer;
+              border-radius: 50%;
+              transition: 0.2s;
+              &:hover {
+                color: #428dfa;
+                &:active {
+                  background: #eee;
+                }
               }
             }
             &.qq-wrap {

@@ -130,18 +130,18 @@ export default {
     // },
     handleSwitch1(e) {
       if (e === this.first) return;
+      this.changePropsFunc([this.typeList[1], '']);
+      this.changePropsFunc([this.typeList[2], '']);
       this.first = e;
       // this.TypeID = '';
       // this.ProductID = '';
-      this.changePropsFunc([this.typeList[1], '']);
-      this.changePropsFunc([this.typeList[2], '']);
       this.products = [{ ProductID: '', ProductName: '不限' }];
     },
     handleSwitch2(e) {
       if (e === this.second) return;
+      this.changePropsFunc([this.typeList[2], '']);
       this.second = e;
       // this.ProductID = '';
-      this.changePropsFunc([this.typeList[2], '']);
       // this.getProductThird();
     },
     handleSwitch3(e) {

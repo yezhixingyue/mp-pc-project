@@ -1,5 +1,5 @@
 <template>
-    <div class="mp-pc-pre-create-order-list-item-wrap">
+    <div class="mp-pc-pre-create-order-list-item-wrap shopping-car">
       <div class="product-item-header">
         <div class="product-item-header-left">
           <span class="product-item-header-amount-box gray is-font-14">产品金额：<i class="is-pink"
@@ -128,13 +128,22 @@ export default {
 
 <style lang='scss'>
 .mp-pc-pre-create-order-list-item-wrap {
-  margin-top: 20px;
-  // margin-bottom: 20px;
+  padding-top: 20px;
+  // padding-bottom: 20px;
   font-size: 12px;
   // border-top: 1px solid #eee;
   // border-bottom: 1px solid #eee;
   // border-bottom: none;
   box-sizing: border-box;
+  &.shopping-car {
+    margin: 0;
+    // .product-item-header {
+    //   // border-top: none;
+    // }
+    border: 1px solid #eee;
+    border-top: none;
+    // border-bottom: none;
+  }
 
   .product-item-header {
     background-color: rgb(248, 248, 248);
@@ -215,6 +224,9 @@ export default {
     border-bottom: none;
     // border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
+    &:last-of-type {
+      border-bottom: none;
+    }
     &:hover > div {
       background-color: rgb(216, 239, 252);
     }

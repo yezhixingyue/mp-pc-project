@@ -11,6 +11,15 @@ const api = {
   getSmsCode(Mobile, Type = 0) {
     return instance.post('/Api/Sms/Send', { Mobile, Type });
   },
+  getCaptcha(data) { // 图片验证码
+    // eslint-disable-next-line object-curly-newline
+    const { closeLoading, width, height, fontSize } = data;
+    return instance.get(`/Api/Captcha?width=${width}&height=${height}&fontSize=${fontSize}`, { closeLoading });
+  },
+  // 验证图片验证码 并获取短信信息 POST /Api/Sms/Send/VerificationCode { "Mobile": "string", "Code": "string", "Type": 0 } 注册为0
+  getVerificationCode(data) {
+    return instance.post('/Api/Sms/Send/VerificationCode', data);
+  },
   getReg(data) { // POST /Api/Customer/Reg
     return instance.post('/Api/Customer/Reg', data);
   },

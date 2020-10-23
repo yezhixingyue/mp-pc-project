@@ -30,7 +30,7 @@
                 <template v-show='coupon'>{{'-¥ ' + (coupon ? coupon : 0)}}</template>
               </p>
               <p>¥ {{ProductQuotationResult.ExpressCost}}</p>
-              <p class="final-price is-pink">¥ <i class="is-font-24 is-bold">{{Cost}}</i></p>
+              <p class="final-price is-pink">¥ <i class="is-font-18 is-bold">{{Cost}}</i></p>
           </div>
         </div>
       </div>

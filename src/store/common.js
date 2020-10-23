@@ -220,9 +220,11 @@ export default {
     ],
     /* 系统滚动状态 #app元素
     -------------------------------*/
-    scrollTop: 0,
-    scrollHeight: 0,
-    offsetHeight: 0,
+    ScrollInfo: {
+      scrollTop: 0,
+      scrollHeight: 0,
+      offsetHeight: 0,
+    },
   },
   getters: {
   },
@@ -341,9 +343,9 @@ export default {
     /* 设置系统滚动状态 #app元素
     -------------------------------*/
     setScrollInfo(state, { scrollTop, scrollHeight, offsetHeight }) {
-      state.scrollTop = scrollTop;
-      state.scrollHeight = scrollHeight;
-      state.offsetHeight = offsetHeight;
+      state.ScrollInfo.scrollTop = scrollTop;
+      state.ScrollInfo.scrollHeight = scrollHeight;
+      state.ScrollInfo.offsetHeight = offsetHeight;
     },
     /* 修改账号基础信息成功后的数据处理方法
     -------------------------------*/

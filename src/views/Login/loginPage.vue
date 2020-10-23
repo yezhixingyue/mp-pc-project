@@ -90,7 +90,7 @@ export default {
             color: #fff;
             text-decoration: unset;
             font-size: 16px;
-            font-weight: 600;
+            // font-weight: 600;
             text-align: center;
             display: block;
             line-height: 78px;
@@ -259,6 +259,36 @@ export default {
               }
             }
             margin-bottom: 60px;
+            &.img-code-box {
+              margin-bottom: 29px;
+              > .el-form-item__content {
+                .el-input__suffix {
+                  width: 138px;
+                  height: 38px;
+                  margin-top: 1px;
+                  margin-right: 1px;
+                  text-align: center;
+                  // border-left: 1px solid #eee;
+                  line-height: 38px;
+                  background-color: #eee;
+                  border-radius: 4px;
+                  overflow: hidden;
+                  right: 0;
+                  > .el-input__suffix-inner {
+                    width: 138px;
+                    height: 38px;
+                    display: inline-block;
+                    line-height: 38px;
+                    > img {
+                      cursor: pointer;
+                    }
+                  }
+                  &::before {
+                    display: none;
+                  }
+                }
+              }
+            }
           }
         }
       }

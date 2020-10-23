@@ -17,7 +17,7 @@ export default {
         First: '',
         Second: '',
       },
-      DateType: 'today',
+      DateType: 'all',
       ProductClass: {
         First: '',
         Second: '',
@@ -77,7 +77,7 @@ export default {
           First: '',
           Second: '',
         },
-        DateType: 'today',
+        DateType: 'all',
         ProductClass: {
           First: '',
           Second: '',
@@ -115,7 +115,7 @@ export default {
           First: '',
           Second: '',
         },
-        DateType: 'today',
+        DateType: 'all',
         ProductClass: {
           First: '',
           Second: '',

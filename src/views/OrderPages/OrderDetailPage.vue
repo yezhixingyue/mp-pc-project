@@ -42,7 +42,7 @@
                       <i v-if='promotePrice && promotePrice>0'>-</i>¥ {{(promotePrice ? promotePrice : 0)}}
                     </template>
                   </p>
-                  <p class="final-price is-pink">¥ <i class="is-font-24 is-bold"
+                  <p class="final-price is-pink">¥ <i class="is-font-18 is-bold"
                     >{{curOrderDetailData.Funds.FinalPrice}}</i></p>
                   <p>¥ {{curOrderDetailData.Funds.HavePaid}}</p>
                   <p>¥ {{curOrderDetailData.Funds.Unpaid}}</p>

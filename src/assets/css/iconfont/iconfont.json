@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7904813",
+      "name": "双箭头-右",
+      "font_class": "yincangxiangqing",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "17775712",
+      "name": "喇叭",
+      "font_class": "laba",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
       "icon_id": "3916416",
       "name": "退出登录",
       "font_class": "tuichudenglu",

@@ -128,13 +128,23 @@ export default {
 
 <style lang='scss'>
 .mp-pc-pre-create-order-list-item-for-unpay-order-wrap {
-  margin-top: 20px;
+  padding-top: 20px;
   // margin-bottom: 20px;
   font-size: 12px;
   // border-top: 1px solid #eee;
   // border-bottom: 1px solid #eee;
   // border-bottom: none;
   box-sizing: border-box;
+
+  &.shopping-car {
+    margin: 0;
+    // .product-item-header {
+    //   // border-top: none;
+    // }
+    border: 1px solid #eee;
+    border-top: none;
+    // border-bottom: none;
+  }
 
   .product-item-header {
     background-color: rgb(248, 248, 248);
@@ -218,6 +228,9 @@ export default {
     // transition: backgroundColor 0.2s;
     &:hover > div {
       background-color: rgb(216, 239, 252);
+    }
+    &:last-of-type {
+      border-bottom: none;
     }
     > div {
       transition: .2s;

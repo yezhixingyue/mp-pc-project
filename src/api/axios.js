@@ -6,11 +6,13 @@ import messageBox from '../assets/js/utils/message';
 
 let loadingInstance;
 let closeTip = false;
+let closeLoading = false;
 axios.interceptors.request.use(
   (config) => {
     const curConfig = config;
     const token = sessionStorage.getItem('token');
     closeTip = curConfig.closeTip;
+    closeLoading = curConfig.closeLoading;
     const url = curConfig.url.split('?')[0];
     const arrWithOutToken = ['/Api/Customer/Reg', '/Api/Customer/Login'];
     if (token && !arrWithOutToken.includes(url)) curConfig.headers.common.Authorization = `Bearer ${token}`;
@@ -21,7 +23,7 @@ axios.interceptors.request.use(
         key = false;
       }
     }
-    if (key) {
+    if (key && !closeLoading) {
       loadingInstance = Loading.service({
         lock: true,
         text: 'Loading',

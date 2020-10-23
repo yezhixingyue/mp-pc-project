@@ -10,7 +10,7 @@
       <ul>
         <li v-for="(data, i) in orderData.PackageList" :key="data.ID"
           :class="i === orderData.PackageList.length - 1 ? 'hide-border' : ''" >
-          <ItemListComp :data="data" :widthObj="widthObj"
+          <ItemListComp :data="data" :widthObj="widthObj" class="shopping-car"
           />
         </li>
       </ul>
@@ -80,15 +80,15 @@ export default {
   box-sizing: border-box;
   // min-height: 360px;
   padding-bottom: 15px;
-  border: 1px solid #eee;
+  // border: 1px solid #eee;
   > header {
     height: 40px;
     // border: 1px solid #eee;
-    // border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
     background-color: rgb(248, 248, 248);
     box-sizing: border-box;
     // border-bottom: none;
-    border-top: none;
+    // border-top: none;
     > div {
       line-height: 38px;
       height: 100%;
@@ -115,6 +115,8 @@ export default {
     overflow-x: hidden;
     // border-bottom: 1px solid #eee;
     border-top: 1px solid #eee;
+    min-height: calc(100vh - 135px - 144px - 346px - 25px);
+    margin-bottom: 20px;
     > div {
       margin-bottom: 0;
     }

@@ -92,6 +92,16 @@ export default {
   }
   > main {
     height: calc(100% - 36px);
+    > div.mp-pc-pre-create-order-list-item-wrap {
+      border-left: 1px solid #eee;
+      border-right: 1px solid #eee;
+      margin: 0;
+      padding-top: 20px;
+      border-top: none;
+      > .product-item-header {
+        border-bottom: 1px solid #eee;
+      }
+    }
   }
 }
 </style>

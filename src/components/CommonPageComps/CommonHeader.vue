@@ -2,7 +2,7 @@
   <section class="mp-pc-common-page-header-common-wrap float" :style="oStyles">
     <header>
       <div>
-        <img src="../../assets/images/logo-white.png" alt />
+        <img @click="onImgClick" src="../../assets/images/logo-white.png" alt />
         <!-- <span>会员中心</span> -->
       </div>
       <ul>
@@ -13,7 +13,13 @@
           <a>快捷下单</a>
         </li>
         <li>
+          <a href="http://www.mpzj.cn/news_complex.aspx" target="_blank">新闻中心</a>
+        </li>
+        <li>
           <a href="http://www.mpzj.cn/about_complex.aspx" target="_blank">关于我们</a>
+        </li>
+        <li>
+          <a href="http://www.mpzj.cn/feedback.aspx" target="_blank">服务中心</a>
         </li>
       </ul>
     </header>
@@ -61,7 +67,7 @@
             <i class="title"><i class="r-5">/ </i> 余额：</i>
             <i class="price">￥{{customerBalance?customerBalance:0}}</i>
           </span>
-          <el-button round @click="setShowRechange">在线充值</el-button>
+          <el-button round @click.stop="setShowRechange">在线充值</el-button>
           <el-dropdown trigger="click" @command='onCommand'>
             <span class="el-dropdown-link">
               {{formatMobile(customerInfo.Account.Mobile)}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -103,7 +109,7 @@
       custom-class="mp-recharge-drawer-wrap"
       :before-close="setShowRechange">
       <div class="recharge-box" :class="showRechange? 'showRechange' : ''">
-        <RechargeComp :showRechange='showRechange' @handleClose='setShowRechange' />
+        <RechargeComp :showRechange='showRechange'  @handleClose='setShowRechangeFalse' />
       </div>
     </el-drawer>
     <PlaceOrderProductClassifyComp isComHeader @handleMouseLeave='onMouseLeave'
@@ -120,6 +126,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { debounce } from '@/assets/js/utils/throttle';
 import PlaceOrderProductClassifyComp from '@/components/QuotationComps/PlaceOrderProductClassifyComp.vue';
 import RechargeComp from './RechargeComp.vue';
 
@@ -129,7 +136,10 @@ export default {
     PlaceOrderProductClassifyComp,
   },
   computed: {
-    ...mapState('common', ['customerInfo', 'customerBalance', 'scrollTop']),
+    ...mapState('common', ['customerInfo', 'customerBalance', 'ScrollInfo']),
+    scrollTop() {
+      return this.ScrollInfo.scrollTop;
+    },
   },
   data() {
     return {
@@ -171,6 +181,20 @@ export default {
     onRemarkClick() {
       this.setShowRechange();
     },
+    setShowRechangeFalse() {
+      if (this.showRechange) {
+        this.showRechange = !this.showRechange;
+        if (!this.showRechange) {
+          this.oStyles.zIndex = 1000;
+          setTimeout(() => {
+            this.showRemark = false;
+          }, 200);
+        }
+      }
+    },
+    onImgClick() {
+      if (this.$route.name !== 'placeOrder') this.$router.push('/placeOrder');
+    },
     onMouseEnter() {
       this.showClassify = true;
       // if (!this.isOpen) {
@@ -193,6 +217,11 @@ export default {
       //   clearTimeout(this.timer2);
       //   this.timer2 = null;
       // }
+    },
+    handleScroll(oEl) {
+      if (!oEl) return;
+      const { scrollTop, scrollHeight, offsetHeight } = oEl;
+      this.$store.commit('common/setScrollInfo', { scrollTop, scrollHeight, offsetHeight });
     },
     onCommand(command) {
       console.log(command);
@@ -261,6 +290,14 @@ export default {
   mounted() {
     this.$store.dispatch('common/getCustomerDetail');
     this.$store.dispatch('common/getCustomerFundBalance');
+    this.oApp = document.getElementById('app');
+    const _func = debounce(this.handleScroll, 50);
+    if (this.oApp) {
+      this.oApp.onscroll = () => _func(this.oApp);
+    }
+  },
+  beforeDestroy() {
+    this.oApp.onscroll = null;
   },
 };
 </script>
@@ -278,6 +315,8 @@ export default {
     width: 1200px;
     height: 60px;
     margin: 0 auto;
+    position: relative;
+    left: -8px;
     > div {
       display: inline-block;
       vertical-align: top;
@@ -289,6 +328,7 @@ export default {
         margin-top: 13px;
         margin-right: 25px;
         vertical-align: -66%;
+        cursor: pointer;
       }
       > span {
         color: #585858;
@@ -303,11 +343,12 @@ export default {
         float: left;
         height: 60px;
         // width: 120px;
-        padding: 0 24px;
         margin-right: 0 10px;
         > a {
           height: 100%;
           width: 100%;
+          padding: 0 24px;
+          box-sizing: border-box;
           color: #fff;
           text-decoration: unset;
           text-decoration: none\0;
@@ -355,6 +396,8 @@ export default {
       width: 1200px;
       margin: 0 auto;
       box-sizing: border-box;
+      position: relative;
+      left: -8px;
       // height: 69px;
       // border-bottom: 1px dashed #eee;
       > .menu-list {
@@ -381,12 +424,18 @@ export default {
             vertical-align: bottom;
           }
           &.normal-item {
-            &.router-link-active, &.active, &:hover {
+            &.router-link-active, &.active {
               color: #fff;
               background-color: #428dfa;
+              &:hover {
+                color: #fff;
+              }
+            }
+            &:hover {
+              color: #428dfa;
             }
             &:active {
-              color: #fff;
+              color: #428dfa;
               box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
               text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
             }
@@ -398,14 +447,6 @@ export default {
             margin-right: 20px;
             height: 70px;
             width: 80px;
-            &.showClassify {
-              // background-color: rgb(236, 243, 254);
-              // color: #428dfa;
-              > div > span {
-                color: #fff;
-                background-color: #428dfa;
-              }
-            }
             > div {
               height: 35px;
               padding: 19px 0px 16px;
@@ -413,27 +454,36 @@ export default {
                 display: inline-block;
                 padding: 10px 20px;
                 border-radius: 5px;
-              }
-            }
-            &.router-link-active, &.active, &:hover {
-              background-color: #fff;
-              > div > span {
-                color: #fff;
-                background-color: #428dfa;
+                transition: 0.2s;
               }
             }
             //  &:hover {
             //    > div > span {
             //     color: #fff;
-            //     background-color: rgba($color: #428dfa, $alpha: 0.8);
+            //     // background-color: rgba($color: #428dfa, $alpha: 0.8);
             //   }
             //  }
+            &.router-link-active, &.active {
+              background-color: #fff;
+              > div > span {
+                color: #fff !important;
+                background-color: #428dfa;
+              }
+            }
             &:active {
               > div > span {
-                color: #fff;
+                color: #428dfa;
                 // color: #428dfa;
                 box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
                 text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+              }
+            }
+            &.showClassify {
+              // background-color: rgb(236, 243, 254);
+              // color: #428dfa;
+              > div > span {
+                color: #428dfa;
+                // background-color: #428dfa;
               }
             }
           }
@@ -635,6 +685,9 @@ export default {
     &.active {
       color: #428dfa;
       font-weight: 700;
+      > i {
+        color: #428dfa;
+      }
     }
   }
 }

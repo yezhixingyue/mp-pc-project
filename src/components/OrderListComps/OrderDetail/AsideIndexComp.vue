@@ -9,6 +9,7 @@
 
 <script>
 import { debounce } from '@/assets/js/utils/throttle';
+import { mapState } from 'vuex';
 
 export default {
   data() {
@@ -23,12 +24,16 @@ export default {
       distance: 130,
     };
   },
-  methods: {
-    handleScroll(oEl) {
-      if (!oEl) return;
-      const { scrollTop } = oEl;
+  computed: {
+    ...mapState('common', ['ScrollInfo']),
+    scrollTop() {
+      return this.ScrollInfo.scrollTop;
+    },
+  },
+  watch: {
+    scrollTop() {
+      const { scrollTop } = this.ScrollInfo;
       const _top = scrollTop + this.distance;
-      // if (_top > this.elesTopInfo.oHeaderTop)
       if (_top > this.elesTopInfo.oPackageTop) {
         this.activeText = 'detail';
       } else if (_top > this.elesTopInfo.oProgressTop) {
@@ -38,6 +43,13 @@ export default {
       } else {
         this.activeText = 'header';
       }
+    },
+  },
+  methods: {
+    handleScroll(oEl) {
+      if (!oEl) return;
+      const { scrollTop, scrollHeight, offsetHeight } = oEl;
+      this.$store.commit('common/setScrollInfo', { scrollTop, scrollHeight, offsetHeight });
     },
     handleJump(text) {
       if (this.activeText === text) return;
@@ -91,17 +103,12 @@ export default {
   },
   mounted() {
     this.oApp = document.getElementById('app');
-    const _func = debounce(this.handleScroll, 30);
-    if (this.oApp) {
-      this.oApp.onscroll = () => _func(this.oApp);
-    }
     this.$nextTick(() => {
       window.onresize = debounce(this.getElesInfo, 30);
       this.getElesInfo();
     });
   },
   beforeDestroy() {
-    this.oApp.onscroll = null;
     window.onresize = null;
   },
 };

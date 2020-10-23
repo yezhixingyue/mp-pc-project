@@ -134,7 +134,7 @@
           </li>
         </ul>
       </div>
-      <div class="right">
+      <div class="right" :class="PartList.length > 1?'':'setMP'">
         <slot></slot>
       </div>
     </div>
@@ -425,14 +425,16 @@ export default {
       // padding-left: 40px;
       box-sizing: border-box;
 
-      border-left: 1px solid #eee;
-      height: 10000px;
-      margin-bottom: -9999px;
+      &.setMP {
+        height: 10000px;
+        margin-bottom: -9999px;
+        border-left: 1px solid #eee;
+      }
     }
     .craft-wrap {
       > div {
         float: left;
-        margin-right: 8px;
+        // margin-right: 8px;
       }
       > ul {
         overflow: hidden;
@@ -454,7 +456,7 @@ export default {
         width: 765px;
         padding-left: 60px;
         padding-top: 30px;
-        min-height: 360px;
+        min-height: 380px;
         // > p.product-name {
         //   margin-bottom: 20px;
         // }

@@ -121,7 +121,8 @@ export default {
       } else {
         localStorage.removeItem('info');
       }
-      this.$router.push(`${this.repath}`);
+      // this.$router.push(`${this.repath}`);
+      this.$router.push('/placeOrder');
     },
     handleFailLogin(status) {
       localStorage.removeItem('info');

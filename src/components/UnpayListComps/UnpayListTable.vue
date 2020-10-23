@@ -110,7 +110,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { debounce, throttle } from '@/assets/js/utils/throttle';
+import { throttle } from '@/assets/js/utils/throttle';
 
 export default {
   data() {
@@ -122,7 +122,10 @@ export default {
   },
   computed: {
     ...mapState('unpayList', ['unpayDataList', 'unpayDataNumber']),
-    // ...mapState('common', ['ExpressList']),
+    ...mapState('common', ['ScrollInfo']),
+    scrollChange() {
+      return this.ScrollInfo.scrollTop + this.ScrollInfo.scrollHeight + this.ScrollInfo.offsetHeight;
+    },
     checkedAll: {
       get() {
         return this.multipleSelection.length === this.unpayDataNumber && this.multipleSelection.length > 0;
@@ -216,12 +219,7 @@ export default {
     handleScroll(oEl) {
       if (!oEl) return;
       const { scrollTop, scrollHeight, offsetHeight } = oEl;
-      const difference = scrollHeight - offsetHeight;
-      // this.scrollTop = scrollTop;
-      // console.log(scrollTop, scrollHeight, offsetHeight);
-      // console.log(difference, scrollTop, difference - 140 - scrollTop);
-      if (difference - 140 - scrollTop > 0) this.isFootFixed = true;
-      else this.isFootFixed = false;
+      this.$store.commit('common/setScrollInfo', { scrollTop, scrollHeight, offsetHeight });
     },
   },
   mounted() {
@@ -230,18 +228,9 @@ export default {
     // window.addEventListener('resize', this.handleScroll);
     // this.$store.dispatch('common/getExpressList');
     this.oApp = document.getElementById('app');
-    const _func = debounce(this.handleScroll, 30);
-    if (this.oApp) {
-      // this.oApp.addEventListener('scroll', () => _func(this.oApp));
-      this.oApp.onscroll = () => _func(this.oApp);
-    }
     this.$nextTick(() => {
       this.handleScroll(this.oApp);
     });
-  },
-  beforeDestroy() {
-    // window.removeEventListener('resize', this.setHeight);
-    this.oApp.onscroll = null;
   },
   watch: {
     unpayDataList: {
@@ -265,6 +254,12 @@ export default {
         });
       },
       immediate: true,
+    },
+    scrollChange() {
+      const { scrollTop, scrollHeight, offsetHeight } = this.ScrollInfo;
+      const difference = scrollHeight - offsetHeight;
+      if (difference - 140 - scrollTop > 0) this.isFootFixed = true;
+      else this.isFootFixed = false;
     },
   },
 };

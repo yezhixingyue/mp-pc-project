@@ -104,6 +104,7 @@ export default {
   margin-bottom: 20px;
   font-size: 12px;
   border: 1px solid #eee;
+  // overflow: hidden;
   // border-bottom: none;
   box-sizing: border-box;
 
