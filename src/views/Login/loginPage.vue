@@ -14,17 +14,19 @@
       </div>
     </header>
     <div class="content">
-      <div class="panel">
+      <div class="panel" v-loading='panelLoading' :element-loading-text='loadingText'>
         <el-tabs v-model="activeName" stretch>
           <el-tab-pane label="用户登录" name="first"></el-tab-pane>
           <el-tab-pane label="用户注册" name="second"></el-tab-pane>
         </el-tabs>
         <div class="panel-content">
           <keep-alive>
-            <LoginComp v-if="activeName === 'first'" @changePanel='setActiveName' />
+            <LoginComp v-if="activeName === 'first'"
+             @setPanelLoading='setPanelLoading' @changePanel='setActiveName' />
           </keep-alive>
           <keep-alive>
-            <RegisterComp v-if="activeName === 'second'" @changePanel='setActiveName' />
+            <RegisterComp v-if="activeName === 'second'"
+             @setPanelLoading='setPanelLoading' @changePanel='setActiveName' />
           </keep-alive>
         </div>
       </div>
@@ -44,11 +46,17 @@ export default {
   data() {
     return {
       activeName: 'first',
+      panelLoading: false,
+      loadingText: '',
     };
   },
   methods: {
     setActiveName(val) {
       if (['first', 'second'].includes(val)) this.activeName = val;
+    },
+    setPanelLoading([bool, text]) {
+      this.panelLoading = bool;
+      this.loadingText = text;
     },
   },
 };
@@ -136,6 +144,12 @@ export default {
       border-radius: 5px;
       box-sizing: border-box;
       padding: 0 50px;
+      .el-loading-spinner .circular {
+        height: 26px;
+        width: 26px;
+        margin-top: -20px;
+        margin-bottom: 10px;
+      }
       > .el-tabs {
         > .el-tabs__header {
           .el-tabs__nav-wrap {

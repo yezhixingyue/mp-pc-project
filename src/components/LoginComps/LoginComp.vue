@@ -1,5 +1,6 @@
 <template>
-  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
+  <el-form :model="ruleForm" :rules="rules"
+    ref="ruleForm" label-width="0px" class="demo-ruleForm">
     <el-form-item prop="Mobile">
       <el-input placeholder="请输入手机号码" clearable v-model.trim="Mobile">
           <i slot="prefix" class="iconfont icon-shouji"></i>
@@ -136,7 +137,9 @@ export default {
         const Password = `${this.rememberInfo.Password}`;
         const obj = { Mobile, Password, Terminal: 1 };
         console.log(obj, Password);
+        this.$emit('setPanelLoading', [true, '正在登录中...']);
         const res = await this.api.getLogin(obj);
+        this.$emit('setPanelLoading', [false, '']);
         if (res.data.Status === 1000) {
           this.handleSuccessLogin(res.data.Data, rememberPwd, Password);
         } else {
@@ -149,7 +152,9 @@ export default {
             const { Mobile, Password, rememberPwd } = this.ruleForm;
             const pwd = Base64.encode(Password);
             const _obj = { Mobile, Password: pwd, Terminal: 1 };
+            this.$emit('setPanelLoading', [true, '正在登录中...']);
             const res = await this.api.getLogin(_obj);
+            this.$emit('setPanelLoading', [false, '']);
             if (res.data.Status === 1000) {
               this.handleSuccessLogin(res.data.Data, rememberPwd, _obj.Password);
             } else {

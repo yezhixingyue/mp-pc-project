@@ -237,8 +237,6 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('Quotation/getProductClassify');
-    this.$store.dispatch('Quotation/getCustomerShortCutList');
     // if (this.isComHeader) {
     //   this.isOpen = true;
     //   this.index = 0;

@@ -288,6 +288,8 @@ export default {
     },
   },
   mounted() {
+    this.$store.dispatch('Quotation/getProductClassify');
+    // this.$store.dispatch('Quotation/getCustomerShortCutList');
     this.$store.dispatch('common/getCustomerDetail');
     this.$store.dispatch('common/getCustomerFundBalance');
     this.oApp = document.getElementById('app');

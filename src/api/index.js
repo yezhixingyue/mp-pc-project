@@ -6,7 +6,7 @@ const api = {
   /* 登录注册部分 与 账号相关等 api
   ----------------------------------------------------------------------------------- */
   getLogin(data) { // POST /Api/Customer/Login
-    return instance.post('/Api/Customer/Login', data);
+    return instance.post('/Api/Customer/Login', data, { closeLoading: true });
   },
   getSmsCode(Mobile, Type = 0) {
     return instance.post('/Api/Sms/Send', { Mobile, Type });
@@ -21,7 +21,7 @@ const api = {
     return instance.post('/Api/Sms/Send/VerificationCode', data);
   },
   getReg(data) { // POST /Api/Customer/Reg
-    return instance.post('/Api/Customer/Reg', data);
+    return instance.post('/Api/Customer/Reg', data, { closeLoading: true });
   },
   getCheckCode(data) { // 验证重置短信息
     return instance.post('/Api/FindPassword/CheckCode', data);

@@ -167,7 +167,9 @@ export default {
             VertifyCode,
             Terminal: 1,
           };
+          this.$emit('setPanelLoading', [true, '正在注册中...']);
           const res = await this.api.getReg(_obj);
+          this.$emit('setPanelLoading', [false, '']);
           if (res.data.Status === 1000) {
             this.messageBox.successSingle({
               title: '注册成功,请登录',
