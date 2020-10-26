@@ -9,7 +9,7 @@
         :value="item">
       </el-option>
     </el-select>
-    <el-select v-model="inpValue">
+    <el-select v-model="inpValue" v-show="optionList2.length > 1 || optionList2[0].Name">
       <el-option
         v-for="item in optionList2"
         :key="item.MaterialID"

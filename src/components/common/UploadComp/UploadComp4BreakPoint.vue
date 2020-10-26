@@ -46,31 +46,33 @@
         <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
       </el-upload>
     </div>
-    <div
-        class="loading-box"
+    <transition name="el-fade-in">
+      <div
+        class="loading-box transition-box"
         @click="e => {e.stopPropagation(); return false;}"
-        v-if="showLoading || showProgress || showReadMsg"
+        v-show="showLoading || showProgress || showReadMsg"
        >
-    <!-- <div
-        class="loading-box"
-        @click="e => {e.stopPropagation(); return false;}"
-        v-if="1"
-       > -->
-        <div v-if="showLoading">
-          <i class="el-icon-loading"></i>
-          <p>文件正在上传中...</p>
+      <!-- <div
+            class="loading-box"
+            @click="e => {e.stopPropagation(); return false;}"
+            v-if="1"
+        > -->
+          <div v-if="showLoading">
+            <i class="el-icon-loading"></i>
+            <p>文件正在上传中...</p>
+          </div>
+          <div v-if="showProgress" class="progress-box">
+            <p>文件正在上传中... </p>
+            <el-progress stroke-linecap="square"
+            :text-inside="true" :stroke-width="13" :percentage="percentageNum">
+            </el-progress>
+          </div>
+          <div v-if="showReadMsg">
+            <i class="el-icon-loading"></i>
+            <p>{{upLoadTitle}}</p>
+          </div>
         </div>
-        <div v-if="showProgress" class="progress-box">
-          <p>文件正在上传中... </p>
-          <el-progress stroke-linecap="square"
-           :text-inside="true" :stroke-width="13" :percentage="percentageNum">
-          </el-progress>
-        </div>
-        <div v-if="showReadMsg">
-          <i class="el-icon-loading"></i>
-          <p>{{upLoadTitle}}</p>
-        </div>
-      </div>
+      </transition>
   </div>
 </template>
 
@@ -181,7 +183,7 @@ export default { // 上传图片按钮
     upLoadSingleFile(file) {
       console.log('upLoadSingleFile');
       if (!file) return;
-      this.upLoadTitle = '读取文件中...  ( 文件过大时速度会较慢 )';
+      this.upLoadTitle = '读取文件中（ 文件大小影响读取时间 ）...';
       this.showReadMsg = true;
       const reader = new FileReader();
       reader.readAsArrayBuffer(file);

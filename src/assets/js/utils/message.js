@@ -27,7 +27,7 @@ function failSingle({ msg, successFunc, failFunc }) {
  * @param {*} failFunc
  */
 function failSingleError({
-  title = '出错啦 ！', msg, successFunc, failFunc,
+  title = '出错啦 ！', msg, successFunc, failFunc, beforeClose,
 }) {
   console.log(title);
   MessageBox({
@@ -36,6 +36,10 @@ function failSingleError({
     type: 'fail ',
     confirmButtonText: '确定',
     title,
+    beforeClose: (action, instance, done) => {
+      if (beforeClose) beforeClose();
+      done();
+    },
     customClass: 'mp-order-del-pop-reverse-fail',
   }).then(() => successFunc && successFunc()).catch(() => failFunc && failFunc());
 }

@@ -98,21 +98,27 @@ export default {
       codeSrc: '',
       timer: null,
       Amount: 0,
+      isShowTips: false, // 是否在弹框显示错误信息
     };
   },
   methods: {
     async handleRecharge() {
+      if (this.isShowTips) return;
       if (!this.reCharge) {
+        this.isShowTips = true;
         this.messageBox.failSingleError({
           title: '校验错误',
           msg: '请输入充值金额',
+          beforeClose: () => { this.isShowTips = false; },
         });
         return;
       }
       if (+this.reCharge === 0) {
+        this.isShowTips = true;
         this.messageBox.failSingleError({
           title: '校验错误',
           msg: '充值金额必须大于0',
+          beforeClose: () => { this.isShowTips = false; },
         });
         return;
       }

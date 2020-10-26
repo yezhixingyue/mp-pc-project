@@ -78,7 +78,7 @@ export default {
     >.img-code-box {
       float: right;
       width: 182px;
-      background: url(https://0.rc.xiniu.com/g1/M00/20/75/CgAGTF1D4GyAOFkhAAMezvQFbb4851.png) no-repeat right center;
+      background: url(../../assets/images/99.png) no-repeat right center;
     }
   }
   &.cancollapse {

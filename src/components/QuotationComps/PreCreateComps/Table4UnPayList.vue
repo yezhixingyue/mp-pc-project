@@ -45,7 +45,7 @@ export default {
         '原价',
         '优惠券',
         '成交价',
-        '订金',
+        '定金',
         '文件内容',
       ],
       curSelectedList: [],

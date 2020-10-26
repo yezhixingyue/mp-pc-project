@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { throttle } from '@/assets/js/utils/throttle';
+
 export default {
   props: {
     /**
@@ -41,16 +43,22 @@ export default {
     return {
       flags: false,
       oDIv: undefined,
+      oldX: 0,
+      oldWidth: 0,
+      distence: 0,
     };
   },
   methods: {
     onMousedown(event) {
+      if (this.flags) return;
       if (!this.oDIv && !this.$refs.moveDiv) return;
       this.oDIv = this.$refs.moveDiv;
       if (event.offsetX > this.oDIv.offsetWidth - 15) {
         this.flags = true;
-        this.oDIv.oldX = event.x;
+        this.oDIv.oldX = event.clientX;
         this.oDIv.oldWidth = this.oDIv.offsetWidth;
+        this.oldX = event.clientX;
+        this.oldWidth = this.oDIv.offsetWidth;
         this.oDIv.style.cursor = 'col-resize';
       }
     },
@@ -61,22 +69,38 @@ export default {
       else this.oDIv.style.cursor = 'default';
       if (!this.flags) return;
       this.oDIv.style.cursor = 'default';
-      if (this.oDIv.oldWidth + (event.x - this.oDIv.oldX) > 30) {
-        this.oDIv.width = this.oDIv.oldWidth + (event.x - this.oDIv.oldX);
-        if (this.onWidthChange) this.onWidthChange(this.oDIv.width);
+      if (this.oDIv.oldWidth + (event.clientX - this.oDIv.oldX) > 30) {
+        this.distence = event.clientX - this.oDIv.oldX;
+        this.oLine.style.display = 'flex';
+        this.oLine.style.left = `${event.clientX}px`;
+        this.oLine.style.top = `${this.oDIv.getBoundingClientRect().top}px`;
+        if (event.target.offsetParent) {
+          this.oLine.style.height = `${event.target.offsetParent.offsetHeight}px`;
+        }
       }
       this.oDIv.style.cursor = 'col-resize';
     },
     onMouseup() {
       if (!this.oDIv && !this.$refs.moveDiv) return;
       if (this.oDIv === undefined) this.oDIv = this.$refs.moveDiv;
-      this.flags = false;
-      this.oDIv.style.cursor = 'default';
+      if (this.flags) {
+        this.flags = false;
+        this.oDIv.style.cursor = 'default';
+        this.oLine.style.display = 'none';
+        this.oDIv.width = this.oDIv.oldWidth + this.distence;
+        if (this.onWidthChange) this.onWidthChange(this.oDIv.width);
+      }
     },
   },
   mounted() {
-    document.addEventListener('mousemove', this.onMousemove);
+    this._tempFunc = e => throttle(this.onMousemove(e), 30);
+    document.addEventListener('mousemove', this._tempFunc);
     document.addEventListener('mouseup', this.onMouseup);
+    this.oLine = document.querySelector('.my-define-table-line');
+  },
+  beforeDestroy() {
+    document.removeEventListener('mousemove', this._tempFunc);
+    document.removeEventListener('mouseup', this.onMouseup);
   },
 };
 </script>

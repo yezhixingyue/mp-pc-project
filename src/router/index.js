@@ -299,7 +299,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
   scrollBehavior(to, from, savedPosition) {
-    console.log(to, savedPosition);
+    // console.log(to, savedPosition);
     if (savedPosition) {
       return savedPosition;
     }

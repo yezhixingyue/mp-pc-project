@@ -46,10 +46,11 @@ axios.interceptors.response.use(
     if (loadingInstance) loadingInstance.close();
     // eslint-disable-next-line max-len
     const _list2NotNeed2Toast = ['/Api/Calculate/ProductPrice', '/Api/Order/Create', '/Api/AfterSales/Excel', '/Api/Customer/OrderExcel'];
-    const _statusList2NotNeed2Toast = [1000, 9062];
+    const _statusList2NotNeed2Toast = [1000, 9062, 9169];
     // 包含以上的状态码 或 以上的请求路径  不会弹窗报错  其余以外都会报错出来
 
     const _url = response.config.url.split('?')[0];
+
     if ([7025, 8037].includes(response.data.Status)) {
       Message({
         showClose: true,
@@ -70,7 +71,7 @@ axios.interceptors.response.use(
       } else {
         _obj.successFunc = undefined;
       }
-      let _msg = '出错啦';
+      let _msg = '错误';
       if (_url === '/Api/Customer/Login') _msg = '登录失败';
       if (_url === '/Api/Customer/Reg') _msg = '注册失败';
       if (_url === '/Api/Sms/Send/VerificationCode') _msg = '验证失败';
@@ -81,6 +82,7 @@ axios.interceptors.response.use(
       if (_url === '/Api/FindPassword/CheckCode') _msg = '验证码错误';
       if (_url === '/Api/Coupon/Receive') _msg = '领取失败';
       if (_url === '/Api/Quotation/Save') _msg = '添加失败';
+      if (_url === '/Api/Upload/File') _msg = '文件上传失败';
 
       _obj.title = _msg;
       messageBox.failSingleError(_obj);
@@ -105,11 +107,11 @@ axios.interceptors.response.use(
             //     sessionStorage.removeItem('token');
             //   },
             // });
-            Message({
-              showClose: true,
-              message: '请重新登录!',
-              type: 'error',
-            });
+            // Message({
+            //   showClose: true,
+            //   message: '请重新登录!',
+            //   type: 'error',
+            // });
             router.replace('/login');
             sessionStorage.removeItem('token');
             key = true;

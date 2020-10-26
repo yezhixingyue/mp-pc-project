@@ -51,7 +51,9 @@
           </div>
           <div class="address">
             <span class="title">收货地址：</span>
-            <span>{{currentAddInfo.address}}</span>
+            <el-tooltip effect="dark" :enterable='false' :content="currentAddInfo.address" placement="top-start">
+              <span>{{currentAddInfo.address}}</span>
+            </el-tooltip>
           </div>
         </li>
         <li v-else class="has-none-consignee">

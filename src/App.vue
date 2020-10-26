@@ -21,9 +21,10 @@ export default {
   // },
   // mounted() {
   //   const oApp = document.getElementById('app');
-  //   const _func = throttle(this.handleScroll, 30);
+  //   // const _func = throttle(this.handleScroll, 30);
   //   if (oApp) {
-  //     oApp.addEventListener('scroll', () => _func(oApp));
+  //     window.addEventListener('scroll', () => this.handleScroll(oApp));
+  //     window.onscroll = () => console.log(123);
   //   }
   // },
 };

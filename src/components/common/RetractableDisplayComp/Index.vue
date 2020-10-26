@@ -10,6 +10,7 @@
     <main :class="isScrollStyle? 'mp-scroll-wrap': '' " :style="minWidth">
       <slot></slot>  <!-- 主体内容显示区，插槽，使用时由外部传入 -->
     </main>
+    <footer class="my-define-table-line"></footer>
   </div>
 </template>
 
@@ -80,7 +81,7 @@ export default {
 .mp-retractable-display-comp-wrap {
   overflow-x: auto;
   overflow-y: hidden;
-  overflow:overlay;
+  // overflow:overlay;
   > header {
     background-color: #f8f8f8;
     display: flex;
@@ -93,6 +94,17 @@ export default {
     overflow-y: auto;
     overflow-x: hidden;
     overflow:overlay;
+  }
+  > footer.my-define-table-line {
+    // height: 120px;
+    width: 1px;
+    position: fixed;
+    // background-color: #e6e6e6;
+    border-left: 1px dashed #ddd;
+    left: 100px;
+    top: 200px;
+    // bottom: 0;
+    display: none;
   }
 }
 

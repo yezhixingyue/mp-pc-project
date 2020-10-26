@@ -175,7 +175,7 @@ export default {
             const Mobile = newMobile;
             const { Sign, TimeStamp, UserID } = this.firstRes;
             const _obj = {
-              Sign, TimeStamp, UserID, Mobile, VertifyCode,
+              Sign, TimeStamp, UserID, Mobile, VertifyCode, Terminal: 1,
             };
             const res = await this.api.getCustomerChangeMobile(_obj);
             if (res.data.Status === 1000) {

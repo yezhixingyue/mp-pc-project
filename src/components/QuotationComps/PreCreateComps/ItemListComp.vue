@@ -22,7 +22,7 @@
         <div :style="wStyles[2]">{{data.OrderList[0].OriginalPrice}}元</div>
         <div :style="wStyles[3]">{{ selectedCoupon ? selectedCoupon.Amount : 0}}元</div>
         <div :style="wStyles[4]">{{data.OrderList[0].FinalPrice}}元</div> <!-- 成交价 -->
-        <div :style="wStyles[5]">{{data.OrderList[0].DepositAmount}}元</div> <!-- 订金 -->
+        <div :style="wStyles[5]">{{data.OrderList[0].DepositAmount}}元</div> <!-- 定金 -->
         <div :style="wStyles[6]" class="is-font-12 gray">{{curFileContent}}</div>
       </li>
     </TransitionGroupCollapse>
