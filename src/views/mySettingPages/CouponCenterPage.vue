@@ -4,7 +4,7 @@
       <span class="blue-v-line is-bold is-black">领券中心</span>
       <span class="is-font-12">（ 共检测出 <i class="is-pink is-font-16">{{couponCount}}</i> 张优惠券 ）</span>
     </header>
-    <ul class="content">
+    <ul class="content" v-if="couponList.length > 0">
       <li class="coupon-item"
         v-for="(item, i) of couponList"
         :key="item.CouponID + i"
@@ -37,6 +37,9 @@
         <div class="receivable-box"></div>
       </li>
     </ul>
+    <div class="has-none-wrap" v-else>
+      <span>暂无优惠券</span>
+    </div>
     <footer>
       <Count
         :watchPage='Page'
@@ -256,6 +259,14 @@ export default {
         }
       }
     }
+  }
+  > .has-none-wrap {
+    font-size: 13px;
+    color: #838a9d;
+    text-align: center;
+    padding-top: 140px;
+    padding-right: 80px;
+    line-height: 16px;
   }
   > footer {
     margin-bottom: 50px;

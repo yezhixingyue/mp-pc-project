@@ -103,11 +103,11 @@ export default {
     },
     QQ: {
       get() {
-        return this.AuthenInfo4Submit.QQ;
+        return this.AuthenInfo4Submit.QQ.replace(/^0/, '');
         // return this.AuthenInfo4Submit.AuthenInfo.QQ;
       },
       set(newVal) {
-        this.AuthenInfo4Submit.QQ = newVal.replace(/[^\d]/g, '');
+        this.AuthenInfo4Submit.QQ = newVal.replace(/^0/, '').replace(/[^\d]/g, '');
         // this.AuthenInfo4Submit.AuthenInfo.QQ = newVal.replace(/[^\d]/g, '');
       },
     },
@@ -236,6 +236,7 @@ export default {
           title: '图片格式错误',
           msg: '请上传 jpg/png/bmp 格式图片',
         });
+        e.target.value = '';
         return;
       }
       const fileReader = new FileReader();
@@ -254,6 +255,7 @@ export default {
               title: '图片尺寸太小',
               msg: '请上传大于等于900×1280像素的图片',
             });
+            e.target.value = '';
             return;
           }
           const res = await this.api.uploadImage(file);

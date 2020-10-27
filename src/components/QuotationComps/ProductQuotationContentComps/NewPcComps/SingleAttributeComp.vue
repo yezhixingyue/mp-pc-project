@@ -22,7 +22,7 @@
       <el-input class="select-and-white-inp" v-model.trim="CustomizedValue"
        :disabled='disabled' maxlength="20" @focus='onFocus' suffix-icon="el-icon-caret-bottom">
       </el-input>
-      <el-dropdown-menu slot="dropdown" class="count-model-comp-dropdown-wrap">
+      <el-dropdown-menu slot="dropdown" class="count-model-comp-dropdown-wrap mp-scroll-wrap">
         <el-dropdown-item
           v-for="item in optionList"
           :key='item[defaultProps.value]'

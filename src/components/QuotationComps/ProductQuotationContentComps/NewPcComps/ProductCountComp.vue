@@ -78,6 +78,8 @@ export default {
 }
 .count-model-comp-dropdown-wrap {
   width: 155px;
+  max-height: 360px;
+  overflow-y: auto;
   .el-dropdown-menu__item.active {
     font-weight: 700;
     color: #428dfa;

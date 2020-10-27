@@ -90,14 +90,14 @@
         <el-button type="primary" @click.native="go2GetProductPrice">计算价格</el-button>
       </header>
       <footer>
-        <el-collapse v-model="activeNames" @change="handleChange">
+      <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item name="1">
           <template slot="title">
             <span class="gray no-cursor" v-if="selectedCoupon" @click.stop="null">已选择满
               {{selectedCoupon.MinPayAmount}}元减{{selectedCoupon.Amount}}元
               <i class="is-font-12 is-pink">{{ couponConditionText }}</i>
             </span>
-            <el-button class="button-title-pink" @click="onBtnClick">
+            <el-button class="button-title-pink is-font-13" @click="onBtnClick">
               使用优惠券<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
           </template>
@@ -131,9 +131,15 @@
                   </p>
                 </div>
                 <div class="aside" @click="addCouponCode(item)">点击选择</div>
-                <div class="icon-box" @click="addCouponCode(item)"></div>
+                <el-tooltip class="item" effect="dark" content="点击取消" placement="top">
+                  <div class="icon-box" @click="addCouponCode(item)"></div>
+                </el-tooltip>
               </li>
             </ul>
+            <footer v-else>
+              <span>当前无可用优惠券,</span>
+              <span @click="handleGoToCouponCenter" class="span-title-blue">前往领券中心查看及领取优惠券</span>
+            </footer>
           </section>
         </el-collapse-item>
       </el-collapse>
@@ -281,6 +287,7 @@ export default {
       // selectedCoupon: null,
       priceGetErrMsg: '',
       couponCode2Add: '',
+      isCouponGet: false, // 是否已获取优惠券列表数据
     };
   },
   methods: {
@@ -317,6 +324,7 @@ export default {
     async handleChange(list, bool) {
       if (list.length === 0) return; // 关闭
       if (!bool && this.couponList.length > 0) return;
+      if (this.isCouponGet) return;
       const _obj = { UseStatus: 0 };
       _obj.Product = {
         ClassID: this.curProductClass.First,
@@ -326,6 +334,7 @@ export default {
       const res = await this.api.getCouponList(_obj);
       if (res.data.Status !== 1000) return;
       this.couponList = res.data.Data;
+      this.isCouponGet = true;
     },
     onBtnClick(evt) {
       let { target } = evt;
@@ -368,6 +377,9 @@ export default {
         // this.selectedCoupon = null;
         this.$store.commit('Quotation/setSelectedCoupon', null);
       }
+    },
+    handleGoToCouponCenter() {
+      this.$router.push('/mySetting/couponCenter');
     },
   },
   mounted() {
@@ -514,12 +526,13 @@ export default {
           }
           .el-collapse-item__wrap {
             border: none;
-            padding-top: 35px;
+            // padding-top: 35px;
             > .el-collapse-item__content {
               padding: 0;
               > .coupon-wrap {
                 > header {
                   margin-bottom: 50px;
+                  margin-top: 35px;
                   text-align: center;
                   // .span-title-blue {
                   //   display: inline-block;
@@ -650,6 +663,17 @@ export default {
                         display: none;
                       }
                     }
+                  }
+                }
+                > footer {
+                  text-align: center;
+                  color: #989898;
+                  font-size: 13px;
+                  padding: 30px;
+                  padding-top: 10px;
+                  line-height: 20px;
+                  > .span-title-blue {
+                    margin-left: 6px;
                   }
                 }
               }

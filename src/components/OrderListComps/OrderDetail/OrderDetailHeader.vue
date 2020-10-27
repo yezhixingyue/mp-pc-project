@@ -135,8 +135,9 @@ export default {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          line-height: 20px;
           &.file-content {
-            margin-bottom: 24px;
+            margin-bottom: 22px;
           }
         }
       }
