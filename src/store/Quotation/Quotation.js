@@ -992,7 +992,7 @@ export default {
       } else if (res.data.Status === 9169) {
         massage.warnCancelBox({
           title: '未达到优惠券使用金额',
-          msg: '是否 [ 取消使用优惠券 ] 后下单',
+          msg: '是否 [ 取消使用优惠券 ] 然后下单',
           successFunc: async () => {
             delete _requestObj.List[0].Coupon;
             commit('setSelectedCoupon', null);
@@ -1052,7 +1052,7 @@ export default {
       } else if (res.data.Status === 9169) {
         massage.warnCancelBox({
           title: '未达到优惠券使用金额',
-          msg: '是否 [ 取消使用优惠券 ] 后加入购物车',
+          msg: '是否 [ 取消使用优惠券 ] 然后加入购物车',
           successFunc: async () => {
             commit('setSelectedCoupon', null);
             delete _itemObj.Coupon;

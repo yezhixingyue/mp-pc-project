@@ -79,7 +79,7 @@
           <span v-if="ProductQuotationResult.ExpressCost && ProductQuotationResult.ExpressCost > 0"
             >运费：<i>¥{{ProductQuotationResult.ExpressCost}}元</i></span>
           <span>成交价：
-            <i class="is-pink is-bold is-font-20">¥{{Cost}}</i>
+            <i class="is-pink is-bold is-font-20">¥{{+(Cost.toFixed(2))}}</i>
             <i class="is-pink">元</i>
             <em class="is-gray is-font-12">(不含运费)</em>
           </span>
@@ -258,7 +258,7 @@ export default {
       if (!this.ProductQuotationResult) return '';
       if (!this.selectedCoupon) return this.ProductQuotationResult.CurrentCost;
       if (this.ProductQuotationResult.CurrentCost >= this.selectedCoupon.MinPayAmount) {
-        const num = this.ProductQuotationResult.CurrentCost - this.selectedCoupon.Amount;
+        const num = +(this.ProductQuotationResult.CurrentCost - this.selectedCoupon.Amount).toFixed(2);
         return num > 0 ? num : 0;
       }
       return this.ProductQuotationResult.CurrentCost;

@@ -293,7 +293,7 @@ export default {
     // border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
     &:hover > div {
-      background-color: rgb(216, 239, 252);
+      background-color: #ebf7ff;
     }
     > div {
       white-space: nowrap;

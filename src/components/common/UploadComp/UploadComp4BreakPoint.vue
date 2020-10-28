@@ -183,14 +183,14 @@ export default { // 上传图片按钮
     upLoadSingleFile(file) {
       console.log('upLoadSingleFile');
       if (!file) return;
-      this.upLoadTitle = '读取文件中（ 文件大小影响读取时间 ）...';
+      this.upLoadTitle = '文件读取中（ 文件大小影响读取时间 ）...';
       this.showReadMsg = true;
       const reader = new FileReader();
       reader.readAsArrayBuffer(file);
       console.log(file, 12345);
       reader.onerror = () => {
         this.messageBox.failSingleError({ title: '文件解析错误！', msg: '请检查文件并重新上传' });
-        this.upLoadTitle = '读取失败请重新选择';
+        this.upLoadTitle = '文件读取失败';
         this.showReadMsg = false;
         const oInput = document.querySelector('.mp-phone-upload-comp-break-point-type-wrap > input');
         if (oInput) oInput.value = '';

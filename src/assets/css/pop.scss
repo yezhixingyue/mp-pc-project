@@ -6,19 +6,19 @@
 }
 @mixin mp-ele-pop--base {
 
-    width: 350px !important;
-    min-height: 200px;
+    width: 400px !important;
+    min-height: 240px;
     background-color: #fff;
     margin: 200px auto 0;
     border-radius: 5px;
     display: flex !important;
     flex-direction: column;
-    padding: 33px 0 25px 0;
+    padding: 42px 0 30px 0;
     justify-content: space-between;
     box-sizing: border-box;
     position: relative;
     text-align: center;
-    padding-bottom: 25px !important;
+    padding-bottom: 30px !important;
     padding-bottom: 55px\0 !important;
     .el-message-box__header{
         height: 36px;
@@ -33,14 +33,14 @@
                     display: none;
                     background: url('../images/search.png') center no-repeat;
                     background-size: 100% 100%;
-                    height: 36px;
-                    width: 36px;
+                    height: 30px;
+                    width: 30px;
                     margin-right: 20px;
                     vertical-align: -27%;
                 }
                 color: $--color-text-regular;
                 font-size: 16px;
-                font-weight: 600;
+                // font-weight: 600;
             }
         }
         >.el-message-box__headerbtn{
@@ -52,8 +52,8 @@
     }
     .el-message-box__content {
         padding: 0;
-        padding-top: 18px;
-        padding-bottom: 15px;
+        padding-top: 25px;
+        padding-bottom: 35px;
         flex: 1;
         .el-message-box__container{
             .el-message-box__status{
@@ -68,7 +68,7 @@
                 > p {
                     line-height: 18px;
                     padding: 0 15px;
-                    font-size: 14px;
+                    font-size: 13px;
                     color: #888;
                 }
             }
@@ -82,41 +82,41 @@
         right: 0\0;
         button{
             width: 100px;
-            height: 30px;
+            height: 35px;
             font-size: 14px;
             padding-top: 0;
             padding-bottom: 0;
-            background-color: $--color-blue;
-            border: 1px solid $--color-blue;
+            // background-color: $--color-blue;
+            // border: 1px solid $--color-blue;
             transition: .1s;
-            border-radius: 2px;
-            &:hover {
-                transform: scale(1.005);
-                box-shadow: 0 1px 0 #0662a6, 0 1px 1px rgba(0, 0, 0, 0.2);
-            }
-            &:active {
-                color: mix($--color-white, $--color-blue, 80%);
-                background-color: mix($--color-white, $--color-blue, 10%);
-            }
-            color: $--color-white;
+            border-radius: 5px;
+            // &:hover {
+            //     transform: scale(1.005);
+            //     box-shadow: 0 1px 0 #0662a6, 0 1px 1px rgba(0, 0, 0, 0.2);
+            // }
+            // &:active {
+            //     color: mix($--color-white, $--color-blue, 80%);
+            //     background-color: mix($--color-white, $--color-blue, 10%);
+            // }
+            // color: $--color-white;
             // margin-left: 35px;
         }
         button:only-child{
             margin-left: 0px;
         }
         button:not(.el-button--primary){
-            color: $--color-primary;
-            background-color: $--color-white;
-            border: 1px solid $--color-primary;
-            &:hover {
-                background-color: $--color-white;
-                transform: scale(1.005);
-                box-shadow: 0px 1px 3px #ddd;
-            }
-            &:active {
-                color: mix($--color-white, $--color-primary, 10%);
-                background-color: rgba(168, 168, 168, 0.1);
-            }
+            // color: $--color-primary;
+            // background-color: $--color-white;
+            // border: 1px solid $--color-primary;
+            // &:hover {
+            //     background-color: $--color-white;
+            //     transform: scale(1.005);
+            //     box-shadow: 0px 1px 3px #ddd;
+            // }
+            // &:active {
+            //     color: mix($--color-white, $--color-primary, 10%);
+            //     background-color: rgba(168, 168, 168, 0.1);
+            // }
         }
     }
 
@@ -129,6 +129,9 @@
         display: block;
         button + button{
             margin-left: 35px;
+        }
+        button {
+            // height: 35px;
         }
     }
 }
@@ -158,18 +161,18 @@
         display: flex;
         justify-content: center;
         button {
-            color: $--color-primary;
-            background-color: $--color-white;
-            border: 1px solid $--color-primary;
-            &:hover {
-                background-color: $--color-white;
-                transform: scale(1.005);
-                box-shadow: 0px 1px 3px #ddd;
-            }
-            &:active {
-                color: mix($--color-white, $--color-primary, 10%);
-                background-color: rgba(168, 168, 168, 0.1);
-            }
+            // color: $--color-primary;
+            // background-color: $--color-white;
+            // border: 1px solid $--color-primary;
+            // &:hover {
+            //     background-color: $--color-white;
+            //     transform: scale(1.005);
+            //     box-shadow: 0px 1px 3px #ddd;
+            // }
+            // &:active {
+            //     color: mix($--color-white, $--color-primary, 10%);
+            //     background-color: rgba(168, 168, 168, 0.1);
+            // }
         }
     }
 }
@@ -179,16 +182,16 @@
     @include single-btn-back-white;
     .el-message-box__btns{
         button {
-            color: $--color-white;
-            background-color: $--color-blue;
-            border: none;
-            &:hover {
-                background-color: $--color-primary;
-            }
-            &:active {
-                background-color: #35dff9;
-                color: $--color-white;
-            }
+            // color: $--color-white;
+            // background-color: $--color-blue;
+            // border: none;
+            // &:hover {
+            //     background-color: $--color-primary;
+            // }
+            // &:active {
+            //     background-color: #35dff9;
+            //     color: $--color-white;
+            // }
         }
     }
 }
@@ -312,14 +315,18 @@
 // 没有信息内容的成功提示框                                             类名：mp-order-del-pop-success
 .el-message-box.mp-order-del-pop-success {
     @include normal-success;
+    padding-top: 35px;
+    padding-bottom: 25px !important;
     .el-message-box__content{
         display: none;
     }
     .el-message-box__header{
         height: 46px;
+        margin-bottom: 30px;
         .el-message-box__title{
             height: 46px;
             line-height: 46px;
+            font-weight: 600;
             > span::before {
                 vertical-align: -18%;
             }

@@ -72,7 +72,7 @@ export default {
         return this.reCharge;
       },
       set(newVal) {
-        const _str = newVal.replace(/[^\d.]/g, '');
+        const _str = newVal.replace(/^\./, '0.').replace(/[^\d.]/g, '');
         const _arr = _str.split('');
         let pointLen = 0;
         let pointIndex = 0;
@@ -124,6 +124,15 @@ export default {
       }
       const _num = +this.reCharge;
       this.Amount = _num.toFixed(2);
+      if (`${this.Amount}` === 'NaN') {
+        this.isShowTips = true;
+        this.messageBox.failSingleError({
+          title: '校验错误',
+          msg: '金额不正确',
+          beforeClose: () => { this.isShowTips = false; },
+        });
+        return;
+      }
       const res = await this.api.getCustomerRecharge({ Amount: this.Amount });
       if (res.data.Status === 1000) {
         this.curStep = 1;

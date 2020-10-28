@@ -227,7 +227,7 @@ export default {
     border-bottom: 1px solid #eee;
     // transition: backgroundColor 0.2s;
     &:hover > div {
-      background-color: rgb(216, 239, 252);
+      background-color:#ebf7ff;
     }
     &:last-of-type {
       border-bottom: none;

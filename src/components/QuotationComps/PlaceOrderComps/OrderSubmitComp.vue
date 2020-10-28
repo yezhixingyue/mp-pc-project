@@ -65,7 +65,7 @@ export default {
       if (!this.ProductQuotationResult) return '';
       if (!this.selectedCoupon) return this.ProductQuotationResult.CurrentCost;
       if (this.ProductQuotationResult.CurrentCost >= this.selectedCoupon.MinPayAmount) {
-        const num = this.ProductQuotationResult.CurrentCost - this.selectedCoupon.Amount;
+        const num = +(this.ProductQuotationResult.CurrentCost - this.selectedCoupon.Amount).toFixed(2);
         return num > 0 ? num : 0;
       }
       return this.ProductQuotationResult.CurrentCost;
@@ -99,6 +99,8 @@ export default {
       let { target } = evt;
       if (target.nodeName === 'SPAN') {
         target = evt.target.parentNode;
+      } else if (target.nodeName === 'I') {
+        target = evt.target.parentNode.parentNode;
       }
       target.blur();
       this.title = '添加';
