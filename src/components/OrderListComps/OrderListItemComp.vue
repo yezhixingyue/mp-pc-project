@@ -186,6 +186,7 @@ export default {
           title: '取消成功',
           successFunc: () => {
             this.$store.commit('order/handleCancelOrder', OrderID);
+            this.$store.dispatch('common/getCustomerFundBalance');
           },
         });
       }

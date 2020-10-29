@@ -21,7 +21,7 @@
           <div class="price-left">
             <p>原价：</p>
             <p>优惠券：</p>
-            <p>运费：</p>
+            <!-- <p>运费：</p> -->
             <p class="final-price">成交价<i class="is-font-12 gray">（不含运费）</i>：</p>
           </div>
           <div class="price-right">
@@ -29,7 +29,7 @@
               <p :class="coupon && coupon > 0 ? 'is-pink' : ''">
                 <template v-show='coupon'>{{'-¥ ' + (coupon ? coupon : 0)}}</template>
               </p>
-              <p>¥ {{ProductQuotationResult.ExpressCost}}</p>
+              <!-- <p>¥ {{ProductQuotationResult.ExpressCost}}</p> -->
               <p class="final-price is-pink">¥ <i class="is-font-18 is-bold">{{Cost}}</i></p>
           </div>
         </div>

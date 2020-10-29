@@ -296,6 +296,7 @@ export default {
     this.$emit('setDetailDataCompleted', true);
     if (res.data.Status === 1000) {
       this.curOrderData = res.data.Data;
+      this.$store.commit('order/updateOrderDetailData', res.data.Data);
     }
   },
 };

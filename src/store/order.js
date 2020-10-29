@@ -95,8 +95,17 @@ export default {
     setCurOrderDetailData(state, data) {
       state.curOrderDetailData = data;
     },
+    /** 获取订单信息后，更新当前订单详情中的资金数据
+    ---------------------------------------- */
+    updateOrderDetailData(state, data) {
+      if (!state.curOrderDetailData) return;
+      state.curOrderDetailData.Funds = data.Funds;
+    },
     handleCancelOrder(state, OrderID) {
       const _t = state.OrderList.find(it => it.OrderID === OrderID);
+      _t.Funds.Refund = _t.Funds.HavePaid;
+      // _t.Funds.HavePaid = 0;
+      _t.Funds.Unpaid = 0;
       _t.Status = 254;
       // state.OrderList = state.OrderList.filter(it => it.OrderID !== OrderID);
     },
