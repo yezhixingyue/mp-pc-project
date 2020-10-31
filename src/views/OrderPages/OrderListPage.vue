@@ -46,10 +46,17 @@
             :watchPage='condition4OrderList.Page'
             :handlePageChange='handlePageChange'
             :count='OrderListNumber'
-            :pageSize='20'
+            :pageSize='12'
             :DownLoadConfigObj='DownLoadConfigObj'
             class="float"
-            />
+            >
+            <span class="price-box">
+              <i class="gray">共计金额：</i>
+              <i class="is-pink is-bold is-font-14">￥{{orderTotalAmount}}</i>
+              <i class="is-pink is-font-12">元</i>
+              <i class="is-cancel is-font-12">(不含已取消订单)</i>
+            </span>
+          </Count>
         </footer>
         <transition name="el-fade-in-linear">
           <footer  v-show="isFootFixed" class="floating">
@@ -58,10 +65,17 @@
               :watchPage='condition4OrderList.Page'
               :handlePageChange='handlePageChange'
               :count='OrderListNumber'
-              :pageSize='20'
+              :pageSize='12'
               :DownLoadConfigObj='DownLoadConfigObj'
               class="float"
-              />
+              >
+                <span class="price-box">
+                  <i class="gray">共计金额：</i>
+                  <i class="is-pink is-bold is-font-14">￥{{orderTotalAmount}}</i>
+                  <i class="is-pink is-font-12">元</i>
+                  <i class="is-cancel is-font-12">(不含已取消订单)</i>
+                </span>
+              </Count>
             </div>
           </footer>
         </transition>
@@ -105,7 +119,7 @@ export default {
   },
   computed: {
     ...mapState('common', ['OrderStatusList', 'ScrollInfo']),
-    ...mapState('order', ['condition4OrderList', 'OrderList', 'OrderListNumber']),
+    ...mapState('order', ['condition4OrderList', 'OrderList', 'OrderListNumber', 'orderTotalAmount']),
     ...mapGetters('order', ['computedOrderlist']),
     scrollChange() {
       return this.ScrollInfo.scrollTop + this.ScrollInfo.scrollHeight + this.ScrollInfo.offsetHeight;
@@ -277,6 +291,13 @@ export default {
         user-select: none;
       }
     }
+  }
+  .price-box {
+    // float: left;
+    position: absolute;
+    // margin-left: 100px;
+    left: 0;
+    font-size: 13px;
   }
 }
 </style>

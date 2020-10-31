@@ -506,6 +506,9 @@ export default {
           if (
             state.obj2GetProductPrice.ProductParams.PartList[indexLv1].PartList[
               indexLv2
+            ].CraftList.find(it => it.ChoiceType === 1)
+            && state.obj2GetProductPrice.ProductParams.PartList[indexLv1].PartList[
+              indexLv2
             ].CraftList.find(it => it.ChoiceType === 1).CraftList.find(
               it => it.CraftID === item.CraftID,
             )

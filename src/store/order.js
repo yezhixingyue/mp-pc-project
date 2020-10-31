@@ -12,6 +12,7 @@ export default {
     ---------------------------------------- */
     OrderList: [], // --------- 订单信息列表
     OrderListNumber: 0,
+    orderTotalAmount: 0,
     condition4OrderList: {
       Date: {
         First: '',
@@ -24,7 +25,7 @@ export default {
       },
       ProductID: '',
       Page: 1,
-      PageSize: 20,
+      PageSize: 12,
       Status: '',
       KeyWords: '',
       FieldType: 3,
@@ -64,6 +65,9 @@ export default {
       state.OrderList = list;
       if (num || num === 0) state.OrderListNumber = num;
     },
+    setOrderTotalAmount(state, amount) {
+      state.orderTotalAmount = amount;
+    },
     setCondition4OrderList(state, [[key1, key2], value]) {
       if (key2) state.condition4OrderList[key1][key2] = value;
       else state.condition4OrderList[key1] = value;
@@ -84,7 +88,7 @@ export default {
         },
         ProductID: '',
         Page: 1,
-        PageSize: 20,
+        PageSize: 12,
         Status: '',
         KeyWords: '',
         FieldType: 3,
@@ -131,7 +135,7 @@ export default {
         },
         ProductID: '',
         Page: 1,
-        PageSize: 20,
+        PageSize: 12,
         Status: '',
         KeyWords: '',
         FieldType: 3,
@@ -159,6 +163,7 @@ export default {
       const res = await api.getCustomerOrderList(_obj);
       if (res.data.Status === 1000) {
         commit('setOrderList', [res.data.Data, res.data.DataNumber]);
+        if (res.data.Message && page === 1) commit('setOrderTotalAmount', res.data.Message);
       }
     },
   },

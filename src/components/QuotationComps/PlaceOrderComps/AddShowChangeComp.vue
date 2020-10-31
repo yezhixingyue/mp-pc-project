@@ -219,6 +219,9 @@ export default {
         isSelected: true,
       },
       recordAddInfo: null,
+      recordRegionalList: null,
+      recordCityList: null,
+      recordCountyList: null,
       selectdAddress: '', //  new | 地址数组索引号
       RegionalList: [],
       CityList: [],
@@ -408,6 +411,9 @@ export default {
       this.addRadio = this.selectdAddress;
       this.outerVisible = true;
       this.recordAddInfo = JSON.stringify(this.newAdd);
+      this.recordRegionalList = JSON.stringify(this.RegionalList);
+      this.recordCityList = JSON.stringify(this.CityList);
+      this.recordCountyList = JSON.stringify(this.CountyList);
 
       if (this.RegionalList.length > 0) return;
       const res = await this.api.getAddressIDList(-1);
@@ -466,17 +472,23 @@ export default {
             this.selectdAddress = this.addRadio;
             this.outerVisible = false;
             this.changeDiaStatus(true);
+            this.$refs.ruleForm.resetFields();
             // this.handleSetPositionOnMap();
           }
         });
       } else {
         this.selectdAddress = this.addRadio;
         this.outerVisible = false;
+        this.$refs.ruleForm.resetFields();
       }
     },
     handleBeforeClose(done) {
       this.newAdd = JSON.parse(this.recordAddInfo);
+      this.RegionalList = JSON.parse(this.recordRegionalList);
+      this.CityList = JSON.parse(this.recordCityList);
+      this.CountyList = JSON.parse(this.recordCountyList);
       this.setInfo4ReqObj();
+      this.$refs.ruleForm.resetFields();
       done();
     },
     handleSetPositionOnMap(callback) { // 方法作废
@@ -488,7 +500,11 @@ export default {
     },
     handleCancel() {
       this.newAdd = JSON.parse(this.recordAddInfo);
+      this.RegionalList = JSON.parse(this.recordRegionalList);
+      this.CityList = JSON.parse(this.recordCityList);
+      this.CountyList = JSON.parse(this.recordCountyList);
       this.setInfo4ReqObj();
+      this.$refs.ruleForm.resetFields();
       this.outerVisible = false;
     },
     getAddressInfoDetail(item) {

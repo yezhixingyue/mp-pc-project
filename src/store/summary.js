@@ -19,7 +19,7 @@ export default {
       },
       DateType: 'all',
       Page: 1,
-      PageSize: 20,
+      PageSize: 12,
       Type: '',
     },
     /** 售后单页面相关
@@ -33,7 +33,7 @@ export default {
       },
       DateType: 'all',
       Page: 1,
-      PageSize: 20,
+      PageSize: 12,
       FieldType: 3,
     },
   },
@@ -78,7 +78,7 @@ export default {
         },
         DateType: 'all',
         Page: 1,
-        PageSize: 20,
+        PageSize: 12,
         Type: '',
       };
       state.ServiceAfterSaleList = [];
@@ -90,7 +90,7 @@ export default {
         },
         DateType: 'all',
         Page: 1,
-        PageSize: 20,
+        PageSize: 12,
         FieldType: 3,
       };
     },

@@ -42,10 +42,11 @@ export default {
   cursor: pointer;
   transition: 0.2s;
   // color: $--color-text-primary;
+  user-select: none;
 
   &:hover {
     // color: $--color-blue;
-    border-color: rgba($color: #428dfa, $alpha: 1);
+    background-color: #ebf7ff;
   }
   &.disabled {
     // color: $--color-text-light;

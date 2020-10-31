@@ -1,8 +1,6 @@
 <template>
   <div class="count-wrap">
-        <!-- <div>  左侧加载loading图标， 采用分页后弃用， 暂留存
-            <LoadingMiniSpinner class="loading-box" v-show="showLoading" />
-        </div> -->
+        <slot></slot>
         <div class="mp-pagination-wrap">
           <el-pagination
             @current-change="handleCurrentChange"
@@ -14,7 +12,6 @@
             :total="count">
           </el-pagination>
         </div>
-        <slot></slot>
         <span class="count" :class="DownLoadConfigObj?'exc':''"
           >共检索出<i class="is-pink is-font-16">{{count}}</i>条记录</span>
         <DownLoadExcelComp :configObj="DownLoadConfigObj" v-if="DownLoadConfigObj" />

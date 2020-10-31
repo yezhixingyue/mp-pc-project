@@ -51,7 +51,7 @@
               :handlePageChange='handlePageChange'
               :count='ServiceAfterSaleListNumber'
               :DownLoadConfigObj='DownLoadConfigObj'
-              :pageSize='20'
+              :pageSize='12'
               class="float"
             />
           </div>
@@ -63,7 +63,7 @@
                   :handlePageChange='handlePageChange'
                   :count='ServiceAfterSaleListNumber'
                   :DownLoadConfigObj='DownLoadConfigObj'
-                  :pageSize='20'
+                  :pageSize='12'
                   class="float"
                 />
               </div>

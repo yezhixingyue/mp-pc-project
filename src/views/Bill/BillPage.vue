@@ -24,7 +24,7 @@
           :watchPage='condition4FundBillList.Page'
           :handlePageChange='handlePageChange'
           :count='FundBillListNumber'
-          :pageSize='20'
+          :pageSize='12'
           class="float"
          />
       </div>

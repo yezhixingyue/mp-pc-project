@@ -27,3 +27,12 @@ new Vue({
   store,
   render: (h) => h(App),
 }).$mount('#app');
+
+function browserRedirect() {
+  const sUserAgent = navigator.userAgent.toLowerCase();
+  if (/ipad|iphone|midp|rv:1.2.3.4|ucweb|android|windows ce|windows mobile/.test(sUserAgent)) {
+    // 跳转移动端页面
+    window.location.href = 'http://newapi.mpzj.cn:8156/M/';
+  }
+}
+browserRedirect();

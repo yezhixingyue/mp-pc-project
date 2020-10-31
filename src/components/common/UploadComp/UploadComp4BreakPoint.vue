@@ -17,7 +17,7 @@
       {{showTitle}}
     </div>
     <div v-else class="el-comp">
-      <span class="gray">印品文件：</span>
+      <span class="gray">印刷文件：</span>
       <el-upload
         class="upload-box"
         ref="upload"
@@ -466,7 +466,7 @@ export default { // 上传图片按钮
       }
       > .el-upload-list {
         float: left;
-        width: 800px;
+        max-width: 800px;
         margin: 0;
         // display: inline-block;
         > li {

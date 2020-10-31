@@ -109,7 +109,7 @@
               <!-- <i class="span-title-blue">不使用优惠券</i> -->
             </header>
             <ul class="coupon-list mp-scroll-wrap" v-if="couponList.length > 0">
-              <li class="float" v-for="item in couponList" :key="item.CouponCode"
+              <li class="float" v-for="item in couponList" :key="item.CouponCode" @click="addCouponCode(item)"
                 :class="{selected: selectedCoupon && item.CouponCode === selectedCoupon.CouponCode}" >
                 <div class="header">
                   <span>
@@ -130,10 +130,10 @@
                     <span>{{item.ValidEndTime | format2MiddleLangTypeDate}}</span>
                   </p>
                 </div>
-                <div class="aside" @click="addCouponCode(item)">点击选择</div>
-                <el-tooltip class="item" effect="dark" content="点击取消" placement="top">
-                  <div class="icon-box" @click="addCouponCode(item)"></div>
-                </el-tooltip>
+                <div class="aside">点击选择</div>
+                <!-- <el-tooltip class="item" effect="dark" content="点击取消" placement="top"> -->
+                  <div class="icon-box"></div>
+                <!-- </el-tooltip> -->
               </li>
             </ul>
             <footer v-else>
@@ -579,6 +579,8 @@ export default {
                     position: relative;
                     display: inline-block;
                     margin: 0 18px 20px;
+                    user-select: none;
+                    cursor: pointer;
                     > .header {
                       width: 100%;
                       height: 60px;
