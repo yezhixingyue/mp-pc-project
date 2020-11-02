@@ -51,9 +51,7 @@
           </div>
           <div class="address">
             <span class="title">收货地址：</span>
-            <el-tooltip effect="dark" :enterable='false' :content="currentAddInfo.address" placement="top-start">
-              <span>{{currentAddInfo.address}}</span>
-            </el-tooltip>
+            <span class="title-content">{{currentAddInfo.address}}</span>
           </div>
         </li>
         <li v-else class="has-none-consignee">
@@ -472,7 +470,7 @@ export default {
             this.selectdAddress = this.addRadio;
             this.outerVisible = false;
             this.changeDiaStatus(true);
-            this.$refs.ruleForm.resetFields();
+            // this.$refs.ruleForm.resetFields();
             // this.handleSetPositionOnMap();
           }
         });
@@ -599,8 +597,25 @@ export default {
           > .consignee-box {
             width: 317px;
             margin-right: 52px;
+            vertical-align: top;
             > .consignee {
               margin-right: 30px;
+            }
+          }
+          > .address {
+            width: 486px;
+            > span {
+              &.title {
+                float: left;
+              }
+              &.title-content {
+                overflow: hidden;
+                width: 415px;
+                display: inline-block;
+                white-space: normal;
+                line-height: 18px;
+                margin-top: -1px;
+              }
             }
           }
         }

@@ -16,20 +16,22 @@
             :successFunc="successFunc" @saveFile2Store='saveFile2Store' />
         </li>
       </ul>
-      <div class="price-wrap">
-        <div class="price-box"  v-if="ProductQuotationResult">
+      <div class="price-wrap"  v-if="ProductQuotationResult">
+        <div class="price-box">
           <div class="price-left">
             <p>原价：</p>
+            <p v-if="ProductQuotationResult.OriginalCost - ProductQuotationResult.CurrentCost > 0">活动：</p>
             <p>优惠券：</p>
-            <!-- <p>运费：</p> -->
             <p class="final-price">成交价<i class="is-font-12 gray">（不含运费）</i>：</p>
           </div>
           <div class="price-right">
               <p>¥ {{ProductQuotationResult.OriginalCost}}</p>
+              <p v-if="ProductQuotationResult.OriginalCost - ProductQuotationResult.CurrentCost > 0">
+                - ¥ {{+(ProductQuotationResult.OriginalCost - ProductQuotationResult.CurrentCost).toFixed(2)}}</p>
               <p :class="coupon && coupon > 0 ? 'is-pink' : ''">
-                <template v-show='coupon'>{{'-¥ ' + (coupon ? coupon : 0)}}</template>
+                <template v-if="coupon && coupon > 0">-</template>
+                <template v-show='coupon'>{{'¥ ' + (coupon ? coupon : 0)}}</template>
               </p>
-              <!-- <p>¥ {{ProductQuotationResult.ExpressCost}}</p> -->
               <p class="final-price is-pink">¥ <i class="is-font-18 is-bold">{{Cost}}</i></p>
           </div>
         </div>
@@ -160,7 +162,7 @@ export default {
       }
     }
     > .price-wrap {
-      height: 215px;
+      height: 165px;
       text-align: right;
       > .price-box {
         height: 100%;
@@ -190,6 +192,7 @@ export default {
     > .submit-btn-wrap {
       text-align: right;
       padding-bottom: 30px;
+      margin-top: 50px;
       > button {
         width: 150px;
         height: 45px;

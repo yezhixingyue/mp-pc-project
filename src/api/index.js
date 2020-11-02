@@ -71,7 +71,7 @@ const api = {
     );
   },
   getProductPrice(data) { // 价格信息计算  POST /Api/Calculate/ProductPrice
-    return instance.post('/Api/Calculate/ProductPrice', data);
+    return instance.post('/Api/Calculate/ProductPrice', { Terminal: 1, ...data });
   },
   getCraftRelationList() { // GET /Api/Craft/GetCraftRelationList 获取工艺关系列表
     return instance.get('/Api/Craft/GetCraftRelationList');
@@ -81,10 +81,10 @@ const api = {
     return instance.post('/Api/Order/PreCreate', data, { closeTip });
   },
   getQuotationSave(data) { // POST /Api/Quotation/Save  保存购物车
-    return instance.post('/Api/Quotation/Save', data);
+    return instance.post('/Api/Quotation/Save', { Terminal: 1, ...data });
   },
   CreateOrderFromPreCreate(data) { // POST /Api/Order/Create
-    return instance.post('/Api/Order/Create', data);
+    return instance.post('/Api/Order/Create', { Terminal: 1, ...data });
   },
   getPayResult(payCode, type) { // GET /Api/PaymentOrder/PayResult 查询付款结果
     if (!type) return instance.get(`/Api/PaymentOrder/PayResult?payCode=${payCode}`);

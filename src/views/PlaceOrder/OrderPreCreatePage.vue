@@ -12,7 +12,8 @@
           <span>总共 <i class="is-pink">1</i>个订单 </span>
           <span> （产品总额：<i>¥{{PreCreateData.ProductPrice}}</i>，
                     总运费：<i>¥{{PreCreateData.Freight}}</i>，
-                    优惠券：<i>¥{{ selectedCoupon ? selectedCoupon.Amount : 0}}</i> ）</span>
+                    优惠券：<i :class="selectedCoupon ? 'is-pink' : ''">
+                      {{ selectedCoupon ? `- ¥${selectedCoupon.Amount}` : 0}}</i> ）</span>
         </p>
         <div class="price-wrap">
           <div class="price-box" v-if="PreCreateData">
@@ -24,11 +25,11 @@
             </div>
             <div class="price-right">
               <p class="is-pink">¥ <i class="is-font-20 is-bold">{{payNumOnline | numToFixed2}}</i></p>
-              <p class="is-pink">{{PayOnDelivery | numToFixed2}}</p>
+              <p class="is-pink">¥ {{PayOnDelivery | numToFixed2}}</p>
               <p v-if="PreCreateData.MinimumCost !== PreCreateData.FullPayout">
                 <el-checkbox v-model="checked" :disabled='!!curPayInfo2Code'>在线支付全款</el-checkbox>
               </p>
-              <p class="final-price">¥{{PreCreateData.FundBalance | numToFixed2}}</p>
+              <p class="final-price">¥ {{PreCreateData.FundBalance | numToFixed2}}</p>
             </div>
           </div>
         </div>

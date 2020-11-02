@@ -75,13 +75,16 @@
       <header>
         <div class="result" v-if="ProductQuotationResult && !priceGetErrMsg">
           <span>原价：<i>¥{{ProductQuotationResult.OriginalCost}}元</i></span>
-          <span>优惠券：<i v-if="selectedCoupon && coupon" class="is-pink">{{'-¥' + coupon}}元</i></span>
+          <span v-if="promotePrice > 0">活动：<i class="is-pink">{{'- ¥' + promotePrice}}元</i></span>
+          <span>优惠券：<i v-if="selectedCoupon && coupon" class="is-pink">{{'- ¥' + coupon}}元</i>
+          <i v-else-if="!selectedCoupon || coupon === 0">{{'¥' + coupon}}元</i></span>
           <span v-if="ProductQuotationResult.ExpressCost && ProductQuotationResult.ExpressCost > 0"
             >运费：<i>¥{{ProductQuotationResult.ExpressCost}}元</i></span>
           <span>成交价：
-            <i class="is-pink is-bold is-font-20">¥{{+(Cost.toFixed(2))}}</i>
-            <i class="is-pink">元</i>
-            <em class="is-gray is-font-12">(不含运费)</em>
+            <i class="is-pink is-font-16">¥ </i>
+            <i class="is-pink is-bold is-font-20">{{+(Cost.toFixed(2))}}</i>
+            <i class="is-pink"> 元</i>
+            <em class="is-gray is-font-12">（不含运费）</em>
           </span>
         </div>
         <div class="result" v-if="priceGetErrMsg">
@@ -212,6 +215,11 @@ export default {
         this.couponCode2Add = newVal.replace(/[^\w]/g, '');
       },
     },
+    // 活动价格
+    promotePrice() {
+      if (!this.ProductQuotationResult || this.priceGetErrMsg) return '';
+      return +(this.ProductQuotationResult.OriginalCost - this.ProductQuotationResult.CurrentCost).toFixed(2);
+    },
     // 产品数量
     ProductAmount: {
       get() {
@@ -247,12 +255,12 @@ export default {
       return _data;
     },
     coupon() {
-      if (!this.ProductQuotationResult) return '';
-      if (!this.selectedCoupon) return '';
+      if (!this.ProductQuotationResult) return 0;
+      if (!this.selectedCoupon) return 0;
       if (this.ProductQuotationResult.CurrentCost >= this.selectedCoupon.MinPayAmount) {
         return this.selectedCoupon.Amount;
       }
-      return '';
+      return 0;
     },
     Cost() {
       if (!this.ProductQuotationResult) return '';
@@ -474,9 +482,9 @@ export default {
       margin-bottom: 22px;
       > .result {
         display: inline-block;
-        margin-right: 3px;
+        margin-right: 6px;
         > span {
-          margin-right: 18px;
+          margin-right: 28px;
         }
       }
       > button {

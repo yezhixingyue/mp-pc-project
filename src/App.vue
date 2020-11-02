@@ -10,6 +10,7 @@
 
 <script>
 // import { throttle } from '@/assets/js/utils/throttle';
+import { mapState } from 'vuex';
 
 export default {
   // methods: {
@@ -27,6 +28,35 @@ export default {
   //     window.onscroll = () => console.log(123);
   //   }
   // },
+  computed: {
+    ...mapState('common', ['customerInfo']),
+  },
+  methods: {
+    async handleStorageChange(e) {
+      if (e.key !== 'token') return;
+      if (!e.newValue) {
+        if (this.$route.name !== 'login') {
+          this.$router.push('/login');
+          sessionStorage.removeItem('token');
+        }
+      } else if (e.newValue) {
+        if (!this.customerInfo) return;
+        sessionStorage.removeItem('customerInfo');
+        sessionStorage.removeItem('token');
+        const res = await this.$store.dispatch('common/getCustomerDetail', true);
+        // eslint-disable-next-line no-restricted-globals
+        if (res) location.reload();
+        else this.$router.push('/login');
+      }
+    },
+  },
+  mounted() {
+    if (document.attachEvent) {
+      document.attachEvent('onstorage', this.handleStorageChange);
+    } else {
+      window.addEventListener('storage', this.handleStorageChange);
+    }
+  },
 };
 </script>
 

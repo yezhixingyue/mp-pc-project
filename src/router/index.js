@@ -311,7 +311,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const _auth = sessionStorage.getItem('token');
+  let _auth = sessionStorage.getItem('token');
+  if (!_auth) _auth = localStorage.getItem('token');
   if (to.meta.title) {
     document.title = to.meta.title;
   }

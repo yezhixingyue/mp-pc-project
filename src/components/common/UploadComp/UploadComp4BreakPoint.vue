@@ -448,27 +448,33 @@ export default { // 上传图片按钮
     }
   }
   > div.el-comp {
+    text-align: left;
     > span {
       line-height: 35px;
-      float: left;
+      // float: left;
       vertical-align: top;
     }
     > .upload-box {
-      float: right;
-      width: 1063px;
+      // float: right;
+      // width: 1063px;
+      display: inline-block;
+      margin-left: 7px;
       > .el-upload {
+        vertical-align: top;
+        margin-right: 20px;
         > .el-button {
           min-width: 100px;
           height: 35px;
           padding: 0 15px;
+          line-height: 33px;
         }
-        float: right;
+        // float: right;
       }
       > .el-upload-list {
-        float: left;
-        max-width: 800px;
-        margin: 0;
-        // display: inline-block;
+        // float: left;
+        // max-width: 800px;
+        // margin: 0;
+        display: inline-block;
         > li {
           margin-top: 5px;
           outline-width: 0;
@@ -480,6 +486,7 @@ export default { // 上传图片按钮
         }
         .el-upload-list__item-name {
           padding: 0;
+          max-width: 620px;
         }
         position: relative;
         &::before {
@@ -506,8 +513,9 @@ export default { // 上传图片按钮
       height: 35px;
       &.empty {
         > .el-upload-list {
+          width: 450px;
           &::before {
-            top: 0;
+            top: -12px;
           }
         }
       }

@@ -291,12 +291,14 @@ export default {
     this.pageName = this.$route.name;
     if (this.pageName === 'unpayOrderDetail') this.pageName = 'orderDetail';
     if (this.pageName !== 'orderDetail') return;
-    // this.$emit('setDetailDataCompleted', false);
     const res = await this.api.getOrderDetail(this.orderDetail.OrderID);
     this.$emit('setDetailDataCompleted', true);
     if (res.data.Status === 1000) {
       this.curOrderData = res.data.Data;
       this.$store.commit('order/updateOrderDetailData', res.data.Data);
+      if (this.$route.name === 'unpayOrderDetail') {
+        this.$store.commit('unpayList/updateCurUnpayListDetailData', res.data.Data);
+      }
     }
   },
 };

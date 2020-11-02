@@ -10,7 +10,8 @@ let closeLoading = false;
 axios.interceptors.request.use(
   (config) => {
     const curConfig = config;
-    const token = sessionStorage.getItem('token');
+    let token = sessionStorage.getItem('token');
+    if (!token) token = localStorage.getItem('token');
     closeTip = curConfig.closeTip;
     closeLoading = curConfig.closeLoading;
     const url = curConfig.url.split('?')[0];
@@ -59,6 +60,7 @@ axios.interceptors.response.use(
       });
       router.replace('/login');
       sessionStorage.removeItem('token');
+      localStorage.removeItem('token');
       return response;
     // eslint-disable-next-line max-len
     } if ((!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && (!closeTip)) || [7025, 8037].includes(response.data.Status)) {
@@ -67,6 +69,7 @@ axios.interceptors.response.use(
         _obj.successFunc = () => {
           router.replace('/login');
           sessionStorage.removeItem('token');
+          localStorage.removeItem('token');
         };
       } else {
         _obj.successFunc = undefined;
@@ -100,20 +103,9 @@ axios.interceptors.response.use(
         let buffterErr = '文件导出数据过大，请缩小导出时间区间或精确筛选条件';
         switch (error.response.status) {
           case 401:
-            // messageBox.failSingleError({
-            //   msg: '[ 错误 401：请重新登录! ]',
-            //   successFunc: () => {
-            //     router.replace('/login');
-            //     sessionStorage.removeItem('token');
-            //   },
-            // });
-            // Message({
-            //   showClose: true,
-            //   message: '请重新登录!',
-            //   type: 'error',
-            // });
             router.replace('/login');
             sessionStorage.removeItem('token');
+            localStorage.removeItem('token');
             key = true;
             break;
           case 413: // 处理文件导出错误
@@ -157,7 +149,6 @@ axios.interceptors.response.use(
         if (error.response && error.response.data && error.response.data.Message) {
           msg = error.response.data.Message;
         }
-        // console.log(error, error.response);
         Message({
           showClose: true,
           message: msg,

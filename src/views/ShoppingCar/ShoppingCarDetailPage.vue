@@ -23,8 +23,8 @@
                   <p :class="curShoppingCarDetailData.Funds.CouponAmount
                      && curShoppingCarDetailData.Funds.CouponAmount > 0 ? 'is-pink' : ''">
                     <template v-show='curShoppingCarDetailData.Funds.CouponAmount'
-                      >{{'-¥ ' + (curShoppingCarDetailData.Funds.CouponAmount
-                        ? curShoppingCarDetailData.Funds.CouponAmount : 0)}}</template>
+                      >{{(curShoppingCarDetailData.Funds.CouponAmount
+                        ? '- ¥ ' + curShoppingCarDetailData.Funds.CouponAmount : '¥ ' + 0)}}</template>
                   </p>
                   <p class="final-price is-pink">¥ <i class="is-font-18 is-bold"
                     >{{curShoppingCarDetailData.Funds.FinalPrice}}</i></p>

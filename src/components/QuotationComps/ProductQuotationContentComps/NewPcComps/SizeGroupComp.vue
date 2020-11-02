@@ -203,7 +203,7 @@ export default {
         const _t = this.SizeList.find(it => it.SizeID === this.inpValue);
         if (_t) {
           this.sizeInputValueList = _t.ValueList.map(it => ({
-            CustomerInputValue: it.Second,
+            CustomerInputValue: '',
             PropertyID: it.First,
           }));
           this.$emit('changeFunc', ['', [...this.sizeInputValueList]]);

@@ -29,7 +29,7 @@ export default {
     /** 设置购物车信息列表
     ---------------------------------------- */
     setShoppingDataList(state, { Data, DataNumber }) {
-      state.shoppingDataList = Data;
+      state.shoppingDataList = Data.filter(it => it.FileHaveUpload);
       state.shoppingDataNumber = DataNumber;
     },
     /** 设置当前购物车订单详情

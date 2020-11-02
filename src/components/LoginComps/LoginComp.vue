@@ -20,7 +20,7 @@
     </el-form-item>
     <el-form-item prop="rememberPwd" class="rememberPwd-box">
       <el-checkbox-group v-model="ruleForm.rememberPwd">
-        <el-checkbox label="记住密码" name="rememberPwd"></el-checkbox>
+        <el-checkbox label="自动登录" name="rememberPwd"></el-checkbox>
       </el-checkbox-group>
       <span class="span-title-blue" @click="go2FundPwd">找回密码</span>
     </el-form-item>
@@ -119,14 +119,17 @@ export default {
         _obj2Keep.Password = pwd;
         _obj2Keep.timeStamp = Date.now();
         localStorage.setItem('info', JSON.stringify(_obj2Keep));
+        localStorage.setItem('token', token);
       } else {
         localStorage.removeItem('info');
+        localStorage.removeItem('token');
       }
       // this.$router.push(`${this.repath}`);
       this.$router.push('/placeOrder');
     },
     handleFailLogin(status) {
       localStorage.removeItem('info');
+      localStorage.removeItem('token');
       if (status === 8017) this.ruleForm.Password = '';
       if (this.isRemember) this.isRemember = false;
     },

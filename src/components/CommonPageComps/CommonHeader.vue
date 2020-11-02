@@ -231,6 +231,7 @@ export default {
           successFunc: () => {
             this.$router.replace('/login');
             sessionStorage.removeItem('token');
+            localStorage.removeItem('token');
             // 另外再需清除状态
           },
         });

@@ -43,45 +43,59 @@
             <li class="f">
               <p>
                 <img src="../../assets/images/qq.png" alt="">
-                <span>800051518（ 电商 ）</span>
+                <a rel="nofollow" target="_blank" href="tencent://message/?uin=800051518&amp;Site=名片之家&amp;Menu=yes">
+                  <span>800051518（ 电商 ）</span>
+                </a>
               </p>
               <p>
                 <img src="../../assets/images/qq.png" alt="">
-                <span>800065607（ 郑州 ）</span>
+                <a rel="nofollow" target="_blank" href="tencent://message/?uin=800065607&amp;Site=名片之家&amp;Menu=yes">
+                  <span>800065607（ 郑州 ）</span>
+                </a>
               </p>
             </li>
             <li>
               <p>
                 <img src="../../assets/images/qq.png" alt="">
-                <span>4006363006</span>
+                <a rel="nofollow" target="_blank" href="tencent://message/?uin=4006363006&amp;Site=名片之家&amp;Menu=yes">
+                  <span>4006363006</span>
+                </a>
               </p>
               <p>西安、石家庄、山东</p>
             </li>
             <li>
               <p>
                 <img src="../../assets/images/qq.png" alt="">
-                <span>800131808</span>
+                <a rel="nofollow" target="_blank" href="tencent://message/?uin=800131808&amp;Site=名片之家&amp;Menu=yes">
+                  <span>800131808</span>
+                </a>
               </p>
               <p>南阳、许昌、驻马店、信阳、平顶山、漯河</p>
             </li>
             <li>
               <p>
                 <img src="../../assets/images/qq.png" alt="">
-                <span>800050507</span>
+                <a rel="nofollow" target="_blank" href="tencent://message/?uin=800050507&amp;Site=名片之家&amp;Menu=yes">
+                  <span>800050507</span>
+                </a>
               </p>
               <p>安阳、新乡、鹤壁、濮阳、邯郸、邢台、聊城</p>
             </li>
             <li>
               <p>
                 <img src="../../assets/images/qq.png" alt="">
-                <span>800131866</span>
+                <a rel="nofollow" target="_blank" href="tencent://message/?uin=800131866&amp;Site=名片之家&amp;Menu=yes">
+                  <span>800131866</span>
+                </a>
               </p>
               <p>开封、周口、商丘、蚌埠、菏泽、亳州</p>
             </li>
             <li>
               <p>
                 <img src="../../assets/images/qq.png" alt="">
-                <span>800131899</span>
+                <a rel="nofollow" target="_blank" href="tencent://message/?uin=800131899&amp;Site=名片之家&amp;Menu=yes">
+                  <span>800131899</span>
+                </a>
               </p>
               <p>焦作、运城、长治、晋城、洛阳、济源、三门峡、临汾</p>
             </li>
@@ -299,6 +313,12 @@ export default {
                     > img {
                       vertical-align: -5%;
                       margin-right: 8px;
+                    }
+                    > a {
+                      color: #585858;
+                      &:hover {
+                        color: #428dfa;
+                      }
                     }
                   }
                   padding-top: 14px;

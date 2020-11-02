@@ -37,6 +37,12 @@ export default {
     setCurUnpayListDetailData(state, data) {
       state.curUnpayListDetailData = data;
     },
+    /** 获取未付款订单详情信息后，更新当前未付款订单详情中的资金数据
+    ---------------------------------------- */
+    updateCurUnpayListDetailData(state, data) {
+      if (!state.curUnpayListDetailData) return;
+      state.curUnpayListDetailData.Funds = data.Funds;
+    },
     /** 当前完成第一步预下单 [前] 的未付款单提交的订单列表数据
     ---------------------------------------- */
     setCurUnpayListDataBeforeFirstPlace(state, list) {

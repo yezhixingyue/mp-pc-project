@@ -382,6 +382,8 @@ export default {
       if (res.data.Status === 1000) {
         commit('setCustomerInfo', res.data.Data);
         sessionStorage.setItem('customerInfo', JSON.stringify(res.data.Data));
+        // eslint-disable-next-line consistent-return
+        return true;
       }
     },
     async getCustomerFundBalance({ commit }) {
