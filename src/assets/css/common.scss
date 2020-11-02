@@ -495,3 +495,19 @@ body .el-radio__inner, body .el-checkbox__inner {
     }
   }
 }
+
+.mp-general-loading-box {
+  animation: loadingOpcity 0.5s;
+}
+
+@keyframes loadingOpcity {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

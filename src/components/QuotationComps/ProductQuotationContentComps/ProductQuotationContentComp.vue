@@ -90,7 +90,11 @@
         <div class="result" v-if="priceGetErrMsg">
           <span class="is-pink">{{ priceGetErrMsg }}</span>
         </div>
-        <el-button type="primary" @click.native="go2GetProductPrice">计算价格</el-button>
+        <el-button type="primary" @click.native="go2GetProductPrice" :loading="isGettingPrice" class="get-price-btn">
+          <template v-if="isGettingPrice">
+            计算中</template>
+          <template v-else>计算价格</template>
+        </el-button>
       </header>
       <footer>
       <el-collapse v-model="activeNames" @change="handleChange">
@@ -296,6 +300,7 @@ export default {
       priceGetErrMsg: '',
       couponCode2Add: '',
       isCouponGet: false, // 是否已获取优惠券列表数据
+      isGettingPrice: false,
     };
   },
   methods: {
@@ -312,7 +317,9 @@ export default {
     },
     async getProductPriceLocal() {
       this.priceGetErrMsg = '';
+      this.isGettingPrice = true;
       const msg = await this.getProductPrice('报价');
+      this.isGettingPrice = false;
       if (msg === true) {
         // this.$router.push('/offerResult');
       } else if (typeof msg === 'string') {
@@ -329,7 +336,7 @@ export default {
       // console.log(1223332131);
       // this.$forceUpdate();
     },
-    async handleChange(list, bool) {
+    handleChange(list, bool) {
       if (list.length === 0) return; // 关闭
       if (!bool && this.couponList.length > 0) return;
       if (this.isCouponGet) return;
@@ -339,15 +346,19 @@ export default {
         TypeID: this.curProductClass.Second,
         ProductID: this.curProductID,
       };
-      const res = await this.api.getCouponList(_obj);
-      if (res.data.Status !== 1000) return;
-      this.couponList = res.data.Data;
-      this.isCouponGet = true;
+      setTimeout(async () => {
+        const res = await this.api.getCouponList(_obj);
+        if (res.data.Status !== 1000) return;
+        this.couponList = res.data.Data;
+        this.isCouponGet = true;
+      }, 300);
     },
     onBtnClick(evt) {
       let { target } = evt;
       if (target.nodeName === 'SPAN') {
         target = evt.target.parentNode;
+      } else if (target.nodeName === 'I') {
+        target = evt.target.parentNode.parentNode;
       }
       target.blur();
     },
@@ -489,6 +500,12 @@ export default {
       }
       > button {
         width: 120px;
+        padding: 0;
+        height: 40px;
+        line-height: 38px;
+        > i {
+          font-size: 17px;
+        }
       }
     }
     > footer {

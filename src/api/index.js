@@ -71,7 +71,7 @@ const api = {
     );
   },
   getProductPrice(data) { // 价格信息计算  POST /Api/Calculate/ProductPrice
-    return instance.post('/Api/Calculate/ProductPrice', { Terminal: 1, ...data });
+    return instance.post('/Api/Calculate/ProductPrice', { Terminal: 1, ...data }, { closeLoading: true });
   },
   getCraftRelationList() { // GET /Api/Craft/GetCraftRelationList 获取工艺关系列表
     return instance.get('/Api/Craft/GetCraftRelationList');

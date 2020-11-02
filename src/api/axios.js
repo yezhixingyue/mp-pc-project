@@ -29,7 +29,7 @@ axios.interceptors.request.use(
         lock: true,
         text: 'Loading',
         spinner: 'el-icon-loading',
-        background: 'rgba(255, 255, 255, 0.3)',
+        background: 'rgba(255, 255, 255, 0.4)',
         customClass: 'mp-general-loading-box',
       });
     }
