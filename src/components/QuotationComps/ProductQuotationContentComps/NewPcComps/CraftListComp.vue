@@ -685,6 +685,7 @@ export default {
 
 <style lang="scss">
 .mp-duotation-content-comps-craft-list-wrap {
+  margin-bottom: 17px !important;
   > .title {
     float: left;
     width: 84px;
@@ -696,7 +697,7 @@ export default {
     > li {
       display: inline-block;
       margin-right: 25px;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       > span {
         min-width: 90px;
         line-height: 26px;

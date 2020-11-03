@@ -10,7 +10,7 @@
           <span>总共 <i class="is-pink">{{orderCount}}</i>个订单 </span>
           <span> （产品总额：<i>¥{{PreCreateData.ProductPrice}}</i>，
                     总运费：<i>¥{{PreCreateData.Freight}}</i>，
-                    优惠券：<i :class="Coupon ? 'is-pink' : ''">{{ Coupon ? `- ¥${Coupon}` : 0}}</i> ）</span>
+                    优惠券：<i :class="Coupon ? 'is-pink' : ''">{{ Coupon ? `-¥${Coupon}` : 0}}</i> ）</span>
         </p>
         <div class="price-wrap">
           <div class="price-box" v-if="PreCreateData">

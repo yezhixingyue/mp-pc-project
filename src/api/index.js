@@ -62,7 +62,7 @@ const api = {
   getProductLists() { // 获取列表头部产品第三级列表
     return instance.post('/Api/Product/ProductList', {
       FieldType: 1,
-      TakeOrderWay: 1,
+      // TakeOrderWay: 1,
     });
   },
   getProductDetail(productID) { // 根据产品ID获取到产品详细信息  GET /Api/Product/GetProductDetail  productID
@@ -167,7 +167,7 @@ const api = {
   },
   getUploadedProgress(uniqueName) { // 获取断点续传文件已上传的位置  GET /Api/FileNode
     console.log('getUploadedProgress', uniqueName);
-    return instance.get(`/Api/FileNode?uniqueName=${uniqueName}`);
+    return instance.get(`/Api/FileNode?uniqueName=${uniqueName}`, { closeLoading: true });
   },
   UploadFileBreakpointResume(data, uniqueName, first, last, length, onUploadProgressFunc) { // 断点续传上传文件 /Api/Upload/File
     const formData = new FormData();

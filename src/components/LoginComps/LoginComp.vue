@@ -47,7 +47,7 @@ export default {
       ruleForm: {
         Mobile: '',
         Password: '',
-        rememberPwd: false,
+        rememberPwd: true,
       },
       rules: {
         Mobile: [

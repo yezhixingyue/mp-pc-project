@@ -25,12 +25,25 @@ axios.interceptors.request.use(
       }
     }
     if (key && !closeLoading) {
+      let _color = 'rgba(255, 255, 255, 0.3)';
+      let _text = '加载中';
+      let _customClass = 'mp-general-loading-box opAnimate';
+      console.log(url);
+      if (url === '/Api/Quotation/Save' || url === '/Api/Order/Create') {
+        _color = 'rgba(0, 0, 0, 0.7)';
+        _text = '上传完成，正在提交...';
+        _customClass = 'mp-general-loading-box';
+      }
+      if (url === '/Api/Customer/CouponList') _text = '优惠券信息获取中...';
+      if (url === '/Api/Express/ValidList') _text = '获取可用配送方式列表...';
+      if (url === '/Api/Product/GetProductDetail') _text = '正在获取产品信息...';
+      if (url === '/Api/Quotation/List') _text = '正在获取购物车信息...';
       loadingInstance = Loading.service({
         lock: true,
-        text: 'Loading',
+        text: _text,
         spinner: 'el-icon-loading',
-        background: 'rgba(255, 255, 255, 0.4)',
-        customClass: 'mp-general-loading-box',
+        background: _color,
+        customClass: _customClass,
       });
     }
     return curConfig;

@@ -16,30 +16,31 @@
             :successFunc="successFunc" @saveFile2Store='saveFile2Store' />
         </li>
       </ul>
-      <div class="price-wrap"  v-if="ProductQuotationResult">
-        <div class="price-box">
-          <div class="price-left">
-            <p>原价：</p>
-            <p v-if="ProductQuotationResult.OriginalCost - ProductQuotationResult.CurrentCost > 0">活动：</p>
-            <p>优惠券：</p>
-            <p class="final-price">成交价<i class="is-font-12 gray">（不含运费）</i>：</p>
-          </div>
-          <div class="price-right">
-              <p>¥ {{ProductQuotationResult.OriginalCost}}</p>
-              <p v-if="ProductQuotationResult.OriginalCost - ProductQuotationResult.CurrentCost > 0">
-                - ¥ {{+(ProductQuotationResult.OriginalCost - ProductQuotationResult.CurrentCost).toFixed(2)}}</p>
-              <p :class="coupon && coupon > 0 ? 'is-pink' : ''">
-                <template v-if="coupon && coupon > 0">-</template>
-                <template v-show='coupon'>{{'¥ ' + (coupon ? coupon : 0)}}</template>
-              </p>
-              <p class="final-price is-pink">¥ <i class="is-font-18 is-bold">{{Cost}}</i></p>
-          </div>
-        </div>
-      </div>
       <div class="submit-btn-wrap">
         <el-button class="button-title-pink" @click="onSave2TheCar">
           <i class="iconfont icon-jiarugouwuche" ></i>加入购物车</el-button>
         <el-button type="danger" @click="onSubmitOrder">直接下单</el-button>
+        <div class="result" v-if="ProductQuotationResult">
+          <span>成交价<em class="is-gray is-font-12">（不含运费）</em>：
+            <!-- <i class="is-pink is-font-14">¥ </i> -->
+            <i class="is-pink is-bold is-font-20">{{Cost}}</i>
+            <i class="is-pink is-font-14"> 元</i>
+          </span>
+          （
+          <span>产品原价：<i>{{ProductQuotationResult.OriginalCost}}元，</i></span>
+          <span>优惠券：<i :class="coupon && coupon > 0 ? 'is-pink' : ''">
+            <template v-if="coupon && coupon > 0">-</template>
+            <template v-show='coupon'>{{'' + (coupon ? coupon : 0)}}元</template>
+            </i>
+          </span>
+          <span v-if="ProductQuotationResult.OriginalCost - ProductQuotationResult.CurrentCost > 0">
+            ，活动：<i class="is-pink">-{{+(ProductQuotationResult.OriginalCost
+               - ProductQuotationResult.CurrentCost).toFixed(2)}}元</i>
+          </span>
+          <span v-if="ProductQuotationResult.ExpressCost || ProductQuotationResult.ExpressCost === 0"
+            >，运费：<i>{{ProductQuotationResult.ExpressCost}}元</i></span>
+          <span class="mg-left"> ）</span>
+        </div>
       </div>
     </div>
   </section>
@@ -190,9 +191,9 @@ export default {
       }
     }
     > .submit-btn-wrap {
-      text-align: right;
-      padding-bottom: 30px;
-      margin-top: 50px;
+      // text-align: right;
+      padding-bottom: 50px;
+      margin-top: 60px;
       > button {
         width: 150px;
         height: 45px;
@@ -209,6 +210,10 @@ export default {
         & + button {
           margin-left: 50px;
         }
+      }
+      > div {
+        display: inline-block;
+        margin-left: 25px
       }
     }
   }

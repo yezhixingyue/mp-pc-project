@@ -497,14 +497,22 @@ body .el-radio__inner, body .el-checkbox__inner {
 }
 
 .mp-general-loading-box {
-  animation: loadingOpcity 0.5s;
+  > .el-loading-spinner {
+    > i {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+  }
+  &.opAnimate {
+    animation: loadingOpcity 0.5s;
+  }
 }
 
 @keyframes loadingOpcity {
   0% {
     opacity: 0;
   }
-  30% {
+  40% {
     opacity: 0;
   }
   100% {

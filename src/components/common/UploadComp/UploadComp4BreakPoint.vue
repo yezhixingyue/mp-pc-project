@@ -17,7 +17,7 @@
       {{showTitle}}
     </div>
     <div v-else class="el-comp">
-      <span class="gray">印刷文件：</span>
+      <!-- <span class="gray">印刷文件：</span> -->
       <el-upload
         class="upload-box"
         ref="upload"
@@ -30,6 +30,7 @@
         :accept='accept'
         :on-exceed='exceed'
         :on-change='handleElChange'
+        drag
         :auto-upload="false">
         <!-- <input
         type="file"
@@ -458,15 +459,22 @@ export default { // 上传图片按钮
       // float: right;
       // width: 1063px;
       display: inline-block;
-      margin-left: 7px;
+      // margin-left: 7px;
       > .el-upload {
         vertical-align: top;
         margin-right: 20px;
-        > .el-button {
-          min-width: 100px;
-          height: 35px;
-          padding: 0 15px;
-          line-height: 33px;
+        .el-upload-dragger {
+          width: auto;
+          height: auto;
+          border: none;
+          border-radius: 0;
+          > .el-button {
+            min-width: 100px;
+            height: 35px;
+            padding: 0 15px;
+            line-height: 33px;
+            font-size: 13px;
+          }
         }
         // float: right;
       }
@@ -497,10 +505,12 @@ export default { // 上传图片按钮
           font-size: 12px;
           // display: block;
           position: absolute;
-          width: 38em;
+
           left: -6px;
-          top: -30px;
-          // opacity: 0;
+          // top: -30px;
+          width: 0;
+          top: -12px;
+          opacity: 0;
           // display: block;
         }
       }
@@ -516,8 +526,19 @@ export default { // 上传图片按钮
           width: 450px;
           &::before {
             top: -12px;
+            opacity: 1;
+            width: 38em;
+            animation: afterAnimate 0.4s;
           }
         }
+      }
+    }
+    @keyframes afterAnimate {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
       }
     }
     &::after {

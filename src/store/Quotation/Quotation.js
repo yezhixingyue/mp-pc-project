@@ -104,7 +104,7 @@ export default {
         level1.children = _list;
       });
       // 添加第三级产品内容
-      state.productNames.forEach(item => level1List.forEach(leve1 => {
+      state.productNames.filter(it => it.AllowCustomOrder).forEach(item => level1List.forEach(leve1 => {
         if (item.ProductClass.First === leve1.ID) {
           leve1.children.forEach(level2 => {
             if (item.ProductClass.Second === level2.ID) {
@@ -925,7 +925,9 @@ export default {
       // _data.Customer = { CustomerID };
       commit('setProductQuotationResult', null);
       commit('setProductQuotationDetail', null);
-
+      if (state.addressInfo4PlaceOrder && state.addressInfo4PlaceOrder.Address.Address.Consignee && state.addressInfo4PlaceOrder.Address.Address.Latitude) {
+        _data.Address = state.addressInfo4PlaceOrder.Address;
+      }
       const res = await api.getProductPrice(_data);
       if (res.data.Status === 7025 || res.data.Status === 8037) return;
       // eslint-disable-next-line consistent-return

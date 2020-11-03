@@ -3,9 +3,6 @@
     <header class="bg-gray"></header>
     <div class="comp-title float">
       <span class="left is-bold">收货信息</span>
-      <span class="right span-title-blue" @click="handleChangeAdd">
-        {{ addCompTitle }}
-      </span>
     </div>
     <div class="content">
       <ul>
@@ -57,9 +54,12 @@
         <li v-else class="has-none-consignee">
           <span class="is-pink">尚未设置收货地址，请点击右上方进行添加</span>
         </li>
+        <li class="add-title">
+          <span class="right span-title-blue" @click="handleChangeAdd">{{ addCompTitle }}</span>
+        </li>
       </ul>
     </div>
-    <el-dialog :visible.sync="outerVisible" top='10vh'
+    <el-dialog :visible.sync="outerVisible" top='20vh'
       v-dialogDrag custom-class="set-craft-dia" :before-close='handleBeforeClose'>
        <header slot="title">
         <i class="iconfont icon-shezhi is-primary-blue"></i>
@@ -564,6 +564,7 @@ export default {
     > ul {
       margin-top: 23px;
       margin-bottom: 28px;
+      position: relative;
       > li {
         > div {
           display: inline-block;
@@ -603,20 +604,30 @@ export default {
             }
           }
           > .address {
-            width: 486px;
+            width: 391px;
             > span {
               &.title {
                 float: left;
               }
               &.title-content {
                 overflow: hidden;
-                width: 415px;
+                width: 312px;
                 display: inline-block;
                 white-space: normal;
                 line-height: 18px;
                 margin-top: -1px;
+                font-size: 13px;
               }
             }
+          }
+          > span {
+              display: inline-block;
+              vertical-align: top;
+              margin-top: -1px;
+              margin-left: 4px;
+              &:active {
+                background-color: #fff;
+              }
           }
         }
         &.has-none-consignee {
@@ -625,6 +636,11 @@ export default {
           font-size: 12px;
           text-align: left;
           color: #cbcbcb;
+        }
+        &.add-title {
+          position: absolute;
+          left: 765px;
+          top: 55px
         }
       }
     }

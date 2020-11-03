@@ -101,6 +101,10 @@ export default {
           title: '领取成功',
           // successFunc: () => { this.getCouponList(); },
         });
+      } else if (res.data.Status === 7086) {
+        const { CouponID } = data;
+        const _t = this.couponList.find(it => it.CouponID === CouponID);
+        _t.Data.GenerateNumber = _t.Data.TotalNumber;
       }
     },
     handleCouponReceive({ CouponID, Receivable, Data }) {

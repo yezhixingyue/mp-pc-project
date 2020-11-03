@@ -36,3 +36,5 @@ public enum ImageType : byte
 ## 订单文件限制类型
 
   cdr,eps,jpg,jpeg,tiff,tif,rar,zip,pdf
+
+传TakeOrderWay值就可以了 1代客下单 2客户自助

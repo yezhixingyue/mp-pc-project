@@ -73,40 +73,44 @@
 
     <section class="coupon-calculate-price-wrap">
       <header>
-        <div class="result" v-if="ProductQuotationResult && !priceGetErrMsg">
-          <span>原价：<i>¥{{ProductQuotationResult.OriginalCost}}元</i></span>
-          <span v-if="promotePrice > 0">活动：<i class="is-pink">{{'- ¥' + promotePrice}}元</i></span>
-          <span>优惠券：<i v-if="selectedCoupon && coupon" class="is-pink">{{'- ¥' + coupon}}元</i>
-          <i v-else-if="!selectedCoupon || coupon === 0">{{'¥' + coupon}}元</i></span>
-          <span v-if="ProductQuotationResult.ExpressCost && ProductQuotationResult.ExpressCost > 0"
-            >运费：<i>¥{{ProductQuotationResult.ExpressCost}}元</i></span>
-          <span>成交价：
-            <i class="is-pink is-font-16">¥ </i>
-            <i class="is-pink is-bold is-font-20">{{+(Cost.toFixed(2))}}</i>
-            <i class="is-pink"> 元</i>
-            <em class="is-gray is-font-12">（不含运费）</em>
-          </span>
-        </div>
-        <div class="result" v-if="priceGetErrMsg">
-          <span class="is-pink">{{ priceGetErrMsg }}</span>
-        </div>
         <el-button type="primary" @click.native="go2GetProductPrice" :loading="isGettingPrice" class="get-price-btn">
           <template v-if="isGettingPrice">
             计算中</template>
           <template v-else>计算价格</template>
         </el-button>
+        <div class="result" v-if="ProductQuotationResult && !priceGetErrMsg">
+          <span class="no-margin">成交价：
+            <!-- <i class="is-pink is-font-16"></i> -->
+            <i class="is-pink is-bold is-font-20">{{+(Cost.toFixed(2))}}</i>
+            <i class="is-pink is-font-15"> 元</i>
+          </span>
+          <template v-if="ProductQuotationResult.OriginalCost > Cost">
+            （
+            <!-- <em class="is-gray is-font-12">不含运费</em> -->
+            <span> 原价：<i>{{ProductQuotationResult.OriginalCost}}元</i></span>
+            <span>优惠券：<i v-if="selectedCoupon && coupon" class="is-pink">{{'-' + coupon}}元</i>
+            <i v-else-if="!selectedCoupon || coupon === 0">{{coupon}}元</i></span>
+            <span v-if="promotePrice > 0">活动：<i class="is-pink">{{'-' + promotePrice}}元</i></span>
+            <!-- <span v-if="ProductQuotationResult.ExpressCost && ProductQuotationResult.ExpressCost > 0"
+              >运费：<i>¥{{ProductQuotationResult.ExpressCost}}</i></span> -->
+            <span class="mg-left">）</span>
+          </template>
+        </div>
+        <div class="result" v-if="priceGetErrMsg">
+          <span class="is-pink">{{ priceGetErrMsg }}</span>
+        </div>
       </header>
       <footer>
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item name="1">
           <template slot="title">
-            <span class="gray no-cursor" v-if="selectedCoupon" @click.stop="null">已选择满
-              {{selectedCoupon.MinPayAmount}}元减{{selectedCoupon.Amount}}元
-              <i class="is-font-12 is-pink">{{ couponConditionText }}</i>
-            </span>
             <el-button class="button-title-pink is-font-13" @click="onBtnClick">
               使用优惠券<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
+            <span class="gray no-cursor is-font-12" v-if="selectedCoupon" @click.stop="null">已选择满
+              {{selectedCoupon.MinPayAmount}}元减{{selectedCoupon.Amount}}元
+              <i class="is-pink"> {{ couponConditionText }}</i>
+            </span>
           </template>
           <section class="coupon-wrap">
             <header>
@@ -194,7 +198,7 @@ export default {
   },
   computed: {
     // eslint-disable-next-line max-len
-    ...mapState('Quotation', ['obj2GetProductPrice', 'ProductQuotationResult', 'curProductClass', 'curProductID', 'selectedCoupon']),
+    ...mapState('Quotation', ['obj2GetProductPrice', 'ProductQuotationResult', 'curProductClass', 'curProductID', 'selectedCoupon', 'addressInfo4PlaceOrder']),
     ...mapGetters('Quotation', ['curProductShowNameInfo']),
     ...mapState('common', ['customerInfo']),
     // 数量下拉列表数据
@@ -290,6 +294,10 @@ export default {
         this.setProductParamsPropertyList([index, data, type]);
       },
     },
+    watchAddInfoChange() {
+      if (!this.addressInfo4PlaceOrder) return null;
+      return this.addressInfo4PlaceOrder.Address.Express;
+    },
   },
   data() {
     return {
@@ -351,7 +359,7 @@ export default {
         if (res.data.Status !== 1000) return;
         this.couponList = res.data.Data;
         this.isCouponGet = true;
-      }, 300);
+      }, 200);
     },
     onBtnClick(evt) {
       let { target } = evt;
@@ -419,6 +427,9 @@ export default {
         this.$store.commit('Quotation/setProductQuotationResult', null);
       },
       deep: true,
+    },
+    watchAddInfoChange() {
+      this.$store.commit('Quotation/setProductQuotationResult', null);
     },
   },
 };
@@ -488,14 +499,23 @@ export default {
   }
   > .coupon-calculate-price-wrap {
     > header {
-      text-align: right;
+      text-align: left;
       margin-top: 38px;
       margin-bottom: 22px;
       > .result {
         display: inline-block;
         margin-right: 6px;
         > span {
-          margin-right: 28px;
+          margin-right: 20px;
+          &.no-margin {
+            margin: 0;
+          }
+          &.mg-left {
+            margin-left: -18px;
+          }
+        }
+        > em {
+          margin-right: 18px;
         }
       }
       > button {
@@ -503,8 +523,11 @@ export default {
         padding: 0;
         height: 40px;
         line-height: 38px;
+        margin-right: 28px;
+        padding-right: 4px;
         > i {
-          font-size: 17px;
+          font-size: 16px;
+          vertical-align: -1px;
         }
       }
     }
@@ -522,8 +545,9 @@ export default {
               text-align: right;
               justify-content: flex-end;
               border: none;
-              float: right;
+              float: left;
               cursor: unset;
+              margin-bottom: 10px;
               > span {
                 display: inline;
                 color: #888;
@@ -536,7 +560,8 @@ export default {
                 width: 120px;
                 line-height: 28px;
                 padding: 0;
-                margin-left: 22px;
+                margin-right: 28px;
+                padding-left: 8px;
                 > span > i {
                   transition: 0.2s;
                 }
@@ -595,6 +620,7 @@ export default {
                   // display: flex;
                   max-height: 322px;
                   overflow-y: auto;
+                  // margin-left: -26px;
                   > li {
                     width: 240px;
                     height: 135px;

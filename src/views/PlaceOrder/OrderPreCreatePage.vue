@@ -13,7 +13,7 @@
           <span> （产品总额：<i>¥{{PreCreateData.ProductPrice}}</i>，
                     总运费：<i>¥{{PreCreateData.Freight}}</i>，
                     优惠券：<i :class="selectedCoupon ? 'is-pink' : ''">
-                      {{ selectedCoupon ? `- ¥${selectedCoupon.Amount}` : 0}}</i> ）</span>
+                      {{ selectedCoupon ? `-¥${selectedCoupon.Amount}` : 0}}</i> ）</span>
         </p>
         <div class="price-wrap">
           <div class="price-box" v-if="PreCreateData">
