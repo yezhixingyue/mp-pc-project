@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable object-curly-newline */
 import api from '@/api/index';
 
@@ -369,7 +370,9 @@ export default {
       const res = await api.getCraftRelationList();
       if (res.data.Status === 1000) {
         commit('setCraftRelationList', res.data.Data);
+        return true;
       }
+      return false;
     },
     async getCustomerDetail({ state, commit }, key = false) { // 获取账号基本信息
       if (state.customerInfo && !key) return;
@@ -390,14 +393,24 @@ export default {
       const res = await api.getCustomerFundBalance();
       if (res.data.Status === 1000) {
         commit('setCustomerBalance', res.data.Data);
+        return true;
       }
+      return false;
     },
     async getExpressList({ state, commit }) {
-      if (state.ExpressList.length > 0) return;
+      if (state.ExpressList.length > 0) return true;
+      const _list = sessionStorage.getItem('expressList');
+      if (_list) {
+        commit('setExpressList', JSON.parse(_list));
+        return true;
+      }
       const res = await api.getExpressList();
       if (res.data.Status === 1000) {
         commit('setExpressList', res.data.Data);
+        sessionStorage.setItem('expressList', JSON.stringify(res.data.Data));
+        return true;
       }
+      return false;
     },
     async getAddressIDList({ state, commit }, parent = undefined) {
       if (state.addressList.length > 0) return;

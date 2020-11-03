@@ -503,6 +503,7 @@ body .el-radio__inner, body .el-checkbox__inner {
       margin-bottom: 8px;
     }
   }
+  z-index: 999 !important;
   &.opAnimate {
     animation: loadingOpcity 0.5s;
   }

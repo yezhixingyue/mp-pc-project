@@ -127,6 +127,7 @@
 <script>
 import { mapState } from 'vuex';
 import { debounce } from '@/assets/js/utils/throttle';
+import { Loading } from 'element-ui';
 import PlaceOrderProductClassifyComp from '@/components/QuotationComps/PlaceOrderProductClassifyComp.vue';
 import RechargeComp from './RechargeComp.vue';
 
@@ -288,11 +289,25 @@ export default {
       }
     },
   },
-  mounted() {
-    this.$store.dispatch('Quotation/getProductClassify');
-    // this.$store.dispatch('Quotation/getCustomerShortCutList');
-    this.$store.dispatch('common/getCustomerDetail');
-    this.$store.dispatch('common/getCustomerFundBalance');
+  async mounted() {
+    const loadingInstance = Loading.service({
+      lock: true,
+      text: '加载中...',
+      spinner: 'el-icon-loading',
+      background: 'rgba(255, 255, 255, 0.3)',
+    });
+    await Promise.all([
+      this.$store.dispatch('Quotation/getProductClassify'),
+      this.$store.dispatch('common/getCustomerDetail'),
+      this.$store.dispatch('common/getCustomerFundBalance'),
+      this.$store.dispatch('common/getCraftRelationList'),
+      this.$store.dispatch('common/getExpressList'),
+    ]);
+    loadingInstance.close();
+    // this.$store.dispatch('Quotation/getProductClassify');
+    // // this.$store.dispatch('Quotation/getCustomerShortCutList');
+    // this.$store.dispatch('common/getCustomerDetail');
+    // this.$store.dispatch('common/getCustomerFundBalance');
     this.oApp = document.getElementById('app');
     const _func = debounce(this.handleScroll, 50);
     if (this.oApp) {

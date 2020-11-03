@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable object-curly-newline */
 /* eslint-disable max-len */
 /* eslint-disable implicit-arrow-linebreak */
@@ -898,7 +899,10 @@ export default {
         if (namesDate.data.Status === 1000) {
           commit('setProductNames', namesDate.data.Data);
         }
+        if (namesDate.data.Status === 1000 && classifyDate.data.Status === 1000) return true;
+        return false;
       }
+      return false;
     },
     /* 获取产品详情
     -------------------------------*/

@@ -25,10 +25,11 @@ axios.interceptors.request.use(
       }
     }
     if (key && !closeLoading) {
-      let _color = 'rgba(255, 255, 255, 0.3)';
+      // let _color = 'rgba(0, 0, 0, 0.4)';
+      let _color = 'rgba(255, 255, 255, 0.5)';
       let _text = '加载中';
       let _customClass = 'mp-general-loading-box opAnimate';
-      console.log(url);
+      // console.log(url);
       if (url === '/Api/Quotation/Save' || url === '/Api/Order/Create') {
         _color = 'rgba(0, 0, 0, 0.7)';
         _text = '上传完成，正在提交...';
@@ -38,6 +39,8 @@ axios.interceptors.request.use(
       if (url === '/Api/Express/ValidList') _text = '获取可用配送方式列表...';
       if (url === '/Api/Product/GetProductDetail') _text = '正在获取产品信息...';
       if (url === '/Api/Quotation/List') _text = '正在获取购物车信息...';
+      if (url === '/Api/Product/ProductList') _text = '获取产品列表信息...';
+      // console.log(url, closeLoading);
       loadingInstance = Loading.service({
         lock: true,
         text: _text,

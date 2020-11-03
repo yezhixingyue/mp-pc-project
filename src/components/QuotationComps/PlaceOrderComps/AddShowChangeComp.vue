@@ -4,7 +4,7 @@
     <div class="comp-title float">
       <span class="left is-bold">收货信息</span>
     </div>
-    <div class="content">
+    <div class="content" v-loading='loadingAddValid'>
       <ul>
         <li>
           <div class="platform-code-box">
@@ -75,7 +75,7 @@
               <span class="is-bold is-font-12 radio-phone">({{item.Mobile}})</span>
               <span class="is-success mgleft" v-if="item.IsDefault">/ 默认地址</span>
             </el-radio>
-            <el-radio v-model="addRadio" label="new" class="new-address-radio">
+            <el-radio v-model="addRadio" label="new" class="new-address-radio"  v-loading='loadingAddInfo'>
               <el-form :model="newAdd" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
                 <div class="content">
                   <div class="add-1">
@@ -253,6 +253,8 @@ export default {
           { strategy: 'isPhone', errorMsg: '手机号码格式不正确' },
         ],
       },
+      loadingAddInfo: false,
+      loadingAddValid: false,
     };
   },
   computed: {
@@ -381,7 +383,9 @@ export default {
       //   this.callbackForLasted();
       //   this.callbackForLasted = null;
       // }
+      this.loadingAddValid = true;
       const resp = await this.api.getExpressValidList(this.newAdd);
+      this.loadingAddValid = false;
       if (resp.data.Status === 1000) {
         this.ExpressValidList = resp.data.Data;
         if (this.ExpressValidList.length === 0) {
@@ -414,7 +418,9 @@ export default {
       this.recordCountyList = JSON.stringify(this.CountyList);
 
       if (this.RegionalList.length > 0) return;
+      this.loadingAddInfo = true;
       const res = await this.api.getAddressIDList(-1);
+      this.loadingAddInfo = false;
       if (res.data.Status === 1000) {
         this.RegionalList = res.data.Data;
       }
@@ -432,7 +438,9 @@ export default {
       this.newAdd.HavePosition = false;
 
       if (this.CityList.length === 0 || this.CityList[0].ParentID !== e) {
+        this.loadingAddInfo = true;
         const res = await this.api.getAddressIDList(e);
+        this.loadingAddInfo = false;
         if (res.data.Status === 1000) {
           this.CityList = res.data.Data;
         }
@@ -447,7 +455,9 @@ export default {
       this.newAdd.HavePosition = false;
 
       if (this.CountyList.length === 0 || this.CountyList[0].ParentID !== e) {
+        this.loadingAddInfo = true;
         const res = await this.api.getAddressIDList(e);
+        this.loadingAddInfo = false;
         if (res.data.Status === 1000) {
           this.CountyList = res.data.Data;
         }
@@ -542,7 +552,9 @@ export default {
       const _t = this.customerInfo.Address.find((it, i) => i === this.selectdAddress);
       if (!_t) return;
       this.$store.commit('common/changeSelectedAdd', _t);
+      this.loadingAddValid = true;
       const res = await this.api.getExpressValidList(_t);
+      this.loadingAddValid = false;
       if (res.data.Status === 1000) {
         this.ExpressValidList = res.data.Data;
       }
@@ -561,6 +573,10 @@ export default {
 <style lang='scss'>
 .mp-pc-place-order-address-show-and-change-wrap {
   > .content {
+    svg {
+      width: 32px;
+      height: 32px;
+    }
     > ul {
       margin-top: 23px;
       margin-bottom: 28px;
@@ -809,6 +825,10 @@ export default {
               }
             }
           }
+        }
+        .el-loading-spinner > svg {
+          width: 24px;
+          height: 24px;
         }
       }
     }

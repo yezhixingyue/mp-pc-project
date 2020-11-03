@@ -32,7 +32,7 @@
                 </el-form-item>
               </div>
             </header>
-            <div class="content">
+            <div class="content" v-loading='loadingAddInfo'>
               <div class="add-1">
                 <span class="title">收货地址：</span>
                 <el-form-item prop="Regional">
@@ -201,6 +201,7 @@ export default {
       mapCenter: [113.625351, 34.746303],
       map: null,
       initNum: 0,
+      loadingAddInfo: false,
     };
   },
   computed: {
@@ -237,7 +238,9 @@ export default {
       this.CountyList = [];
 
       if (this.CityList.length === 0 || this.CityList[0].ParentID !== e) {
+        this.loadingAddInfo = true;
         const res = await this.api.getAddressIDList(e);
+        this.loadingAddInfo = false;
         if (res.data.Status === 1000) {
           this.CityList = res.data.Data;
         }
@@ -251,7 +254,9 @@ export default {
       this.CountyList = [];
 
       if (this.CountyList.length === 0 || this.CountyList[0].ParentID !== e) {
+        this.loadingAddInfo = true;
         const res = await this.api.getAddressIDList(e);
+        this.loadingAddInfo = false;
         if (res.data.Status === 1000) {
           this.CountyList = res.data.Data;
         }
@@ -427,11 +432,13 @@ export default {
           this.setPositionIndex(+Longitude, +Latitude, false);
         }
         if (ExpressArea) {
+          this.loadingAddInfo = true;
           const res = await Promise.all([
             this.api.getAddressIDList(-1),
             this.api.getAddressIDList(RegionalID),
             this.api.getAddressIDList(CityID),
           ]);
+          this.loadingAddInfo = false;
           const _list = res.map(it => {
             if (it.data.Status === 1000) {
               return it.data.Data;
@@ -467,7 +474,9 @@ export default {
         this.CityList = [];
         this.CountyList = [];
         if (this.RegionalList.length > 0) return;
+        this.loadingAddInfo = true;
         const res = await this.api.getAddressIDList(-1);
+        this.loadingAddInfo = false;
         if (res.data.Status === 1000) {
           this.RegionalList = res.data.Data;
         }
@@ -606,6 +615,16 @@ export default {
                     // margin-bottom: 25px;
                   }
                   > .content {
+                    .el-loading-mask {
+                      width: 800px;
+                      .el-loading-spinner {
+                        width: 580px;
+                      }
+                      svg {
+                        height: 25px;
+                        width: 25px;
+                      }
+                    }
                     > .add-1 {
                       > .el-form-item {
                         display: inline-block;

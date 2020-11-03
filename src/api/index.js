@@ -57,13 +57,13 @@ const api = {
   /* 产品报价及下单部分api
   ----------------------------------------------------------------------------------- */
   getProductClassify() { // 获取产品分类
-    return instance.post('/Api/Constant/VersionValid', { Key: 6 });
+    return instance.post('/Api/Constant/VersionValid', { Key: 6 }, { closeLoading: true });
   },
   getProductLists() { // 获取列表头部产品第三级列表
     return instance.post('/Api/Product/ProductList', {
       FieldType: 1,
       // TakeOrderWay: 1,
-    });
+    }, { closeLoading: true });
   },
   getProductDetail(productID) { // 根据产品ID获取到产品详细信息  GET /Api/Product/GetProductDetail  productID
     return instance.get(
@@ -74,7 +74,7 @@ const api = {
     return instance.post('/Api/Calculate/ProductPrice', { Terminal: 1, ...data }, { closeLoading: true });
   },
   getCraftRelationList() { // GET /Api/Craft/GetCraftRelationList 获取工艺关系列表
-    return instance.get('/Api/Craft/GetCraftRelationList');
+    return instance.get('/Api/Craft/GetCraftRelationList', { closeLoading: true });
   },
   getOrderPreCreate(data) { // POST /Api/Order/PreCreate  直接下单 - 预下单
     const { closeTip } = data;
@@ -121,16 +121,16 @@ const api = {
   /* 客户信息 配送方式 等公共部分api
   ----------------------------------------------------------------------------------- */
   getCustomerDetail() { // GET /Api/Customer/Detail  客户基础信息
-    return instance.get('/Api/Customer/Detail');
+    return instance.get('/Api/Customer/Detail', { closeLoading: true });
   },
-  getExpressList(data) { // 获取配送方式
-    return instance.get('/Api/Express/List', data);
+  getExpressList() { // 获取配送方式
+    return instance.get('/Api/Express/List', { closeLoading: true });
   },
   getAddressIDList(data) { // 查询地址ID
-    return instance.get(`/Api/District/List?parentID=${data}`);
+    return instance.get(`/Api/District/List?parentID=${data}`, { closeLoading: true });
   },
   getCustomerFundBalance() { // GET /Api/Customer/FundBalance 获取账号资金余额
-    return instance.get('/Api/Customer/FundBalance');
+    return instance.get('/Api/Customer/FundBalance', { closeLoading: true });
   },
   getCustomerApplyAuthentication(data) { // POST /Api/Customer/ApplyAuthentication 申请认证
     return instance.post('/Api/Customer/ApplyAuthentication', data);
@@ -139,7 +139,7 @@ const api = {
     return instance.post('/Api/Customer/Recharge', data);
   },
   getExpressValidList(data) { // POST /Api/Express/ValidList 查询可用物料列表
-    return instance.post('/Api/Express/ValidList', data);
+    return instance.post('/Api/Express/ValidList', data, { closeLoading: true });
   },
 
   /* 图片与文件上传api

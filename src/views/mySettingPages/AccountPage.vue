@@ -13,7 +13,7 @@
         <InputComp :disabled='!AllowEdit' v-model="QQ"  title='QQ' />
       </div>
       <div class="address-wrap">
-        <div class="add-1">
+        <div class="add-1" v-loading='loadingAddInfo'>
           <p class="title"><i class="is-pink">*</i> 经营地址：</p>
           <el-select :disabled='!AllowEdit'
             v-model="AuthenInfo4Submit.AuthenInfo.SellArea.RegionalID" @change='handleRegionalChange'>
@@ -182,6 +182,7 @@ export default {
       TaxIDRules: [
         { strategy: 'hasNotSpace', errorMsg: '纳税人识别号中不能有空格' },
       ],
+      loadingAddInfo: false,
     };
   },
   methods: {
@@ -196,7 +197,9 @@ export default {
       this.CountyList = [];
 
       if (this.CityList.length === 0 || this.CityList[0].ParentID !== e) {
+        this.loadingAddInfo = true;
         const res = await this.api.getAddressIDList(e);
+        this.loadingAddInfo = false;
         if (res.data.Status === 1000) {
           this.CityList = res.data.Data;
         }
@@ -210,7 +213,9 @@ export default {
       this.CountyList = [];
 
       if (this.CountyList.length === 0 || this.CountyList[0].ParentID !== e) {
+        this.loadingAddInfo = true;
         const res = await this.api.getAddressIDList(e);
+        this.loadingAddInfo = false;
         if (res.data.Status === 1000) {
           this.CountyList = res.data.Data;
         }
@@ -383,11 +388,13 @@ export default {
         if (SellArea) this.AuthenInfo4Submit.AuthenInfo.SellArea = { ...SellArea };
         if (SellArea) {
           const { RegionalID, CityID } = SellArea;
+          this.loadingAddInfo = true;
           const res = await Promise.all([
             this.api.getAddressIDList(-1),
             this.api.getAddressIDList(RegionalID),
             this.api.getAddressIDList(CityID),
           ]);
+          this.loadingAddInfo = false;
           const _list = res.map(it => {
             if (it.data.Status === 1000) {
               return it.data.Data;
@@ -398,7 +405,9 @@ export default {
           this.CityList = [..._list[1]];
           this.CountyList = [..._list[2]];
         } else {
+          this.loadingAddInfo = true;
           const res = await this.api.getAddressIDList(-1);
+          this.loadingAddInfo = false;
           if (res.data.Status === 1000) {
             this.RegionalList = res.data.Data;
           }
@@ -441,6 +450,15 @@ export default {
                 > input {
                   height: 30px;
                   line-height: 26px\0;
+                }
+              }
+              &.el-loading-mask {
+                width: 400px;
+                top: 42px;
+                height: 45px;
+                .el-loading-spinner svg {
+                  height: 24px;
+                  width: 24px;
                 }
               }
             }
