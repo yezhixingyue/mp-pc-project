@@ -43,11 +43,9 @@
             <li class="f">
               <p>
                 <img src="../../assets/images/qq.png" alt="">
-                <!-- <a rel="nofollow" target="_blank"
-                href="tencent://message/?uin=800051518&amp;Site=名片之家&amp;Menu=yes">
-                  <span>800051518（ 电商 ）</span>
-                </a> -->
-                <span>800051518（ 电商 ）</span>
+                <a rel="nofollow" target="_blank" href="tencent://message/?uin=800051513&amp;Site=名片之家&amp;Menu=yes">
+                  <span>800051513（ 电商 ）</span>
+                </a>
               </p>
               <p>
                 <img src="../../assets/images/qq.png" alt="">
@@ -146,6 +144,13 @@ export default {
       this.drawer = false;
     },
   },
+  // mounted() {
+  //   if (window.BizQQWPA) {
+  //     window.BizQQWPA.addCustom({
+  //       aty: '0', a: '0', nameAccount: 800051518, selector: 'BizQQWPA',
+  //     });
+  //   }
+  // },
 };
 </script>
 
@@ -322,8 +327,12 @@ export default {
                     }
                     > a {
                       color: #585858;
+                      outline: none;
                       &:hover {
                         color: #428dfa;
+                      }
+                      > span {
+                        outline: none;
                       }
                     }
                   }

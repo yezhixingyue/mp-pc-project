@@ -370,15 +370,25 @@ export default {
           this.onSearchResult(LngLats);
           this.initNum += 1;
         } else if (status === 'error' || result.poiList === undefined) {
-          this.messageBox.failSingleError({
-            title: '定位失败',
-            msg: '搜索不到地址，请尝试修改搜索关键词!',
-            successFunc: () => {
-              this.$emit('handleMapSearchError');
-            },
-          });
+          if (typeof result === 'string') {
+            this.messageBox.failSingleError({
+              title: '定位失败',
+              msg: result,
+              successFunc: () => {
+                this.$emit('handleMapSearchError');
+              },
+            });
+          } else {
+            this.messageBox.failSingleError({
+              title: '定位失败',
+              msg: '搜索不到地址，请尝试修改搜索关键词!',
+              successFunc: () => {
+                this.$emit('handleMapSearchError');
+              },
+            });
+          }
           if (!this.initNum && this.openType === 'new') this.newAdd.HavePosition = false;
-          throw new Error('定位搜索错误!');
+          throw new Error('定位过程中出现错误!');
         }
       });
       this.mapIsLoading = true;
@@ -525,8 +535,9 @@ export default {
     },
   },
   mounted() {
+    // 09966c2b866f9783b49969af19102d91 geren
     // eslint-disable-next-line max-len
-    const url = 'https://webapi.amap.com/maps?v=1.4.15&key=09966c2b866f9783b49969af19102d91&plugin=AMap.PlaceSearch&callback=initMap';
+    const url = 'https://webapi.amap.com/maps?v=1.4.15&key=d1de441473f06000bd61463102442b1e&plugin=AMap.PlaceSearch&callback=initMap';
 
     let key = true;
     const oSrc = document.getElementsByTagName('script');

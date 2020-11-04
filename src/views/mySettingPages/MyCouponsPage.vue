@@ -54,8 +54,10 @@
             <div class="product">
               <span class="title is-font-12">限产品：</span>
               <div class="text gray">
-                <el-tooltip popper-class="table-item" :enterable='false'
-                  :content="item.ProductString" placement="top-start">
+                <el-tooltip popper-class="table-item" :enterable='false' placement="top-start">
+                  <ul slot="content">
+                    <li v-for="(it, i) in item.ProductString.split('\n')" :key="i">{{it}}</li>
+                  </ul>
                   <span>{{item.ProductString}}</span>
                 </el-tooltip>
               </div>

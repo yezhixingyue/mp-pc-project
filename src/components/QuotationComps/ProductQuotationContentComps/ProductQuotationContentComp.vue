@@ -134,7 +134,12 @@
                 <div class="content is-font-12">
                   <p>
                     <span>限产品：</span>
-                    <span class="product">{{item.ProductString}}</span>
+                    <el-tooltip class="item" effect="dark" :enterable='false' placement="top-start">
+                      <ul slot="content">
+                        <li v-for="(it, i) in item.ProductString.split('\n')" :key="i">{{it}}</li>
+                      </ul>
+                      <span class="product">{{item.ProductString}}</span>
+                    </el-tooltip>
                   </p>
                   <p>
                     <span>有效期至：</span>
@@ -654,6 +659,9 @@ export default {
                           color: #888;
                           &.product {
                             color: #585858;
+                            max-width: 105px;
+                            display: inline-block;
+                            word-break: break-all
                           }
                         }
                         white-space: nowrap;

@@ -48,15 +48,24 @@
           </div>
           <div class="address">
             <span class="title">收货地址：</span>
-            <span class="title-content">{{currentAddInfo.address}}</span>
+            <span class="title-content">
+              <i>{{currentAddInfo.address}}</i>
+              <span class="right span-title-blue" @click="handleChangeAdd">{{ addCompTitle }}</span>
+            </span>
           </div>
         </li>
         <li v-else class="has-none-consignee">
-          <span class="is-pink">尚未设置收货地址，请点击右上方进行添加</span>
+          <span class="is-pink">尚未设置收货地址， </span>
+          <span class="right span-title-blue" @click="handleChangeAdd"> {{ addCompTitle }}</span>
+          <span class="is-primary">
+             ， 前往
+            <router-link to="/mySetting/address" tag="i" class="span-title-blue">个人设置 - 收货地址</router-link>
+             设置常用收货地址
+          </span>
         </li>
-        <li class="add-title">
+        <!-- <li class="add-title">
           <span class="right span-title-blue" @click="handleChangeAdd">{{ addCompTitle }}</span>
-        </li>
+        </li> -->
       </ul>
     </div>
     <el-dialog :visible.sync="outerVisible" top='20vh'
@@ -330,7 +339,7 @@ export default {
     },
     addCompTitle() {
       if (!this.customerInfo) return '';
-      if (this.customerInfo.Address.length === 0 && !this.newAdd.isSaved) return '添加配送地址';
+      if (this.customerInfo.Address.length === 0 && !this.newAdd.isSaved) return '添加临时配送地址';
       return '更改配送地址';
     },
   },
@@ -574,8 +583,8 @@ export default {
 .mp-pc-place-order-address-show-and-change-wrap {
   > .content {
     svg {
-      width: 32px;
-      height: 32px;
+      width: 26px;
+      height: 26px;
     }
     > ul {
       margin-top: 23px;
@@ -620,19 +629,26 @@ export default {
             }
           }
           > .address {
-            width: 391px;
+            width: 400px;
             > span {
               &.title {
                 float: left;
               }
               &.title-content {
                 overflow: hidden;
-                width: 312px;
+                // width: 312px;
                 display: inline-block;
                 white-space: normal;
                 line-height: 18px;
                 margin-top: -1px;
                 font-size: 13px;
+                > span {
+                  margin-left: -6px;
+                  white-space: nowrap;
+                }
+                > i {
+                  margin-right: 12px;
+                }
               }
             }
           }
@@ -653,11 +669,11 @@ export default {
           text-align: left;
           color: #cbcbcb;
         }
-        &.add-title {
-          position: absolute;
-          left: 765px;
-          top: 55px
-        }
+        // &.add-title {
+        //   position: absolute;
+        //   left: 765px;
+        //   top: 55px
+        // }
       }
     }
   }

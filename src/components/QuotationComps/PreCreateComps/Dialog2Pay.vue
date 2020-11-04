@@ -136,8 +136,9 @@ export default {
     onError(e) {
       // 图片下载出错
       if (e.type === 'error' && this.isShow2PayDialog) {
+        const msg = this.$route.name === 'unpayOrderSubmit' ? '[ 获取二维码失败，请刷新重试 ]' : '[ 抱歉，获取二维码失败，订单已生成，请到未付款单中查看及支付 ]';
         this.messageBox.failSingleError({
-          msg: '[ 获取二维码失败 ]',
+          msg,
           title: '图片获取失败',
         });
       }

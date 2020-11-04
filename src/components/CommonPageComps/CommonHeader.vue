@@ -296,14 +296,18 @@ export default {
       spinner: 'el-icon-loading',
       background: 'rgba(255, 255, 255, 0.3)',
     });
-    await Promise.all([
-      this.$store.dispatch('Quotation/getProductClassify'),
-      this.$store.dispatch('common/getCustomerDetail'),
-      this.$store.dispatch('common/getCustomerFundBalance'),
-      this.$store.dispatch('common/getCraftRelationList'),
-      this.$store.dispatch('common/getExpressList'),
-    ]);
-    loadingInstance.close();
+    try {
+      await Promise.all([
+        this.$store.dispatch('Quotation/getProductClassify'),
+        this.$store.dispatch('common/getCustomerDetail'),
+        this.$store.dispatch('common/getCustomerFundBalance'),
+        this.$store.dispatch('common/getCraftRelationList'),
+        this.$store.dispatch('common/getExpressList'),
+      ]);
+      loadingInstance.close();
+    } catch (error) {
+      loadingInstance.close();
+    }
     // this.$store.dispatch('Quotation/getProductClassify');
     // // this.$store.dispatch('Quotation/getCustomerShortCutList');
     // this.$store.dispatch('common/getCustomerDetail');
@@ -315,7 +319,7 @@ export default {
     }
   },
   beforeDestroy() {
-    this.oApp.onscroll = null;
+    if (this.oApp) this.oApp.onscroll = null;
   },
 };
 </script>

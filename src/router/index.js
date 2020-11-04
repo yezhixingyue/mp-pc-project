@@ -133,7 +133,7 @@ const routes = [
       },
       {
         path: '/unpay',
-        name: 'order',
+        name: 'unpay',
         component: CommonViewPage,
         redirect: '/unpay/list',
         meta: {
@@ -168,7 +168,7 @@ const routes = [
             meta: {
               requiresAuth: true,
               y: 0,
-              title: '购物车产品详情 - 郑州名片之家电子商务有限公司',
+              title: '产品详情 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/UnpayList/UnpayOrderDetailPage.vue'),
           },
@@ -178,7 +178,7 @@ const routes = [
             meta: {
               requiresAuth: true,
               y: 0,
-              title: '购物车订单提交 - 郑州名片之家电子商务有限公司',
+              title: '订单支付 - 郑州名片之家电子商务有限公司',
             },
             component: () => import('../views/UnpayList/UnpayOrderSubmitPage.vue'),
           },

@@ -499,13 +499,14 @@ body .el-radio__inner, body .el-checkbox__inner {
 .mp-general-loading-box {
   > .el-loading-spinner {
     > i {
-      font-size: 20px;
+      font-size: 28px;
       margin-bottom: 8px;
     }
   }
-  z-index: 999 !important;
+  // z-index: 999 !important;
   &.opAnimate {
     animation: loadingOpcity 0.5s;
+    background: linear-gradient(to bottom,rgba(0,0,0,0) 0px,  rgba(0,0,0,0) 60px, rgba(255,255,255,0.4) 61px, rgba(255,255,255,0.4) 100%) !important;
   }
 }
 
@@ -513,7 +514,7 @@ body .el-radio__inner, body .el-checkbox__inner {
   0% {
     opacity: 0;
   }
-  40% {
+  20% {
     opacity: 0;
   }
   100% {
