@@ -85,5 +85,14 @@ export default {
     color: #428dfa;
     background-color: rgb(245, 247, 250);
   }
+  @media screen and (max-height: 700px) {
+    max-height: 260px;
+  }
+  @media screen and (max-height: 540px) {
+    max-height: 200px;
+  }
+  @media screen and (max-height: 450px) {
+    max-height: 135px;
+  }
 }
 </style>

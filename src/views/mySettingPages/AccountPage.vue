@@ -65,7 +65,7 @@
           </el-image>
           <div class="img-mask" @click="onImgClick"></div>
         </div>
-        <div class="text gray" v-if="!(hasUploadedImg || !AllowEdit)">
+        <div class="text gray" v-if="!(!AllowEdit)">
           <p class="is-bold">操作说明：</p>
           <p class="is-font-12">双击可更换照片；单击查看照片，鼠标滚轮滚动可放大/ 缩小图片；拖拽可移动图片。</p>
         </div>
@@ -282,7 +282,7 @@ export default {
       }, 300);
     },
     onImgClick() {
-      if (this.hasUploadedImg || !this.AllowEdit) return;
+      if (!this.AllowEdit) return;
       this.firstClickTime = this.secondClickTime;
       this.secondClickTime = Date.now();
       if (!this.firstClickTime) {

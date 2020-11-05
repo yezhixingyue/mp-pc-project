@@ -657,16 +657,17 @@ export default {
                       > p {
                         > span {
                           color: #888;
+                          vertical-align: top;
                           &.product {
                             color: #585858;
-                            max-width: 105px;
+                            max-width: 160px;
                             display: inline-block;
-                            word-break: break-all
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
                           }
                         }
                         white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
                         line-height: 27px;
                       }
                     }
