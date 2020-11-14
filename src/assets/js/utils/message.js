@@ -75,17 +75,17 @@ function warnSingleError({
  * @param {*} failFunc
  */
 function warnCancelBox({
-  title = '确定取消此订单吗 ?', msg, successFunc, failFunc,
+  title = '确定取消此订单吗 ?', msg, successFunc, failFunc, confirmButtonText = '确定', cancelButtonText = '取消',
 }) {
   MessageBox({
     showClose: true,
     message: msg,
     type: 'success ',
-    confirmButtonText: '确定',
+    confirmButtonText,
     title,
     customClass: 'mp-order-del-pop-reverse-warn',
     showCancelButton: true,
-    cancelButtonText: '取消',
+    cancelButtonText,
   }).then(() => successFunc && successFunc()).catch(() => failFunc && failFunc());
 }
 

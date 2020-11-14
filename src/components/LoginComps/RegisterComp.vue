@@ -21,7 +21,7 @@
       </el-input>
     </el-form-item>
     <el-form-item prop="VertifyImgCode" class="code-box img-code-box">
-      <el-input placeholder="请输入验证码" v-model.trim="regForm.VertifyImgCode">
+      <el-input placeholder="请输入验证码" v-model.trim="VertifyImgCode">
           <i slot="prefix" class="iconfont icon-xinxi"></i>
           <img slot="suffix" v-if='!imgLoading' @click="getImgCode" :src="imgSrc" alt="图片校验码">
           <i slot="suffix" v-else >加载中...</i>
@@ -89,7 +89,7 @@ export default {
         VertifyImgCode: [
           { required: true, message: '请输入图片验证码', trigger: 'blur' },
           {
-            min: 2, max: 2, message: '请输入2个字符验证码', trigger: 'blur',
+            min: 2, max: 2, message: '请输入2个字符验证码，中间不要输入空格', trigger: 'blur',
           },
         ],
       },
@@ -147,6 +147,14 @@ export default {
         this.regForm.VertifyCode = newVal.replace(/[^\d.]/g, '');
       },
     },
+    VertifyImgCode: {
+      get() {
+        return this.regForm.VertifyImgCode;
+      },
+      set(newVal) {
+        this.regForm.VertifyImgCode = newVal.replace(/[\s+]/g, '');
+      },
+    },
     canGoToReg() {
       return this.regForm.Name && this.regForm.Mobile
         && this.regForm.Password && this.regForm.rePassword && this.regForm.VertifyCode;
@@ -175,6 +183,8 @@ export default {
               title: '注册成功,请登录',
               successFunc: () => this.$emit('changePanel', 'first'),
             });
+          } else {
+            this.getImgCode();
           }
         }
         return false;
@@ -197,6 +207,8 @@ export default {
         });
         if (res.data.Status === 1000) {
           this.changeCodeTitleAtSecond();
+        } else if (res.data.Status !== 5034) {
+          this.getImgCode();
         }
       }
     },
@@ -210,6 +222,7 @@ export default {
         this.codeTitle = `${_second}秒后重新获取`;
         if (_second === 0) {
           this.codeTitle = '重新获取验证码';
+          this.getImgCode();
           clearInterval(this.timer);
           this.canGetCode = true;
         }

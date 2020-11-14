@@ -361,6 +361,8 @@ export default {
           successFunc: () => {
             this.AuthenInfo4Submit.AllowEdit = false;
             this.$store.commit('common/setCustomerAuthenInfo', this.AuthenInfo4Submit);
+            const { redirect } = this.$route.query;
+            if (redirect) this.$router.push(`/${redirect}`);
           },
         });
       }
@@ -415,6 +417,9 @@ export default {
       },
       immediate: true,
     },
+  },
+  mounted() {
+    console.log(this.$route.query);
   },
 };
 </script>

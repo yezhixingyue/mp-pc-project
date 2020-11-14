@@ -31,7 +31,6 @@
           <div class="content">
             <p>0371-55672961</p>
             <p>199-0397-0210</p>
-            <p>199-3993-8782</p>
           </div>
         </section>
         <section class="qq-wrap">

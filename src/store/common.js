@@ -1,6 +1,8 @@
 /* eslint-disable consistent-return */
 /* eslint-disable object-curly-newline */
 import api from '@/api/index';
+import router from '@/router';
+import massage from '@/assets/js/utils/message';
 
 export default {
   namespaced: true,
@@ -385,6 +387,20 @@ export default {
       if (res.data.Status === 1000) {
         commit('setCustomerInfo', res.data.Data);
         sessionStorage.setItem('customerInfo', JSON.stringify(res.data.Data));
+        if (res.data.Data.AuthStatus !== 2) {
+          massage.warnCancelBox({
+            title: '账户信息未完善',
+            msg: '您尚有资料未完善，无法享受优惠价格',
+            cancelButtonText: '忽略',
+            confirmButtonText: '去完善资料',
+            successFunc: () => {
+              router.push({
+                path: '/mySetting/account',
+                query: { redirect: 'placeOrder' },
+              });
+            },
+          });
+        }
         // eslint-disable-next-line consistent-return
         return true;
       }
