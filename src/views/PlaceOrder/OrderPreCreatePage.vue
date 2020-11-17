@@ -38,6 +38,10 @@
             ref='UploadComp4BreakPoint' title='' isUploadRightNow onlyShow :successFunc="subMitPlaceOrder" />
           <el-button type="danger" @click="handleSubmit">提交订单</el-button>
         </div>
+        <div class="keep-data-check-box">
+          <el-checkbox v-model="keepDataChecked">保留下单面板数据</el-checkbox>
+          <p>如果选中保留订单参数，则在每次提交订单并支付成功后，下单面板订单部分的数据不清空，保留已选择和已填写的数据</p>
+        </div>
         <Dialog2Pay :needClear='false' />
       </footer>
     </section>
@@ -79,10 +83,20 @@ export default {
     data2Listener() {
       return (!this.orderFile4PreCreateData || !this.PreCreateData);
     },
+    keepDataChecked: {
+      get() {
+        return !!this.iskeeping;
+      },
+      set(newVal) {
+        localStorage.setItem('isOrderDataKeeping', newVal);
+        this.iskeeping = newVal;
+      },
+    },
   },
   data() {
     return {
       isFullPayout: false,
+      iskeeping: false,
     };
   },
   methods: {
@@ -124,6 +138,9 @@ export default {
       this.$router.replace('/placeOrder');
       this.$store.commit('Quotation/setCurPayInfo2Code', null);
     }
+    const _bool = localStorage.getItem('isOrderDataKeeping');
+    // console.log(_bool);
+    if (_bool === 'true') this.iskeeping = true;
   },
 };
 </script>
@@ -234,6 +251,22 @@ export default {
           font-size: 16px;
           padding: 0;
           line-height: 40px;
+        }
+      }
+      > .keep-data-check-box {
+        text-align: right;
+        margin-top: 15px;
+        margin-right: 1px;
+        .el-checkbox {
+          font-size: 15px;
+          .el-checkbox__label {
+            color: #585858;
+          }
+        }
+        > p {
+          font-size: 12px;
+          color: #888;
+          line-height: 28px;
         }
       }
     }

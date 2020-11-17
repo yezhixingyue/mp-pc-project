@@ -809,16 +809,10 @@ export default {
     /* 设置订单付款成功后的状态
     -------------------------------*/
     setPaySuccessOrderDataStatus(state) {
-      // '设置订单付款成功后的状态,清除一些数据的状态值');
+      // '设置订单付款成功后的状态,清除一些数据的状态值'); ----------------- !!!
       state.PreCreateData = null;
       state.orderFile4PreCreateData = null;
-      state.curProductID = '';
-      state.curProductClass = null;
-      state.curProductName = '';
-      state.curProductInfo2Quotation = null;
-      state.obj2GetProductPrice = {
-        ProductParams: {},
-      };
+
       state.ProductQuotationResult = null;
       state.ProductQuotationDetail = null;
       state.curFileContent = '';
@@ -826,12 +820,25 @@ export default {
       state.curReqObj4PreCreate = null;
       state.selectedCoupon = null;
       state.isFullPayoutDisabled = false;
-      state.initPageText = '下单成功';
+
+      const _keepingData = localStorage.getItem('isOrderDataKeeping');
+      console.log(_keepingData);
+      if (!(_keepingData && _keepingData === 'true')) {
+        state.curProductID = '';
+        state.curProductClass = null;
+        state.curProductName = '';
+        state.curProductInfo2Quotation = null;
+        state.obj2GetProductPrice = {
+          ProductParams: {},
+        };
+        state.initPageText = '下单成功';
+        state.curProduct = null;
+      }
     },
     /* 下单成功后的状态清理
     -------------------------------*/
     clearStateAfterPlaceOrderSuccess(state) {
-      console.log(1231232132132131);
+      // console.log(1231232132132131);
       state.selectedCoupon = null;
       state.isFullPayoutDisabled = true;
     },
@@ -993,7 +1000,7 @@ export default {
       if (res.data.Status === 1000) {
         commit('setCurReqObj4PreCreate', _itemObj);
         commit('setPreCreateData', res.data.Data);
-        commit('setCurProduct', null);
+        // commit('setCurProduct', null);
         const _b = rootState.common.customerBalance;
         const { FundBalance } = res.data.Data;
         if (FundBalance !== +_b) commit('common/setCustomerBalance', FundBalance, { root: true });
@@ -1010,7 +1017,7 @@ export default {
             if (resp.data.Status === 1000) {
               commit('setCurReqObj4PreCreate', _itemObj);
               commit('setPreCreateData', resp.data.Data);
-              commit('setCurProduct', null);
+              // commit('setCurProduct', null);
               const _b = rootState.common.customerBalance;
               const { FundBalance } = resp.data.Data;
               if (FundBalance !== +_b) commit('common/setCustomerBalance', FundBalance, { root: true });
@@ -1123,7 +1130,7 @@ export default {
       const _obj = { OrderType: 2, PayInFull, List: [] };
       console.log(rootState.unpayList, rootState.unpayList.curUnpayListDataBeforeFirstPlace);
       _obj.List = rootState.unpayList.curUnpayListDataBeforeFirstPlace.map(it => ({ ID: it.OrderID }));
-      console.log('placeOrderFromPrePay');
+      // console.log('placeOrderFromPrePay');
       const res = await api.getPaymentOrderCreate(_obj);
       if (res.data.Status !== 1000) {
         throw new Error(res.data.Message);

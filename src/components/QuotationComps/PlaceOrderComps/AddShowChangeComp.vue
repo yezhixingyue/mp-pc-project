@@ -268,6 +268,7 @@ export default {
   },
   computed: {
     ...mapState('common', ['ExpressList', 'customerInfo']),
+    // ...mapState('Quotation', ['addressInfo4PlaceOrder']),
     secondExpressList() {
       if (this.ExpressList.length === 0) return [];
       return this.ExpressList.find(it => it.Type === 3).List;
@@ -575,6 +576,10 @@ export default {
     const _i = this.customerInfo.Address.findIndex(it => it.isSelected);
     if (_i > -1) this.selectdAddress = _i;
     else this.selectdAddress = 'new';
+    // console.log(this.addressInfo4PlaceOrder);
+    // if (this.addressInfo4PlaceOrder) {
+    //   console.log('this.addressInfo4PlaceOrder is not null');
+    // }
   },
 };
 </script>
