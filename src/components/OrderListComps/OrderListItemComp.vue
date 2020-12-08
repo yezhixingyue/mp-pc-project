@@ -24,7 +24,12 @@
           :key="item.OrderID"
         >
           <div :style="wStyles[0]" class="is-twelve">{{item.OrderID}}</div>
-          <div :style="wStyles[1]">{{item.OutPlate && item.OutPlate.Second}}</div>
+          <div :style="wStyles[1]">
+            <el-tooltip popper-class="table-item" :enterable='false'
+              :content="item.OutPlate" placement="top-start">
+              <span>{{item.OutPlate}}</span>
+            </el-tooltip>
+          </div>
           <div :style="wStyles[2]">
             <el-tooltip popper-class="table-item" :enterable='false'
               :content="item.ProductName" placement="top-start">
@@ -49,7 +54,12 @@
               <span>{{item.ProductAmount + item.Unit + item.KindCount + '款'}}</span>
             </el-tooltip>
           </div>
-          <div :style="wStyles[6]" class="is-font-12 gray">{{item.Content}}</div>
+          <div :style="wStyles[6]" class="is-font-12 gray">
+            <el-tooltip popper-class="table-item" :enterable='false'
+              :content="item.Content" placement="top-start">
+              <span>{{item.Content}}</span>
+            </el-tooltip>
+          </div>
           <div :style="wStyles[7]" class="is-twelve">
             <i v-if="item.Funds.CouponAmount>0">-</i>{{item.Funds.CouponAmount}}元</div>
           <div :style="wStyles[8]">{{item.Funds.FinalPrice}}元</div>

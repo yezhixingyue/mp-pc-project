@@ -132,11 +132,12 @@ axios.interceptors.response.use(
             if (buffterRes && buffterRes.currentTarget && buffterRes.currentTarget.result) {
               buffterErr = buffterRes.currentTarget.result;
             }
-            messageBox.failSingleError({ msg: `[ 错误 413：${buffterErr} ]` });
+            messageBox.failSingleError({ msg: `${buffterErr}`, title: '导出失败' });
             key = true;
             break;
           default:
-            messageBox.failSingleError({ msg: `[ 错误代码${error.response.status}：${error.response.statusText}]` });
+            // eslint-disable-next-line max-len
+            messageBox.failSingleError({ title: '操作失败', msg: `${error.response.data && error.response.data.Message ? error.response.data.Message : error.response.statusText}` });
             key = true;
             break;
         }

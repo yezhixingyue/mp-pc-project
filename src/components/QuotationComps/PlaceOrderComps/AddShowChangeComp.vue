@@ -9,7 +9,7 @@
         <li>
           <div class="platform-code-box">
             <span class="title">平台单号：</span>
-            <el-input v-model.trim="outPlaceCode" maxlength="20" show-word-limit placeholder="平台单号"></el-input>
+            <el-input v-model.trim="outPlaceCode" maxlength="20" show-word-limit placeholder="第三方平台单号"></el-input>
           </div>
           <div  class="express-box">
             <span class="title">配送：</span>

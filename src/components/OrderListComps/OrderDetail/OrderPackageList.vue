@@ -3,7 +3,11 @@
     <header class="section-title">包裹列表</header>
     <div class="content">
       <el-table :data="packageListData" border style="width: 100%" :span-method="objectSpanMethod">
-        <el-table-column prop="ID" label="运单号" width="180"></el-table-column>
+        <el-table-column label="运单号" width="180">
+          <span v-if="scope.row && scope.row.Logistics && scope.row.Logistics.BillNo" class="gray" slot-scope="scope"
+            >{{scope.row.Logistics.BillNo}}</span>
+          <span v-else class="gray is-font-12">暂未生成</span>
+        </el-table-column>
         <el-table-column label="数量" width="180">
           <span class="gray" slot-scope="scope">{{scope.row.ProductAmount + Unit}}</span>
         </el-table-column>

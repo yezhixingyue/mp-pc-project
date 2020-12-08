@@ -120,7 +120,7 @@ export default { // 上传图片按钮
     accept: {
       type: String,
       // default: 'image/png,image/jpeg,image/gif,image/jpg,image/bmp',
-      default: '.cdr,.eps,.jpg,.jpeg,.tiff,.tif,.rar,.zip,.pdf',
+      default: '.cdr,.jpg,.jpeg,.tiff,.tif,.rar,.zip,.pdf',
       // default: '.png,.jpeg,.gif,.jpg,.bmp',
       // default: '',
     },
@@ -498,7 +498,7 @@ export default { // 上传图片按钮
         }
         position: relative;
         &::before {
-          content: '请选择订单文件 ( 请上传cdr, eps, jpg, jpeg, tiff, tif, rar, zip, pdf等格式的设计文件 )';
+          content: '请选择订单文件 ( 请上传cdr, jpg, jpeg, tiff, tif, rar, zip, pdf等格式的设计文件 )';
           display: inline-block;
           line-height: 35px;
           color: #989898;

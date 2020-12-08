@@ -296,6 +296,7 @@ export default class QuotationClassType {
         PartList: [
           {
             ...Part,
+            singlePartID: Part.PartID + (`${Math.random()}`).replace('.', ''),
             PartAmount: {
               First: '',
               Second: true,

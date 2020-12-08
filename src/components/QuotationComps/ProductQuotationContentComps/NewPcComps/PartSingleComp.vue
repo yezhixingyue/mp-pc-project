@@ -307,7 +307,12 @@ export default {
       'addPartPrintPropertyGroupList', 'addPartPropertyGroupList', 'delPartProductParamsPartList', 'delPartPrintPropertyGroupList', 'delPartPropertyGroupList', 'setCraftItemDisabled4Part',
     ]),
     handleDelClick() {
+      console.log(this.indexLv1, this.indexLv2);
       this.delPartProductParamsPartList([this.indexLv1, this.indexLv2]);
+      // console.log(this.$forceUpdate);
+      // setTimeout(() => {
+      //   this.$forceUpdate();
+      // }, 0);
     },
     handleAddClick() {
       this.$emit('handleAddPart');

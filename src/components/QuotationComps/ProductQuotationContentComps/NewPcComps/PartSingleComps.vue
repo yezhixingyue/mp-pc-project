@@ -2,7 +2,7 @@
   <article class="mp-duotation-content-part-comps-wrap">
     <part-single-comp
       v-for="(item, i) of PartData.PartList"
-      :key="item.PartID + i"
+      :key="item.singlePartID"
       :indexLv1="index"
       :indexLv2="i"
       :data="item"
@@ -35,7 +35,11 @@ export default {
   methods: {
     ...mapMutations('Quotation', ['addPartProductParamsPartList']),
     handleAddPart() {
-      this.addPartProductParamsPartList([this.index, this.localPartData]);
+      const _temp = {
+        ...this.localPartData,
+        singlePartID: this.PartData.PartID + (`${Math.random()}`).replace('.', ''),
+      };
+      this.addPartProductParamsPartList([this.index, _temp]);
     },
   },
   data() {

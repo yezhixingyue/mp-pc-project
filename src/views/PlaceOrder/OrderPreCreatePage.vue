@@ -40,7 +40,7 @@
         </div>
         <div class="keep-data-check-box">
           <el-checkbox v-model="keepDataChecked">保留下单面板数据</el-checkbox>
-          <p>如果选中保留订单参数，则在每次提交订单并支付成功后，下单面板订单部分的数据不清空，保留已选择和已填写的数据</p>
+          <p>如果选中保留订单参数，则在提交订单并支付成功后，下单面板产品参数部分的数据不清空，保留已选择和已填写的数据</p>
         </div>
         <Dialog2Pay :needClear='false' />
       </footer>
