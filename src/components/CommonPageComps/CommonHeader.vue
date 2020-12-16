@@ -405,7 +405,7 @@ export default {
   }
   > footer {
     width: 100%;
-    height: 70px;
+    height: 65px;
     overflow: hidden;
     background-color: #fff;
     &.show {
@@ -435,7 +435,7 @@ export default {
           text-align: center;
           transition: 0.2s;
           padding: 10px 20px 10px;
-          margin-top: 19px;
+          margin-top: 16px;
           margin-bottom: 16px;
           box-sizing: border-box;
           margin-right: 20px;
@@ -471,7 +471,7 @@ export default {
             width: 80px;
             > div {
               height: 35px;
-              padding: 19px 0px 16px;
+              padding: 16px 0px 16px;
               > span {
                 display: inline-block;
                 padding: 10px 20px;
@@ -514,7 +514,7 @@ export default {
       > div.customer-box {
         float: right;
         color: #888;
-        line-height: 70px;
+        line-height: 65px;
         max-width: 560px;
         text-align: right;
         white-space: nowrap;

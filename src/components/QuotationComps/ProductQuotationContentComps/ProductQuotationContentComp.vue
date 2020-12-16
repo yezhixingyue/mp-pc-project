@@ -19,9 +19,8 @@
         <span>{{curProductShowNameInfo[1]}}</span>
         <span>-</span>
         <span>{{curProductShowNameInfo[2]}}</span>
-
       </section>
-
+      <SwiperClassifyComp />
       <section class="count-model-box">
           <!-- 数量 -->
         <ProductCountComp
@@ -78,26 +77,19 @@
             计算中</template>
           <template v-else>计算价格</template>
         </el-button>
-        <div class="result" v-if="ProductQuotationResult && !priceGetErrMsg">
-          <span class="no-margin">成交价：
-            <!-- <i class="is-pink is-font-16"></i> -->
-            <i class="is-pink is-bold is-font-20">{{+(Cost.toFixed(2))}}</i>
-            <i class="is-pink is-font-15"> 元</i>
-          </span>
-          <template v-if="ProductQuotationResult.OriginalCost > Cost">
-            （
-            <!-- <em class="is-gray is-font-12">不含运费</em> -->
-            <span> 原价：<i>{{ProductQuotationResult.OriginalCost}}元</i></span>
-            <span>优惠券：<i v-if="selectedCoupon && coupon" class="is-pink">{{'-' + coupon}}元</i>
-            <i v-else-if="!selectedCoupon || coupon === 0">{{coupon}}元</i></span>
-            <span v-if="promotePrice > 0">活动：<i class="is-pink">{{'-' + promotePrice}}元</i></span>
-            <!-- <span v-if="ProductQuotationResult.ExpressCost && ProductQuotationResult.ExpressCost > 0"
-              >运费：<i>¥{{ProductQuotationResult.ExpressCost}}</i></span> -->
-            <span class="mg-left">）</span>
-          </template>
-        </div>
-        <div class="result" v-if="priceGetErrMsg">
+        <ComputedResultComp
+         :ProductQuotationResult='ProductQuotationResult'
+         :selectedCoupon='selectedCoupon'
+          v-if="!priceGetErrMsg"
+         />
+        <div class="result center" v-if="priceGetErrMsg">
           <span class="is-pink">{{ priceGetErrMsg }}</span>
+        </div>
+        <div class="result center" v-if="!priceGetErrMsg && !ProductQuotationResult && !isGettingPrice">
+          <span class="gray no-cursor is-font-12" v-if="selectedCoupon" @click.stop="null">已选择满
+            {{selectedCoupon.MinPayAmount}}元减{{selectedCoupon.Amount}}元
+            <i class="is-pink"> {{ couponConditionText }}</i>
+          </span>
         </div>
       </header>
       <footer>
@@ -107,10 +99,6 @@
             <el-button class="button-title-pink is-font-13" @click="onBtnClick">
               使用优惠券<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
-            <span class="gray no-cursor is-font-12" v-if="selectedCoupon" @click.stop="null">已选择满
-              {{selectedCoupon.MinPayAmount}}元减{{selectedCoupon.Amount}}元
-              <i class="is-pink"> {{ couponConditionText }}</i>
-            </span>
           </template>
           <section class="coupon-wrap">
             <header>
@@ -179,8 +167,10 @@ import AttributesComp from '@/components/QuotationComps/ProductQuotationContentC
 import CraftListComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/CraftListComp.vue';
 import PartComps from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/PartComps.vue';
 import ProductCountComp from './NewPcComps/ProductCountComp.vue';
+import ComputedResultComp from './NewPcComps/ComputedResultComp.vue';
 import AddShowChangeComp from '../PlaceOrderComps/AddShowChangeComp.vue';
 import OrderSubmitComp from '../PlaceOrderComps/OrderSubmitComp.vue';
+import SwiperClassifyComp from './NewPcComps/SwiperClassifyComp.vue';
 
 export default {
   props: {
@@ -200,6 +190,8 @@ export default {
     PartComps,
     AddShowChangeComp,
     OrderSubmitComp,
+    ComputedResultComp,
+    SwiperClassifyComp,
   },
   computed: {
     // eslint-disable-next-line max-len
@@ -275,17 +267,17 @@ export default {
       }
       return 0;
     },
-    Cost() {
-      if (!this.ProductQuotationResult) return '';
-      if (!this.selectedCoupon) return this.ProductQuotationResult.CurrentCost;
-      if (this.ProductQuotationResult.CurrentCost >= this.selectedCoupon.MinPayAmount) {
-        const num = +(this.ProductQuotationResult.CurrentCost - this.selectedCoupon.Amount).toFixed(2);
-        return num > 0 ? num : 0;
-      }
-      return this.ProductQuotationResult.CurrentCost;
-    },
+    // Cost() {
+    //   if (!this.ProductQuotationResult) return '';
+    //   if (!this.selectedCoupon) return this.ProductQuotationResult.CurrentCost;
+    //   if (this.ProductQuotationResult.CurrentCost >= this.selectedCoupon.MinPayAmount) {
+    //     const num = +(this.ProductQuotationResult.CurrentCost - this.selectedCoupon.Amount).toFixed(2);
+    //     return num > 0 ? num : 0;
+    //   }
+    //   return this.ProductQuotationResult.CurrentCost;
+    // },
     couponConditionText() {
-      if (!this.ProductQuotationResult) return '(点击 计算价格 查看是否可使用)';
+      if (!this.ProductQuotationResult) return '( 点击 计算价格 查看是否可使用 )';
       if (!this.coupon) return '(尚未满足使用条件)';
       return '';
     },
@@ -455,7 +447,7 @@ export default {
     > .content-title {
       color: #333;
       font-weight: 700;
-      margin-bottom: 35px;
+      margin-bottom: 30px;
       // padding-left: 20px;
       > .blue-v-line {
         margin-right: 6px;
@@ -503,15 +495,28 @@ export default {
     // ------------------------------- ⬆
   }
   > .coupon-calculate-price-wrap {
+    position: relative;
     > header {
       text-align: left;
-      margin-top: 38px;
-      margin-bottom: 22px;
+      // margin-top: 38px;
+      // margin-bottom: 22px;
+      position: absolute;
+      top: 4px;
+      left: 165px;
       > .result {
         display: inline-block;
         margin-right: 6px;
-        > span {
+        line-height: 33px;
+        // white-space: nowrap;
+        white-space: normal;
+        position: absolute;
+        left: 160px;
+        top: -16px;
+        height: 72px;
+        width: 818px;
+        > span, > div > span {
           margin-right: 20px;
+          white-space: nowrap;
           &.no-margin {
             margin: 0;
           }
@@ -519,21 +524,42 @@ export default {
             margin-left: -18px;
           }
         }
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        > div {
+          // display: inline-block;
+          white-space: nowrap;
+        }
         > em {
           margin-right: 18px;
         }
+        &.center::before {
+          content: '';
+          display: inline-block;
+          height: 100%;
+          vertical-align: middle;
+          margin-right: -0.25em; /* Adjusts for spacing */
+        }
       }
       > button {
+        position: absolute;
         width: 120px;
         padding: 0;
         height: 40px;
         line-height: 38px;
         margin-right: 28px;
         padding-right: 4px;
+        vertical-align: top;
+        top: 0;
         > i {
           font-size: 16px;
           vertical-align: -1px;
         }
+      }
+      .ml-0 {
+        margin-left: -12px;
+        margin-right: 12px !important;
       }
     }
     > footer {
@@ -561,11 +587,11 @@ export default {
               > button {
                 display: inline-block;
                 border-radius: 5px;
-                height: 30px;
+                height: 40px;
                 width: 120px;
                 line-height: 28px;
                 padding: 0;
-                margin-right: 28px;
+                // margin-right: 28px;
                 padding-left: 8px;
                 > span > i {
                   transition: 0.2s;

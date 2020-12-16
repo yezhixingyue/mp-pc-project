@@ -176,7 +176,7 @@ export default {
       } else {
         this.timer = setTimeout(() => {
           this.getPayStatus();
-        }, 2000);
+        }, 2800);
       }
     },
     async getPayResult(cb) {

@@ -64,3 +64,38 @@ Vue.filter('formatStatus4PackageList', status => {
   if (arr) return arr.label.trim();
   return status;
 });
+
+Vue.filter('getPayTime', ProducePeriod => {
+  if (!ProducePeriod) return '';
+  const { LatestPayTime } = ProducePeriod;
+  console.log(LatestPayTime.split('T')[1].split('+')[0].slice(0, 5));
+  return `${LatestPayTime.split('T')[1].split('+')[0].slice(0, 5)}前支付`;
+});
+
+Vue.filter('getDoneTime', ProducePeriod => {
+  if (!ProducePeriod) return '';
+  const { IncludeDiliveryTime, Time } = ProducePeriod;
+  const str = IncludeDiliveryTime ? '送达' : '出货';
+  const fullDay = Time.split('T')[0];
+  const m = fullDay.split('-')[1];
+  const d = fullDay.split('-')[2];
+  let dayTimeStr = `${m}月${d}日`;
+  const _m = `${new Date().getMonth() + 1}`;
+  const _d = `${new Date().getDate()}`;
+  if (m === _m) {
+    if (d === _d) dayTimeStr = '今天';
+    if (d - _d === 1) dayTimeStr = '明天';
+    if (d - _d === 2) dayTimeStr = '后天';
+  } else if ((_m - m === 1 || (m === '1' && _m === '12')) && (d === '1' || d === '2')) {
+    const year = new Date().getFullYear();
+    const surMonthDayCount = new Date(year, _m, 0).getDate();
+    if (surMonthDayCount - _d === 0) {
+      // eslint-disable-next-line no-nested-ternary
+      dayTimeStr = d === '1' ? '明天' : (d === '2' ? '后天' : dayTimeStr);
+    } else if (surMonthDayCount - _d === 1 && d === '1') {
+      dayTimeStr = '后天';
+    }
+  }
+  const hour = Time.split('T')[1].split('+')[0].slice(0, 5);
+  return `预计${dayTimeStr}${hour}${str}`;
+});

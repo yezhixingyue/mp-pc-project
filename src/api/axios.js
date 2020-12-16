@@ -63,10 +63,16 @@ axios.interceptors.response.use(
     if (loadingInstance) loadingInstance.close();
     // eslint-disable-next-line max-len
     const _list2NotNeed2Toast = ['/Api/Calculate/ProductPrice', '/Api/Order/Create', '/Api/AfterSales/Excel', '/Api/Customer/OrderExcel'];
-    const _statusList2NotNeed2Toast = [1000, 9062, 9169];
-    // 包含以上的状态码 或 以上的请求路径  不会弹窗报错  其余以外都会报错出来
 
     const _url = response.config.url.split('?')[0];
+
+    const _statusList2NotNeed2Toast = [1000, 9062];
+    // 包含以上的状态码 或 以上的请求路径  不会弹窗报错  其余以外都会报错出来
+    // eslint-disable-next-line max-len
+    const oneCondition4NotNeedToast = !([9164, 9165, 9166, 9167, 9168, 9169, 9170].includes(response.data.Status) && ['/Api/Order/PreCreate', '/Api/Quotation/Save'].includes(_url));
+    //  || !['/Api/Order/PreCreate', '/Api/Quotation/Save'].includes(_url))
+
+    console.log(oneCondition4NotNeedToast);
 
     if ([7025, 8037].includes(response.data.Status)) {
       Message({
@@ -79,7 +85,7 @@ axios.interceptors.response.use(
       localStorage.removeItem('token');
       return response;
     // eslint-disable-next-line max-len
-    } if ((!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && (!closeTip)) || [7025, 8037].includes(response.data.Status)) {
+    } if ((!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && (!closeTip) && oneCondition4NotNeedToast) || [7025, 8037].includes(response.data.Status)) {
       const _obj = { msg: `[ ${response.data.Message} ]` };
       if ([7025, 8037].includes(response.data.Status)) {
         _obj.successFunc = () => {

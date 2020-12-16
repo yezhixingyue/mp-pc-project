@@ -31,13 +31,14 @@ export default {
   data() {
     return {
       widthObj: {
-        w1: 270,
-        w2: 105,
-        w3: 105,
-        w4: 105,
-        w5: 105,
-        w6: 105,
-        w7: 402,
+        w1: 230,
+        w2: 100,
+        w3: 80,
+        w4: 70,
+        w5: 80,
+        w6: 80,
+        w7: 235,
+        w8: 322,
       },
       titleList: [
         '产品',
@@ -46,6 +47,7 @@ export default {
         '优惠券',
         '成交价',
         '定金',
+        '工期',
         '文件内容',
       ],
       curSelectedList: [],

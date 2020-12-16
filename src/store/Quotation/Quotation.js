@@ -996,7 +996,7 @@ export default {
       _requestObj.List.push(_itemObj);
       const res = await api.getOrderPreCreate(_requestObj);
       // console.log(res);
-
+      // console.log(res.data.Status);
       if (res.data.Status === 1000) {
         commit('setCurReqObj4PreCreate', _itemObj);
         commit('setPreCreateData', res.data.Data);
@@ -1005,9 +1005,9 @@ export default {
         const { FundBalance } = res.data.Data;
         if (FundBalance !== +_b) commit('common/setCustomerBalance', FundBalance, { root: true });
         callBack();
-      } else if (res.data.Status === 9169) {
+      } else if ([9164, 9165, 9166, 9167, 9168, 9169, 9170].includes(res.data.Status)) {
         massage.warnCancelBox({
-          title: '未达到优惠券使用金额',
+          title: res.data.Message,
           msg: '是否 [ 取消使用优惠券 ] 然后下单',
           successFunc: async () => {
             delete _requestObj.List[0].Coupon;
@@ -1065,7 +1065,7 @@ export default {
         commit('setSelectedCoupon', null);
         await dispatch('delay', 10);
         commit('setCurProductInfo2Quotation', _obj);
-      } else if (res.data.Status === 9169) {
+      } else if ([9164, 9165, 9166, 9167, 9168, 9169, 9170].includes(res.data.Status)) {
         massage.warnCancelBox({
           title: '未达到优惠券使用金额',
           msg: '是否 [ 取消使用优惠券 ] 然后加入购物车',

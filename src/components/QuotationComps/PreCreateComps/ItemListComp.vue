@@ -23,7 +23,9 @@
         <div :style="wStyles[3]">{{ selectedCoupon ? selectedCoupon.Amount : 0}}元</div>
         <div :style="wStyles[4]">{{data.OrderList[0].FinalPrice}}元</div> <!-- 成交价 -->
         <div :style="wStyles[5]">{{data.OrderList[0].DepositAmount}}元</div> <!-- 定金 -->
-        <div :style="wStyles[6]" class="is-font-12 gray">{{curFileContent}}</div>
+        <div :style="wStyles[6]" class="is-font-12 is-pink">{{data.OrderList[0].ProducePeriod | getPayTime}}
+          {{data.OrderList[0].ProducePeriod | getDoneTime}}</div> <!-- 工期 -->
+        <div :style="wStyles[7]" class="is-font-12 gray">{{curFileContent}}</div>
       </li>
     </TransitionGroupCollapse>
   </div>

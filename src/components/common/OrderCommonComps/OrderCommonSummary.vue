@@ -48,6 +48,11 @@
             <span>{{info4OrderSummary.FilePath}}</span>
           </el-tooltip>
         </p>
+        <p v-if="info4OrderSummary.ProducePeriod">
+          <span class="title">工期时间：</span>
+          <span class="is-pink">{{info4OrderSummary.ProducePeriod | getPayTime}}
+            {{info4OrderSummary.ProducePeriod | getDoneTime}}</span>
+        </p>
       </li>
     </ul>
   </section>
@@ -78,6 +83,7 @@ export default {
         Address: this.getAdd(this.showData.Address.Address),
         Content: this.showData.Content,
         FilePath: this.showData.FilePath,
+        ProducePeriod: this.showData.ProducePeriod,
       };
     },
   },
@@ -139,7 +145,7 @@ export default {
         padding-bottom: 9px;
       }
       padding-right: 20px;
-      width: 680px;
+      width: 660px;
       > p {
         > .phone {
           margin: 0 40px 0 25px;
@@ -148,13 +154,13 @@ export default {
     }
     > .right {
       overflow: hidden;
-      height: 76px;
+      height: 96px;
       font-size: 12px;
       padding-left: 25px;
       // margin-top: 10px;
       border-left: 1px solid #eee;
       line-height: 32px;
-      padding-top: 44px;
+      padding-top: 14px;
     }
   }
   .title {

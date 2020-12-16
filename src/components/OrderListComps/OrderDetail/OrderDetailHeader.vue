@@ -33,12 +33,18 @@
           <span>文件内容：</span>
           <el-tooltip popper-class="table-item" :enterable='false'
             :content="info4OrderSummary.Content" placement="top-start">
-            <span>{{info4OrderSummary.Content}}</span>
+            <span> {{info4OrderSummary.Content}}</span>
           </el-tooltip>
         </p>
         <p>
           <span>下单时间：</span>
-          <span>{{info4OrderSummary.CreateTime | format2MiddleLangTypeDate}}</span>
+          <span> {{info4OrderSummary.CreateTime | format2MiddleLangTypeDate}}</span>
+        </p>
+        <p class="ProducePeriod">
+          <span>工期时间：</span>
+          <span :class="!afterPay ? 'is-pink' : ''">
+            <template v-if="!afterPay">{{info4OrderSummary.ProducePeriod | getPayTime}}</template>
+            {{info4OrderSummary.ProducePeriod | getDoneTime}}</span>
         </p>
       </li>
     </ul>
@@ -51,6 +57,10 @@ export default {
     info4OrderSummary: {
       type: Object,
       default: () => ({}),
+    },
+    afterPay: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -128,8 +138,8 @@ export default {
       }
       &.file-box {
         width: 465px;
-        padding-top: 44px;
-        height: 86px;
+        padding-top: 14px;
+        height: 105px;
         > p {
           padding: 0 25px;
           overflow: hidden;
@@ -137,7 +147,10 @@ export default {
           white-space: nowrap;
           line-height: 20px;
           &.file-content {
-            margin-bottom: 22px;
+            margin-bottom: 23px;
+          }
+          &.ProducePeriod {
+            margin-top: 13px;
           }
         }
       }

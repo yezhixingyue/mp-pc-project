@@ -255,15 +255,15 @@ export default {
     position: relative;
     background-color: #fff;
     > .header {
-      height: 71px;
+      height: 60px;
       width: 1200px;
       margin: 0 auto;
       box-sizing: border-box;
       // z-index: 999;
       > li {
         float: left;
-        height: 70px;
-        line-height: 70px;
+        height: 59px;
+        line-height: 59px;
         text-align: center;
         width: 80px;
         font-size: 14px;
@@ -452,7 +452,7 @@ export default {
     width: 100vw;
     left: 0;
     padding: 0;
-    top: 69px;
+    top: 60px;
     box-shadow: none;
     > .content {
       width: 100%;

@@ -20,9 +20,10 @@
         <el-button class="button-title-pink" @click="onSave2TheCar">
           <i class="iconfont icon-jiarugouwuche" ></i>加入购物车</el-button>
         <el-button type="danger" @click="onSubmitOrder">直接下单</el-button>
-        <div class="result" v-if="ProductQuotationResult">
+        <ComputedResultComp
+          :ProductQuotationResult='ProductQuotationResult' :showExpressCost='true' :selectedCoupon='selectedCoupon' />
+        <!-- <div class="result" v-if="ProductQuotationResult">
           <span>成交价<em class="is-gray is-font-12">（不含运费）</em>：
-            <!-- <i class="is-pink is-font-14">¥ </i> -->
             <i class="is-pink is-bold is-font-20">{{Cost}}</i>
             <i class="is-pink is-font-14"> 元</i>
           </span>
@@ -40,7 +41,7 @@
           <span v-if="ProductQuotationResult.ExpressCost || ProductQuotationResult.ExpressCost === 0"
             >，运费：<i>{{ProductQuotationResult.ExpressCost}}元</i></span>
           <span class="mg-left"> ）</span>
-        </div>
+        </div> -->
       </div>
     </div>
   </section>
@@ -49,10 +50,12 @@
 <script>
 import { mapState } from 'vuex';
 import UploadComp4BreakPoint from '@/components/common/UploadComp/UploadComp4BreakPoint.vue';
+import ComputedResultComp from '../ProductQuotationContentComps/NewPcComps/ComputedResultComp.vue';
 
 export default {
   components: {
     UploadComp4BreakPoint,
+    ComputedResultComp,
   },
   computed: {
     ...mapState('Quotation', ['selectedCoupon', 'ProductQuotationResult', 'addressInfo4PlaceOrder']),
@@ -194,6 +197,7 @@ export default {
       // text-align: right;
       padding-bottom: 50px;
       margin-top: 60px;
+      position: relative;
       > button {
         width: 150px;
         height: 45px;
@@ -212,8 +216,9 @@ export default {
         }
       }
       > div {
-        display: inline-block;
-        margin-left: 25px
+       position: absolute;
+       top: 0;
+       left: 390px;
       }
     }
   }

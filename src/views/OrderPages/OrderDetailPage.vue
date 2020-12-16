@@ -5,7 +5,7 @@
     </header>
     <ul class="content">
       <li>
-        <OrderDetailHeader :info4OrderSummary='info4OrderSummary' />
+        <OrderDetailHeader :info4OrderSummary='info4OrderSummary' :afterPay='true' />
       </li>
       <li>
         <OrderProgress @setProgressDataCompleted='setProgressDataCompleted' :OrderID='this.curOrderDetailData.OrderID'/>
@@ -85,7 +85,7 @@ export default {
     ...mapState('order', ['curOrderDetailData']),
     info4OrderSummary() {
       const {
-        OutPlate, Content, OrderID, CreateTime, Express, Status, Package,
+        OutPlate, Content, OrderID, CreateTime, Express, Status, Package, ProducePeriod,
       } = this.curOrderDetailData;
       const {
         AddressDetail, ExpressArea, Consignee, Mobile,
@@ -102,6 +102,7 @@ export default {
         Consignee,
         Mobile,
         Status,
+        ProducePeriod,
       };
     },
     promotePrice() {

@@ -155,7 +155,7 @@ export default {
 
 <style lang='scss'>
 .mp-pc-common-page-comp-view-wrap {
-  padding-top: 130px;
+  padding-top: 125px;
   background-color: rgb(245, 245, 245);
   box-sizing: border-box;
   min-width: 1200px;
@@ -164,8 +164,8 @@ export default {
     width: 100%;
     margin: 0 auto;
     box-sizing: border-box;
-    min-height: calc(100vh - 130px - 22px);
-    min-height: calc(100vh - 130px - 42px)\0;
+    min-height: calc(100vh - 115px - 22px);
+    min-height: calc(100vh - 115px - 42px)\0;
     > .back-wrapper {
       width: 1200px;
       margin: 0 auto;

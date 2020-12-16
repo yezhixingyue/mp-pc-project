@@ -27,7 +27,9 @@
           <div :style="wStyles[3]">{{ getCoupon(item.OrderID)}}</div>
           <div :style="wStyles[4]">{{item.FinalPrice}}元</div> <!-- 成交价 -->
           <div :style="wStyles[5]">{{item.DepositAmount}}元</div> <!-- 定金 -->
-          <div :style="wStyles[6]" class="is-font-12 gray">{{item.Content}}</div>
+          <div :style="wStyles[6]" class="is-font-12 is-pink">{{item.ProducePeriod | getPayTime}}
+          {{item.ProducePeriod | getDoneTime}}</div> <!-- 工期 -->
+          <div :style="wStyles[7]" class="is-font-12 gray">{{item.Content}}</div>
         </li>
       </TransitionGroupCollapse4ShopCar>
     </div>

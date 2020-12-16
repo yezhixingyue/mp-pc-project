@@ -63,6 +63,7 @@ export default {
         Address: this.curShoppingCarDetailData.Address,
         Content: this.curShoppingCarDetailData.Content,
         FilePath: this.curShoppingCarDetailData.FilePath,
+        ProducePeriod: this.curShoppingCarDetailData.ProducePeriod,
       };
     },
   },
