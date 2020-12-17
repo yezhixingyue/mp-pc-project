@@ -83,6 +83,9 @@ export default {
     /** 当前选中的用于报价的产品
     ---------------------------------------- */
     curProduct: null,
+    /** 是否为点击tag标签获取产品报价信息  （ 此时不全清下单报价页面信息 只部分展示loading ）
+    ---------------------------------------- */
+    isFetchingPartProductData: false,
   },
   getters: {
     /* 全部产品分类结构树，用于报价目录展示
@@ -177,12 +180,10 @@ export default {
     -------------------------------*/
     setCurProductInfo2Quotation(state, data) {
       if (!data && data !== null) return;
-      let _tempObj;
       QuotationClassType.handlePropertyRelevanceList(data);
       QuotationClassType.handleCraftConditionList(data);
-      if (data !== null) _tempObj = QuotationClassType.init(data);
       state.curProductInfo2Quotation = data;
-      state.obj2GetProductPrice.ProductParams = _tempObj;
+      state.obj2GetProductPrice.ProductParams = QuotationClassType.init(data);
       state.initPageText = '';
     },
     /* 清除选中产品详细信息
@@ -888,6 +889,11 @@ export default {
     setCurProduct(state, data) {
       state.curProduct = data;
     },
+    /** 设置是否为点击tag标签获取产品报价信息  （ 此时不全清下单报价页面信息 只部分展示loading ）
+    ---------------------------------------- */
+    setIsFetchingPartProductData(state, bool) {
+      state.isFetchingPartProductData = bool;
+    },
   },
   actions: {
     /* 产品分类相关 getProductClassify getProductLists
@@ -913,11 +919,19 @@ export default {
     },
     /* 获取产品详情
     -------------------------------*/
-    async getProductDetail({ state, commit }) {
-      commit('clearCurProductInfo2Quotation');
-      const res = await api.getProductDetail(state.curProductID);
-      if (res.data.Status !== 1000) return;
+    async getProductDetail({ state, commit }, clearOldData = true) {
+      if (clearOldData) commit('clearCurProductInfo2Quotation');
+      let isError = false;
+      // if (!clearOldData) commit('setIsFetchingPartProductData', true);
+      const res = await api.getProductDetail([state.curProductID, false]).catch(() => isError = true); // !clearOldData
+      if (!clearOldData) commit('setIsFetchingPartProductData', false);
+      if (isError) {
+        if (!clearOldData) commit('setIsFetchingPartProductData', false);
+        return false;
+      }
+      if (res.data.Status !== 1000) return false;
       commit('setCurProductInfo2Quotation', res.data.Data);
+      return true;
     },
     /* 获取产品报价信息
     -------------------------------*/

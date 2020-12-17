@@ -13,142 +13,144 @@
         </li>
       </ul>
     </header> -->
-    <div class="content">
-      <section class="content-title" v-if="curProductShowNameInfo && curProductShowNameInfo.length === 3">
-        <span class="blue-v-line">{{curProductShowNameInfo[0]}}</span>
-        <span>{{curProductShowNameInfo[1]}}</span>
-        <span>-</span>
-        <span>{{curProductShowNameInfo[2]}}</span>
-      </section>
-      <SwiperClassifyComp />
-      <section class="count-model-box">
-          <!-- 数量 -->
-        <ProductCountComp
-          :option="countOption"
-          :remark="obj2GetProductPrice.ProductParams.Unit"
-          v-model.trim="ProductAmount"
+    <article v-if="data" v-loading='isFetchingPartProductData'>
+      <div class="content" :key="data.ProductID">
+        <section class="content-title" v-if="curProductShowNameInfo && curProductShowNameInfo.length === 3">
+          <span class="blue-v-line">{{curProductShowNameInfo[0]}}</span>
+          <span>{{curProductShowNameInfo[1]}}</span>
+          <span>-</span>
+          <span>{{curProductShowNameInfo[2]}}</span>
+        </section>
+        <SwiperClassifyComp />
+        <section class="count-model-box">
+            <!-- 数量 -->
+          <ProductCountComp
+            :option="countOption"
+            :remark="obj2GetProductPrice.ProductParams.Unit"
+            v-model.trim="ProductAmount"
+          />
+          <ProductCountComp
+            v-if="obj2GetProductPrice.ProductParams.AllowMultyKind"
+            remark="款"
+            title="款数"
+            v-model.trim="KindCount"
+          />
+        </section>
+
+        <!-- 属性 -->
+        <attributes-comp v-model="AttributeList" />
+
+        <!-- 联拼行列数及是否允许多款联拼 -->
+        <multy-kind-makeup
+          :AllowMultyKindMakeup="
+            obj2GetProductPrice.ProductParams.AllowMultyKindMakeup
+          "
+          :maxColCount="obj2GetProductPrice.ProductParams.MaxMakeupColumnNumber"
+          :maxRowCount="obj2GetProductPrice.ProductParams.MaxMakeupRowNumber"
         />
-        <ProductCountComp
-          v-if="obj2GetProductPrice.ProductParams.AllowMultyKind"
-          remark="款"
-          title="款数"
-          v-model.trim="KindCount"
+
+        <!-- :list="obj2GetProductPrice.ProductParams.PropertyList"
+        @change="changeAttributes" -->
+        <!-- 必选工艺 -->
+        <craft-list-comp
+          title="必选工艺"
+          v-if="RequiredCraft"
+          :selectedArr="obj2GetProductPrice.ProductParams.CraftList2Req.First"
+          @setCraftList="setProductParamsCraftList"
+          :data="RequiredCraft"
         />
+        <!-- 可选工艺 -->
+        <craft-list-comp
+          title="可选工艺"
+          v-if="notRequiredCraft"
+          :selectedArr="obj2GetProductPrice.ProductParams.CraftList2Req.First"
+          @setCraftList="setProductParamsCraftList"
+          :data="notRequiredCraft"
+        />
+        <!-- 部件列表组件 -->
+        <PartComps :PartList="obj2GetProductPrice.ProductParams.PartList" />
+      </div>
+
+      <section class="coupon-calculate-price-wrap">
+        <header>
+          <el-button type="primary" @click.native="go2GetProductPrice" :loading="isGettingPrice" class="get-price-btn">
+            <template v-if="isGettingPrice">
+              计算中</template>
+            <template v-else>计算价格</template>
+          </el-button>
+          <ComputedResultComp
+          :ProductQuotationResult='ProductQuotationResult'
+          :selectedCoupon='selectedCoupon'
+            v-if="!priceGetErrMsg"
+          />
+          <div class="result center" v-if="priceGetErrMsg">
+            <span class="is-pink">{{ priceGetErrMsg }}</span>
+          </div>
+          <div class="result center" v-if="!priceGetErrMsg && !ProductQuotationResult && !isGettingPrice">
+            <span class="gray no-cursor is-font-12" v-if="selectedCoupon" @click.stop="null">已选择满
+              {{selectedCoupon.MinPayAmount}}元减{{selectedCoupon.Amount}}元
+              <i class="is-pink"> {{ couponConditionText }}</i>
+            </span>
+          </div>
+        </header>
+        <footer>
+        <el-collapse v-model="activeNames" @change="handleChange">
+          <el-collapse-item name="1">
+            <template slot="title">
+              <el-button class="button-title-pink is-font-13" @click="onBtnClick">
+                使用优惠券<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+            </template>
+            <section class="coupon-wrap">
+              <header>
+                <span>激活优惠券：</span>
+                <el-input v-model.trim="computedCouponCode2Add" placeholder="请输入优惠券激活码"></el-input>
+                <el-button type="primary" :disabled='!computedCouponCode2Add' @click="getCouponActivate">激活</el-button>
+                <!-- <i class="span-title-blue">不使用优惠券</i> -->
+              </header>
+              <ul class="coupon-list mp-scroll-wrap" v-if="couponList.length > 0">
+                <li class="float" v-for="item in couponList" :key="item.CouponCode" @click="addCouponCode(item)"
+                  :class="{selected: selectedCoupon && item.CouponCode === selectedCoupon.CouponCode}" >
+                  <div class="header">
+                    <span>
+                      <i class="is-font-14">¥</i>
+                      <i class="is-bold is-font-30">{{item.Amount}}</i>
+                    </span>
+                    <span class="is-font-12">
+                      满<i class="is-font-14">{{item.MinPayAmount}}</i>元可用
+                    </span>
+                  </div>
+                  <div class="content is-font-12">
+                    <p>
+                      <span>限产品：</span>
+                      <el-tooltip class="item" effect="dark" :enterable='false' placement="top-start">
+                        <ul slot="content">
+                          <li v-for="(it, i) in item.ProductString.split('\n')" :key="i">{{it}}</li>
+                        </ul>
+                        <span class="product">{{item.ProductString}}</span>
+                      </el-tooltip>
+                    </p>
+                    <p>
+                      <span>有效期至：</span>
+                      <span>{{item.ValidEndTime | format2MiddleLangTypeDate}}</span>
+                    </p>
+                  </div>
+                  <div class="aside">点击选择</div>
+                  <!-- <el-tooltip class="item" effect="dark" content="点击取消" placement="top"> -->
+                    <div class="icon-box"></div>
+                  <!-- </el-tooltip> -->
+                </li>
+              </ul>
+              <footer v-else>
+                <span>当前无可用优惠券,</span>
+                <span @click="handleGoToCouponCenter" class="span-title-blue">前往领券中心查看及领取优惠券</span>
+              </footer>
+            </section>
+          </el-collapse-item>
+        </el-collapse>
+        </footer>
       </section>
-
-      <!-- 属性 -->
-      <attributes-comp v-model="AttributeList" />
-
-      <!-- 联拼行列数及是否允许多款联拼 -->
-      <multy-kind-makeup
-        :AllowMultyKindMakeup="
-          obj2GetProductPrice.ProductParams.AllowMultyKindMakeup
-        "
-        :maxColCount="obj2GetProductPrice.ProductParams.MaxMakeupColumnNumber"
-        :maxRowCount="obj2GetProductPrice.ProductParams.MaxMakeupRowNumber"
-      />
-
-      <!-- :list="obj2GetProductPrice.ProductParams.PropertyList"
-      @change="changeAttributes" -->
-      <!-- 必选工艺 -->
-      <craft-list-comp
-        title="必选工艺"
-        v-if="RequiredCraft"
-        :selectedArr="obj2GetProductPrice.ProductParams.CraftList2Req.First"
-        @setCraftList="setProductParamsCraftList"
-        :data="RequiredCraft"
-      />
-      <!-- 可选工艺 -->
-      <craft-list-comp
-        title="可选工艺"
-        v-if="notRequiredCraft"
-        :selectedArr="obj2GetProductPrice.ProductParams.CraftList2Req.First"
-        @setCraftList="setProductParamsCraftList"
-        :data="notRequiredCraft"
-      />
-      <!-- 部件列表组件 -->
-      <PartComps :PartList="obj2GetProductPrice.ProductParams.PartList" />
-    </div>
-
-    <section class="coupon-calculate-price-wrap">
-      <header>
-        <el-button type="primary" @click.native="go2GetProductPrice" :loading="isGettingPrice" class="get-price-btn">
-          <template v-if="isGettingPrice">
-            计算中</template>
-          <template v-else>计算价格</template>
-        </el-button>
-        <ComputedResultComp
-         :ProductQuotationResult='ProductQuotationResult'
-         :selectedCoupon='selectedCoupon'
-          v-if="!priceGetErrMsg"
-         />
-        <div class="result center" v-if="priceGetErrMsg">
-          <span class="is-pink">{{ priceGetErrMsg }}</span>
-        </div>
-        <div class="result center" v-if="!priceGetErrMsg && !ProductQuotationResult && !isGettingPrice">
-          <span class="gray no-cursor is-font-12" v-if="selectedCoupon" @click.stop="null">已选择满
-            {{selectedCoupon.MinPayAmount}}元减{{selectedCoupon.Amount}}元
-            <i class="is-pink"> {{ couponConditionText }}</i>
-          </span>
-        </div>
-      </header>
-      <footer>
-      <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item name="1">
-          <template slot="title">
-            <el-button class="button-title-pink is-font-13" @click="onBtnClick">
-              使用优惠券<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-          </template>
-          <section class="coupon-wrap">
-            <header>
-              <span>激活优惠券：</span>
-              <el-input v-model.trim="computedCouponCode2Add" placeholder="请输入优惠券激活码"></el-input>
-              <el-button type="primary" :disabled='!computedCouponCode2Add' @click="getCouponActivate">激活</el-button>
-              <!-- <i class="span-title-blue">不使用优惠券</i> -->
-            </header>
-            <ul class="coupon-list mp-scroll-wrap" v-if="couponList.length > 0">
-              <li class="float" v-for="item in couponList" :key="item.CouponCode" @click="addCouponCode(item)"
-                :class="{selected: selectedCoupon && item.CouponCode === selectedCoupon.CouponCode}" >
-                <div class="header">
-                  <span>
-                    <i class="is-font-14">¥</i>
-                    <i class="is-bold is-font-30">{{item.Amount}}</i>
-                  </span>
-                  <span class="is-font-12">
-                    满<i class="is-font-14">{{item.MinPayAmount}}</i>元可用
-                  </span>
-                </div>
-                <div class="content is-font-12">
-                  <p>
-                    <span>限产品：</span>
-                    <el-tooltip class="item" effect="dark" :enterable='false' placement="top-start">
-                      <ul slot="content">
-                        <li v-for="(it, i) in item.ProductString.split('\n')" :key="i">{{it}}</li>
-                      </ul>
-                      <span class="product">{{item.ProductString}}</span>
-                    </el-tooltip>
-                  </p>
-                  <p>
-                    <span>有效期至：</span>
-                    <span>{{item.ValidEndTime | format2MiddleLangTypeDate}}</span>
-                  </p>
-                </div>
-                <div class="aside">点击选择</div>
-                <!-- <el-tooltip class="item" effect="dark" content="点击取消" placement="top"> -->
-                  <div class="icon-box"></div>
-                <!-- </el-tooltip> -->
-              </li>
-            </ul>
-            <footer v-else>
-              <span>当前无可用优惠券,</span>
-              <span @click="handleGoToCouponCenter" class="span-title-blue">前往领券中心查看及领取优惠券</span>
-            </footer>
-          </section>
-        </el-collapse-item>
-      </el-collapse>
-      </footer>
-    </section>
+    </article>
 
     <AddShowChangeComp ref="AddShowChangeComp" />
 
@@ -173,15 +175,7 @@ import OrderSubmitComp from '../PlaceOrderComps/OrderSubmitComp.vue';
 import SwiperClassifyComp from './NewPcComps/SwiperClassifyComp.vue';
 
 export default {
-  props: {
-    /**
-     * 当前产品主体数据
-     */
-    data: {
-      type: Object,
-      required: true,
-    },
-  },
+  props: ['data'],
   components: {
     ProductCountComp,
     MultyKindMakeup,
@@ -195,7 +189,7 @@ export default {
   },
   computed: {
     // eslint-disable-next-line max-len
-    ...mapState('Quotation', ['obj2GetProductPrice', 'ProductQuotationResult', 'curProductClass', 'curProductID', 'selectedCoupon', 'addressInfo4PlaceOrder']),
+    ...mapState('Quotation', ['obj2GetProductPrice', 'ProductQuotationResult', 'curProductClass', 'curProductID', 'selectedCoupon', 'addressInfo4PlaceOrder', 'isFetchingPartProductData']),
     ...mapGetters('Quotation', ['curProductShowNameInfo']),
     ...mapState('common', ['customerInfo']),
     // 数量下拉列表数据
@@ -443,7 +437,7 @@ export default {
   font-size: 14px;
   color: #585858;
 
-  > .content {
+  > article > .content {
     > .content-title {
       color: #333;
       font-weight: 700;
@@ -494,7 +488,7 @@ export default {
     }
     // ------------------------------- ⬆
   }
-  > .coupon-calculate-price-wrap {
+  > article > .coupon-calculate-price-wrap {
     position: relative;
     > header {
       text-align: left;

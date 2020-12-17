@@ -1,5 +1,5 @@
 <template>
-  <section class="mp-pc-place-order-address-show-and-change-wrap">
+  <section class="mp-pc-place-order-address-show-and-change-wrap" v-if="customerInfo">
     <header class="bg-gray"></header>
     <div class="comp-title float">
       <span class="left is-bold">收货信息</span>

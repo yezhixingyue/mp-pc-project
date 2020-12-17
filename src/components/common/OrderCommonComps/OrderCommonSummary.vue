@@ -27,15 +27,11 @@
       </li>
       <li class="right gray">
         <p>
-          <span class="title">文件内容：</span>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            :content="info4OrderSummary.Content"
-            placement="top-start"
-          >
-            <span>{{info4OrderSummary.Content}}</span>
-          </el-tooltip>
+          <template v-if="info4OrderSummary.ProducePeriod">
+            <span class="title">工期时间：</span>
+            <span class="is-pink">{{info4OrderSummary.ProducePeriod | getPayTime}}
+              {{info4OrderSummary.ProducePeriod | getDoneTime}}</span>
+          </template>
         </p>
         <p>
           <span class="title">印刷文件：</span>
@@ -48,10 +44,16 @@
             <span>{{info4OrderSummary.FilePath}}</span>
           </el-tooltip>
         </p>
-        <p v-if="info4OrderSummary.ProducePeriod">
-          <span class="title">工期时间：</span>
-          <span class="is-pink">{{info4OrderSummary.ProducePeriod | getPayTime}}
-            {{info4OrderSummary.ProducePeriod | getDoneTime}}</span>
+        <p>
+          <span class="title">文件内容：</span>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="info4OrderSummary.Content"
+            placement="top-start"
+          >
+            <span>{{info4OrderSummary.Content}}</span>
+          </el-tooltip>
         </p>
       </li>
     </ul>
@@ -161,6 +163,9 @@ export default {
       border-left: 1px solid #eee;
       line-height: 32px;
       padding-top: 14px;
+      > p {
+        height: 32px;
+      }
     }
   }
   .title {

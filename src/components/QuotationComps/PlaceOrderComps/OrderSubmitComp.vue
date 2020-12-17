@@ -154,6 +154,7 @@ export default {
               height: 30px;
               font-size: 13px;
               line-height: 26px\0;
+              width: 100%;
             }
           }
           > .title {

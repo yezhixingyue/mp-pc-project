@@ -1,6 +1,7 @@
 <template>
-  <section class="mp-duration-content-swiper-classify-comp-wrap">
-    <el-tabs v-model="activeName" type="card">
+  <section class="mp-duration-content-swiper-classify-comp-wrap"
+   :class="{'show-scroll': scrollLeft > 0, 'show-end': isEnd}">
+    <el-tabs v-model="activeName" type="card" :onTabScroll='onTabScroll' ref="tabs">
       <el-tab-pane
         v-for="item in classiftList"
         :key="item.ProductID"
@@ -15,6 +16,12 @@
 import { mapState, mapGetters } from 'vuex';
 
 export default {
+  data() {
+    return {
+      scrollLeft: 0,
+      isEnd: false,
+    };
+  },
   computed: {
     ...mapState('Quotation', ['curProductClass', 'curProductID']),
     ...mapGetters('Quotation', ['allProductClassify']),
@@ -32,9 +39,26 @@ export default {
       get() {
         return this.curProductID;
       },
-      set(val) {
-        console.log(val);
+      async set(val) {
+        if (val === this.curProductID) return;
+        const t = this.classiftList.find(it => it.ProductID === val);
+        if (t) {
+          this.$store.commit('Quotation/setCurProductInfo', t);
+          this.$store.commit('Quotation/setCurProduct', t);
+          this.$store.commit('Quotation/setSelectedCoupon', null);
+          // this.$store.commit('Quotation/setIsFetchingPartProductData', true);
+          const key = await this.$store.dispatch('Quotation/getProductDetail', false);
+          // this.$store.commit('Quotation/setIsFetchingPartProductData', false);
+          if (!key) this.$store.commit('Quotation/clearCurProductInfo2Quotation');
+        }
       },
+    },
+  },
+  methods: {
+    onTabScroll({ navSize, containerSize, navOffset }) {
+      this.scrollLeft = navOffset;
+      if (navSize === containerSize + navOffset) this.isEnd = true;
+      else this.isEnd = false;
     },
   },
 };
@@ -43,29 +67,45 @@ export default {
 <style lang='scss'>
 .mp-duration-content-swiper-classify-comp-wrap {
   padding-bottom: 35px;
+  padding-right: 32px;
+
+  .el-tabs {
+    width: 1080px;
+  }
   .el-tabs__header {
     margin: 0;
     border-color: #e5e5e5;
     .el-tabs__nav-wrap {
-      padding: 0 38px;
+      padding-right: 0px;
+      padding-left: 0;
+      // margin: 0 20px;
+      overflow: unset;
       > span {
-        line-height: 35px;
-        width: 35px;
-        height: 35px;
+        line-height: 18px;
+        width: 18px;
+        height: 18px;
+        right: -38px;
+        &.el-tabs__nav-prev {
+          display: none;
+        }
         > i {
-          height: 22px;
-          width: 22px;
+          height: 18px;
+          width: 18px;
           position: absolute;
-          top: 6px;
-          left: 6px;
+          top: 8px;
+          left: 0px;
           background-color: #f5f5f5;
           border-radius: 50%;
           &::before {
             position: absolute;
-            left: 5px;
-            top: 5px;
+            left: 3px;
+            top: 3px;
           }
         }
+      }
+      > div {
+        // padding-right: 20px;
+        // overflow: hidden;
       }
     }
     .el-tabs__nav {
@@ -77,6 +117,11 @@ export default {
       border: 1px solid transparent;
       border-bottom: none;
       color: #888;
+      padding: 0 16px;
+      user-select: none;
+      &:hover {
+        color: #428dfa;
+      }
       &.is-active {
         border-color: #e5e5e5;
         position: relative;
@@ -100,6 +145,9 @@ export default {
           background-color: #428dfa;
         }
       }
+      &:last-of-type {
+        // margin-right: 20px;
+      }
     }
   }
   .el-tabs--card > .el-tabs__header .el-tabs__item:first-child {
@@ -107,6 +155,28 @@ export default {
     border-bottom: none;
     &.is-active {
       border-color: #e5e5e5;
+    }
+  }
+  &.show-scroll {
+    padding-left: 32px;
+    .el-tabs__nav-wrap {
+      // padding-left: 20px;
+      > span {
+        &.el-tabs__nav-prev {
+          display: block;
+          left: -30px;
+        }
+      }
+    }
+  }
+  &.show-end {
+    padding-right: 0px;
+    .el-tabs__nav-wrap {
+      > span {
+        &.el-tabs__nav-next {
+          display: none;
+        }
+      }
     }
   }
 }

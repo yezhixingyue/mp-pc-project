@@ -5,7 +5,7 @@
     </header>
     <div class="content">
       <ProductQuotationContentComp v-if="curProductInfo2Quotation" :data='curProductInfo2Quotation' />
-      <div v-else-if='initPageText' class="empty">
+      <div v-else-if='initPageText && !curProductInfo2Quotation' class="empty">
         <span class="iconfont icon-wancheng is-success"></span>
         <span>{{initPageText}}</span>
       </div>

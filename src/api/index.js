@@ -65,9 +65,10 @@ const api = {
       // TakeOrderWay: 1,
     }, { closeLoading: true });
   },
-  getProductDetail(productID) { // 根据产品ID获取到产品详细信息  GET /Api/Product/GetProductDetail  productID
+  getProductDetail([productID, closeLoading]) { // 根据产品ID获取到产品详细信息  GET /Api/Product/GetProductDetail  productID
     return instance.get(
       `/Api/Product/GetProductDetail?productID=${productID}&placeOrder=${true}`,
+      { closeLoading },
     );
   },
   getProductPrice(data) { // 价格信息计算  POST /Api/Calculate/ProductPrice
