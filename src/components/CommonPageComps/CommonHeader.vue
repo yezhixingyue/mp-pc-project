@@ -626,7 +626,7 @@ export default {
   }
   > .recharge-remark {
     position: fixed;
-    top: 130px;
+    top: 125px;
     left: 0;
     right: 0;
     bottom: 0;

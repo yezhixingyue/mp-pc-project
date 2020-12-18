@@ -68,15 +68,15 @@ Vue.filter('formatStatus4PackageList', status => {
 Vue.filter('getPayTime', ProducePeriod => {
   if (!ProducePeriod) return '';
   const { LatestPayTime } = ProducePeriod;
-  console.log(LatestPayTime.split('T')[1].split('+')[0].slice(0, 5));
+  // console.log(LatestPayTime.split('T')[1].split('+')[0].slice(0, 5));
   return `${LatestPayTime.split('T')[1].split('+')[0].slice(0, 5)}前支付`;
 });
 
 Vue.filter('getDoneTime', ProducePeriod => {
   if (!ProducePeriod) return '';
-  const { IncludeDiliveryTime, Time } = ProducePeriod;
+  const { IncludeDiliveryTime, TotalTime } = ProducePeriod;
   const str = IncludeDiliveryTime ? '送达' : '出货';
-  const fullDay = Time.split('T')[0];
+  const fullDay = TotalTime.split('T')[0];
   const m = fullDay.split('-')[1];
   const d = fullDay.split('-')[2];
   let dayTimeStr = `${m}月${d}日`;
@@ -96,6 +96,7 @@ Vue.filter('getDoneTime', ProducePeriod => {
       dayTimeStr = '后天';
     }
   }
-  const hour = Time.split('T')[1].split('+')[0].slice(0, 5);
+  const hour = TotalTime.split('T')[1].split('+')[0].slice(0, 5); // 显示具体时间（时 分 秒）
+  // const hour = ''; // 不显示具体时间
   return `预计${dayTimeStr}${hour}${str}`;
 });

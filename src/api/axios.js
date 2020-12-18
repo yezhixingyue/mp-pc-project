@@ -72,14 +72,14 @@ axios.interceptors.response.use(
     const oneCondition4NotNeedToast = !([9164, 9165, 9166, 9167, 9168, 9169, 9170].includes(response.data.Status) && ['/Api/Order/PreCreate', '/Api/Quotation/Save'].includes(_url));
     //  || !['/Api/Order/PreCreate', '/Api/Quotation/Save'].includes(_url))
 
-    console.log(oneCondition4NotNeedToast);
+    // console.log(oneCondition4NotNeedToast);
 
     if ([7025, 8037].includes(response.data.Status)) {
-      Message({
-        showClose: true,
-        message: `${response.data.Message}`,
-        type: 'error',
-      });
+      // Message({
+      //   showClose: true,
+      //   message: `${response.data.Message}`,
+      //   type: 'error',
+      // });
       router.replace('/login');
       sessionStorage.removeItem('token');
       localStorage.removeItem('token');

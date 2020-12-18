@@ -103,10 +103,6 @@ export default {
           }
         }
       }
-      > div {
-        // padding-right: 20px;
-        // overflow: hidden;
-      }
     }
     .el-tabs__nav {
       border: none;
@@ -144,9 +140,6 @@ export default {
           height: 3px;
           background-color: #428dfa;
         }
-      }
-      &:last-of-type {
-        // margin-right: 20px;
       }
     }
   }
