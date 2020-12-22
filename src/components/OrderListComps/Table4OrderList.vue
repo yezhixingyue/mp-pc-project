@@ -67,7 +67,7 @@ export default {
         '未付',
         '退款',
         '状态',
-        '下单时间',
+        '付款时间',
         '操作',
       ],
       curSelectedList: [],

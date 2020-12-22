@@ -96,7 +96,7 @@ Vue.filter('getDoneTime', ProducePeriod => {
       dayTimeStr = '后天';
     }
   }
-  const hour = TotalTime.split('T')[1].split('+')[0].slice(0, 5); // 显示具体时间（时 分 秒）
-  // const hour = ''; // 不显示具体时间
+  // const hour = TotalTime.split('T')[1].split('+')[0].slice(0, 5); // 显示具体时间（时 分 秒）
+  const hour = ''; // 不显示具体时间
   return `预计${dayTimeStr}${hour}${str}`;
 });

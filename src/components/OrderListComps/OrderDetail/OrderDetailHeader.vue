@@ -5,7 +5,7 @@
       <li class="status-box" :class="{
         moving: +info4OrderSummary.Status === 80,
         unPay: +info4OrderSummary.Status === 10,
-        normal: [20, 30, 40, 55, 60, 70].includes(+info4OrderSummary.Status),
+        normal: [20, 30, 40, 45, 50, 55, 60, 70].includes(+info4OrderSummary.Status),
         cancel: [254, 255, 35].includes(+info4OrderSummary.Status),
         success: +info4OrderSummary.Status === 200,
       }">
@@ -38,6 +38,12 @@
         <p>
           <span>下单时间：</span>
           <span> {{info4OrderSummary.CreateTime | format2MiddleLangTypeDate}}</span>
+        </p>
+        <p>
+          <template v-if="info4OrderSummary.PayTime">
+            <span>付款时间：</span>
+            <span> {{info4OrderSummary.PayTime | format2MiddleLangTypeDate}}</span>
+          </template>
         </p>
         <p class="file-content">
           <span>文件内容：</span>
@@ -138,7 +144,7 @@ export default {
       }
       &.file-box {
         width: 465px;
-        padding-top: 14px;
+        padding-top: 10px;
         height: 105px;
         > p {
           padding: 0 25px;
@@ -146,12 +152,13 @@ export default {
           text-overflow: ellipsis;
           white-space: nowrap;
           line-height: 20px;
-          &.file-content {
-            margin-top: 13px;
-          }
-          &.ProducePeriod {
-            margin-bottom: 23px;
-          }
+          margin-bottom: 10px;
+          // &.file-content {
+          //   margin-top: 13px;
+          // }
+          // &.ProducePeriod {
+          //   margin-bottom: 23px;
+          // }
         }
       }
     }

@@ -139,7 +139,6 @@ export default {
         const { Mobile, rememberPwd } = this.ruleForm;
         const Password = `${this.rememberInfo.Password}`;
         const obj = { Mobile, Password, Terminal: 1 };
-        console.log(obj, Password);
         this.$emit('setPanelLoading', [true, '正在登录中...']);
         const res = await this.api.getLogin(obj);
         this.$emit('setPanelLoading', [false, '']);

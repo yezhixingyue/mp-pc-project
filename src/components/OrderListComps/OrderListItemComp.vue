@@ -72,7 +72,7 @@
             'is-gray': [254, 255, 35].includes(item.Status),
             'is-success': item.Status === 200,
           }">{{item.Status | formatStatus}}</div>
-          <div :style="wStyles[13]" class="is-font-12 gray">{{item.CreateTime | format2MiddleLangTypeDate}}</div>
+          <div :style="wStyles[13]" class="is-font-12 gray">{{item.PayTime | format2MiddleLangTypeDate}}</div>
           <div :style="wStyles[14]" class="is-font-12 gray btn-wrap">
             <span class="span-title-blue" @click="goToDetailPage(item)">订单详情</span>
             <span class="span-title-pink" @click="handleOrderCancel(item)"

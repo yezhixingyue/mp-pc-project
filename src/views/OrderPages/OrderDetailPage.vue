@@ -85,7 +85,7 @@ export default {
     ...mapState('order', ['curOrderDetailData']),
     info4OrderSummary() {
       const {
-        OutPlate, Content, OrderID, CreateTime, Express, Status, Package, ProducePeriod,
+        OutPlate, Content, OrderID, CreateTime, Express, Status, Package, ProducePeriod, PayTime,
       } = this.curOrderDetailData;
       const {
         AddressDetail, ExpressArea, Consignee, Mobile,
@@ -103,6 +103,7 @@ export default {
         Mobile,
         Status,
         ProducePeriod,
+        PayTime,
       };
     },
     promotePrice() {

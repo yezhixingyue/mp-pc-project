@@ -305,8 +305,16 @@ body .iconfont {
     line-height: 30px;
     transform: rotate(0deg) !important;
     text-align: center;
+    position: relative;
     &::before {
-      content: '\e790',
+      // content: '\e790', arrow
+      content: '';
+      position: absolute;
+      width: 13px;
+      height: 14px;
+      background: url(../images/arrow.jpg) no-repeat center center/100% 100%;
+      top: 7px;
+      right: 4px;
     }
   }
 }
