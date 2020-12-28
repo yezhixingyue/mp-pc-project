@@ -498,7 +498,7 @@ export default { // 上传图片按钮
         }
         position: relative;
         &::before {
-          content: '请选择订单文件 ( 请上传cdr, jpg, jpeg, tiff, tif, rar, zip, pdf等格式的设计文件 )';
+          content: '请选择订单文件 ( 请上传cdr, jpg, jpeg, tiff, tif, rar, zip, pdf等格式的设计文件，JPG文件多面请打压缩包上传 )';
           display: inline-block;
           line-height: 35px;
           color: #989898;
@@ -523,11 +523,11 @@ export default { // 上传图片按钮
       height: 35px;
       &.empty {
         > .el-upload-list {
-          width: 450px;
+          width: 600px;
           &::before {
             top: -12px;
             opacity: 1;
-            width: 38em;
+            width: 55em;
             animation: afterAnimate 0.4s;
           }
         }

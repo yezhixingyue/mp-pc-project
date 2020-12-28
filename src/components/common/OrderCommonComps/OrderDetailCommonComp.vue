@@ -232,16 +232,24 @@ export default {
         const _obj = {};
         _obj.craftName = it.Attributes.NickName;
         const _subArr = [];
-        if (it.PropertyList.length > 1) _subArr.push(`${it.PropertyList.length}处`);
-        else {
-          it.PropertyList.forEach(it2 => {
-            it2.forEach(it3 => {
-              const _str = it3.ShowValue + it3.ShowUnit;
-              _subArr.push(_str);
-            });
+        it.PropertyList.forEach(it2 => {
+          it2.forEach(it3 => {
+            const _str = it3.ShowValue + it3.ShowUnit;
+            _subArr.push(_str);
           });
-        }
-        _obj.Property = _subArr.join(' ');
+        });
+        // if (it.PropertyList.length > 1) _subArr.push(`${it.PropertyList.length}处`);
+        // else {
+        //   it.PropertyList.forEach(it2 => {
+        //     it2.forEach(it3 => {
+        //       const _str = it3.ShowValue + it3.ShowUnit;
+        //       _subArr.push(_str);
+        //     });
+        //   });
+        // }
+        _obj.Property = _subArr.join('、');
+        if (_subArr.length > 1) _obj.craftName = `${_obj.craftName}${_subArr.length}处`;
+        // _obj.Property = _subArr.join(' ');
         _arr.push(_obj);
       });
       return _arr;
@@ -272,16 +280,23 @@ export default {
         const _obj = {};
         _obj.craftName = it.Attributes.NickName;
         const _subArr = [];
-        if (it.PropertyList.length > 1) _subArr.push(`${it.PropertyList.length}处`);
-        else {
-          it.PropertyList.forEach(it2 => {
-            it2.forEach(it3 => {
-              const _str = it3.ShowValue + it3.ShowUnit;
-              _subArr.push(_str);
-            });
+        it.PropertyList.forEach(it2 => {
+          it2.forEach(it3 => {
+            const _str = it3.ShowValue + it3.ShowUnit;
+            _subArr.push(_str);
           });
-        }
-        _obj.Property = _subArr.join(' ');
+        });
+        // if (it.PropertyList.length > 1) _subArr.push(`${it.PropertyList.length}处`);
+        // else {
+        //   it.PropertyList.forEach(it2 => {
+        //     it2.forEach(it3 => {
+        //       const _str = it3.ShowValue + it3.ShowUnit;
+        //       _subArr.push(_str);
+        //     });
+        //   });
+        // }
+        _obj.Property = _subArr.join('、');
+        if (_subArr.length > 1) _obj.craftName = `${_obj.craftName}${_subArr.length}处`;
         _arr.push(_obj);
       });
       return _arr;

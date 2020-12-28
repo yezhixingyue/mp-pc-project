@@ -69,7 +69,7 @@ Vue.filter('getPayTime', ProducePeriod => {
   if (!ProducePeriod) return '';
   const { LatestPayTime } = ProducePeriod;
   // console.log(LatestPayTime.split('T')[1].split('+')[0].slice(0, 5));
-  return `${LatestPayTime.split('T')[1].split('+')[0].slice(0, 5)}前支付`;
+  return `${LatestPayTime.split('T')[1].split('+')[0].slice(0, 5)}点前支付`;
 });
 
 Vue.filter('getDoneTime', ProducePeriod => {
