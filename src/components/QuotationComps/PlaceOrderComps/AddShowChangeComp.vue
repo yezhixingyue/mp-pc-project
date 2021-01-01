@@ -9,7 +9,9 @@
         <li>
           <div class="platform-code-box">
             <span class="title">平台单号：</span>
-            <el-input v-model.trim="outPlaceCode" maxlength="20" show-word-limit placeholder="第三方平台单号"></el-input>
+            <el-input v-model.trim="outPlaceCode" maxlength="19" :class="isPlatformCodeError ? 'error': ''"
+             show-word-limit placeholder="电商(淘宝、京东、拼多多)平台单号"></el-input>
+            <div v-show="isPlatformCodeError" class="is-pink is-font-12">平台单号只能输入13位 18位 19位纯数字</div>
           </div>
           <div  class="express-box">
             <span class="title">配送：</span>
@@ -56,11 +58,11 @@
         </li>
         <li v-else class="has-none-consignee">
           <span class="is-pink">尚未设置收货地址， </span>
-          <span class="right span-title-blue" @click="handleChangeAdd"> {{ addCompTitle }}</span>
+          <span class="right span-title-blue" @click="handleChangeAdd"> 点击此处{{ addCompTitle }}</span>
           <span class="is-primary">
-             ， 前往
+             ， 或前往
             <router-link to="/mySetting/address" tag="i" class="span-title-blue">个人设置 - 收货地址</router-link>
-             设置常用收货地址
+             设置常用收货地址 (<i class="is-gray">推荐</i>)
           </span>
         </li>
         <!-- <li class="add-title">
@@ -264,6 +266,7 @@ export default {
       },
       loadingAddInfo: false,
       loadingAddValid: false,
+      isPlatformCodeError: false,
     };
   },
   computed: {
@@ -319,7 +322,9 @@ export default {
         return this.PlatformCode;
       },
       set(newVal) {
-        this.PlatformCode = newVal;
+        this.PlatformCode = newVal.replace(/\D/g, '');
+        if ([0, 13, 18, 19].indexOf(this.PlatformCode.length) === -1) this.isPlatformCodeError = true;
+        else this.isPlatformCodeError = false;
         this.setInfo4ReqObj();
       },
     },
@@ -599,14 +604,30 @@ export default {
         > div {
           display: inline-block;
           &.platform-code-box {
+            position: relative;
             > .el-input {
-              width: 240px;
+              width: 252px;
               > input {
                 height: 30px;
                 line-height: 28px;
+                padding-left: 8px;
+                font-size: 13px;
+                &::placeholder {
+                  font-size: 12px;
+                }
+              }
+              &.error {
+                > input {
+                  border-color: #ff3769;
+                }
               }
             }
-            margin-right: 52px;
+            > div.is-pink {
+              position: absolute;
+              left: 80px;
+              top: 33px;
+            }
+            margin-right: 40px;
           }
           &.express-box {
             .el-input {

@@ -64,6 +64,7 @@ export default {
       const {
         OutPlate, Content, OrderID, CreateTime, Express, Status, Package, ProducePeriod,
       } = this.curUnpayListDetailData;
+      console.log(ProducePeriod);
       const {
         AddressDetail, ExpressArea, Consignee, Mobile,
       } = Package.Address.Address;

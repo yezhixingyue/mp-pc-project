@@ -119,9 +119,11 @@ export default {
     async getProductPriceLocal() { // 校验函数  用来判断是否可以进行下单
       if (!this.fileContent) return '请输入文件内容';
       if (!this.addressInfo4PlaceOrder || !this.addressInfo4PlaceOrder.Address.Address.Consignee) return '请选择配送地址';
-      if (this.addressInfo4PlaceOrder.OutPlate
-        && this.addressInfo4PlaceOrder.OutPlate.Second
-        && this.addressInfo4PlaceOrder.OutPlate.Second.length > 20) return '平台单号不能超出20个字符';
+      if (this.addressInfo4PlaceOrder.OutPlate && this.addressInfo4PlaceOrder.OutPlate.Second) {
+        if ([0, 13, 18, 19].indexOf(this.addressInfo4PlaceOrder.OutPlate.Second.length) === -1) {
+          return '平台单号只能输入13位 18位 19位纯数字';
+        }
+      }
 
       // const key = await this.$store.dispatch('Quotation/getProductPrice', this.title);
       // return key;

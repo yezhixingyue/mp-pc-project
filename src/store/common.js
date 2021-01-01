@@ -365,6 +365,7 @@ export default {
       state.customerInfo.AuthenInfo.CompanyName = CompanyName;
       state.customerInfo.AuthenInfo.DetailAddress = DetailAddress;
       state.customerInfo.AuthenInfo.SellArea = { ...SellArea };
+      state.customerInfo.AuthStatus = 2;
     },
 
   },

@@ -42,6 +42,7 @@ export default {
     updateCurUnpayListDetailData(state, data) {
       if (!state.curUnpayListDetailData) return;
       state.curUnpayListDetailData.Funds = data.Funds;
+      state.curUnpayListDetailData.ProducePeriod = data.ProducePeriod;
     },
     /** 当前完成第一步预下单 [前] 的未付款单提交的订单列表数据
     ---------------------------------------- */
