@@ -9,9 +9,9 @@
         <li>
           <div class="platform-code-box">
             <span class="title">平台单号：</span>
-            <el-input v-model.trim="outPlaceCode" maxlength="19" :class="isPlatformCodeError ? 'error': ''"
+            <el-input v-model.trim="outPlaceCode" maxlength="22" :class="isPlatformCodeError ? 'error': ''"
              show-word-limit placeholder="电商(淘宝、京东、拼多多)平台单号"></el-input>
-            <div v-show="isPlatformCodeError" class="is-pink is-font-12">平台单号只能输入13位 18位 19位纯数字</div>
+            <div v-show="isPlatformCodeError" class="is-pink is-font-12">{{PlatformCodeErrorMsg}}</div>
           </div>
           <div  class="express-box">
             <span class="title">配送：</span>
@@ -267,6 +267,7 @@ export default {
       loadingAddInfo: false,
       loadingAddValid: false,
       isPlatformCodeError: false,
+      PlatformCodeErrorMsg: '平台单号长度应为13 18 19或22位',
     };
   },
   computed: {
@@ -322,9 +323,15 @@ export default {
         return this.PlatformCode;
       },
       set(newVal) {
-        this.PlatformCode = newVal.replace(/\D/g, '');
-        if ([0, 13, 18, 19].indexOf(this.PlatformCode.length) === -1) this.isPlatformCodeError = true;
-        else this.isPlatformCodeError = false;
+        this.PlatformCode = newVal.replace(/[^0-9-]/g, '').replace(/^-/, '');
+        const reg = /(^\d{13}$)|(^\d{18}$)|(^\d{19}$)|(^\d{6}-\d{15}$)/;
+        if ([0, 13, 18, 19, 22].indexOf(this.PlatformCode.length) === -1) {
+          if (!this.PlatformCodeErrorMsg) this.PlatformCodeErrorMsg = '平台单号长度应为13 18 19或22位';
+          this.isPlatformCodeError = true;
+        } else if (reg.test(this.PlatformCode) || this.PlatformCode.length === 0) {
+          this.PlatformCodeErrorMsg = '';
+          this.isPlatformCodeError = false;
+        } else this.PlatformCodeErrorMsg = '平台单号格式不正确';
         this.setInfo4ReqObj();
       },
     },
@@ -776,6 +783,7 @@ export default {
                         > .el-form-item__content {
                           height: 30px;
                           > .el-select {
+                            line-height: 30px;
                             > .el-input {
                               width: 100px;
                               > input {

@@ -957,7 +957,7 @@ export default {
       if (res.data.Status === 7025 || res.data.Status === 8037) return;
       // eslint-disable-next-line consistent-return
       if (res.data.Status !== 1000) return res.data.Message;
-      if (!res.data.Data) {
+      if (!res.data.Data || !res.data.Data.HavePrice) {
         // eslint-disable-next-line consistent-return
         return '暂无报价，请联系客服获取报价信息!';
       } // 可能为null 当需要客服咨询报价

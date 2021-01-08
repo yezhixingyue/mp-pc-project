@@ -62,9 +62,8 @@ export default {
     ...mapState('unpayList', ['curUnpayListDetailData']),
     info4OrderSummary() {
       const {
-        OutPlate, Content, OrderID, CreateTime, Express, Status, Package, ProducePeriod,
+        OutPlate, Content, OrderID, CreateTime, Express, Status, Package, ProducePeriod, Weight,
       } = this.curUnpayListDetailData;
-      console.log(ProducePeriod);
       const {
         AddressDetail, ExpressArea, Consignee, Mobile,
       } = Package.Address.Address;
@@ -81,6 +80,7 @@ export default {
         Mobile,
         Status,
         ProducePeriod,
+        Weight,
       };
     },
   },

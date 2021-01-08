@@ -27,6 +27,12 @@
             <span>收件地址：{{info4OrderSummary.Address}}</span>
           </el-tooltip>
         </p>
+        <p>
+          <span>包裹重量：
+            <template
+             v-if="info4OrderSummary.Weight || info4OrderSummary.Weight === 0">{{info4OrderSummary.Weight}}kg</template>
+          </span>
+        </p>
       </li>
       <li class="file-box gray is-font-12">
         <p class="ProducePeriod" v-if="[254, 255].indexOf(info4OrderSummary.Status) === -1">
@@ -120,6 +126,7 @@ export default {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          line-height: 20px;
           > span {
             &.ml-50 {
               margin-left: 50px;
@@ -136,10 +143,11 @@ export default {
               display: inline-block;
             }
           }
-          &.mid {
-            margin-top: 32px;
-            margin-bottom: 20px;
-          }
+          // &.mid {
+          //   margin-top: 32px;
+          //   margin-bottom: 20px;
+          // }
+          margin-bottom: 9px;
         }
       }
       &.file-box {

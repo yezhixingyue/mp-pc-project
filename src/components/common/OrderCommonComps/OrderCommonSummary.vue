@@ -24,6 +24,12 @@
             <span>{{info4OrderSummary.Address}}</span>
           </el-tooltip>
         </p>
+        <p>
+          <span>包裹重量：
+            <template
+             v-if="info4OrderSummary.Weight || info4OrderSummary.Weight === 0">{{info4OrderSummary.Weight}}kg</template>
+          </span>
+        </p>
       </li>
       <li class="right gray">
         <p>
@@ -86,6 +92,7 @@ export default {
         Content: this.showData.Content,
         FilePath: this.showData.FilePath,
         ProducePeriod: this.showData.ProducePeriod,
+        Weight: this.showData.Weight,
       };
     },
   },
@@ -144,7 +151,7 @@ export default {
       line-height: 34px;
       font-size: 14px;
       > .first {
-        padding-bottom: 9px;
+        // padding-bottom: 9px;
       }
       padding-right: 20px;
       width: 660px;

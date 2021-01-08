@@ -642,6 +642,7 @@ export default {
                         > .el-form-item__content {
                           height: 35px;
                           > .el-select {
+                            line-height: 30px;
                             > .el-input {
                               width: 100px;
                               > input {

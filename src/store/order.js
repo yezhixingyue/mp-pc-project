@@ -103,7 +103,11 @@ export default {
     ---------------------------------------- */
     updateOrderDetailData(state, data) {
       if (!state.curOrderDetailData) return;
-      state.curOrderDetailData.Funds = data.Funds;
+      const _temp = { ...state.curOrderDetailData };
+      _temp.Funds = data.Funds;
+      _temp.Weight = data.Weight;
+      _temp.ProducePeriod = data.ProducePeriod;
+      state.curOrderDetailData = _temp;
     },
     handleCancelOrder(state, OrderID) {
       const _t = state.OrderList.find(it => it.OrderID === OrderID);

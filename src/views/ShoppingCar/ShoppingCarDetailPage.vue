@@ -64,6 +64,7 @@ export default {
         Content: this.curShoppingCarDetailData.Content,
         FilePath: this.curShoppingCarDetailData.FilePath,
         ProducePeriod: this.curShoppingCarDetailData.ProducePeriod,
+        Weight: this.curShoppingCarDetailData.Weight,
       };
     },
   },

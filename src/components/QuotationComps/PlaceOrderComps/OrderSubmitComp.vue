@@ -120,8 +120,9 @@ export default {
       if (!this.fileContent) return '请输入文件内容';
       if (!this.addressInfo4PlaceOrder || !this.addressInfo4PlaceOrder.Address.Address.Consignee) return '请选择配送地址';
       if (this.addressInfo4PlaceOrder.OutPlate && this.addressInfo4PlaceOrder.OutPlate.Second) {
-        if ([0, 13, 18, 19].indexOf(this.addressInfo4PlaceOrder.OutPlate.Second.length) === -1) {
-          return '平台单号只能输入13位 18位 19位纯数字';
+        const reg = /(^\d{13}$)|(^\d{18}$)|(^\d{19}$)|(^\d{6}-\d{15}$)/;
+        if (!reg.test(this.addressInfo4PlaceOrder.OutPlate.Second)) {
+          return '平台单号格式不正确';
         }
       }
 
