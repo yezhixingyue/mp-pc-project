@@ -136,7 +136,8 @@ export default {
     totalFreight() {
       let _freight = 0;
       // eslint-disable-next-line no-return-assign
-      this.data.forEach(it => (_freight += it.Funds.Freight));
+      // this.data.forEach(it => (_freight += it.Funds.Freight));
+      if (this.data[0] && this.data[0].Package) _freight = this.data[0].Package.Freight;
       return +(_freight.toFixed(2));
     },
   },

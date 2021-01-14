@@ -82,8 +82,8 @@ Vue.filter('getDoneTime', ProducePeriod => {
   let dayTimeStr = `${m}月${d}日`;
   const _m = `${new Date().getMonth() + 1}`;
   const _d = `${new Date().getDate()}`;
-  if (m === _m) {
-    if (d === _d) dayTimeStr = '今天';
+  if (+m === +_m) {
+    if (+d === +_d) dayTimeStr = '今天';
     if (d - _d === 1) dayTimeStr = '明天';
     if (d - _d === 2) dayTimeStr = '后天';
   } else if ((_m - m === 1 || (m === '1' && _m === '12')) && (d === '1' || d === '2')) {

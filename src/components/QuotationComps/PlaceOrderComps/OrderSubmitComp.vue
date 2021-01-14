@@ -1,21 +1,23 @@
 <template>
   <section class="mp-pc-place-order-upload-and-submit-comp-wrap">
     <header class="bg-gray"></header>
-    <div class="comp-title float">
+    <div class="comp-title float" v-show="!isSpotGoods">
       <span class="left is-bold">印刷内容</span>
     </div>
     <div class="content">
-      <ul>
+      <ul v-show="!isSpotGoods">
         <li class="file-content-box">
           <span class="title gray">文件内容：</span>
           <el-input v-model.trim="fileContent" maxlength="100" show-word-limit  placeholder="文件内容"></el-input>
         </li>
         <li class="upload-box">
           <UploadComp4BreakPoint ref='UploadComp4BreakPoint' :validateFunc='getProductPriceLocal'
+            :shouldUpload='!isSpotGoods'
             :msgTitle='title' @fillFileContent='fillFileContent'
             :successFunc="successFunc" @saveFile2Store='saveFile2Store' />
         </li>
       </ul>
+      <!-- <p v-if="isSpotGoods" class="is-cyan is-font-12">当前产品为现货产品，不用上传文件，可直接下单</p> -->
       <div class="submit-btn-wrap">
         <el-button class="button-title-pink" @click="onSave2TheCar">
           <i class="iconfont icon-jiarugouwuche" ></i>加入购物车</el-button>
@@ -57,6 +59,12 @@ export default {
     UploadComp4BreakPoint,
     ComputedResultComp,
   },
+  props: {
+    isSpotGoods: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     ...mapState('Quotation', ['selectedCoupon', 'ProductQuotationResult', 'addressInfo4PlaceOrder']),
     coupon() {
@@ -86,6 +94,10 @@ export default {
   },
   methods: {
     successFunc({ compiledName }) {
+      console.log('successFunc ---- submit comp -- this.shouldUpload', this.isSpotGoods);
+      // if (this.isSpotGoods) { // 现货 不需上传
+      //   return;
+      // }
       if (this.type === 'placeOrder') {
         const callBack = () => {
           this.$store.commit('Quotation/setCurPayInfo2Code', null);
@@ -117,7 +129,7 @@ export default {
       this.fileContent = name;
     },
     async getProductPriceLocal() { // 校验函数  用来判断是否可以进行下单
-      if (!this.fileContent) return '请输入文件内容';
+      if (!this.fileContent && !this.isSpotGoods) return '请输入文件内容';
       if (!this.addressInfo4PlaceOrder || !this.addressInfo4PlaceOrder.Address.Address.Consignee) return '请选择配送地址';
       if (this.addressInfo4PlaceOrder.OutPlate && this.addressInfo4PlaceOrder.OutPlate.Second) {
         const reg = /(^\d{13}$)|(^\d{18}$)|(^\d{19}$)|(^\d{6}-\d{15}$)/;
@@ -225,6 +237,10 @@ export default {
        left: 390px;
       }
     }
+    // > p {
+    //   position: relative;
+    //   top: 5px;
+    // }
   }
 }
 </style>

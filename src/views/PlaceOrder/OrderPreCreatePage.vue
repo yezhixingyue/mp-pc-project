@@ -35,6 +35,7 @@
         </div>
         <div class="btn-wrap">
           <UploadComp4BreakPoint
+            :shouldUpload='obj2GetProductPrice ? !obj2GetProductPrice.ProductParams.IsSpotGoods : true'
             ref='UploadComp4BreakPoint' title='' isUploadRightNow onlyShow :successFunc="subMitPlaceOrder" />
           <el-button type="danger" @click="handleSubmit">提交订单</el-button>
         </div>
@@ -62,7 +63,7 @@ export default {
   },
   computed: {
     // eslint-disable-next-line max-len
-    ...mapState('Quotation', ['orderFile4PreCreateData', 'PreCreateData', 'selectedCoupon', 'curPayInfo2Code', 'curPayInfo2Code']),
+    ...mapState('Quotation', ['orderFile4PreCreateData', 'PreCreateData', 'selectedCoupon', 'curPayInfo2Code', 'obj2GetProductPrice']),
     payNumOnline() {
       if (this.isFullPayout) return this.PreCreateData.FullPayout;
       return this.PreCreateData.MinimumCost;
@@ -81,7 +82,7 @@ export default {
       },
     },
     data2Listener() {
-      return (!this.orderFile4PreCreateData || !this.PreCreateData);
+      return (!this.PreCreateData); // !this.orderFile4PreCreateData) ||
     },
     keepDataChecked: {
       get() {
@@ -114,9 +115,12 @@ export default {
       const cb = () => {
         this.$store.dispatch('common/getCustomerFundBalance');
       };
-      const _obj = { FilePath: compiledName, PayInFull: this.checked, cb };
+      const isSpotGoods = this.obj2GetProductPrice ? this.obj2GetProductPrice.ProductParams.IsSpotGoods : false;
+      // eslint-disable-next-line object-curly-newline
+      const _obj = { FilePath: compiledName, PayInFull: this.checked, cb, isSpotGoods };
       this.$store.dispatch('Quotation/placeOrderFromPreCreate', _obj).catch((...args) => {
         const error = args[0];
+        console.log(error);
         this.messageBox.handleLoadingError({
           title: '下单失败',
           error,

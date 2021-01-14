@@ -156,7 +156,7 @@
 
     <!-- <button @click="handleMapPosition">12312312</button> -->
 
-    <OrderSubmitComp @handleMapPosition='handleMapPosition' />
+    <OrderSubmitComp @handleMapPosition='handleMapPosition' :isSpotGoods='data.IsSpotGoods' />
   </article>
 </template>
 

@@ -981,7 +981,7 @@ export default {
       const _requestObj = { List: [], OrderType: 2, PayInFull: false };
       const _itemObj = {};
       _itemObj.IsOrder = false; // 预下单false  正式下单 true
-      _itemObj.FilePath = compiledName;
+      if (compiledName) _itemObj.FilePath = compiledName;
       if (state.addressInfo4PlaceOrder.OutPlate.Second) _itemObj.OutPlate = state.addressInfo4PlaceOrder.OutPlate;
       _itemObj.Address = {};
       _itemObj.Address.Express = state.addressInfo4PlaceOrder.Address.Express;
@@ -1105,10 +1105,10 @@ export default {
       const res = await api.getPayResult(state.curPayInfo2Code.PayCode);
       if (res.data.Status === 1000) cb(res.data.Data);
     },
-    async placeOrderFromPreCreate({ state, commit, rootState }, { FilePath, PayInFull, cb }) {
+    async placeOrderFromPreCreate({ state, commit, rootState }, { FilePath, PayInFull, cb, isSpotGoods = false }) {
       const _obj = { OrderType: 2, PayInFull, List: [] };
       let item;
-      if (FilePath) {
+      if (FilePath || isSpotGoods) {
         item = { ...state.curReqObj4PreCreate, FilePath };
         _obj.List.push(item);
       } else {
@@ -1130,10 +1130,11 @@ export default {
       // 成功后清除优惠券等信息
       if (!res.data.Data) {
         // commit('setClock2PaySuccess');
+        console.log('placeOrderFromPreCreate');
         massage.successSingle({
           title: '下单成功!',
           successFunc: () => {
-            if (FilePath) commit('setPaySuccessOrderDataStatus');
+            if (FilePath || (!FilePath && isSpotGoods)) commit('setPaySuccessOrderDataStatus');
             if (cb) cb(); // 清除购物车中一些数据 然后跳转购物车列表页面 该方法目前只在购物车提交时使用
             commit('setIsShow2PayDialog', false);
           },

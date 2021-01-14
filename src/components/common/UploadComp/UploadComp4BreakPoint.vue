@@ -143,6 +143,10 @@ export default { // 上传图片按钮
       type: Boolean,
       default: false,
     },
+    shouldUpload: { // 是否需要上传文件
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -183,7 +187,11 @@ export default { // 上传图片按钮
     },
     upLoadSingleFile(file) {
       console.log('upLoadSingleFile');
-      if (!file) return;
+      if (!file && this.shouldUpload) return;
+      if (!this.shouldUpload) {
+        this.successFunc({});
+        return;
+      }
       this.upLoadTitle = '文件读取中（ 文件大小影响读取时间 ）...';
       this.showReadMsg = true;
       const reader = new FileReader();
@@ -249,7 +257,7 @@ export default { // 上传图片按钮
     handleElChange(file, fileList) {
       console.log(file, fileList);
       this.fileList = fileList;
-      this.$emit('fillFileContent', file.name.split('.')[0]);
+      this.$emit('fillFileContent', file.name.substring(0, file.name.lastIndexOf('.')));
     },
     delay(storeObj, duration) {
       return new Promise(resolve => {
@@ -263,14 +271,23 @@ export default { // 上传图片按钮
       const file = fileList[0];
       this.fileList[0].raw = file;
       this.fileList[0].name = file.name;
-      this.$emit('fillFileContent', file.name.split('.')[0]);
+      this.$emit('fillFileContent', file.name.substring(0, file.name.lastIndexOf('.')));
       // this.fileList = fileList;
       // massage.failSingleError({ title: '已上传订单文件', msg: '如需更换，请删除订单文件后重新上传' });
     },
     async handleElUpload() {
       console.log('handleElUpload');
       const oInpFile = document.querySelector('.upload-box .el-upload__input');
-      console.log(oInpFile.files);
+      console.log(oInpFile.files, 'shouldUpload upload comp', this.shouldUpload);
+      if (!this.shouldUpload) { // 如果不需要上传文件
+        const msg = await this.validateFunc();
+        if (typeof msg === 'string') {
+          massage.failSingleError({ title: `${this.msgTitle}失败`, msg });
+          return;
+        }
+        if (msg === true) this.successFunc({});
+        return;
+      }
       await this.delay(0);
       if (this.fileList.length === 0) {
         massage.failSingleError({ title: `${this.msgTitle}失败`, msg: '请选择订单文件!', failFunc: this.failFunc });
@@ -291,6 +308,15 @@ export default { // 上传图片按钮
       }
     },
     async saveFile2Store() {
+      if (!this.shouldUpload) { // 如果不需要上传文件
+        const msg = await this.validateFunc();
+        if (typeof msg === 'string') {
+          massage.failSingleError({ title: `${this.msgTitle}失败`, msg });
+          return;
+        }
+        if (msg === true) this.successFunc({});
+        return;
+      }
       await this.delay(0);
       if (this.fileList.length === 0) {
         massage.failSingleError({ title: `${this.msgTitle}失败`, msg: '请选择订单文件!', failFunc: this.failFunc });

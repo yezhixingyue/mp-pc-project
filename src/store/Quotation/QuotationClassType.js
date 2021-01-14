@@ -214,6 +214,8 @@ export function getRelevanceInTargetValue(targetObj, RelevanceInformation) {
 
 export default class QuotationClassType {
   static init(obj) {
+    console.log(obj);
+    if (!obj) return;
     const _obj = JSON.parse(JSON.stringify(obj));
     _obj.ProductAmount = '';
     _obj.KindCount = 1;
@@ -983,7 +985,7 @@ export default class QuotationClassType {
 
   // 处理工艺上的条件判断，给设置有条件判断的工艺上添加相关信息
   static handleCraftConditionList(obj) {
-    if (!obj) return;
+    if (!obj) return {};
     const _obj = obj;
     if (_obj.CraftConditionList.length > 0) {
       _obj.CraftConditionList.forEach(it => {
