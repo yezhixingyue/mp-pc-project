@@ -280,6 +280,16 @@ const routes = [
             },
             component: () => import('../views/mySettingPages/ChangeMobilePage.vue'),
           },
+          {
+            path: '/mySetting/setting',
+            name: 'mySettingPage',
+            meta: {
+              requiresAuth: true,
+              y: 0,
+              title: '我的设置 - 郑州名片之家电子商务有限公司',
+            },
+            component: () => import('../views/mySettingPages/SettingPage.vue'),
+          },
         ],
       },
     ],

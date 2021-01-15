@@ -307,6 +307,12 @@ export default {
         _t.Mobile = mobile;
       }
     },
+    /** 修改客户设置信息  是否允许发送未付款短信提醒
+    ---------------------------------------- */
+    setCustomerAcceptNotify(state, bool) {
+      if (!state.customerInfo) return;
+      state.customerInfo.Config.IsAcceptNotify = bool;
+    },
     /** 设置客户子账号列表
     ---------------------------------------- */
     setCustomerAccountList(state, data) {

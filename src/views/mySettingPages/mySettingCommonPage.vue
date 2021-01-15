@@ -10,6 +10,7 @@
         <router-link tag="li" to="/mySetting/subAccountManage">子账号管理</router-link>
         <router-link tag="li" to="/mySetting/changePwd">修改密码</router-link>
         <router-link tag="li" to="/mySetting/changeMobile">修改手机号</router-link>
+        <router-link tag="li" to="/mySetting/setting">我的设置</router-link>
       </ul>
       <div class="right">
         <!-- <keep-alive> -->

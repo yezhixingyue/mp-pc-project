@@ -94,6 +94,9 @@
               <el-dropdown-item
                 :class="{active: $route.name === 'mySettingChangeMobile'}"
                 command='changeMobile' icon="el-icon-s-order">修改手机号</el-dropdown-item>
+              <el-dropdown-item
+                :class="{active: $route.name === 'mySettingPage'}"
+                command='setup' icon="el-icon-s-tools">我的设置</el-dropdown-item>
               <el-dropdown-item command='loginOut'>
                 <span class="iconfont icon-tuichudenglu"></span>退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -260,6 +263,9 @@ export default {
           break;
         case 'changeMobile':
           _path = '/mySetting/changeMobile';
+          break;
+        case 'setup':
+          _path = '/mySetting/setting';
           break;
         default:
           break;

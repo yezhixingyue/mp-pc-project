@@ -23,7 +23,7 @@ export function delay(duration) {
   });
 }
 
-export function animateScroll(start, end, callback) {
+export function animateScroll(start, end, callback, handleAnimateEnd) {
   let num = start;
   const tick = 16; // 每隔16毫秒完成一次变化
   const total = 300;
@@ -36,6 +36,7 @@ export function animateScroll(start, end, callback) {
     if (curTimes === times) {
       num = end;
       clearInterval(timer);
+      if (handleAnimateEnd) handleAnimateEnd();
     }
     callback(num);
   }, tick);

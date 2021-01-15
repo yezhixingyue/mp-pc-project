@@ -245,6 +245,12 @@ const api = {
     const { closeTip } = data;
     return instance.post('/Api/PaymentOrder/Create', data, { closeTip });
   },
+
+  /* 客户设置api
+   ----------------------------------------------------------------------------------- */
+  getCustomConfigSave(data) { // POST /Api/CustomConfig/Save  设置客户接收短信提醒
+    return instance.post('/Api/CustomConfig/Save', data);
+  },
 };
 
 export default api;
