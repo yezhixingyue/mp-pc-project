@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import CommonViewPage from '../views/Common/CommonViewPage.vue';
+// import LoginPage from '../views/Login/loginPage.vue';
 
 Vue.use(VueRouter);
 
@@ -335,6 +336,15 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (to.name === 'login') {
       next();
+    } else if (to.name === 'placeOrder' && to.query.token) {
+      localStorage.setItem('token', to.query.token);
+      next({
+        path: '/placeOrder',
+        query: { id: to.query.id },
+      });
+    } else if (to.name === 'placeOrder' && to.query.id && !_auth && !to.query.token) {
+      sessionStorage.setItem('targetProID', to.query.id);
+      next('/login');
     } else if (_auth) {
       next();
     } else {

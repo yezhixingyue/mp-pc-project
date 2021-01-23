@@ -33,7 +33,15 @@ export default {
     ...mapState('Quotation', ['curProductInfo2Quotation', 'initPageText']),
     ...mapState('common', ['customerInfo']),
   },
+  methods: {
+    handlePathDataFetch() {
+      const productID = this.$route.query.id;
+      if (!productID) return;
+      console.log('handlePathDataFetch', productID);
+    },
+  },
   mounted() {
+    this.handlePathDataFetch();
     if (!this.customerInfo || this.customerInfo.AuthStatus === 2) return;
     this.messageBox.warnCancelBox({
       title: '账户信息未完善',

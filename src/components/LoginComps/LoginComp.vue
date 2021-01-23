@@ -124,8 +124,12 @@ export default {
         localStorage.removeItem('info');
         localStorage.removeItem('token');
       }
+      // console.log(this.repath);
       // this.$router.push(`${this.repath}`);
-      this.$router.push('/placeOrder');
+      const id = sessionStorage.getItem('targetProID');
+      const path = id ? `/placeOrder?id=${id}` : '/placeOrder';
+      this.$router.push(path);
+      sessionStorage.removeItem('targetProID');
     },
     handleFailLogin(status) {
       localStorage.removeItem('info');
@@ -197,6 +201,7 @@ export default {
     }
     if (this.$route.query.redirect) {
       this.repath = this.$route.query.redirect;
+      // console.log(this.repath);
     }
   },
 };

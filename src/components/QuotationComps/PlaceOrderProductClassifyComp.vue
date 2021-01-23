@@ -160,6 +160,8 @@ export default {
       //   if (this.isOpen) this.isOpen = false;
     },
     selectProduct(sub) {
+      console.log('selectProduct', this.curMenus.canCollect);
+      console.log('sub', sub);
       if (this.curMenus.canCollect) {
         if (this.hasCollectIDList.includes(sub.ProductID)) {
           this.hasCollectList = this.hasCollectList.filter(it => it.ProductID !== sub.ProductID)
