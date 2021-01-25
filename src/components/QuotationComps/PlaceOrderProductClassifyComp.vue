@@ -160,7 +160,7 @@ export default {
       //   if (this.isOpen) this.isOpen = false;
     },
     selectProduct(sub) {
-      console.log('selectProduct', this.curMenus.canCollect);
+      console.log('selectProduct -- sub', sub);
       console.log('sub', sub);
       if (this.curMenus.canCollect) {
         if (this.hasCollectIDList.includes(sub.ProductID)) {

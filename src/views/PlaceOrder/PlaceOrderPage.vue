@@ -30,14 +30,30 @@ export default {
     ProductQuotationContentComp,
   },
   computed: {
-    ...mapState('Quotation', ['curProductInfo2Quotation', 'initPageText']),
+    ...mapState('Quotation', ['curProductInfo2Quotation', 'initPageText', 'productNames']),
     ...mapState('common', ['customerInfo']),
   },
   methods: {
-    handlePathDataFetch() {
+    async handlePathDataFetch() {
       const productID = this.$route.query.id;
       if (!productID) return;
-      console.log('handlePathDataFetch', productID);
+      let sub = null;
+      if (this.productNames.length === 0) {
+        const res = await this.api.getProductLists({ ID: productID });
+        if (res.data.Status !== 1000) return;
+        if (res.data.Data.length === 1) {
+          // eslint-disable-next-line prefer-destructuring
+          sub = res.data.Data[0];
+        }
+      }
+      console.log(sub);
+      if (sub) {
+        this.$store.commit('Quotation/setCurProduct', sub);
+        // this.curProduct = sub;
+        this.$store.commit('Quotation/setCurProductInfo', sub);
+        this.$store.dispatch('Quotation/getProductDetail');
+        this.$store.commit('Quotation/setSelectedCoupon', null);
+      }
     },
   },
   mounted() {

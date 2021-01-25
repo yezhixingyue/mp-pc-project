@@ -59,9 +59,10 @@ const api = {
   getProductClassify() { // 获取产品分类
     return instance.post('/Api/Constant/VersionValid', { Key: 6 }, { closeLoading: true });
   },
-  getProductLists() { // 获取列表头部产品第三级列表
+  getProductLists(data = {}) { // 获取列表头部产品第三级列表
     return instance.post('/Api/Product/ProductList', {
       FieldType: 1,
+      ...data,
       // TakeOrderWay: 1,
     }, { closeLoading: true });
   },

@@ -281,10 +281,12 @@ export default {
         _obj.craftName = it.Attributes.NickName;
         const _subArr = [];
         it.PropertyList.forEach(it2 => {
+          const _tempArr = [];
           it2.forEach(it3 => {
             const _str = it3.ShowValue + it3.ShowUnit;
-            _subArr.push(_str);
+            _tempArr.push(_str);
           });
+          _subArr.push(_tempArr.join('、'));
         });
         // if (it.PropertyList.length > 1) _subArr.push(`${it.PropertyList.length}处`);
         // else {
