@@ -10,6 +10,9 @@
         <span>{{initPageText}}</span>
       </div>
       <!-- <div v-else class="bg-empty-wrap"></div> -->
+      <div v-else-if="initLoading" class="init-loading-box">
+        <p><i class="el-icon-loading"></i>请稍候，正在加载中。。。</p>
+      </div>
       <div class="show-empty-bg" v-else>
         <img src="../../assets/images/placeorderisempty.png" alt="">
         <p class="is-gray">当前尚未选择产品，请通过上方产品分类选择产品吧...</p>
@@ -33,27 +36,39 @@ export default {
     ...mapState('Quotation', ['curProductInfo2Quotation', 'initPageText', 'productNames']),
     ...mapState('common', ['customerInfo']),
   },
+  data() {
+    return {
+      initLoading: false,
+    };
+  },
   methods: {
     async handlePathDataFetch() {
       const productID = this.$route.query.id;
       if (!productID) return;
       let sub = null;
+      let key = true;
+      this.initLoading = true;
       if (this.productNames.length === 0) {
-        const res = await this.api.getProductLists({ ID: productID });
-        if (res.data.Status !== 1000) return;
-        if (res.data.Data.length === 1) {
-          // eslint-disable-next-line prefer-destructuring
-          sub = res.data.Data[0];
+        const res = await this.api.getProductLists({ ID: productID }).catch(() => { key = false; });
+        if (!key || !res || res.data.Status !== 1000) {
+          this.initLoading = false;
+          return;
         }
+        if (res.data.Data.length === 1) {
+          const [t] = res.data.Data;
+          sub = t;
+        }
+      } else {
+        const t = this.productNames.find(it => it.ProductID === productID);
+        if (t) sub = t;
       }
-      console.log(sub);
       if (sub) {
         this.$store.commit('Quotation/setCurProduct', sub);
-        // this.curProduct = sub;
         this.$store.commit('Quotation/setCurProductInfo', sub);
-        this.$store.dispatch('Quotation/getProductDetail');
+        await this.$store.dispatch('Quotation/getProductDetail');
         this.$store.commit('Quotation/setSelectedCoupon', null);
       }
+      this.initLoading = false;
     },
   },
   mounted() {
@@ -94,6 +109,17 @@ export default {
       height: 266px;
       width: 545px;
       margin: 80px auto 0;
+    }
+    .init-loading-box {
+      text-align: center;
+      margin-top: 220px;
+      color: #989898;
+      i {
+        font-size: 24px;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+      line-height: 24px;
     }
     > .show-empty-bg {
       text-align: center;

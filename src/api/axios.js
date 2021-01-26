@@ -25,6 +25,7 @@ axios.interceptors.request.use(
       }
     }
     if (key && !closeLoading) {
+      console.log('key && !closeLoading', key && !closeLoading);
       // let _color = 'rgba(0, 0, 0, 0.4)';
       let _color = 'rgba(255, 255, 255, 0.5)';
       let _text = '加载中';
@@ -37,7 +38,7 @@ axios.interceptors.request.use(
       }
       if (url === '/Api/Customer/CouponList') _text = '优惠券信息获取中...';
       if (url === '/Api/Express/ValidList') _text = '获取可用配送方式列表...';
-      if (url === '/Api/Product/GetProductDetail') _text = '正在获取产品信息...';
+      if (url === '/Api/Product/GetProductDetail') _text = '请稍候，正在获取产品信息...';
       if (url === '/Api/Quotation/List') _text = '正在获取购物车信息...';
       if (url === '/Api/Product/ProductList') _text = '获取产品列表信息...';
       // console.log(url, closeLoading);

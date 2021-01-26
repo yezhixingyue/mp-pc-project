@@ -75,11 +75,11 @@ export default {
   white-space: normal;
   position: absolute;
   left: 160px;
-  top: -16px !important;
+  top: -18px !important;
   height: 72px;
-  width: 818px;
+  width: 538px;
   &.showExpressCost {
-    width: 750px;
+    width: 470px;
   }
   > span, > div > span {
     margin-right: 16px;
@@ -97,7 +97,8 @@ export default {
   flex-wrap: wrap;
   > div {
     // display: inline-block;
-    white-space: nowrap;
+    // white-space: nowrap;
+    white-space: normal;
   }
   > em {
     margin-right: 18px;

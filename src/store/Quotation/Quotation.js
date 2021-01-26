@@ -11,6 +11,7 @@
 
 import api from '@/api/index';
 import massage from '@/assets/js/utils/message';
+import router from '@/router';
 import QuotationClassType from './QuotationClassType';
 
 // eslint-disable-next-line no-unused-vars
@@ -136,6 +137,7 @@ export default {
       const level1Item = getters.allProductClassify.find(
         item => item.ID === First,
       );
+      if (!level1Item) return [];
       const level2Item = level1Item.children.find(item => item.ID === Second);
       return [level1Item.ClassName, level2Item.ClassName, state.curProductName];
     },
@@ -931,6 +933,11 @@ export default {
       }
       if (res.data.Status !== 1000) return false;
       commit('setCurProductInfo2Quotation', res.data.Data);
+      console.log(router.currentRoute.query.id);
+      if (!router.currentRoute.query.id || router.currentRoute.query.id !== state.curProductID) {
+        console.log('change place query -----');
+        router.push(`?id=${state.curProductID}`);
+      }
       return true;
     },
     /* 获取产品报价信息

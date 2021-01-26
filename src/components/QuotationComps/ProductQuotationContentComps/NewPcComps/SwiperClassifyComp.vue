@@ -70,7 +70,7 @@ export default {
   padding-right: 32px;
 
   .el-tabs {
-    width: 1080px;
+    width: 800px;
   }
   .el-tabs__header {
     margin: 0;

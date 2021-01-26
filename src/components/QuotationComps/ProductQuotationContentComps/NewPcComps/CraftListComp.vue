@@ -693,7 +693,7 @@ export default {
   }
   > .content {
     float: right;
-    width: 1050px;
+    width: 770px;
     > li {
       display: inline-block;
       margin-right: 25px;

@@ -355,7 +355,7 @@ export default {
           height: 1px;
           width: 100%;
           background-color: #eee;
-          margin: 12px 0 13px 0;
+          margin: 12px 0 28px 0;
         }
       }
       &.part-count-material-box {
