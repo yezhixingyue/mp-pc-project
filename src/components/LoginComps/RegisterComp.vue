@@ -36,6 +36,10 @@
            class="span-title-blue" :class="canGetCode?'':'disabled'" @click="getVertifyCode">{{ codeTitle }}</i>
       </el-input>
     </el-form-item>
+    <el-form-item prop="agreement" class="agreement">
+      <el-checkbox label="" v-model="regForm.agreement">阅读并同意</el-checkbox>
+      <i @click="onAgreementViewClick">《承接印品协议书》</i>
+    </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('regForm')" :disabled="!canGoToReg">注册</el-button>
       <p><span class="span-title-blue" @click="() => this.$emit('changePanel', 'first')">已有账号请登录</span></p>
@@ -69,6 +73,11 @@ export default {
     const validateVertifyCode = (rule, value, callback) => {
       if (this.validateCheck(value, this.defineRules.VertifyCodeRules, callback)) callback();
     };
+    const validatAgreement = (rule, value, callback) => {
+      console.log(value, 'validatAgreement');
+      if (value) callback();
+      else callback(new Error('请阅读并同意承接印品协议书'));
+    };
     return {
       rules: {
         Mobile: [
@@ -91,6 +100,9 @@ export default {
           {
             min: 2, max: 2, message: '请输入2个字符验证码，中间不要输入空格', trigger: 'blur',
           },
+        ],
+        agreement: [
+          { validator: validatAgreement, trigger: 'blur' },
         ],
       },
       defineRules: {
@@ -122,6 +134,7 @@ export default {
         rePassword: '',
         VertifyCode: '',
         VertifyImgCode: '',
+        agreement: false,
       },
       codeTitle: '获取验证码',
       timer: null,
@@ -157,7 +170,7 @@ export default {
     },
     canGoToReg() {
       return this.regForm.Name && this.regForm.Mobile
-        && this.regForm.Password && this.regForm.rePassword && this.regForm.VertifyCode;
+        && this.regForm.Password && this.regForm.rePassword && this.regForm.VertifyCode && this.regForm.agreement;
     },
   },
   methods: {
@@ -247,6 +260,9 @@ export default {
     },
     setImgCodeCookie(data) {
       Cookie.setCookie('SessionID', data.SessionID, 600);
+    },
+    onAgreementViewClick() {
+      this.$emit('setAgreeView');
     },
   },
   mounted() {
