@@ -26,10 +26,12 @@
           </keep-alive>
           <keep-alive>
             <RegisterComp v-if="activeName === 'second'"
+             @setAgreeView='setAgreeView'
              @setPanelLoading='setPanelLoading' @changePanel='setActiveName' />
           </keep-alive>
         </div>
       </div>
+      <Agreement v-model="agreementvisible" />
     </div>
   </section>
 </template>
@@ -37,17 +39,20 @@
 <script>
 import LoginComp from '@/components/LoginComps/LoginComp.vue';
 import RegisterComp from '@/components/LoginComps/RegisterComp.vue';
+import Agreement from '@/components/LoginComps/Agreement.vue';
 
 export default {
   components: {
     LoginComp,
     RegisterComp,
+    Agreement,
   },
   data() {
     return {
       activeName: 'first',
       panelLoading: false,
       loadingText: '',
+      agreementvisible: false,
     };
   },
   methods: {
@@ -57,6 +62,9 @@ export default {
     setPanelLoading([bool, text]) {
       this.panelLoading = bool;
       this.loadingText = text;
+    },
+    setAgreeView() {
+      this.agreementvisible = true;
     },
   },
 };
@@ -139,7 +147,7 @@ export default {
       min-height: 460px;
       position: absolute;
       top: 50%;
-      transform: translateY(-53.5%);
+      transform: translateY(-53.7%);
       background-color: #fff;
       border-radius: 5px;
       box-sizing: border-box;
@@ -272,7 +280,7 @@ export default {
                 }
               }
             }
-            margin-bottom: 60px;
+            margin-bottom: 4px;
             &.img-code-box {
               margin-bottom: 29px;
               > .el-form-item__content {
@@ -300,6 +308,25 @@ export default {
                   &::before {
                     display: none;
                   }
+                }
+              }
+            }
+          }
+          &.agreement {
+            > .el-form-item__content {
+              font-size: 13px;
+              .el-checkbox__label {
+                font-size: 13px;
+                color: #585858;
+              }
+              > i {
+                cursor: pointer;
+                transition: color 0.3s;
+                margin-left: 8px;
+                color: #585858;
+                &:hover {
+                  color: #428dfa;
+                  text-decoration: underline
                 }
               }
             }
