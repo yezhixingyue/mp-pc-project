@@ -87,7 +87,7 @@ export default {
       const {
         OutPlate, Content, OrderID, CreateTime, Express, Status, Package, ProducePeriod, PayTime, Weight,
       } = this.curOrderDetailData;
-      console.log(Weight, 'Weight');
+      // console.log(Weight, 'Weight');
       const {
         AddressDetail, ExpressArea, Consignee, Mobile,
       } = Package.Address.Address;
@@ -130,17 +130,17 @@ export default {
     setProgressDataCompleted(bool) {
       this.progressDataCompleted = bool;
       if (bool) this.handleGetDataSuccess();
-      // console.log(this.$refs.AsideIndexComp);
+      // // console.log(this.$refs.AsideIndexComp);
     },
     setPackDataCompleted(bool) {
       this.packDataCompleted = bool;
       if (bool) this.handleGetDataSuccess();
-      // console.log(this.$refs.AsideIndexComp);
+      // // console.log(this.$refs.AsideIndexComp);
     },
     setDetailDataCompleted(bool) {
       this.detailDataCompleted = bool;
       if (bool) this.handleGetDataSuccess();
-      // console.log(this.$refs.AsideIndexComp);
+      // // console.log(this.$refs.AsideIndexComp);
     },
   },
   mounted() {

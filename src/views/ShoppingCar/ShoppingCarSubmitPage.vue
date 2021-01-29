@@ -100,10 +100,10 @@ export default {
     onReturnClick() {
       this.$router.go(-1);
       this.$store.commit('Quotation/setCurPayInfo2Code', null);
-      // console.log(this.$router, this.$route);
+      // // console.log(this.$router, this.$route);
     },
     handleSubmit() {
-      console.log('handleSubmit');
+      // console.log('handleSubmit');
       this.$store.commit('Quotation/setIsShow2PayDialog', true);
       const cb = () => {
         this.$router.push('/shopping/car');

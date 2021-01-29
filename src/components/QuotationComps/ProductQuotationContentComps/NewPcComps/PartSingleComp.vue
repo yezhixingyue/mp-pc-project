@@ -203,7 +203,7 @@ export default {
         return this.data.Material.First;
       },
       set(newVal) {
-        console.log(newVal);
+        // console.log(newVal);
         this.setQuotationPartPlainInfo([this.indexLv1, this.indexLv2, 'Material', `${newVal}`]);
       },
     },
@@ -307,9 +307,9 @@ export default {
       'addPartPrintPropertyGroupList', 'addPartPropertyGroupList', 'delPartProductParamsPartList', 'delPartPrintPropertyGroupList', 'delPartPropertyGroupList', 'setCraftItemDisabled4Part',
     ]),
     handleDelClick() {
-      console.log(this.indexLv1, this.indexLv2);
+      // console.log(this.indexLv1, this.indexLv2);
       this.delPartProductParamsPartList([this.indexLv1, this.indexLv2]);
-      // console.log(this.$forceUpdate);
+      // // console.log(this.$forceUpdate);
       // setTimeout(() => {
       //   this.$forceUpdate();
       // }, 0);

@@ -160,8 +160,8 @@ export default {
       //   if (this.isOpen) this.isOpen = false;
     },
     selectProduct(sub) {
-      console.log('selectProduct -- sub', sub);
-      console.log('sub', sub);
+      // console.log('selectProduct -- sub', sub);
+      // console.log('sub', sub);
       if (this.curMenus.canCollect) {
         if (this.hasCollectIDList.includes(sub.ProductID)) {
           this.hasCollectList = this.hasCollectList.filter(it => it.ProductID !== sub.ProductID)
@@ -207,7 +207,7 @@ export default {
     // async onSubmit() {
     //   if (this.hasCollectList4Req) {
     //     const res = await this.$store.dispatch('Quotation/getCustomerShortCutSave', this.hasCollectList4Req);
-    //     console.log(res);
+    //     // console.log(res);
     //     if (res) {
     //       this.canCollectList = this.canCollectList.filter(it => it !== this.index);
     //       // this.hasCollectList = this.hasCollectList.filter(it => it !== this.index);

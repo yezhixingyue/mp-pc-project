@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="ruleForm" :rules="rules"
+  <el-form :model="ruleForm" :rules="rules" :disabled='formDisabled'
     ref="ruleForm" label-width="0px" class="demo-ruleForm">
     <el-form-item prop="Mobile">
       <el-input placeholder="请输入手机号码" clearable v-model.trim="Mobile">
@@ -34,6 +34,9 @@
 
 <script>
 import { Base64 } from 'js-base64';
+import { homeUrl, useCookie, domain } from '@/assets/js/setup';
+import Cookie from '@/assets/js/Cookie';
+import messageBox from '@/assets/js/utils/message';
 
 export default {
   data() {
@@ -76,6 +79,7 @@ export default {
       isRemember: false,
       // msg: '123',
       repath: '/placeOrder',
+      formDisabled: false,
     };
   },
   computed: {
@@ -113,32 +117,53 @@ export default {
       this.$store.commit('unpayList/clearStateForNewCustomer');
       // sessionStorage.removeItem('customerInfo');
       sessionStorage.removeItem('couponCenterData');
-      sessionStorage.setItem('token', token);
+      if (!useCookie) sessionStorage.setItem('token', token);
+      const oneDay = 24 * 60 * 60;
       if (rememberPwd) {
         const _obj2Keep = { ...this.ruleForm };
         _obj2Keep.Password = pwd;
         _obj2Keep.timeStamp = Date.now();
         localStorage.setItem('info', JSON.stringify(_obj2Keep));
-        localStorage.setItem('token', token);
+        if (!useCookie) localStorage.setItem('token', token);
+        else Cookie.setCookie('token', token, 30 * oneDay);
       } else {
         localStorage.removeItem('info');
-        localStorage.removeItem('token');
+        if (useCookie) Cookie.setCookie('token', token, oneDay);
+        else localStorage.removeItem('token');
       }
-      // console.log(this.repath);
+      // // console.log(this.repath);
       // this.$router.push(`${this.repath}`);
-      const id = sessionStorage.getItem('targetProID');
-      const path = id ? `/placeOrder?id=${id}` : '/placeOrder';
-      this.$router.push(path);
-      sessionStorage.removeItem('targetProID');
+      const { source, id } = this.$route.query;
+      if (source && source === 'home') {
+        window.location.href = homeUrl;
+        return;
+      }
+      // console.log('domain', domain);
+      const host = window.location.hostname;
+      if (host.includes(domain)) {
+        const path = id ? `/placeOrder?id=${id}` : '/placeOrder';
+        this.$router.push(path);
+      } else {
+        // 登录域名不匹配，请使用正确域名登录
+        messageBox.failSingleError({
+          msg: '登录域名不匹配，请使用正确域名登录',
+          title: '登录失败',
+          successFunc: () => {
+            this.formDisabled = true;
+          },
+        });
+      }
     },
     handleFailLogin(status) {
       localStorage.removeItem('info');
       localStorage.removeItem('token');
+      Cookie.removeCookie('token');
       if (status === 8017) this.ruleForm.Password = '';
       if (this.isRemember) this.isRemember = false;
     },
     async submitForm(formName) {
-      sessionStorage.removeItem('customerInfo');
+      if (!useCookie) sessionStorage.removeItem('customerInfo');
+      else Cookie.removeCookie('customerInfo');
       if (this.isRemember) {
         const { Mobile, rememberPwd } = this.ruleForm;
         const Password = `${this.rememberInfo.Password}`;
@@ -201,7 +226,7 @@ export default {
     }
     if (this.$route.query.redirect) {
       this.repath = this.$route.query.redirect;
-      // console.log(this.repath);
+      // // console.log(this.repath);
     }
   },
 };

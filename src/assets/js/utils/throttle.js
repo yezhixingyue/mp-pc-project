@@ -53,7 +53,7 @@ export function throttle(func, delay) {
       func.apply(context, args);
       startTime = Date.now();
     } else {
-      // console.log(timer, 'timer');
+      // // console.log(timer, 'timer');
       timer = setTimeout(func, remaining);
     }
   };

@@ -10,7 +10,7 @@ Vue.filter('format2MiddleLangTypeDate', date => {
 });
 
 Vue.filter('numToFixed2', num => {
-  // console.log(num);
+  // // console.log(num);
   if (!num && num !== 0) return '';
   return num.toFixed(2);
 });
@@ -20,9 +20,9 @@ Vue.filter('numToFixed2', num => {
  */
 const { TransactionTypeList } = store.state.common;
 Vue.filter('formatTransactionType', Type => {
-  // console.log(Type);
+  // // console.log(Type);
   const _t = TransactionTypeList.find(_it => +_it.value === +Type);
-  // console.log(TransactionTypeList, _t);
+  // // console.log(TransactionTypeList, _t);
   if (_t) return _t.label;
   return '';
 });
@@ -68,7 +68,7 @@ Vue.filter('formatStatus4PackageList', status => {
 Vue.filter('getPayTime', ProducePeriod => {
   if (!ProducePeriod) return '';
   const { LatestPayTime } = ProducePeriod;
-  // console.log(LatestPayTime.split('T')[1].split('+')[0].slice(0, 5));
+  // // console.log(LatestPayTime.split('T')[1].split('+')[0].slice(0, 5));
   return `${LatestPayTime.split('T')[1].split('+')[0].slice(0, 5)}点前支付`;
 });
 

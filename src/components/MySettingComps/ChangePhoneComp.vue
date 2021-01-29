@@ -145,8 +145,8 @@ export default {
     },
   },
   watch: {
-    customerInfo(newVal) {
-      console.log(newVal, 'customerInfo');
+    customerInfo() {
+      // // console.log(newVal, 'customerInfo');
     },
   },
   methods: {

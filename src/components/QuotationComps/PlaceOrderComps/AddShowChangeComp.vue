@@ -289,7 +289,7 @@ export default {
 
       if (this.selectdAddress === 'new') _t = this.newAdd;
       else _t = this.customerInfo.Address.find((it, i) => i === this.selectdAddress);
-      console.log(this.selectdAddress, _t);
+      // // console.log(this.selectdAddress, _t);
       if (!_t) return '';
 
       const { ExpressArea, AddressDetail } = _t;
@@ -427,7 +427,7 @@ export default {
       _temp.Address.Address = this.currentAddInfo;
       const OutPlate = { First: 1, Second: this.PlatformCode };
       _temp.OutPlate = OutPlate;
-      console.log('_temp', _temp.Address.Express.First, _temp.Address.Express.Second);
+      // // console.log('_temp', _temp.Address.Express.First, _temp.Address.Express.Second);
       this.$store.commit('Quotation/setAddressInfo4PlaceOrder', JSON.parse(JSON.stringify(_temp)));
       return true;
     },
@@ -486,7 +486,7 @@ export default {
       }
     },
     handleCountyChange(e) {
-      // console.log(e);
+      // // console.log(e);
       this.newAdd.HavePosition = false;
       const _t = this.CountyList.find(it => it.ID === e);
       this.newAdd.ExpressArea.CountyName = _t.Name;
@@ -522,7 +522,7 @@ export default {
       done();
     },
     handleSetPositionOnMap(callback) { // 方法作废
-      console.log(this.newAdd.HavePosition);
+      // // console.log(this.newAdd.HavePosition);
       if (this.addRadio === 'new') {
         this.changeDiaStatus(true);
         if (callback) this.callbackForLasted = callback;
@@ -588,9 +588,9 @@ export default {
     const _i = this.customerInfo.Address.findIndex(it => it.isSelected);
     if (_i > -1) this.selectdAddress = _i;
     else this.selectdAddress = 'new';
-    // console.log(this.addressInfo4PlaceOrder);
+    // // console.log(this.addressInfo4PlaceOrder);
     // if (this.addressInfo4PlaceOrder) {
-    //   console.log('this.addressInfo4PlaceOrder is not null');
+    //   // console.log('this.addressInfo4PlaceOrder is not null');
     // }
   },
 };

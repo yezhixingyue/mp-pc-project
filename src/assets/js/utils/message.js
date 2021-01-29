@@ -29,7 +29,7 @@ function failSingle({ msg, successFunc, failFunc }) {
 function failSingleError({
   title = '出错啦 ！', msg, successFunc, failFunc, beforeClose,
 }) {
-  console.log(title);
+  // // console.log(title);
   MessageBox({
     showClose: true,
     message: msg,
@@ -164,7 +164,7 @@ function handleLoadingError({ error, successFunc, failFunc, title }) {
   } else if (msg.message) {
     msg = msg.message;
   }
-  console.log(title);
+  // // console.log(title);
   failSingleError({
     title, msg, successFunc, failFunc,
   });

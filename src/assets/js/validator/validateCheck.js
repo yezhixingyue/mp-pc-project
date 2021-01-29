@@ -33,7 +33,7 @@ function validateFunc(value, rules) {
  */
 function validateCheck(value, rules, cb) {
   // 策咯模式函数2
-  // console.log(value, rules, cb);
+  // // console.log(value, rules, cb);
   const checkMsg = validateFunc(value, rules);
   if (checkMsg !== true) {
     cb(checkMsg);

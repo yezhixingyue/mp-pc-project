@@ -136,7 +136,7 @@ export default {
       }
       state.selectedTimeArr = [0, 0, 0, 0, 0, 0];
       state.selectedTimeArr[num] = 1;
-    //  console.log(state.objForOrderList);
+    //  // console.log(state.objForOrderList);
     },
     /* 更新时间
     -------------------------------*/

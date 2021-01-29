@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     handleItemChange([i, item]) {
-      // console.log(i, item);
+      // // console.log(i, item);
       this.$emit('change', [i, item]);
     },
   },

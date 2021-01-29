@@ -74,7 +74,7 @@ export default {
       if (this.validateCheck(value, this.defineRules.VertifyCodeRules, callback)) callback();
     };
     const validatAgreement = (rule, value, callback) => {
-      console.log(value, 'validatAgreement');
+      // // console.log(value, 'validatAgreement');
       if (value) callback();
       else callback(new Error('请阅读并同意承接印品协议书'));
     };

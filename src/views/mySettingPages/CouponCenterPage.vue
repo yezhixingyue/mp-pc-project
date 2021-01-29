@@ -85,7 +85,7 @@ export default {
         // this.setSsionStorage();
       }
     },
-    setSsionStorage() {
+    setSsionStorage() { // 已弃用
       const _couponCenterData = { couponList: this.couponList, couponCount: this.couponCount };
       sessionStorage.setItem('couponCenterData', JSON.stringify(_couponCenterData));
     },

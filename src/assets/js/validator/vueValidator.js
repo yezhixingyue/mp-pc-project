@@ -15,7 +15,7 @@ Validator.prototype.strategies = {
   },
   maxLength(value, length, errorMsg) {
     // 最大长度
-    // console.log(value, +length, errorMsg, 'value, length, errorMsg', value.length > +length);
+    // // console.log(value, +length, errorMsg, 'value, length, errorMsg', value.length > +length);
     if (value !== '' && value.length > +length) {
       return errorMsg;
     }
@@ -98,7 +98,7 @@ Validator.prototype.strategies = {
     return true;
   },
   equalValue(value, equalValue, errorMsg) {
-    console.log(equalValue);
+    // // console.log(equalValue);
     if (`${value}` !== `${equalValue}`) return errorMsg;
     return true;
   },
@@ -110,12 +110,12 @@ Validator.prototype.add = function (value, rules) {
   rules.forEach((rule) => {
     // 遍历策咯数组
     self.cache.push(() => {
-      // console.log(rule.strategy);
+      // // console.log(rule.strategy);
       const arr = rule.strategy.split(':'); // arr => ['isNonEmpty'] ['maxLength', '4'];
       const type = arr.shift(); // type => isNonEmpty    maxLength     arr => []  ['4']
       arr.unshift(value); // [value] [value, '4']
       arr.push(rule.errorMsg); // [dom.value, errorMsg] [dom.value, '4', errorMsg]
-      // console.log(arr, type, '-----------arr', self.strategies[type]);
+      // // console.log(arr, type, '-----------arr', self.strategies[type]);
       return self.strategies[type].apply(self, arr);
     });
   });
@@ -123,7 +123,7 @@ Validator.prototype.add = function (value, rules) {
 
 Validator.prototype.start = function () {
   // 标记最后是否能符合规则
-  // console.log(this.cache);
+  // // console.log(this.cache);
   let msg = true;
   for (let i = 0; i < this.cache.length; i += 1) {
     msg = this.cache[i]();

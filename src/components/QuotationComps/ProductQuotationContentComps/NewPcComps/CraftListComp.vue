@@ -271,7 +271,7 @@ export default {
     async onConfirm() {
       // 判断值 如果通过则emit 如果不通过则done(false);
       let key = true;
-      console.log(this.curCraftData.PropertyList[0].CustomizedOptionValue);
+      // console.log(this.curCraftData.PropertyList[0].CustomizedOptionValue);
       this.curCraftData.PropertyList.forEach((item) => {
         item.forEach(it => {
           if (!key) return;
@@ -308,7 +308,7 @@ export default {
       this.watch2Dia = true;
       await this.utils.delay(10);
       this.curCraftData.historyData = JSON.parse(JSON.stringify(this.curCraftData.PropertyList));
-      console.log(this.curCraftData);
+      // console.log(this.curCraftData);
       this.$emit('setCraftList', [
         'maybeEdit',
         this.curCraftData,
@@ -322,10 +322,10 @@ export default {
       if (!type) {
         this.curCraftData.PropertyList[i][index].CustomerInputValue = data;
       } else {
-        console.log(this.curCraftData.PropertyList[i][index].CustomizedOptionValue, data);
+        // console.log(this.curCraftData.PropertyList[i][index].CustomizedOptionValue, data);
         this.curCraftData.PropertyList[i][index].CustomizedOptionValue = data;
       }
-      console.log(this.curCraftData.PropertyList);
+      // console.log(this.curCraftData.PropertyList);
     },
     addCraft() {
       const _temp = JSON.parse(JSON.stringify(this.addTemplateDate));
@@ -461,7 +461,7 @@ export default {
           key = false;
           break;
       }
-      // console.log(Operator, Value, ProductAmount, key);
+      // // console.log(Operator, Value, ProductAmount, key);
       return key;
     },
     handleMeetConditionsResult(key, craft, FilterType, type = 'isMain') {
@@ -478,7 +478,7 @@ export default {
           const item = this.selectedArr.find(_it => _it.CraftID === craft.CraftID);
           if (!item.isSystemSelect) return;
           // 在这里 如果前面提取条件时取的是交集的话 会有影响 需判断是否有另外一个条件已满足 此时不删除 这里和后端保持一致 只取第一个满足条件项 -- 作废 此处需处理
-          console.log(craft);
+          // console.log(craft);
           const _list = craft.CraftCondition.filter(it => it.UseStatus === 2); // 必选列表
           if (_list.length === 1) {
             this.$emit('setCraftList', ['del', craft, this.handleCallBack]);
@@ -530,7 +530,7 @@ export default {
           if (this.craftList2CraftCondition.length === 0 || (Object.prototype.toString.call(newVal) === '[object Array]' && newVal.length === 0)) return;
           if (newVal[0] && newVal[0].ProductAmount) {
             const { ProductAmount } = newVal[0];
-            console.log(newVal[0].ProductAmount, 'newVal[0].ProductAmount');
+            // console.log(newVal[0].ProductAmount, 'newVal[0].ProductAmount');
             this.craftList2CraftCondition.forEach(craft => {
               craft.CraftCondition.forEach(item => {
                 const { UseStatus, Constraint } = item;

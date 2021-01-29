@@ -506,6 +506,7 @@ body .el-radio__inner, body .el-checkbox__inner {
 
 .mp-general-loading-box {
   > .el-loading-spinner {
+    top: 40%;
     > i {
       font-size: 28px;
       margin-bottom: 8px;

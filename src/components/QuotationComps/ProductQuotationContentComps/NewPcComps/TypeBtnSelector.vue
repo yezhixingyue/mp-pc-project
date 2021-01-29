@@ -109,7 +109,7 @@ export default {
       return this.data.OptionList;
     },
     disabled() {
-      console.log(this.data.AllowCustomized);
+      // console.log(this.data.AllowCustomized);
       return this.data.AllowCustomized === false;
     },
   },

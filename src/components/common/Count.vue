@@ -90,13 +90,13 @@ export default {
   //       return 10;
   //     },
   //     set(newVal) {
-  //     //  console.log(newVal);
+  //     //  // console.log(newVal);
   //     },
   //   },
   // },
-  mounted() {
-    console.log(1);
-  },
+  // mounted() {
+  //   // console.log(1);
+  // },
 };
 </script>
 

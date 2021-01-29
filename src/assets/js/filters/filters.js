@@ -41,7 +41,7 @@
 //  * 促销活动 - 活动商品名称转换
 //  */
 // Vue.filter('formatPromoteProductList', ProductList => {
-// //  console.log(ProductList);
+// //  // console.log(ProductList);
 //   if (!ProductList || ProductList.length === 0) return '';
 //   const _textArr = [];
 //   ProductList.forEach(product => {

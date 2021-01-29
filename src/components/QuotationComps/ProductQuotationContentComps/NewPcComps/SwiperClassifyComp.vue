@@ -47,7 +47,7 @@ export default {
           this.$store.commit('Quotation/setCurProduct', t);
           this.$store.commit('Quotation/setSelectedCoupon', null);
           // this.$store.commit('Quotation/setIsFetchingPartProductData', true);
-          const key = await this.$store.dispatch('Quotation/getProductDetail', false);
+          const key = await this.$store.dispatch('Quotation/getProductDetail', { saveOldData: true });
           // this.$store.commit('Quotation/setIsFetchingPartProductData', false);
           if (!key) this.$store.commit('Quotation/clearCurProductInfo2Quotation');
         }

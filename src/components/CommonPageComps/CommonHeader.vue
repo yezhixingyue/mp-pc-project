@@ -131,6 +131,8 @@
 import { mapState } from 'vuex';
 import { debounce } from '@/assets/js/utils/throttle';
 import { Loading } from 'element-ui';
+import Cookie from '@/assets/js/Cookie';
+import { useCookie } from '@/assets/js/setup';
 import PlaceOrderProductClassifyComp from '@/components/QuotationComps/PlaceOrderProductClassifyComp.vue';
 import RechargeComp from './RechargeComp.vue';
 
@@ -172,7 +174,6 @@ export default {
       if (this.showRechange) {
         this.$store.dispatch('common/getCustomerFundBalance');
         this.showRemark = true;
-        // console.log('kai');
         this.oStyles.zIndex = 3000;
       }
       if (!this.showRechange) {
@@ -201,26 +202,15 @@ export default {
     },
     onMouseEnter() {
       this.showClassify = true;
-      // if (!this.isOpen) {
-      //   this.timer2 = setTimeout(() => {
-      //     this.isOpen = true;
-      //     this.timer2 = null;
-      //   }, 100);
-      // }
       if (this.timer) {
         clearTimeout(this.timer);
         this.timer = null;
       }
-      // if (i || i === 0) this.index = i;
     },
     onMouseLeave() {
       this.timer = setTimeout(() => {
         if (this.showClassify) this.showClassify = false;
       }, 80);
-      // if (this.timer2) {
-      //   clearTimeout(this.timer2);
-      //   this.timer2 = null;
-      // }
     },
     handleScroll(oEl) {
       if (!oEl) return;
@@ -228,7 +218,7 @@ export default {
       this.$store.commit('common/setScrollInfo', { scrollTop, scrollHeight, offsetHeight });
     },
     onCommand(command) {
-      console.log(command);
+      // console.log(command);
       if (command === 'loginOut') {
         this.messageBox.warnCancelNullMsg({
           title: '确定退出登录吗?',
@@ -236,6 +226,7 @@ export default {
             this.$router.replace('/login');
             sessionStorage.removeItem('token');
             localStorage.removeItem('token');
+            Cookie.removeCookie('token');
             // 另外再需清除状态
           },
         });
@@ -274,18 +265,14 @@ export default {
     },
   },
   watch: {
-    // customerInfo(newVal) {
-    //   // console.log('customerInfo new');
-    //   sessionStorage.setItem('customerInfo', JSON.stringify(newVal));
-    // },
     customerInfo: {
       handler(newVal) {
-        sessionStorage.setItem('customerInfo', JSON.stringify(newVal));
+        if (useCookie) Cookie.setCookie('customerInfo', JSON.stringify(newVal), 'Session');
+        else sessionStorage.setItem('customerInfo', JSON.stringify(newVal));
       },
       deep: true,
     },
     scrollTop(newVal) {
-      // console.log(newVal);
       if (newVal > 0) {
         if (this.showBoxShadow) return;
         this.showBoxShadow = true;
@@ -296,12 +283,15 @@ export default {
     },
   },
   async mounted() {
-    const loadingInstance = Loading.service({
+    let showLoading = true;
+    if (this.$route.name === 'placeOrder' && this.$route.query.id) showLoading = false;
+    const loadingInstance = showLoading ? Loading.service({
       lock: true,
       text: '加载中...',
       spinner: 'el-icon-loading',
       background: 'rgba(255, 255, 255, 0.3)',
-    });
+      customClass: 'mp-general-loading-box opAnimate',
+    }) : null;
     try {
       await Promise.all([
         this.$store.dispatch('Quotation/getProductClassify'),
@@ -310,14 +300,10 @@ export default {
         this.$store.dispatch('common/getCraftRelationList'),
         this.$store.dispatch('common/getExpressList'),
       ]);
-      loadingInstance.close();
+      if (showLoading) loadingInstance.close();
     } catch (error) {
-      loadingInstance.close();
+      if (showLoading) loadingInstance.close();
     }
-    // this.$store.dispatch('Quotation/getProductClassify');
-    // // this.$store.dispatch('Quotation/getCustomerShortCutList');
-    // this.$store.dispatch('common/getCustomerDetail');
-    // this.$store.dispatch('common/getCustomerFundBalance');
     this.oApp = document.getElementById('app');
     const _func = debounce(this.handleScroll, 50);
     if (this.oApp) {

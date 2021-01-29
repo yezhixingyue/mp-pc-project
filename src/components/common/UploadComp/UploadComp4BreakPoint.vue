@@ -186,7 +186,7 @@ export default { // 上传图片按钮
       }
     },
     upLoadSingleFile(file) {
-      console.log('upLoadSingleFile');
+      // // console.log('upLoadSingleFile');
       if (!file && this.shouldUpload) return;
       if (!this.shouldUpload) {
         this.successFunc({});
@@ -196,7 +196,7 @@ export default { // 上传图片按钮
       this.showReadMsg = true;
       const reader = new FileReader();
       reader.readAsArrayBuffer(file);
-      console.log(file, 12345);
+      // // console.log(file, 12345);
       reader.onerror = () => {
         this.messageBox.failSingleError({ title: '文件解析错误！', msg: '请检查文件并重新上传' });
         this.upLoadTitle = '文件读取失败';
@@ -242,20 +242,22 @@ export default { // 上传图片按钮
       };
     },
     // clearFile() {
-    //   console.log(this.$refs.uploadInp.value)
+    //   // console.log(this.$refs.uploadInp.value)
     // },
     submitUpload() {
       this.$refs.upload.submit();
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      // // console.log(file, fileList);
       this.fileList = fileList;
     },
     handlePreview(file) {
-      console.log(file);
+      if (file) {
+        // // console.log(file);
+      }
     },
     handleElChange(file, fileList) {
-      console.log(file, fileList);
+      // // console.log(file, fileList);
       this.fileList = fileList;
       this.$emit('fillFileContent', file.name.substring(0, file.name.lastIndexOf('.')));
     },
@@ -266,8 +268,8 @@ export default { // 上传图片按钮
         }, duration);
       });
     },
-    exceed(fileList, arr) {
-      console.log(this.fileList, fileList, arr);
+    exceed(fileList) {
+      // // console.log(this.fileList, fileList, arr);
       const file = fileList[0];
       this.fileList[0].raw = file;
       this.fileList[0].name = file.name;
@@ -276,9 +278,9 @@ export default { // 上传图片按钮
       // massage.failSingleError({ title: '已上传订单文件', msg: '如需更换，请删除订单文件后重新上传' });
     },
     async handleElUpload() {
-      console.log('handleElUpload');
-      const oInpFile = document.querySelector('.upload-box .el-upload__input');
-      console.log(oInpFile.files, 'shouldUpload upload comp', this.shouldUpload);
+      // // console.log('handleElUpload');
+      // const oInpFile = document.querySelector('.upload-box .el-upload__input');
+      // // console.log(oInpFile.files, 'shouldUpload upload comp', this.shouldUpload);
       if (!this.shouldUpload) { // 如果不需要上传文件
         const msg = await this.validateFunc();
         if (typeof msg === 'string') {

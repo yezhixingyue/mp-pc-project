@@ -43,7 +43,7 @@ export default {
         return this.value;
       },
       set(newVal) {
-        console.log('mount init num-input-wrap----!');
+        // console.log('mount init num-input-wrap----!');
         this.$emit('input', newVal);
       },
     },
@@ -51,7 +51,7 @@ export default {
   methods: {
     // eslint-disable-next-line no-unused-vars
     onFocus(e) {
-      // console.log(e, e.currentTarget);
+      // // console.log(e, e.currentTarget);
       // e.currentTarget.select();
       e.currentTarget.select();
       // return false;

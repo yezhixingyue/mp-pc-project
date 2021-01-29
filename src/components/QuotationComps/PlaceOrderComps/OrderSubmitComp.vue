@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     successFunc({ compiledName }) {
-      console.log('successFunc ---- submit comp -- this.shouldUpload', this.isSpotGoods);
+      // // console.log('successFunc ---- submit comp -- this.shouldUpload', this.isSpotGoods);
       // if (this.isSpotGoods) { // 现货 不需上传
       //   return;
       // }

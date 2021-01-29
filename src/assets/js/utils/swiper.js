@@ -140,7 +140,7 @@ const tweenMove = ({
 
     for (const v in to) {
       moveAttr[v] = Tween[type](t, b[v], c[v], d);
-      // console.log(to[v]==Math.round(moveAttr[v]));
+      // // console.log(to[v]==Math.round(moveAttr[v]));
 
       /* if(to[v]==Math.round(moveAttr[v])){
 				cancelAnimationFrame(el.timer);
@@ -383,7 +383,7 @@ const swiper = ({
       callBack() {
         // 当缓冲走完了的时候才是加载数据的时候，但是需要判断是不是走到底部了
         if (target == minDistance[dir]) {	// 这个条件成立代表现在缓冲是到了底部了
-          // console.log(1);
+          // // console.log(1);
           toEnd && toEnd.call(wrap, ev);
         }
         over && over.call(wrap, ev);
@@ -514,14 +514,14 @@ const gesTure = ({
         y: touch[0].pageY - startPoint.y,
       };
 
-      // console.log(distance);
+      // // console.log(distance);
 
       // 这里要除以倍数，是因为图片缩放后它要走的距离与手指走的距离不是1:1的关系了，而是形成了倍数的关系，所以要去掉倍数
       targetEle = {
         x: (startEle.x + distance.x) / el.scale,
         y: (startEle.y + distance.y) / el.scale,
       };
-      console.log((startEle.x + distance.x), el.scale);
+      // // console.log((startEle.x + distance.x), el.scale);
 
       css(el, { translateX: targetEle.x, translateY: targetEle.y });
     }

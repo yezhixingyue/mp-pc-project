@@ -283,7 +283,7 @@ export default {
             // 新增地址
             const _obj = JSON.parse(JSON.stringify(this.newAdd));
             const res = await this.api.getCustomerAddress(_obj);
-            // console.log(res);
+            // // console.log(res);
             if (res.data.Status === 1000) {
               this.messageBox.successSingle({
                 title: '地址添加成功',
@@ -315,12 +315,12 @@ export default {
         // }
         const _obj = JSON.parse(JSON.stringify(this.newAdd));
         const res = await this.api.getCustomerAddress(_obj);
-        // console.log(res);
+        // // console.log(res);
         if (res.data.Status === 1000) {
           this.messageBox.successSingle({
             title: '地址修改成功',
             successFunc: () => {
-              // console.log('successFunc');
+              // // console.log('successFunc');
               this.$store.commit('common/handleAddOrEditAddressOnStore', [this.newAdd, 'edit']);
               this.handleBeforeDiaClose();
             },

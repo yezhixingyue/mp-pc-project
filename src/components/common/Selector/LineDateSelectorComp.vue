@@ -118,13 +118,13 @@ export default {
       },
       set(newVal) {
         if (this.tabValue === newVal) return;
-        console.log(newVal);
+        // // console.log(newVal);
         if (newVal !== 'define') {
           this.changePropsFunc([this.typeList[0], newVal]);
           if (newVal) this.requestFunc();
         } else {
           this.visible = true;
-          console.log(this.visible);
+          // // console.log(this.visible);
         }
       },
     },

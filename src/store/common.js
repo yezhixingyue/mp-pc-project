@@ -3,6 +3,8 @@
 import api from '@/api/index';
 import router from '@/router';
 import massage from '@/assets/js/utils/message';
+import { useCookie } from '@/assets/js/setup';
+import Cookie from '@/assets/js/Cookie';
 
 export default {
   namespaced: true,
@@ -387,15 +389,20 @@ export default {
     },
     async getCustomerDetail({ state, commit }, key = false) { // 获取账号基本信息
       if (state.customerInfo && !key) return;
-      const sessionCust = sessionStorage.getItem('customerInfo');
+      const sessionCust = useCookie ? Cookie.getCookie('customerInfo') : sessionStorage.getItem('customerInfo');
       if (sessionCust) {
-        commit('setCustomerInfo', JSON.parse(sessionCust));
-        return;
+        const user = JSON.parse(sessionCust);
+        const token = Cookie.getCookie('token');
+        if (user.Account.Token === token) {
+          commit('setCustomerInfo', user);
+          return;
+        }
       }
       const res = await api.getCustomerDetail();
       if (res.data.Status === 1000) {
         commit('setCustomerInfo', res.data.Data);
-        sessionStorage.setItem('customerInfo', JSON.stringify(res.data.Data));
+        if (useCookie) Cookie.setCookie('customerInfo', JSON.stringify(res.data.Data), 'Session');
+        else sessionStorage.setItem('customerInfo', JSON.stringify(res.data.Data));
         if (res.data.Data.AuthStatus !== 2) {
           massage.warnCancelBox({
             title: '账户信息未完善',

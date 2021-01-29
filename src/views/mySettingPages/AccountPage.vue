@@ -223,12 +223,12 @@ export default {
     },
     handleCountyChange(e) {
       const _t = this.CountyList.find(it => it.ID === e);
-      console.log(_t);
+      // console.log(_t);
       this.AuthenInfo4Submit.AuthenInfo.SellArea.CountyName = _t.Name;
     },
     onChange(e) {
       const file = e.target.files[0];
-      console.log(file);
+      // console.log(file);
       if (!file) {
         return;
       }
@@ -353,7 +353,7 @@ export default {
     },
     async handleSubmit() {
       if (!this.checkValue()) return;
-      // console.log(this.AuthenInfo4Submit);
+      // // console.log(this.AuthenInfo4Submit);
       const res = await this.api.getCustomerApplyAuthentication(this.AuthenInfo4Submit);
       if (res.data.Status === 1000) {
         this.messageBox.successSingle({
@@ -386,7 +386,7 @@ export default {
         this.AuthenInfo4Submit.AuthenInfo.DetailAddress = DetailAddress;
         this.AuthenInfo4Submit.AuthenInfo.LicensePath = LicensePath;
         if (LicensePath) this.hasUploadedImg = true;
-        // console.log(SellArea);
+        // // console.log(SellArea);
         if (SellArea) this.AuthenInfo4Submit.AuthenInfo.SellArea = { ...SellArea };
         if (SellArea) {
           const { RegionalID, CityID } = SellArea;
@@ -419,7 +419,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$route.query);
+    // console.log(this.$route.query);
   },
 };
 </script>

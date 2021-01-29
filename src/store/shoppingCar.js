@@ -115,7 +115,7 @@ export default {
 
       const _list = list.map(it => ({ preOrderID: it.OrderID, closeTip: true }));
 
-      console.log(_list, list);
+      // console.log(_list, list);
 
       const res = await asyncNonCurrentFunc(api.getQuotationRemove, _list);
       // const res = [];

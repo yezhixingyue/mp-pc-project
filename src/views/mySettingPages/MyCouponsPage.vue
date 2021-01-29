@@ -137,7 +137,7 @@ export default {
       const _t0 = this.countData.find(it => it.First === 0);
       const _t1 = this.countData.find(it => it.First === 1);
       const _t2 = this.countData.find(it => it.First === 2);
-      // console.log(_t0);
+      // // console.log(_t0);
       return {
         unused: _t0.Second,
         used: _t1.Second,

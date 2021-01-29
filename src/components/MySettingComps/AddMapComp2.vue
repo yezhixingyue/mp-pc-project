@@ -249,7 +249,7 @@ export default {
           pName: 'PlaceSearch',
           events: {
             error: e => {
-              console.log(e, 'errpr map');
+              // console.log(e, 'errpr map');
             },
           },
         },
@@ -314,7 +314,7 @@ export default {
       }
     },
     handleCountyChange(e) {
-      // console.log(e);
+      // // console.log(e);
       const _t = this.CountyList.find(it => it.ID === e);
       this.newAdd.ExpressArea.CountyName = _t.Name;
     },
@@ -322,7 +322,7 @@ export default {
       this.$emit('changeStatus', false);
     },
     // onSelfSearch() {
-    //   console.log(AMap, AMap.PlaceSearch, AMap.Amap.PlaceSearch);
+    //   // console.log(AMap, AMap.PlaceSearch, AMap.Amap.PlaceSearch);
     //   // const placeSearch = new AMap.PlaceSearch({
     //   //   // city 指定搜索所在城市，支持传入格式有：城市名、citycode和adcode
     //   //   city: '010',
@@ -342,7 +342,7 @@ export default {
             // 新增地址
             const _obj = JSON.parse(JSON.stringify(this.newAdd));
             const res = await this.api.getCustomerAddress(_obj);
-            // console.log(res);
+            // // console.log(res);
             if (res.data.Status === 1000) {
               this.messageBox.successSingle({
                 title: '地址添加成功',
@@ -367,12 +367,12 @@ export default {
         // 编辑地址
         const _obj = JSON.parse(JSON.stringify(this.newAdd));
         const res = await this.api.getCustomerAddress(_obj);
-        // console.log(res);
+        // // console.log(res);
         if (res.data.Status === 1000) {
           this.messageBox.successSingle({
             title: '地址修改成功',
             successFunc: () => {
-              // console.log('successFunc');
+              // // console.log('successFunc');
               this.$store.commit('common/handleAddOrEditAddressOnStore', [this.newAdd, 'edit']);
               this.handleBeforeDiaClose();
             },
@@ -391,10 +391,10 @@ export default {
       }
       this.newAdd.Latitude = _lat;
       this.newAdd.Longitude = _lng;
-      // console.log(this.newAdd.Longitude, _lat);
+      // // console.log(this.newAdd.Longitude, _lat);
     },
     onSearchResult(pois) {
-      console.log(pois, 'onSearchResult');
+      // console.log(pois, 'onSearchResult');
       this.mapIsLoading = false;
       if (pois.length > 0) {
         const { lng, lat } = pois[0];
@@ -405,16 +405,16 @@ export default {
       const { AddressDetail, ExpressArea } = this.newAdd;
       const { RegionalName, CityName, CountyName } = ExpressArea;
       const _str = `${RegionalName}${CityName}${CountyName}${AddressDetail}`;
-      console.log(_str);
+      // console.log(_str);
       if (_str === this.lastSearchWords) return;
       this.newAdd.HavePosition = true;
       setTimeout(() => {
         this.$refs.amapSearchBox.keyword = _str;
-        // console.log(this.$refs.amapSearchBox.search);
+        // // console.log(this.$refs.amapSearchBox.search);
         try {
           this.$refs.amapSearchBox.search();
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
         this.mapIsLoading = true;
         this.lastSearchWords = _str;
@@ -434,7 +434,7 @@ export default {
         this.newAdd.IsDefault = IsDefault;
         this.newAdd.Latitude = Latitude;
         this.newAdd.Longitude = Longitude;
-        // console.log(this.newAdd.Latitude, Latitude, this.newAdd.Longitude, Longitude);
+        // // console.log(this.newAdd.Latitude, Latitude, this.newAdd.Longitude, Longitude);
         const { RegionalName, RegionalID, CityName, CityID, CountyName, CountyID } = ExpressArea;
         this.newAdd.ExpressArea.RegionalName = RegionalName;
         this.newAdd.ExpressArea.RegionalID = RegionalID;
@@ -442,7 +442,7 @@ export default {
         this.newAdd.ExpressArea.CityID = CityID;
         this.newAdd.ExpressArea.CountyName = CountyName;
         this.newAdd.ExpressArea.CountyID = CountyID;
-        // console.log(AMap);
+        // // console.log(AMap);
         if (ExpressArea) {
           const res = await Promise.all([
             this.api.getAddressIDList(-1),
@@ -472,7 +472,7 @@ export default {
         this.newAdd.IsDefault = IsDefault;
         this.newAdd.Latitude = Latitude;
         this.newAdd.Longitude = Longitude;
-        // console.log(this.newAdd.Latitude, Latitude, this.newAdd.Longitude, Longitude);
+        // // console.log(this.newAdd.Latitude, Latitude, this.newAdd.Longitude, Longitude);
         const { RegionalName, RegionalID, CityName, CityID, CountyName, CountyID } = ExpressArea;
         this.newAdd.ExpressArea.RegionalName = RegionalName;
         this.newAdd.ExpressArea.RegionalID = RegionalID;

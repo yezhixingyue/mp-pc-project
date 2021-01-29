@@ -3,15 +3,26 @@ import { Loading, Message } from 'element-ui';
 import router from '@/router';
 import store from '../store';
 import messageBox from '../assets/js/utils/message';
+import Cookie from '../assets/js/Cookie';
+import { useCookie } from '../assets/js/setup';
 
 let loadingInstance;
 let closeTip = false;
 let closeLoading = false;
+const clearToken = () => {
+  sessionStorage.removeItem('token');
+  localStorage.removeItem('token');
+  Cookie.removeCookie('token');
+};
+
 axios.interceptors.request.use(
   (config) => {
     const curConfig = config;
-    let token = sessionStorage.getItem('token');
-    if (!token) token = localStorage.getItem('token');
+    let token;
+    if (useCookie) token = Cookie.getCookie('token');
+    else token = sessionStorage.getItem('token');
+
+    if (!token && !useCookie) token = localStorage.getItem('token');
     closeTip = curConfig.closeTip;
     closeLoading = curConfig.closeLoading;
     const url = curConfig.url.split('?')[0];
@@ -25,12 +36,10 @@ axios.interceptors.request.use(
       }
     }
     if (key && !closeLoading) {
-      console.log('key && !closeLoading', key && !closeLoading);
-      // let _color = 'rgba(0, 0, 0, 0.4)';
       let _color = 'rgba(255, 255, 255, 0.5)';
       let _text = '加载中';
       let _customClass = 'mp-general-loading-box opAnimate';
-      // console.log(url);
+      // // console.log(url);
       if (url === '/Api/Quotation/Save' || url === '/Api/Order/Create') {
         _color = 'rgba(0, 0, 0, 0.7)';
         _text = '上传完成，正在提交...';
@@ -41,7 +50,7 @@ axios.interceptors.request.use(
       if (url === '/Api/Product/GetProductDetail') _text = '请稍候，正在获取产品信息...';
       if (url === '/Api/Quotation/List') _text = '正在获取购物车信息...';
       if (url === '/Api/Product/ProductList') _text = '获取产品列表信息...';
-      // console.log(url, closeLoading);
+      // // console.log(url, closeLoading);
       loadingInstance = Loading.service({
         lock: true,
         text: _text,
@@ -73,7 +82,7 @@ axios.interceptors.response.use(
     const oneCondition4NotNeedToast = !([9164, 9165, 9166, 9167, 9168, 9169, 9170].includes(response.data.Status) && ['/Api/Order/PreCreate', '/Api/Quotation/Save'].includes(_url));
     //  || !['/Api/Order/PreCreate', '/Api/Quotation/Save'].includes(_url))
 
-    // console.log(oneCondition4NotNeedToast);
+    // // console.log(oneCondition4NotNeedToast);
 
     if ([7025, 8037].includes(response.data.Status)) {
       // Message({
@@ -81,18 +90,16 @@ axios.interceptors.response.use(
       //   message: `${response.data.Message}`,
       //   type: 'error',
       // });
+      clearToken();
       router.replace('/login');
-      sessionStorage.removeItem('token');
-      localStorage.removeItem('token');
       return response;
     // eslint-disable-next-line max-len
     } if ((!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && (!closeTip) && oneCondition4NotNeedToast) || [7025, 8037].includes(response.data.Status)) {
       const _obj = { msg: `[ ${response.data.Message} ]` };
       if ([7025, 8037].includes(response.data.Status)) {
         _obj.successFunc = () => {
+          clearToken();
           router.replace('/login');
-          sessionStorage.removeItem('token');
-          localStorage.removeItem('token');
         };
       } else {
         _obj.successFunc = undefined;
@@ -126,9 +133,8 @@ axios.interceptors.response.use(
         let buffterErr = '文件导出数据过大，请缩小导出时间区间或精确筛选条件';
         switch (error.response.status) {
           case 401:
+            clearToken();
             router.replace('/login');
-            sessionStorage.removeItem('token');
-            localStorage.removeItem('token');
             key = true;
             break;
           case 413: // 处理文件导出错误

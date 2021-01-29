@@ -70,7 +70,7 @@ export default {
   watch: {
     curProductInfo2Quotation: {
       handler(newVal) {
-        console.log('curProductInfo2Quotatio-------------------------------n');
+        // console.log('curProductInfo2Quotatio-------------------------------n');
         if (newVal) {
           if (this.minNum && this.minNum === this.maxNum) {
             this.$emit('changeFunc', this.minNum);
@@ -81,7 +81,7 @@ export default {
     },
   },
   updated() {
-    console.log('updated-------------------');
+    // console.log('updated-------------------');
   },
   // mounted() {
   //   if (this.minNum && this.minNum === this.maxNum) {

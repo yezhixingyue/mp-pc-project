@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Cookie from '@/assets/js/Cookie';
+import { useCookie } from '@/assets/js/setup';
 import CommonViewPage from '../views/Common/CommonViewPage.vue';
 // import LoginPage from '../views/Login/loginPage.vue';
 
@@ -310,7 +312,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
   scrollBehavior(to, from, savedPosition) {
-    // console.log(to, savedPosition);
+    // // console.log(to, savedPosition);
     if (savedPosition) {
       return savedPosition;
     }
@@ -322,8 +324,11 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  let _auth = sessionStorage.getItem('token');
-  if (!_auth) _auth = localStorage.getItem('token');
+  // // console.log('router.beforeEach', Cookie.getCookie('token'));
+  let _auth;
+  if (useCookie) _auth = Cookie.getCookie('token');
+  else _auth = sessionStorage.getItem('token');
+  if (!_auth && !useCookie) _auth = localStorage.getItem('token');
   if (to.meta.title) {
     document.title = to.meta.title;
   }
@@ -334,17 +339,22 @@ router.beforeEach(async (to, from, next) => {
   }
   // 判断该路由是否需要登录权限
   if (to.matched.some(record => record.meta.requiresAuth)) {
+    // // console.log(1, _auth, to);
     if (to.name === 'login') {
       next();
     } else if (to.name === 'placeOrder' && to.query.token) {
-      localStorage.setItem('token', to.query.token);
+      if (!useCookie) localStorage.setItem('token', to.query.token);
+      else Cookie.setItem('token', to.query.token, 24 * 60 * 60); // 该情况将不存在
       next({
         path: '/placeOrder',
         query: { id: to.query.id },
       });
     } else if (to.name === 'placeOrder' && to.query.id && !_auth && !to.query.token) {
-      sessionStorage.setItem('targetProID', to.query.id);
-      next('/login');
+      // sessionStorage.setItem('targetProID', to.query.id);
+      next({
+        path: '/login',
+        query: { id: to.query.id },
+      });
     } else if (_auth) {
       next();
     } else {
@@ -354,6 +364,10 @@ router.beforeEach(async (to, from, next) => {
       });
     }
   } else {
+    // if (to.name === 'login' && to.query.source) {
+    //   sessionStorage.setItem('source', to.query.source);
+    //   next();
+    // }
     next();
   }
 });

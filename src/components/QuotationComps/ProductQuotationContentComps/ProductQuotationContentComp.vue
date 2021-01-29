@@ -1,8 +1,8 @@
 <template>
   <article class="mp-quotation-product-quotation-content-wrap">
     <section class="left-place">
-      <article v-if="data" v-loading="isFetchingPartProductData">
-        <div class="content" :key="data.ProductID">
+      <article v-if="placeData" v-loading="isFetchingPartProductData">
+        <div class="content" :key="placeData.ProductID">
           <section
             class="content-title"
             v-if="curProductShowNameInfo && curProductShowNameInfo.length === 3"
@@ -205,10 +205,16 @@
       <AddShowChangeComp ref="AddShowChangeComp" />
       <OrderSubmitComp
         @handleMapPosition="handleMapPosition"
-        :isSpotGoods="data.IsSpotGoods"
+        :isSpotGoods="placeData.IsSpotGoods"
       />
     </section>
-    <section  class="right-tips">right - use 骨架屏</section>
+    <AsideIntroComp
+     :asideAboutData='asideAboutData'
+     :asideIntroData='asideIntroData'
+     :isError='getAboutIsError'
+     :productName='placeData.ProductName'
+     @getProductAsideIntroData='getProductAsideIntroData'
+     />
   </article>
 </template>
 
@@ -216,6 +222,7 @@
 import {
   mapState, mapGetters, mapMutations, mapActions,
 } from 'vuex';
+import tipEnums from '@/assets/js/utils/tipEnums';
 import MultyKindMakeup from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/MultyKindMakeup.vue';
 import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesComp.vue';
 import CraftListComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/CraftListComp.vue';
@@ -225,9 +232,10 @@ import ComputedResultComp from './NewPcComps/ComputedResultComp.vue';
 import AddShowChangeComp from '../PlaceOrderComps/AddShowChangeComp.vue';
 import OrderSubmitComp from '../PlaceOrderComps/OrderSubmitComp.vue';
 import SwiperClassifyComp from './NewPcComps/SwiperClassifyComp.vue';
+import AsideIntroComp from '../PlaceOrderComps/AsideIntroComp.vue';
 
 export default {
-  props: ['data'],
+  props: ['placeData'],
   components: {
     ProductCountComp,
     MultyKindMakeup,
@@ -238,6 +246,7 @@ export default {
     OrderSubmitComp,
     ComputedResultComp,
     SwiperClassifyComp,
+    AsideIntroComp,
   },
   computed: {
     // eslint-disable-next-line max-len
@@ -347,7 +356,7 @@ export default {
         return this.obj2GetProductPrice.ProductParams.PropertyList;
       },
       set([data, index, type]) {
-        // console.log("setProductParamsPropertyList", data);
+        // // console.log("setProductParamsPropertyList", data);
         this.setProductParamsPropertyList([index, data, type]);
       },
     },
@@ -366,6 +375,9 @@ export default {
       couponCode2Add: '',
       isCouponGet: false, // 是否已获取优惠券列表数据
       isGettingPrice: false,
+      asideAboutData: null, // 侧边栏推荐产品数据
+      asideIntroData: null,
+      getAboutIsError: false,
     };
   },
   methods: {
@@ -378,7 +390,7 @@ export default {
     ...mapActions('Quotation', ['getProductPrice']),
     ...mapActions('common', ['getCraftRelationList']),
     handleMapPosition(cb) {
-      console.log(cb, 'cb func ----');
+      // // console.log(cb, 'cb func ----');
       this.$refs.AddShowChangeComp.handleSetPositionOnMap(cb);
     },
     async go2GetProductPrice() {
@@ -402,7 +414,7 @@ export default {
       if (this.curDefaultID === DefaultID) return;
       this.curDefaultID = DefaultID;
       this.$store.commit('Quotation/setDefaultProductInfo', item);
-      // console.log(1223332131);
+      // // console.log(1223332131);
       // this.$forceUpdate();
     },
     handleChange(list, bool) {
@@ -472,6 +484,18 @@ export default {
     handleGoToCouponCenter() {
       this.$router.push('/mySetting/couponCenter');
     },
+    async getProductAsideIntroData() {
+      const { ProductID } = this.placeData;
+      let bool = true;
+      this.asideAboutData = null;
+      this.getAboutIsError = false;
+      const res = await this.api.getProductIntroDetail(ProductID).catch(() => { bool = false; });
+      if (bool && res && res.data.Status === 1000) {
+        this.asideAboutData = res.data.Data;
+      } else {
+        this.getAboutIsError = true;
+      }
+    },
   },
   mounted() {
     if (this.countOption.length > 0 && !this.ProductAmount) {
@@ -479,6 +503,7 @@ export default {
       this.setProductParams(['ProductAmount', `${_count}`]);
     }
     this.getCraftRelationList();
+    // if (this.data) this.getProductAsideIntroData(this.data.ProductID);
   },
   watch: {
     countOption(newVal) {
@@ -494,6 +519,20 @@ export default {
     },
     watchAddInfoChange() {
       this.$store.commit('Quotation/setProductQuotationResult', null);
+    },
+    placeData: {
+      handler(val) {
+        if (!val || typeof val !== 'object') return;
+        const { ProductID, TipsDetail } = val;
+        if (!ProductID || !TipsDetail) return;
+        const { BaseTips } = TipsDetail;
+        if (BaseTips && BaseTips.length > 0) {
+          const t = BaseTips.find(it => it.Type === tipEnums.Product);
+          if (t) this.asideIntroData = t;
+        }
+        this.getProductAsideIntroData();
+      },
+      immediate: true,
     },
   },
 };
@@ -583,7 +622,7 @@ export default {
           white-space: normal;
           position: absolute;
           left: 160px;
-          top: -18px;
+          top: 2px;
           // height: 100px;
           width: 538px;
           > span,
@@ -885,13 +924,6 @@ export default {
         }
       }
     }
-  }
-
-  > section.right-tips {
-    display: inline-block;
-    vertical-align: top;
-    width: 255px;
-    background-color: #fff;
   }
 }
 </style>

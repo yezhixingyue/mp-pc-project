@@ -116,7 +116,7 @@ export default {
     /** 未付款单提交第一步
     ---------------------------------------- */
     async getOrderPreCreateFromUnpayList({ commit, rootState }, list) {
-      console.log(list);
+      // console.log(list);
       const List = list.map(it => ({ ID: it.OrderID }));
       const _obj = { OrderType: 2, PayInFull: false, List };
       const res = await api.getOrderPrePay(_obj);

@@ -149,7 +149,7 @@ export default {
         return this.condition4OrderList.Status;
       },
       set(newVal) {
-        // console.log(newVal);
+        // // console.log(newVal);
         this.$store.commit('order/setCondition4OrderList', [['Status', ''], newVal]);
         this.$store.dispatch('order/getOrderList');
       },

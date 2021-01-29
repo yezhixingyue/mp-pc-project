@@ -4,7 +4,7 @@
       <PlaceOrderProductClassifyComp />
     </header>
     <div class="content">
-      <ProductQuotationContentComp v-if="curProductInfo2Quotation" :data='curProductInfo2Quotation' />
+      <ProductQuotationContentComp v-if="curProductInfo2Quotation" :placeData='curProductInfo2Quotation' />
       <div v-else-if='initPageText && !curProductInfo2Quotation' class="empty">
         <span class="iconfont icon-wancheng is-success"></span>
         <span>{{initPageText}}</span>
@@ -65,7 +65,7 @@ export default {
       if (sub) {
         this.$store.commit('Quotation/setCurProduct', sub);
         this.$store.commit('Quotation/setCurProductInfo', sub);
-        await this.$store.dispatch('Quotation/getProductDetail');
+        await this.$store.dispatch('Quotation/getProductDetail', { closeloading: true });
         this.$store.commit('Quotation/setSelectedCoupon', null);
       }
       this.initLoading = false;

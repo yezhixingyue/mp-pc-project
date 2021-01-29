@@ -3,7 +3,7 @@ import store from '@/store';
 export default class ClassType {
   static setDate(obj) {
     const _obj = obj;
-    console.log(obj.Date, store);
+    // console.log(obj.Date, store);
     const dateTypeList = ['all', 'today', 'yesterday', 'beforeyesterday', 'curMonth', 'lastMonth'];
     if (dateTypeList.includes(obj.DateType)) {
       switch (obj.DateType) {
@@ -39,7 +39,7 @@ export default class ClassType {
 
   static filter(obj) {
     const _tempObj = {};
-    console.log(obj);
+    // console.log(obj);
     if (!obj) return {};
     Object.keys(obj).forEach(key => {
       if (Object.prototype.toString.call(obj[key]) !== '[object Object]') {

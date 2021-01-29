@@ -38,3 +38,24 @@ public enum ImageType : byte
   cdr,eps,jpg,jpeg,tiff,tif,rar,zip,pdf
 
 传TakeOrderWay值就可以了 1代客下单 2客户自助
+
+## 产品提示，提示类型枚举值
+
+    产品提示类型
+    产品
+        Product = 0,
+
+    部件
+        Part = 1,
+
+    数量
+        Number = 2,
+
+    尺寸
+        Size = 3,
+
+    物料
+        Material = 4,
+
+    属性
+        Property = 5

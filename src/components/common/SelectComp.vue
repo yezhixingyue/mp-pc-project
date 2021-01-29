@@ -49,7 +49,7 @@ export default {
         return this.title;
       },
       set(newVal) {
-        // console.log(newVal, this.title);
+        // // console.log(newVal, this.title);
         if (newVal === this.title) return;
         this.$emit('handleChange', newVal);
       },

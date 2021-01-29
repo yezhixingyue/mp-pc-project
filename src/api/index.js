@@ -72,6 +72,9 @@ const api = {
       { closeLoading },
     );
   },
+  getProductIntroDetail(productID) { // GET /Api/Product/GetProductDetail  获取下单时 右侧侧边栏 推荐列表
+    return instance.get(`/Api/Product/Introduce?productID=${productID}`, { closeLoading: true });
+  },
   getProductPrice(data) { // 价格信息计算  POST /Api/Calculate/ProductPrice
     return instance.post('/Api/Calculate/ProductPrice', { Terminal: 1, ...data }, { closeLoading: true });
   },
@@ -168,7 +171,7 @@ const api = {
     return instance.post(`/Api/Upload/WholeFile?uniqueName=${uniqueName}`, formData, config);
   },
   getUploadedProgress(uniqueName) { // 获取断点续传文件已上传的位置  GET /Api/FileNode
-    console.log('getUploadedProgress', uniqueName);
+    // // console.log('getUploadedProgress', uniqueName);
     return instance.get(`/Api/FileNode?uniqueName=${uniqueName}`, { closeLoading: true });
   },
   UploadFileBreakpointResume(data, uniqueName, first, last, length, onUploadProgressFunc) { // 断点续传上传文件 /Api/Upload/File

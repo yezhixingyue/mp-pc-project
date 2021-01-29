@@ -120,7 +120,7 @@ export default {
       const _obj = { FilePath: compiledName, PayInFull: this.checked, cb, isSpotGoods };
       this.$store.dispatch('Quotation/placeOrderFromPreCreate', _obj).catch((...args) => {
         const error = args[0];
-        console.log(error);
+        // console.log(error);
         this.messageBox.handleLoadingError({
           title: '下单失败',
           error,
@@ -143,7 +143,7 @@ export default {
       this.$store.commit('Quotation/setCurPayInfo2Code', null);
     }
     const _bool = localStorage.getItem('isOrderDataKeeping');
-    // console.log(_bool);
+    // // console.log(_bool);
     if (_bool === 'true') this.iskeeping = true;
   },
 };

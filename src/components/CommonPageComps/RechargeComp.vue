@@ -163,7 +163,7 @@ export default {
     },
     async getPayStatus() {
       // 轮询付款状态
-      // console.log(object)
+      // // console.log(object)
       if (!this.showRechange) return;
       let key = false;
       await this.getPayResult((status) => {
@@ -188,7 +188,7 @@ export default {
       this.$emit('handleClose');
     },
     handleBodyClick() {
-      // console.log('handleBodyClick', e.target);
+      // // console.log('handleBodyClick', e.target);
       this.handleCloseClick();
     },
   },
@@ -202,12 +202,12 @@ export default {
   mounted() {
     this.oHeader = document.querySelector('.mp-pc-common-page-header-common-wrap > header');
     this.oFooter = document.querySelector('.mp-pc-common-page-header-common-wrap > footer');
-    // console.log(this.oHeader, 'oBody mounted');
+    // // console.log(this.oHeader, 'oBody mounted');
     this.oHeader.addEventListener('click', this.handleBodyClick);
     this.oFooter.addEventListener('click', this.handleBodyClick);
   },
   destroyed() {
-    // console.log(this.oHeader, 'oBody destroyed');
+    // // console.log(this.oHeader, 'oBody destroyed');
     this.oHeader.removeEventListener('click', this.handleBodyClick);
     this.oFooter.removeEventListener('click', this.handleBodyClick);
   },

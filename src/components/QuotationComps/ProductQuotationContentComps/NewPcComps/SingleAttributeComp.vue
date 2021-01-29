@@ -202,7 +202,7 @@ export default {
       if (!this.ValueType && this.ValueType !== 0) {
         this.$emit('changeFunc', newVal);
       } else {
-        console.log(newVal, e);
+        // console.log(newVal, e);
         this.$emit('changeFunc', [newVal, false]);
         this.$emit('changeFunc', ['', true]);
       }
@@ -241,7 +241,7 @@ export default {
     },
     watch2Dia() { // 作用? 关闭窗口时
       if (!this.isSelectedInp && this.inputType !== 'CustomizedValue') {
-        console.log('changeFunc', 'watch2Dia');
+        // console.log('changeFunc', 'watch2Dia');
         this.$emit('changeFunc', [
           '',
           !this.isSelectedInp && this.ValueType === 2,

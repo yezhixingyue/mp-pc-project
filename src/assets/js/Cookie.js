@@ -1,6 +1,8 @@
+import { domain } from './setup';
+
 const Cookie = {
-  setCookie(key, value, t) {
-    document.cookie = `${key}=${value};max-age=${t}`;
+  setCookie(key, value, t) { // max-age单位为秒
+    document.cookie = `${key}=${value};max-age=${t};domain=${domain};path=/;`;
   },
   removeCookie(name) {
     this.setCookie(name, '', -1);

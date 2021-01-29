@@ -63,7 +63,7 @@ export default {
         return this.condition4FundBillList.Type;
       },
       set(newVal) {
-        // console.log(newVal);
+        // // console.log(newVal);
         this.$store.commit('summary/setCondition4FundBillList', [['Type', ''], newVal]);
         this.$store.dispatch('summary/getFundBillList');
       },

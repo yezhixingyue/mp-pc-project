@@ -188,7 +188,7 @@ export default {
   },
   methods: {
     handleInputChange([data, index]) {
-      console.log(data, index, 'handleInputChange');
+      // console.log(data, index, 'handleInputChange');
       this.sizeInputValueList[index] = data;
       this.$emit('changeFunc', ['', [...this.sizeInputValueList]]);
     },
@@ -246,7 +246,7 @@ export default {
     watchTarget: {
       handler(newVal) {
         this.$nextTick(() => {
-          console.log(newVal);
+          // console.log(newVal);
           if (!newVal || newVal.length === 0) return;
           const _list = [];
           newVal.forEach(it => {
@@ -257,7 +257,7 @@ export default {
             _list.push(itemData);
           });
           const arr = [..._list];
-          // console.log(arr, this.sizeInputValueList);
+          // // console.log(arr, this.sizeInputValueList);
           this.$emit('changeFunc', ['', arr]);
           this.sizeInputValueList = arr;
         });

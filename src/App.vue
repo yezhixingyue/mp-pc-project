@@ -11,13 +11,14 @@
 <script>
 // import { throttle } from '@/assets/js/utils/throttle';
 import { mapState } from 'vuex';
+import { useCookie } from '@/assets/js/setup';
 
 export default {
   // methods: {
   //   handleScroll(oEl) {
   //     if (!oEl) return;
   //     const { scrollTop, scrollHeight, offsetHeight } = oEl;
-  //     console.log(scrollTop, scrollHeight, offsetHeight);
+  //     // console.log(scrollTop, scrollHeight, offsetHeight);
   //   },
   // },
   // mounted() {
@@ -25,7 +26,7 @@ export default {
   //   // const _func = throttle(this.handleScroll, 30);
   //   if (oApp) {
   //     window.addEventListener('scroll', () => this.handleScroll(oApp));
-  //     window.onscroll = () => console.log(123);
+  //     window.onscroll = () => // console.log(123);
   //   }
   // },
   computed: {
@@ -33,7 +34,7 @@ export default {
   },
   methods: {
     async handleStorageChange(e) {
-      if (e.key !== 'token') return;
+      if (e.key !== 'token' || useCookie) return;
       if (!e.newValue) {
         if (this.$route.name !== 'login') {
           this.$router.push('/login');

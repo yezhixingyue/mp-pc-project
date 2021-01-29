@@ -87,6 +87,9 @@ export default {
     /** 是否为点击tag标签获取产品报价信息  （ 此时不全清下单报价页面信息 只部分展示loading ）
     ---------------------------------------- */
     isFetchingPartProductData: false,
+    // /** 报价页面产品右侧边栏推荐信息
+    // ---------------------------------------- */
+    // productAsideIntroData: null,
   },
   getters: {
     /* 全部产品分类结构树，用于报价目录展示
@@ -125,7 +128,7 @@ export default {
         )),
       );
       level1List = level1List.filter(_leve1 =>
-        // console.log(_leve1, _leve1.children, _leve1.children.length);
+        // // console.log(_leve1, _leve1.children, _leve1.children.length);
         _leve1.children.length > 0);
       return level1List;
     },
@@ -262,7 +265,7 @@ export default {
           _key = 'add';
           break;
         case 'del':
-          console.log(item, item.CraftName);
+          // console.log(item, item.CraftName);
           // eslint-disable-next-line no-case-declarations
           const _delTarget = state.obj2GetProductPrice.ProductParams.CraftList2Req.First.find(
             _it => _it.CraftID === item.CraftID,
@@ -443,7 +446,7 @@ export default {
       state,
       [indexLv1, indexLv2, index1, index2, index3, value, type],
     ) {
-      // console.log(state.obj2GetProductPrice.ProductParams.PartList[indexLv1].PartList[
+      // // console.log(state.obj2GetProductPrice.ProductParams.PartList[indexLv1].PartList[
       //   indexLv2
       // ].PrintPropertyGroupList[index1].PropertyList);
       if (!type) {
@@ -553,10 +556,10 @@ export default {
             state.obj2GetProductPrice.ProductParams.PartList[indexLv1].PartList[
               indexLv2
             ].PartCraftList2Req.First.push(item);
-            console.log(
-              state.obj2GetProductPrice.ProductParams.PartList[indexLv1]
-                .PartList[indexLv2],
-            );
+            // console.log(
+            //   state.obj2GetProductPrice.ProductParams.PartList[indexLv1]
+            //     .PartList[indexLv2],
+            // );
             const _list2SetSystemSelec = state.obj2GetProductPrice.ProductParams.PartList[
               indexLv1
             ].PartList[indexLv2].CraftList.find(it => it.ChoiceType === 1);
@@ -825,7 +828,7 @@ export default {
       state.isFullPayoutDisabled = false;
 
       const _keepingData = localStorage.getItem('isOrderDataKeeping');
-      console.log(_keepingData);
+      // console.log(_keepingData);
       if (!(_keepingData && _keepingData === 'true')) {
         state.curProductID = '';
         state.curProductClass = null;
@@ -841,7 +844,7 @@ export default {
     /* 下单成功后的状态清理
     -------------------------------*/
     clearStateAfterPlaceOrderSuccess(state) {
-      // console.log(1231232132132131);
+      // // console.log(1231232132132131);
       state.selectedCoupon = null;
       state.isFullPayoutDisabled = true;
     },
@@ -921,29 +924,29 @@ export default {
     },
     /* 获取产品详情
     -------------------------------*/
-    async getProductDetail({ state, commit }, clearOldData = true) {
-      if (clearOldData) commit('clearCurProductInfo2Quotation');
+    async getProductDetail({ state, commit }, config = {}) {
+      const { saveOldData, closeloading } = { saveOldData: false, closeloading: false, ...config };
+      if (!saveOldData) commit('clearCurProductInfo2Quotation');
       let isError = false;
-      // if (!clearOldData) commit('setIsFetchingPartProductData', true);
-      const res = await api.getProductDetail([state.curProductID, false]).catch(() => isError = true); // !clearOldData
-      if (!clearOldData) commit('setIsFetchingPartProductData', false);
+      const res = await api.getProductDetail([state.curProductID, closeloading]).catch(() => isError = true); // !saveOldData
+      if (saveOldData) commit('setIsFetchingPartProductData', false);
       if (isError) {
-        if (!clearOldData) commit('setIsFetchingPartProductData', false);
+        if (saveOldData) commit('setIsFetchingPartProductData', false);
         return false;
       }
       if (res.data.Status !== 1000) return false;
       commit('setCurProductInfo2Quotation', res.data.Data);
-      console.log(router.currentRoute.query.id);
+      // console.log(router.currentRoute.query.id);
       if (!router.currentRoute.query.id || router.currentRoute.query.id !== state.curProductID) {
-        console.log('change place query -----');
+        // console.log('change place query -----');
         router.push(`?id=${state.curProductID}`);
       }
       return true;
     },
     /* 获取产品报价信息
     -------------------------------*/
-    async getProductPrice({ state, commit, dispatch }, curSelectStatus) {
-      console.log(curSelectStatus);
+    async getProductPrice({ state, commit, dispatch }) {
+      // console.log(curSelectStatus);
       const productData = state.obj2GetProductPrice.ProductParams;
       commit('setCurSelectStatus', '报价');
       if (QuotationClassType.check(productData) === false) return;
@@ -983,7 +986,7 @@ export default {
     /* 下单 - 预下单
     -------------------------------*/
     async getOrderPreCreate({ state, commit, dispatch, rootState }, { compiledName, fileContent, callBack }) {
-      // console.log(state, compiledName, fileContent);
+      // // console.log(state, compiledName, fileContent);
       // 配置组合生成请求对象
       const _requestObj = { List: [], OrderType: 2, PayInFull: false };
       const _itemObj = {};
@@ -996,7 +999,7 @@ export default {
         _itemObj.Address.AddressID = state.addressInfo4PlaceOrder.Address.AddressID;
       } else {
         _itemObj.Address.Address = state.addressInfo4PlaceOrder.Address.Address;
-        console.log(state.addressInfo4PlaceOrder.Address.Address.Latitude);
+        // console.log(state.addressInfo4PlaceOrder.Address.Address.Latitude);
         // if (!state.addressInfo4PlaceOrder.Address.Address.Latitude) alert('未定位')
       }
       _itemObj.Content = fileContent;
@@ -1016,8 +1019,8 @@ export default {
 
       _requestObj.List.push(_itemObj);
       const res = await api.getOrderPreCreate(_requestObj);
-      // console.log(res);
-      // console.log(res.data.Status);
+      // // console.log(res);
+      // // console.log(res.data.Status);
       if (res.data.Status === 1000) {
         commit('setCurReqObj4PreCreate', _itemObj);
         commit('setPreCreateData', res.data.Data);
@@ -1077,7 +1080,7 @@ export default {
 
       _itemObj.ProductParams = ProductParams;
       const res = await api.getQuotationSave(_itemObj);
-      // console.log(res);
+      // // console.log(res);
 
       if (res.data.Status === 1000) {
         massage.successSingle({ title: '添加成功!' });
@@ -1137,7 +1140,7 @@ export default {
       // 成功后清除优惠券等信息
       if (!res.data.Data) {
         // commit('setClock2PaySuccess');
-        console.log('placeOrderFromPreCreate');
+        // console.log('placeOrderFromPreCreate');
         massage.successSingle({
           title: '下单成功!',
           successFunc: () => {
@@ -1150,9 +1153,9 @@ export default {
     },
     async placeOrderFromPrePay({ commit, rootState }, { PayInFull, cb }) {
       const _obj = { OrderType: 2, PayInFull, List: [] };
-      console.log(rootState.unpayList, rootState.unpayList.curUnpayListDataBeforeFirstPlace);
+      // console.log(rootState.unpayList, rootState.unpayList.curUnpayListDataBeforeFirstPlace);
       _obj.List = rootState.unpayList.curUnpayListDataBeforeFirstPlace.map(it => ({ ID: it.OrderID }));
-      // console.log('placeOrderFromPrePay');
+      // // console.log('placeOrderFromPrePay');
       const res = await api.getPaymentOrderCreate(_obj);
       if (res.data.Status !== 1000) {
         throw new Error(res.data.Message);
@@ -1180,15 +1183,15 @@ export default {
     async getCustomerShortCutList({ commit }) {
       const res = await api.getCustomerShortCutList();
       if (res.data.Status === 1000) {
-        console.log(res);
+        // console.log(res);
         commit('setCustomerShortCutList', res.data.Data);
       }
     },
     // eslint-disable-next-line consistent-return
     async getCustomerShortCutSave(args, data) {
-      console.log(args);
+      // console.log(args);
       const res = await api.getCustomerShortCutSave(data);
-      console.log(res);
+      // console.log(res);
       if (res.data.Status !== 1000) return false;
       return true;
     },
