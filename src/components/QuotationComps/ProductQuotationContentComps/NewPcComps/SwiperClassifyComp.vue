@@ -41,17 +41,12 @@ export default {
       },
       async set(val) {
         if (val === this.curProductID) return;
-        const t = this.classiftList.find(it => it.ProductID === val);
-        if (t) {
-          this.$store.commit('Quotation/setCurProductInfo', t);
-          this.$store.commit('Quotation/setCurProduct', t);
-          this.$store.commit('Quotation/setSelectedCoupon', null);
-          // this.$store.commit('Quotation/setIsFetchingPartProductData', true);
-          const key = await this.$store.dispatch('Quotation/getProductDetail', { saveOldData: true });
-          // this.$store.commit('Quotation/setIsFetchingPartProductData', false);
-          if (!key) this.$store.commit('Quotation/clearCurProductInfo2Quotation');
-        }
+        this.handleProductSelected(val);
       },
+    },
+    curQueryPath() {
+      const { id } = this.$route.query;
+      return id;
     },
   },
   methods: {
@@ -59,6 +54,23 @@ export default {
       this.scrollLeft = navOffset;
       if (navSize === containerSize + navOffset) this.isEnd = true;
       else this.isEnd = false;
+    },
+    async handleProductSelected(val) {
+      const item = this.classiftList.find(it => it.ProductID === val);
+      if (item) {
+        this.$store.commit('Quotation/setCurProductInfo', item);
+        this.$store.commit('Quotation/setCurProduct', item);
+        this.$store.commit('Quotation/setSelectedCoupon', null);
+        const key = await this.$store.dispatch('Quotation/getProductDetail', { saveOldData: true });
+        if (!key) this.$store.commit('Quotation/clearCurProductInfo2Quotation');
+      }
+    },
+  },
+  watch: {
+    curQueryPath(newVal) {
+      if (!newVal) return;
+      this.handleProductSelected(newVal);
+      // console.log('curQueryPath -- watch - change', newVal);
     },
   },
 };

@@ -10,9 +10,10 @@
   >
     <template #header v-if="!showTitle">
       <header>
-        <span class="header-title point" ref="headerTitle"
-          >// {{ data.PartName }}{{ indexLv2 > 0 ? '-' +(indexLv2 + 1) : "" }}</span
-        >
+        <span class="header-title point" ref="headerTitle">
+          // {{ data.PartName }}{{ indexLv2 > 0 ? '-' +(indexLv2 + 1) : "" }}
+          <HelpTipsComp :tipsData="tipsData" :title='data.PartName' />
+        </span>
         <span class="line" :style='headerWidth'></span>
       </header>
     </template>
@@ -29,6 +30,8 @@
           v-model.lazy="PartAmount"
           :disabled="!data.PartAmount.Second"
         />
+        <HelpTipsComp v-show="!(data.MinNumber && data.MinNumber === data.MaxNumber)"
+         :tipsData="countTipsData" :title='`${data.PartName}数量`' />
 
         <!-- 物料与物料品牌 -->
         <MaterialComp
@@ -37,11 +40,13 @@
           v-if="data.MaterialList.length > 1"
           :option="data.MaterialList"
           :disabled="!data.Material.Second"
+          :data='data'
+          :partTitle='data.PartName'
         />
       </section>
 
       <!-- 属性 -->
-      <attributes-comp v-model="PartAttributeList" />
+      <attributes-comp :partID='data.PartID' v-model="PartAttributeList" />
 
       <!-- 尺寸组 -->
       <size-group-comp
@@ -54,15 +59,18 @@
         :disabled="!data.Size.Second"
         :SizePropertyList="data.SizePropertyList"
         :AllowCustomSize='data.AllowCustomSize'
+        :data='data'
+        :partTitle='data.PartName'
       />
 
       <!-- 印刷属性 -->
-      <print-type-list-comps v-model="PartPrintTypeList" />
+      <print-type-list-comps :partID='data.PartID' v-model="PartPrintTypeList" />
       <!-- <attributes-comp v-model="PartPrintTypeList" /> -->
 
       <!-- 印刷属性组 -->
       <attributes-group-comp
         v-model="PartPrintPropertyGroupList"
+        :partID='data.PartID'
         @addPropertyGroup="
           data => addPartPrintPropertyGroupList([indexLv1, indexLv2, data])
         "
@@ -74,6 +82,7 @@
       <!-- 属性组 -->
       <attributes-group-comp
         v-model="PartPropertyGroupList"
+        :partID='data.PartID'
         @addPropertyGroup="
           data => addPartPropertyGroupList([indexLv1, indexLv2, data])
         "
@@ -137,8 +146,10 @@ import AttributesGroupComp from '@/components/QuotationComps/ProductQuotationCon
 import CraftListComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/CraftListComp.vue';
 import PrintTypeListComps from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/PrintTypeListComps.vue';
 import { mapState, mapMutations } from 'vuex';
+import tipEnums from '@/assets/js/utils/tipEnums';
 
 import MaterialComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/MaterialComp.vue';
+import HelpTipsComp from '@/components/QuotationComps/PlaceOrderComps/HelpTipsComp.vue';
 
 export default {
   components: {
@@ -150,6 +161,7 @@ export default {
     AttributesGroupComp,
     CraftListComp,
     PrintTypeListComps,
+    HelpTipsComp,
   },
   props: {
     data: {
@@ -291,6 +303,30 @@ export default {
         && !this.RequiredCraft
         && !this.notRequiredCraft
       );
+    },
+    tipsData() {
+      if (!this.obj2GetProductPrice || !this.obj2GetProductPrice.ProductParams || !this.obj2GetProductPrice.ProductParams.TipsDetail) return null;
+      const { BaseTips } = this.obj2GetProductPrice.ProductParams.TipsDetail;
+      if (!BaseTips || BaseTips.length === 0 || !this.data) return null;
+      const _arr = BaseTips.filter(it => it.Type === tipEnums.Part);
+      if (_arr.length === 0) return null;
+      const { PartID } = this.data;
+      if (!PartID) return null;
+      const t = _arr.find(it => it.Part.ID === PartID);
+      if (!t) return null;
+      return t;
+    },
+    countTipsData() {
+      if (!this.obj2GetProductPrice || !this.obj2GetProductPrice.ProductParams || !this.obj2GetProductPrice.ProductParams.TipsDetail) return null;
+      const { BaseTips } = this.obj2GetProductPrice.ProductParams.TipsDetail;
+      if (!BaseTips || BaseTips.length === 0 || !this.data) return null;
+      const _arr = BaseTips.filter(it => it.Type === tipEnums.Number);
+      if (_arr.length === 0) return null;
+      const { PartID } = this.data;
+      if (!PartID) return null;
+      const t = _arr.find(it => it.Part && it.Part.ID === PartID);
+      if (!t) return null;
+      return t;
     },
   },
   data() {

@@ -1,6 +1,6 @@
 <!--
  * @Describe: 属性值组件
- * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/Sections/AttributesGroupComp.vue
+ * @FilePath: /src/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesGroupComp.vue
 -->
 
 <template>
@@ -24,6 +24,7 @@
           <attributes-comp
             :value="Property.Second"
             :showGroupMenu='PropertyGroup.AllowCustomized'
+            :partID='partID'
             @change="data => handlePropertyChange(data, index1, index2)"
             :showGroupAdd='index2 === PropertyGroup.PropertyList.length - 1'
             @handleGroupAdd='addPropertyGroup(index1, PropertyGroup)'
@@ -52,6 +53,7 @@ export default {
       type: Array,
       default: () => [],
     },
+    partID: {},
   },
   computed: {
     PropertyGroupList: {

@@ -281,7 +281,7 @@ body .iconfont {
   height: 8px;
 }
 .mp-scroll-wrap::-webkit-scrollbar-thumb {
-  background-color: $--border-color-base;
+  background-color: #ddd;
   border-radius: 3px;
   &:hover {
     background-color: $--color-text-secondary;

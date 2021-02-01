@@ -7,10 +7,15 @@
             class="content-title"
             v-if="curProductShowNameInfo && curProductShowNameInfo.length === 3"
           >
-            <span class="blue-v-line">{{ curProductShowNameInfo[0] }}</span>
-            <span>{{ curProductShowNameInfo[1] }}</span>
-            <span>-</span>
-            <span>{{ curProductShowNameInfo[2] }}</span>
+            <div>
+              <span class="blue-v-line">{{ curProductShowNameInfo[0] }}</span>
+              <span>{{ curProductShowNameInfo[1] }}</span>
+              <span>-</span>
+              <span>{{ curProductShowNameInfo[2] }}</span>
+            </div>
+            <span @click="onHomeDetailClick" v-if="asideIntroData">查看详情
+              <i class="el-icon-d-arrow-right"></i>
+            </span>
           </section>
           <SwiperClassifyComp />
           <section class="count-model-box">
@@ -20,6 +25,7 @@
               :remark="obj2GetProductPrice.ProductParams.Unit"
               v-model.trim="ProductAmount"
             />
+            <HelpTipsComp :title="`${curProductShowNameInfo[2]}`" :tipsData='countTipsData' />
             <ProductCountComp
               v-if="obj2GetProductPrice.ProductParams.AllowMultyKind"
               remark="款"
@@ -29,7 +35,7 @@
           </section>
 
           <!-- 属性 -->
-          <attributes-comp v-model="AttributeList" />
+          <attributes-comp :partID='null' v-model="AttributeList" />
 
           <!-- 联拼行列数及是否允许多款联拼 -->
           <multy-kind-makeup
@@ -227,6 +233,8 @@ import MultyKindMakeup from '@/components/QuotationComps/ProductQuotationContent
 import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesComp.vue';
 import CraftListComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/CraftListComp.vue';
 import PartComps from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/PartComps.vue';
+import { productJumpUrl } from '@/assets/js/setup';
+import HelpTipsComp from '@/components/QuotationComps/PlaceOrderComps/HelpTipsComp.vue';
 import ProductCountComp from './NewPcComps/ProductCountComp.vue';
 import ComputedResultComp from './NewPcComps/ComputedResultComp.vue';
 import AddShowChangeComp from '../PlaceOrderComps/AddShowChangeComp.vue';
@@ -247,6 +255,7 @@ export default {
     ComputedResultComp,
     SwiperClassifyComp,
     AsideIntroComp,
+    HelpTipsComp,
   },
   computed: {
     // eslint-disable-next-line max-len
@@ -363,6 +372,16 @@ export default {
     watchAddInfoChange() {
       if (!this.addressInfo4PlaceOrder) return null;
       return this.addressInfo4PlaceOrder.Address.Express;
+    },
+    countTipsData() {
+      if (!this.placeData || !this.placeData.TipsDetail) return null;
+      const { BaseTips } = this.placeData.TipsDetail;
+      if (!BaseTips || BaseTips.length === 0) return null;
+      const _arr = BaseTips.filter(it => it.Type === tipEnums.Number);
+      if (_arr.length === 0) return null;
+      const t = _arr.find(it => !it.Part);
+      if (!t) return null;
+      return t;
     },
   },
   data() {
@@ -496,6 +515,9 @@ export default {
         this.getAboutIsError = true;
       }
     },
+    onHomeDetailClick() {
+      window.open(`${productJumpUrl}product?productID=${this.placeData.ProductID}`);
+    },
   },
   mounted() {
     if (this.countOption.length > 0 && !this.ProductAmount) {
@@ -525,6 +547,7 @@ export default {
         if (!val || typeof val !== 'object') return;
         const { ProductID, TipsDetail } = val;
         if (!ProductID || !TipsDetail) return;
+        this.asideIntroData = null;
         const { BaseTips } = TipsDetail;
         if (BaseTips && BaseTips.length > 0) {
           const t = BaseTips.find(it => it.Type === tipEnums.Product);
@@ -544,6 +567,7 @@ export default {
   margin: 25px auto 30px;
   font-size: 14px;
   color: #585858;
+  overflow: hidden;
 
   > section.left-place {
     display: inline-block;
@@ -554,14 +578,40 @@ export default {
     padding: 30px;
     padding-bottom: 15px;
     box-sizing: border-box;
+    padding-bottom:9999px;
+    margin-bottom:-9999px;
     > article > .content {
       > .content-title {
-        color: #333;
-        font-weight: 700;
-        margin-bottom: 30px;
-        // padding-left: 20px;
-        > .blue-v-line {
-          margin-right: 6px;
+        > div {
+          color: #333;
+          font-weight: 700;
+          margin-bottom: 30px;
+          display: inline-block;
+          vertical-align: top;
+          width: 750px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          > .blue-v-line {
+            margin-right: 6px;
+          }
+        }
+        > span {
+          display: inline-block;
+          vertical-align: top;
+          width: 100px;
+          text-align: right;
+          color: #888;
+          transition: color 0.25s ease-in-out;
+          cursor: pointer;
+          user-select: none;
+          padding-top: 2px;
+          &:hover {
+            color:mix(#428dfa, #fff, 80%);
+          }
+          &:active {
+            color: #428dfa
+          }
         }
       }
       > .count-model-box {

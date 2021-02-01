@@ -1,5 +1,5 @@
 <template>
-  <section class="mp-place-order-aside-intro-comp-wrap" :class="asideAboutData ? 'right' : ''">
+  <section class="mp-place-order-aside-intro-comp-wrap" :class="asideIntroData ? 'right' : ''">
     <header @click="onHomeDetailClick">
       <el-image v-if="asideIntroData" :src="baseImgUrl + asideIntroData.Cover" fit="cover" ></el-image>
       <h2 v-if="asideIntroData">{{productName}}</h2>
@@ -7,7 +7,10 @@
         <span>{{asideIntroData.Introduce.substr(0, 28)}}<i v-if="asideIntroData.Introduce.length > 28">...</i></span>
         <em class="span-title-blue">查看详情</em>
       </p>
-      <span v-else>暂无产品详情介绍</span>
+      <span v-else>
+        <img src="@/assets/images/empty.png" alt="">
+        <i>暂无产品详情介绍</i>
+      </span>
     </header>
     <section>
       <header>
@@ -22,6 +25,11 @@
             <p class="tip">点击下单</p>
           </div>
         </li>
+        <li v-if="asideAboutData.AboutList.length === 0" class="no-recommended">
+          <img src="@/assets/images/empty.png" alt="">
+          <p>暂无同类产品推荐</p>
+        </li>
+        <li class="footer-w"></li>
       </ul>
       <div v-else>
         <div v-show="isError">获取数据出错,<span @click="onNewGetClick" class="span-title-blue">重新获取</span></div>
@@ -69,18 +77,6 @@ export default {
     background-color: #fff;
     cursor: pointer;
     transition: box-shadow 0.25s ease-in-out;
-    &:hover {
-      .span-title-blue {
-        opacity: 0.8;
-        color: #26bcf9;
-      }
-      box-shadow: 0 0px 5px rgba(0, 0, 0, 0.08), 0 2px 6px 0 rgba(0, 0, 0, 0.08);
-      > div.el-image {
-        > img {
-          transform: scale(1.05);
-        }
-      }
-    }
     > div.el-image {
       width: 255px;
       height: 170px;
@@ -100,6 +96,7 @@ export default {
       text-align: center;
       background-color: #fff;
       color: #585858;
+      transition: 0.25s ease-in-out;
     }
     > p {
       line-height: 21px;
@@ -115,18 +112,23 @@ export default {
       }
       > em {
         margin-left: -6px;
+        white-space: nowrap;
       }
     }
     > span {
       text-align: center;
-      padding-top: 110px;
+      padding-top: 85px;
       display: inline-block;
       width: 100%;
       height: 100%;
-      background-color: #eee;
+      background-color: #fff;
       box-sizing: border-box;
-      font-size: 13px;
-      color: #989898;
+      font-size: 12px;
+      color: #aaa;
+      > i {
+        display: block;
+        margin-top: 15px;
+      }
     }
   }
   > section {
@@ -136,6 +138,7 @@ export default {
       padding: 20px 15px;
       line-height: 20px;
       box-sizing: border-box;
+      background-color: #fff;
       > h2 {
         display: inline-block;
         font-size: 16px;
@@ -179,6 +182,7 @@ export default {
           box-sizing: border-box;
           font-size: 14px;
           color: #585858;
+          transition: color 0.3s ease-in-out;
         }
         > div {
           height: 120px;
@@ -187,6 +191,9 @@ export default {
           > div {
             height: 120px;
             width: 100%;
+            > img {
+              transition: transform 0.3s ease-in-out;
+            }
           }
           > p {
             position: absolute;
@@ -208,6 +215,26 @@ export default {
             bottom: 0;
             opacity: 1;
           }
+          .el-image > img {
+            transform: scale(1.05);
+          }
+          > p {
+            color: mix(#428dfa, #fff, 80%);
+          }
+        }
+        &.no-recommended {
+          text-align: center;
+          padding-top: 60px;
+          height: 270px;
+          > p {
+            color: #aaa;
+            font-size: 12px;
+            padding-top: 10px;
+          }
+        }
+        &.footer-w {
+          height: 30px;
+          border: none;
         }
       }
     }
@@ -223,9 +250,19 @@ export default {
     }
   }
   &.right {
-    > section {
-      > header {
-        background-color: #fff;
+    > header:hover {
+      .span-title-blue {
+        opacity: 0.8;
+        color: #26bcf9;
+      }
+      box-shadow: 0 0px 5px rgba(0, 0, 0, 0.08), 0 2px 6px 0 rgba(0, 0, 0, 0.08);
+      > div.el-image {
+        > img {
+          transform: scale(1.05);
+        }
+      }
+      > h2 {
+        font-weight: 700;
       }
     }
   }

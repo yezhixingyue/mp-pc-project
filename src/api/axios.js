@@ -4,7 +4,7 @@ import router from '@/router';
 import store from '../store';
 import messageBox from '../assets/js/utils/message';
 import Cookie from '../assets/js/Cookie';
-import { useCookie } from '../assets/js/setup';
+import { useCookie, baseUrl } from '../assets/js/setup';
 
 let loadingInstance;
 let closeTip = false;
@@ -189,5 +189,7 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+axios.defaults.baseURL = baseUrl;
 
 export default axios;

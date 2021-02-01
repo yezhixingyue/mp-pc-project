@@ -25,6 +25,7 @@
         >
           <i class="iconfont icon-bianji is-cyan" @click="handleEditClick(it)"></i>
         </template>
+        <HelpTipsComp :title="getCraftNickName(it)" :tipsData='getCraftTipsData(it.CraftID)' />
       </li>
     </ul>
     <el-dialog
@@ -62,12 +63,14 @@
 /* eslint-disable max-len */
 import ShowProductBtn from '@/components/QuotationComps/SMComps/ShowProductBtn.vue';
 import AttributesComp from '@/components/QuotationComps/ProductQuotationContentComps/NewPcComps/AttributesComp.vue';
+import HelpTipsComp from '@/components/QuotationComps/PlaceOrderComps/HelpTipsComp.vue';
 import { mapState, mapGetters } from 'vuex';
 
 export default {
   components: {
     ShowProductBtn,
     AttributesComp,
+    HelpTipsComp,
   },
   props: {
     data: {
@@ -188,6 +191,13 @@ export default {
       });
       return _obj;
     },
+    CraftTipsList() {
+      if (!this.obj2GetProductPrice
+       || !this.obj2GetProductPrice.ProductParams || !this.obj2GetProductPrice.ProductParams.TipsDetail) return null;
+      const { CraftTips } = this.obj2GetProductPrice.ProductParams.TipsDetail;
+      if (!CraftTips || CraftTips.length === 0) return null;
+      return CraftTips;
+    },
   },
   data() {
     return {
@@ -203,6 +213,12 @@ export default {
     };
   },
   methods: {
+    getCraftTipsData(craftID) {
+      if (!this.CraftTipsList) return null;
+      const t = this.CraftTipsList.find(it => it.ID === craftID);
+      if (t) return t;
+      return null;
+    },
     handleBtnClick(data) {
       const _arr = this.selectedArr.map(it => it.CraftID);
       if (_arr.includes(data.CraftID)) {

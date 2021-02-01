@@ -3,6 +3,8 @@
     <type-btn-selector
       v-for="(PrintType, i) of PrintTypeList"
       :key="PrintType.PropertyID"
+      :partID='partID'
+      :PropertyID="PrintType.PropertyID"
       :title="PrintType.PropertyName"
       :data="PrintType"
       :index="i"
@@ -25,6 +27,7 @@ export default {
       type: Array,
       default: () => [],
     },
+    partID: {},
   },
   model: {
     prop: 'value',

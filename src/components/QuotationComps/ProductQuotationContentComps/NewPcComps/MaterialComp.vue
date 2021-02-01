@@ -17,21 +17,31 @@
         :value="item.MaterialID">
       </el-option>
     </el-select>
+    <HelpTipsComp :title="partTitle + '' + title" :tipsData='tipsData' />
   </section>
 </template>
 
 <script>
 /* eslint-disable prefer-destructuring */
+import tipEnums from '@/assets/js/utils/tipEnums';
+import HelpTipsComp from '@/components/QuotationComps/PlaceOrderComps/HelpTipsComp.vue';
+import { mapState } from 'vuex';
+
 export default {
   model: {
     prop: 'value',
     event: 'changeFunc',
+  },
+  components: {
+    HelpTipsComp,
   },
   props: {
     option: { // 选择项列表
       type: Array,
       default: () => [],
     },
+    data: {},
+    partTitle: {},
     value: { // v-model绑定值
       required: true,
     },
@@ -47,6 +57,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('Quotation', ['obj2GetProductPrice']),
     inpValue: {
       get() {
         return this.value;
@@ -58,11 +69,22 @@ export default {
     optionObj() {
       const _list = this.option.map(it => ({ Name: it.Name, MaterialID: it.MaterialID }))
         .map(it => {
-          const _arr = it.Name.trim().split(/\s+/);
-          const _t = _arr[0];
-          _arr.shift();
-          const _s = _arr.join(' ');
-          return { ...it, Name: [_t, _s] };
+          const r = /^\D+\d+\D+$/;
+          if (r.test(it.Name)) {
+            const _arr1 = it.Name.trim().split('');
+            const _arr2 = _arr1.filter(sub => !!sub);
+            const reg = /\d/;
+            const i = _arr2.findIndex(subIt => reg.test(subIt));
+            const _t1 = _arr2.slice(0, i).join('');
+            const _s1 = _arr2.slice(i).join('');
+
+            // const _arr = it.Name.trim().split(/\s+/);
+            // const _t = _arr[0];
+            // _arr.shift();
+            // const _s = _arr.join('');
+            return { ...it, Name: [_t1, _s1] };
+          }
+          return { ...it, Name: [it.Name, ''] };
         });
       const _obj = {};
       _list.forEach(item => {
@@ -94,6 +116,19 @@ export default {
         const _v = this.optionObj[newVal][0].MaterialID;
         this.$emit('changeFunc', _v);
       },
+    },
+    tipsData() {
+      if (!this.obj2GetProductPrice
+       || !this.obj2GetProductPrice.ProductParams || !this.obj2GetProductPrice.ProductParams.TipsDetail) return null;
+      const { BaseTips } = this.obj2GetProductPrice.ProductParams.TipsDetail;
+      if (!BaseTips || BaseTips.length === 0 || !this.data) return null;
+      const _arr = BaseTips.filter(it => it.Type === tipEnums.Material);
+      if (_arr.length === 0) return null;
+      const { PartID } = this.data;
+      if (!PartID) return null;
+      const t = _arr.find(it => it.Part.ID === PartID);
+      if (!t) return null;
+      return t;
     },
   },
 };

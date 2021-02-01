@@ -13,6 +13,8 @@
         v-for="(item, i) in value"
         :key="item.PropertyID"
         :title="item.PropertyName"
+        :PropertyID="item.PropertyID"
+        :partID='partID'
         :RelevanceInformation="item.RelevanceInformation"
         :watch2Dia="watch2Dia"
         :remark="
@@ -77,6 +79,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    partID: {},
     /**
      * 工艺使用，其为工艺弹窗开闭状态
      */

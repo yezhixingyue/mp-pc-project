@@ -40,6 +40,7 @@
         <li class="gray">{{ remark[2] }}</li>
       </ul>
     </div>
+    <HelpTipsComp :title="partTitle + '' + SizeGroup.GroupName" :tipsData='tipsData' />
     <check-box-single
       v-show="showCheckBox && SizeList.length > 0 && AllowCustomSize"
       :default="defaultSelect || SizeList.length === 0 || isSelectedInp"
@@ -56,11 +57,15 @@ import DropDownSelector from '@/components/QuotationComps/SMComps/DropDownSelect
 import { getRelevanceInTargetValue } from '@/store/Quotation/QuotationClassType';
 import { mapState } from 'vuex';
 // import { Toast } from 'vant';
+import tipEnums from '@/assets/js/utils/tipEnums';
+import HelpTipsComp from '@/components/QuotationComps/PlaceOrderComps/HelpTipsComp.vue';
+
 import SizeGroupSingleInputComp from './SizeGroupSingleInputComp.vue';
 
 export default {
   components: {
     CheckBoxSingle,
+    HelpTipsComp,
     // BaseNumInput,
     DropDownSelector,
     // SectionCompHeader,
@@ -78,6 +83,8 @@ export default {
       type: Boolean,
       default: false,
     },
+    data: {},
+    partTitle: {},
     /**
      * 该组件负责处理的值
      */
@@ -156,6 +163,19 @@ export default {
         }));
         this.$emit('changeFunc', [newVal, _list]);
       },
+    },
+    tipsData() {
+      if (!this.obj2GetProductPrice
+       || !this.obj2GetProductPrice.ProductParams || !this.obj2GetProductPrice.ProductParams.TipsDetail) return null;
+      const { BaseTips } = this.obj2GetProductPrice.ProductParams.TipsDetail;
+      if (!BaseTips || BaseTips.length === 0 || !this.data) return null;
+      const _arr = BaseTips.filter(it => it.Type === tipEnums.Size);
+      if (_arr.length === 0) return null;
+      const { PartID } = this.data;
+      if (!PartID) return null;
+      const t = _arr.find(it => it.Part.ID === PartID);
+      if (!t) return null;
+      return t;
     },
     watchTarget() {
       // if (!this.sizeData.RelevanceInformation) return null;

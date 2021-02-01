@@ -51,11 +51,14 @@
         :value="item[defaultProps.value]">
       </el-option>
     </el-select>
+    <HelpTipsComp :title="title" :tipsData='tipsData' />
   </section>
 </template>
 
 <script>
 import { getRelevanceInTargetValue } from '@/store/Quotation/QuotationClassType';
+import tipEnums from '@/assets/js/utils/tipEnums';
+import HelpTipsComp from '@/components/QuotationComps/PlaceOrderComps/HelpTipsComp.vue';
 import { mapState } from 'vuex';
 
 export default {
@@ -63,11 +66,16 @@ export default {
     prop: 'value',
     event: 'changeFunc',
   },
+  components: {
+    HelpTipsComp,
+  },
   props: {
     ValueType: { // 属性输入类型: 只可输入、可输可选
       type: Number,
       default: 0,
     },
+    PropertyID: {},
+    partID: {},
     option: { // 选择项列表 ValueType值为2时有该值
       type: Array,
       default: () => [],
@@ -148,6 +156,22 @@ export default {
         this.inputType = 'CustomizedValue';
         this.$emit('changeFunc', [newVal, true]);
       },
+    },
+    tipsData() {
+      if (!this.obj2GetProductPrice || !this.PropertyID
+       || !this.obj2GetProductPrice.ProductParams || !this.obj2GetProductPrice.ProductParams.TipsDetail) return null;
+      const { BaseTips } = this.obj2GetProductPrice.ProductParams.TipsDetail;
+      if (!BaseTips || BaseTips.length === 0) return null;
+      const _arr = BaseTips.filter(it => it.Type === tipEnums.Property);
+      if (_arr.length === 0) return null;
+      const t = _arr.find(it => {
+        const key = it.Property && it.Property.ID === this.PropertyID;
+        if (!key) return false;
+        return (!this.partID && !it.Part) || (it.Part && it.Part.ID === this.partID);
+      });
+      if (!t) return null;
+      console.log(t, BaseTips);
+      return t;
     },
     watchTarget() {
       if (!this.RelevanceInformation) return null;

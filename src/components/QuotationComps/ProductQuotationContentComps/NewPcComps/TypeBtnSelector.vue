@@ -29,7 +29,9 @@
       :title="title"
       :value="data.CustomerInputValue"
       @changeFunc="handleChangeFunc"
+      :PropertyID="PropertyID"
       remark=""
+      :partID='partID'
       :option="data.OptionList"
       :defaultProps="{ text: 'Value', value: 'OptionID' }"
       :ValueType="2"
@@ -56,6 +58,7 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    partID: {},
     defaultProps: {
       type: Object,
       default: () => ({
@@ -63,6 +66,7 @@ export default {
         value: 'OptionID',
       }),
     },
+    PropertyID: {},
     index: {},
     /**
      * 属性关联信息
