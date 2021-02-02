@@ -1,32 +1,34 @@
 <template>
   <div class="mp-pc-common-comp-all-page-footer-wrap" :class="cancollapse ? 'cancollapse' : ''">
     <ul class="content float">
-      <li class="img-box"></li>
       <li class="text-box">
+        <div>
+          <div class="img-box">
+            <img src="../../assets/images/logo-white.png" alt="">
+          </div>
+          <a :href="concact" target="_blank">联系我们</a>
+          <a :href="statement" target="_blank">用户协议</a>
+          <a :href="agreement" target="_blank">权责声明</a>
+          <a :href="opinion" target="_blank">意见建议</a>
+        </div>
         <p>
           <span>Copyright ©2019 - 2022 郑州名片之家电子商务有限公司</span>
-          <span>
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">豫ICP备16032622号-1</a>
-          </span>
-          <span>
-            <a href="http://www.mpzj.cn/siteMap.html" target="_blank"> 网站地图</a>
-          </span>
-          <span>犀牛云提供企业云服务</span>
-        </p>
-        <p>
-          <span>公司总机：400-6363-006</span>
-          <span>售后电话：400-6363-500</span>
-        </p>
-        <p>
-          <span>运营中心： 郑州花园路与国基路花园SOHO一栋10楼</span>
+          <span>服务热线：4006363006</span>
+          <span>售后专线：4006363500</span>
+          <a href="https://beian.miit.gov.cn/">豫ICP备16032622号-1</a>
         </p>
       </li>
-      <li class="img-code-box"></li>
+      <li class="img-code-box">
+        <div></div>
+        <p>扫描进入公众号</p>
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { homeUrl, statementID, agreementID } from '@/assets/js/setup';
+
 export default {
   props: {
     cancollapse: {
@@ -34,21 +36,31 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      concact: `${homeUrl}contact-us#contact-top`,
+      opinion: `${homeUrl}contact-us#opinion`,
+      statement: `${homeUrl}help/${statementID}`,
+      agreement: `${homeUrl}help/${agreementID}`,
+    };
+  },
 };
 </script>
 
 <style lang='scss'>
 .mp-pc-common-comp-all-page-footer-wrap {
   width: 100%;
-  height: 144px;
-  background-color: #1D7AD9;
+  height: 197px;
+  box-sizing: border-box;
+  padding: 10px 0;
+  background-color: #222;
   position: relative;
   z-index: 18;
   .content {
     width: 1200px;
     height: 100%;
     margin: 0 auto;
-    background-color: #1D7AD9;
+    background-color: #222;
     > li {
       height: 136px;
     }
@@ -59,26 +71,71 @@ export default {
     }
     >.text-box {
       float: left;
-      padding-top: 32px;
       box-sizing: border-box;
-      > p {
-        height: 31px;
-        > span {
-            font-size: 12px;
-            color: #fff;
-            margin-right: 16px;
-          > a {
-            font-size: 12px;
-            color: #fff;
-            text-decoration: unset;
+      > div {
+        height: 95px;
+        padding-top: 31px;
+        padding-bottom: 30px;
+        line-height: 34px;
+        box-sizing: border-box;
+        width: 984px;
+        border-bottom: 1px solid rgba(238, 238, 238, 0.05);
+        > div {
+          display: inline-block;
+          height: 34px;
+          vertical-align: top;
+          width: 147px;
+          margin-right: 65px;
+          opacity: 0.8;
+        }
+        > a {
+          line-height: 34px;
+          display: inline-block;
+          margin: 0 30px;
+          cursor: pointer;
+          color: #aaa;
+          font-size: 16px;
+          transition: color 0.25s ease-in-out;
+          &:hover {
+            color: #ccc;
           }
+        }
+      }
+      > p {
+        height: 82px;
+        font-size: 14px;
+        color: #585858;
+        line-height: 20px;
+        padding: 31px 0;
+        box-sizing: border-box;
+        > a {
+          font-size: 14px;
+          color: #585858;
+          line-height: 20px;
+          text-decoration: unset;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+        > span {
+          margin-right: 47px;
         }
       }
     }
     >.img-code-box {
       float: right;
-      width: 182px;
-      background: url(../../assets/images/99.png) no-repeat right center;
+      width: 86px;
+      padding-top: 32px;
+      > div {
+        width: 86px;
+        height: 86px;
+        background: url(../../assets/images/code.png) no-repeat right center;
+      }
+      > p {
+        font-size: 12px;
+        color: #585858;
+        margin-top: 10px;
+      }
     }
   }
   &.cancollapse {

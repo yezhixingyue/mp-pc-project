@@ -28,6 +28,9 @@ axios.interceptors.request.use(
     const url = curConfig.url.split('?')[0];
     const arrWithOutToken = ['/Api/Customer/Reg', '/Api/Customer/Login'];
     if (token && !arrWithOutToken.includes(url)) curConfig.headers.common.Authorization = `Bearer ${token}`;
+    if (url === '/Api/Sms/Send/VerificationCode') {
+      curConfig.headers.common.SessionID = Cookie.getCookie('SessionID');
+    }
     let key = true;
     const arr = ['/Api/Order/Create', '/Api/PaymentOrder/PayResult', '/Api/Upload/File']; // 不需要展示loading的api地址
     for (let i = 0; i < arr.length; i += 1) {

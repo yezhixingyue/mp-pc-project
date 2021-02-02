@@ -1,7 +1,7 @@
 <template>
   <section class="mp-place-order-aside-intro-comp-wrap" :class="asideIntroData ? 'right' : ''">
     <header @click="onHomeDetailClick">
-      <el-image v-if="asideIntroData" :src="baseImgUrl + asideIntroData.Cover" fit="cover" ></el-image>
+      <el-image v-if="asideIntroData" :src="baseImgUrl + asideIntroData.Cover" fit="cover" title="点击查看详情" ></el-image>
       <h2 v-if="asideIntroData">{{productName}}</h2>
       <p v-if="asideIntroData">
         <span>{{asideIntroData.Introduce.substr(0, 28)}}<i v-if="asideIntroData.Introduce.length > 28">...</i></span>

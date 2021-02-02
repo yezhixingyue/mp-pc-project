@@ -17,7 +17,7 @@
       custom-class="mp-help-tips-dialog-wrap"
     >
       <section>
-        <div class="rich-edit-content ql-editor ql-snow mp-scroll-wrap" v-html="tipsData.Content"></div>
+        <div class="rich-edit-content ql-editor ql-snow mp-scroll-wrap" v-html="richContent"></div>
         <footer>
           <el-button @click="handleBeforeDiaClose">关闭</el-button>
         </footer>
@@ -27,12 +27,23 @@
 </template>
 
 <script>
+import { imgUrl } from '@/assets/js/setup';
+
 export default {
   props: ['tipsData', 'title'],
   data() {
     return {
       visible: false,
     };
+  },
+  computed: {
+    richContent() {
+      if (this.tipsData && this.tipsData.Content) {
+        const _content = this.tipsData.Content.replace('<img src="/', `<img src="${imgUrl}/`);
+        return _content;
+      }
+      return '';
+    },
   },
   methods: {
     onShowTipsClick() {
@@ -112,6 +123,7 @@ export default {
           padding-bottom: 15px;
           color: #525252;
           padding-right: 3px;
+          font-size: 14px;
           /* font
   -------------------------*/
           .ql-font-SimSun {

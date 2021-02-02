@@ -7,21 +7,25 @@
       </div>
       <ul>
         <li>
-          <a href="http://www.mpzj.cn/" target="_blank">首页</a>
+          <a :href="homeUrl" target="_blank">首页</a>
         </li>
         <li class="active">
           <a>快捷下单</a>
         </li>
         <li>
-          <a href="http://www.mpzj.cn/news_complex.aspx" target="_blank">新闻中心</a>
+          <a :href='`${homeUrl}productIntro`' target="_blank">产品介绍</a>
         </li>
         <li>
-          <a href="http://www.mpzj.cn/about_complex.aspx" target="_blank">关于我们</a>
+          <a :href='`${homeUrl}news`' target="_blank">新闻中心</a>
         </li>
         <li>
-          <a href="http://www.mpzj.cn/feedback.aspx" target="_blank">服务中心</a>
+          <a :href='`${homeUrl}about`' target="_blank">关于我们</a>
+        </li>
+        <li>
+          <a :href='`${homeUrl}help`' target="_blank">帮助中心</a>
         </li>
       </ul>
+      <span v-if="customerInfo"><i></i>{{customerInfo.CustomerName}}</span>
     </header>
     <footer :class="showBoxShadow?'show':''">
       <div class="common-header-menus-wrap float">
@@ -132,7 +136,7 @@ import { mapState } from 'vuex';
 import { debounce } from '@/assets/js/utils/throttle';
 import { Loading } from 'element-ui';
 import Cookie from '@/assets/js/Cookie';
-import { useCookie } from '@/assets/js/setup';
+import { useCookie, homeUrl } from '@/assets/js/setup';
 import PlaceOrderProductClassifyComp from '@/components/QuotationComps/PlaceOrderProductClassifyComp.vue';
 import RechargeComp from './RechargeComp.vue';
 
@@ -157,6 +161,7 @@ export default {
       showClassify: false,
       timer: null,
       showBoxShadow: false,
+      homeUrl,
     };
   },
   methods: {
@@ -337,8 +342,8 @@ export default {
       height: 100%;
       margin-right: 78px;
       > img {
-        width: 143px;
-        height: 34px;
+        width: 147px;
+        height: 32px;
         margin-top: 13px;
         margin-right: 25px;
         vertical-align: -66%;
@@ -392,6 +397,28 @@ export default {
           // text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
           // box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 1px 0px white;
         }
+      }
+    }
+    > span {
+      position: absolute;
+      right: 0;
+      height: 60px;
+      color: #fff;
+      font-size: 16px;
+      padding: 18px 0;
+      line-height: 24px;
+      box-sizing: border-box;
+      max-width: 240px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      > i {
+        display: inline-block;
+        height: 100%;
+        width: 18px;
+        vertical-align: top;
+        margin-right: 9px;
+        background: url(../../assets/images/avator.png) no-repeat center center/18px 21px;
       }
     }
   }
