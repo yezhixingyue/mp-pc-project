@@ -25,7 +25,7 @@
           <a :href='`${homeUrl}help`' target="_blank">帮助中心</a>
         </li>
       </ul>
-      <span v-if="customerInfo"><i></i>{{customerInfo.CustomerName}}</span>
+      <!-- <span v-if="customerInfo"><i></i>{{customerInfo.CustomerName}}</span> -->
     </header>
     <footer :class="showBoxShadow?'show':''">
       <div class="common-header-menus-wrap float">

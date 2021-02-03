@@ -77,6 +77,16 @@ axios.interceptors.response.use(
     // eslint-disable-next-line max-len
     const _list2NotNeed2Toast = ['/Api/Calculate/ProductPrice', '/Api/Order/Create', '/Api/AfterSales/Excel', '/Api/Customer/OrderExcel'];
 
+    // IE 8-9
+    if (response.data == null && response.config.responseType === 'json' && response.request.responseText != null) {
+      try {
+        // eslint-disable-next-line no-param-reassign
+        response.data = JSON.parse(response.request.responseText);
+      } catch (e) {
+        // ignored
+      }
+    }
+
     const _url = response.config.url.split('?')[0];
 
     const _statusList2NotNeed2Toast = [1000, 9062];
@@ -126,6 +136,7 @@ axios.interceptors.response.use(
     return response;
   },
   async (error) => {
+    console.log('error', error);
     if (!store.state.common.isLoading) {
       if (loadingInstance) loadingInstance.close();
       if (error.response) {

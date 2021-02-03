@@ -217,6 +217,7 @@ export default {
           }
           .el-image > img {
             transform: scale(1.05);
+            transform: translate(-50%, -50%) scale(1.05)\0;
           }
           > p {
             color: mix(#428dfa, #fff, 80%);
@@ -259,6 +260,7 @@ export default {
       > div.el-image {
         > img {
           transform: scale(1.05);
+          transform: translate(-50%, -50%) scale(1.05)\0;
         }
       }
       > h2 {

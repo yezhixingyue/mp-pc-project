@@ -50,19 +50,19 @@ export default {
 <style lang='scss'>
 .mp-pc-common-comp-all-page-footer-wrap {
   width: 100%;
-  height: 197px;
+  height: 160px;
   box-sizing: border-box;
-  padding: 10px 0;
-  background-color: #222;
+  // padding: 10px 0;
+  background-color: #252525;
   position: relative;
   z-index: 18;
   .content {
     width: 1200px;
     height: 100%;
     margin: 0 auto;
-    background-color: #222;
+    background-color: #252525;
     > li {
-      height: 136px;
+      height: 126px;
     }
     > .img-box {
       width: 155px;
@@ -79,7 +79,7 @@ export default {
         line-height: 34px;
         box-sizing: border-box;
         width: 984px;
-        border-bottom: 1px solid rgba(238, 238, 238, 0.05);
+        // border-bottom: 1px solid rgba(238, 238, 238, 0.05);
         > div {
           display: inline-block;
           height: 34px;
@@ -93,24 +93,25 @@ export default {
           display: inline-block;
           margin: 0 30px;
           cursor: pointer;
-          color: #aaa;
+          color: #ccc;
           font-size: 16px;
           transition: color 0.25s ease-in-out;
           &:hover {
-            color: #ccc;
+            color: #eee;
           }
         }
       }
       > p {
-        height: 82px;
+        height: 50px;
         font-size: 14px;
-        color: #585858;
+        color: #888;
         line-height: 20px;
-        padding: 31px 0;
+        // padding: 31px 0;
+        padding-top: 5px;
         box-sizing: border-box;
         > a {
           font-size: 14px;
-          color: #585858;
+          color: #888;
           line-height: 20px;
           text-decoration: unset;
           &:hover {
@@ -125,16 +126,16 @@ export default {
     >.img-code-box {
       float: right;
       width: 86px;
-      padding-top: 32px;
+      padding-top: 27px;
       > div {
         width: 86px;
-        height: 86px;
+        height: 80px;
         background: url(../../assets/images/code.png) no-repeat right center;
       }
       > p {
         font-size: 12px;
-        color: #585858;
-        margin-top: 10px;
+        color: #888;
+        margin-top: 12px;
       }
     }
   }

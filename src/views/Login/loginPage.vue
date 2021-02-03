@@ -3,13 +3,15 @@
     <section>
       <header>
         <div class="header-content float">
-          <img src="../../assets/images/logo-white.png" alt="" />
+          <a :href="homeUrl" target="_blank">
+            <img src="../../assets/images/logo-white.png" alt="" />
+          </a>
           <ul>
             <li>
-              <a href="http://www.mpzj.cn/">首页</a>
+              <a :href="homeUrl" target="_blank">首页</a>
             </li>
             <li>
-              <a href="http://www.mpzj.cn/about_complex.aspx">关于我们</a>
+              <a :href="`${homeUrl}/about`" target="_blank">关于我们</a>
             </li>
           </ul>
         </div>
@@ -52,6 +54,7 @@
 import LoginComp from '@/components/LoginComps/LoginComp.vue';
 import RegisterComp from '@/components/LoginComps/RegisterComp.vue';
 import Agreement from '@/components/LoginComps/Agreement.vue';
+import { homeUrl } from '@/assets/js/setup';
 
 export default {
   components: {
@@ -65,6 +68,7 @@ export default {
       panelLoading: false,
       loadingText: '',
       agreementvisible: false,
+      homeUrl,
     };
   },
   methods: {
@@ -106,10 +110,10 @@ export default {
       > .header-content {
         width: 950px;
         margin: 0 auto;
-        > img {
+        > a > img {
           float: left;
-          width: 143px;
-          height: 34px;
+          width: 147px;
+          height: 32px;
           margin-top: 23px;
         }
         > ul {
