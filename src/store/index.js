@@ -11,7 +11,7 @@ import Quotation from './Quotation/Quotation';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  strict: process.env.NODE_ENV !== 'production',
+  strict: process.env.NODE_ENV === 'development',
   modules: {
     order,
     common,

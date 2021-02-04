@@ -81,6 +81,7 @@
 <script>
 import InputComp from '@/components/common/InputComp.vue';
 import { mapState } from 'vuex';
+import { imgUrl } from '@/assets/js/setup';
 
 export default {
   // 修改账户信息后要重新获取账户信息数据和账号数据 (2个接口  需在获取前设置旧数据为null) 其它情况, 如充值后也需要重新获取账号信息
@@ -90,10 +91,10 @@ export default {
   computed: {
     ...mapState('common', ['customerInfo']),
     imgSrc() {
-      if (process.env.NODE_ENV === 'development') {
-        return `http://192.168.1.92:8055/${this.AuthenInfo4Submit.AuthenInfo.LicensePath}`;
-      }
-      return this.AuthenInfo4Submit.AuthenInfo.LicensePath;
+      // if (process.env.NODE_ENV === 'development') {
+      //   return `${imgUrl}${this.AuthenInfo4Submit.AuthenInfo.LicensePath}`;
+      // }
+      return `${imgUrl}${this.AuthenInfo4Submit.AuthenInfo.LicensePath}`;
     },
     srcList() {
       return [this.imgSrc];

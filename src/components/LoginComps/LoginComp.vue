@@ -34,7 +34,8 @@
 
 <script>
 import { Base64 } from 'js-base64';
-import { homeUrl, useCookie, domain } from '@/assets/js/setup';
+// eslint-disable-next-line object-curly-newline
+import { homeUrl, useCookie, domain, rightOpenUrl } from '@/assets/js/setup';
 import Cookie from '@/assets/js/Cookie';
 import messageBox from '@/assets/js/utils/message';
 
@@ -207,6 +208,13 @@ export default {
     },
   },
   mounted() {
+    const reg = new RegExp(`^${rightOpenUrl}`);
+    if (!reg.test(window.location.href)) {
+      // eslint-disable-next-line max-len
+      const url = this.$router.mode === 'hash' ? `${rightOpenUrl}#${this.$route.fullPath}` : `${rightOpenUrl}${this.$route.fullPath}`;
+      window.location.href = url;
+      return;
+    }
     const info = localStorage.getItem('info');
     if (info) {
       const temp = JSON.parse(info);
