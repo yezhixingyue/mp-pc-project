@@ -121,7 +121,7 @@ export default {
         overflow: auto;
         &.rich-edit-content {
           padding-bottom: 15px;
-          color: #525252;
+          color: #000000;
           padding-right: 3px;
           font-size: 14px;
           /* font

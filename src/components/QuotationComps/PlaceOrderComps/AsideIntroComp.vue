@@ -183,6 +183,23 @@ export default {
           font-size: 14px;
           color: #585858;
           transition: color 0.3s ease-in-out;
+          display: inline-block;
+          width: auto;
+          position: relative;
+          max-width: 225px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          &::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background-color: rgba(0, 0, 0, 0);
+            left: 0;
+            bottom: 14px;
+            transition: background-color 0.3s ease-in-out;
+          }
         }
         > div {
           height: 120px;
@@ -216,12 +233,17 @@ export default {
             opacity: 1;
           }
           .el-image > img {
-            transform: scale(1.05);
-            transform: translate(-50%, -50%) scale(1.05)\0;
+            // transform: scale(1.05);
+            // transform: translate(-50%, -50%) scale(1.05)\0;
           }
           > p {
             color: mix(#428dfa, #fff, 80%);
+            // text-decoration: underline;
+            &::after {
+              background-color: mix(#428dfa, #fff, 80%);
+            }
           }
+          // box-shadow: 0 0px 5px rgba(0, 0, 0, 0.08), 0 2px 6px 0 rgba(0, 0, 0, 0.08);
         }
         &.no-recommended {
           text-align: center;

@@ -170,6 +170,7 @@ export default {
       > footer {
         text-align: center;
         margin-top: 23px;
+        margin-bottom: 15px;
         > button {
           width: 110px;
           height: 35px;
