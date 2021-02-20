@@ -293,6 +293,26 @@ const routes = [
           },
         ],
       },
+      {
+        path: '/feedback/:id',
+        name: 'feedback',
+        meta: {
+          requiresAuth: true,
+          y: 0,
+          title: '问题反馈 - 郑州名片之家电子商务有限公司',
+        },
+        component: () => import('../views/FeedbackPages/FeedbackAdd.vue'),
+      },
+      {
+        path: '/feedbackList',
+        name: 'feedbackList',
+        meta: {
+          requiresAuth: true,
+          y: 0,
+          title: '订单提交 - 郑州名片之家电子商务有限公司',
+        },
+        component: () => import('../views/FeedbackPages/FeedbackList.vue'),
+      },
     ],
   },
   {
