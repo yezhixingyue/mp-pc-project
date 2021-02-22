@@ -38,3 +38,25 @@ public enum ImageType : byte
   cdr,eps,jpg,jpeg,tiff,tif,rar,zip,pdf
 
 传TakeOrderWay值就可以了 1代客下单 2客户自助
+
+## 售后申请类型（诉求意向）
+
+  退货退款  0
+  
+  补印  1
+  
+  减款  2
+  
+  其他  255
+
+## 售后状态（问题反馈状态）
+
+  已提交  0
+  
+  处理中  1
+  
+  处理成功  2
+
+  已拒绝 3
+  
+  已取消  255

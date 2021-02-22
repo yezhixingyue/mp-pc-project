@@ -252,6 +252,18 @@ const api = {
   getCustomConfigSave(data) { // POST /Api/CustomConfig/Save  设置客户接收短信提醒
     return instance.post('/Api/CustomConfig/Save', data);
   },
+
+  /* 问题反馈api
+   ----------------------------------------------------------------------------------- */
+  getQuestionList() {
+    return instance.get('/Api/AfterSales/ApplyQuestionList');
+  },
+  getAfterSalesApply(data) { // POST /Api/AfterSales/Apply 售后申请 问题反馈
+    return instance.post('/Api/AfterSales/Apply', data);
+  },
+  getAfterSalesApplyList(data) { // POST /Api/AfterSales/ApplyList 获取售后申请列表
+    return instance.post('/Api/AfterSales/ApplyList', data);
+  },
 };
 
 export default api;

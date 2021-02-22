@@ -230,6 +230,23 @@ export default {
       scrollHeight: 0,
       offsetHeight: 0,
     },
+    /* 售后申请类型（诉求意向）
+    -------------------------------*/
+    AppealList: [
+      { label: '退货退款', value: 0 },
+      { label: '补印', value: 1 },
+      { label: '减款', value: 2 },
+      { label: '其它', value: 255 },
+    ],
+    /* 售后申请类型（诉求意向）
+    -------------------------------*/
+    FeedbackProgress: [
+      { label: '已提交', value: 0 },
+      { label: '处理中', value: 1 },
+      { label: '处理成功', value: 2 },
+      { label: '已拒绝', value: 3 },
+      { label: '已取消', value: 255 },
+    ],
   },
   getters: {
   },

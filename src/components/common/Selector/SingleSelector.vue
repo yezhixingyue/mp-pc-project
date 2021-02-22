@@ -1,7 +1,7 @@
 <template>
   <section class="mp-pc-common-comps-select-comp-wrap float">
     <header class="is-bold">{{title}}：</header>
-    <el-select v-model="selectValue" placeholder="请选择">
+    <el-select v-model="selectValue" :placeholder="placeholder" :multiple='multiple'>
       <el-option
         v-for="item in optionList"
         :key="item[defaultProps.value]"
@@ -30,6 +30,14 @@ export default {
     title: {
       type: String,
       default: '交易类型',
+    },
+    placeholder: {
+      type: String,
+      default: '请选择',
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
     },
   },
   model: {

@@ -36,6 +36,7 @@ export default {
       PageSize: 12,
       FieldType: 3,
     },
+    editFeedbackData: null, // 问题反馈编辑信息
   },
   getters: {
   },
@@ -66,6 +67,9 @@ export default {
     // setDate4ConditionDate(state, key) {
     //   ClassType.setDate(state[key]);
     // },
+    setEditFeedbackData(state, data) { // 设置问题反馈编辑信息
+      state.editFeedbackData = data;
+    },
     /* 注销及登录状态清理
     -------------------------------*/
     clearStateForNewCustomer(state) {
@@ -93,6 +97,7 @@ export default {
         PageSize: 12,
         FieldType: 3,
       };
+      state.editFeedbackData = null;
     },
   },
   actions: {

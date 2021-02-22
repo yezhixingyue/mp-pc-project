@@ -45,13 +45,13 @@ export default {
       this.h = tempHeight;
     },
   },
-  mounted() {
-    this.$nextTick(() => this.setHeight());
-    window.addEventListener('resize', this.setHeight);
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.setHeight);
-  },
+  // mounted() {
+  //   this.$nextTick(() => this.setHeight());
+  //   window.addEventListener('resize', this.setHeight);
+  // },
+  // beforeDestroy() {
+  //   window.removeEventListener('resize', this.setHeight);
+  // },
 };
 </script>
 

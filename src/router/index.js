@@ -294,7 +294,7 @@ const routes = [
         ],
       },
       {
-        path: '/feedback/:id',
+        path: '/feedback/:id/:desc/:type',
         name: 'feedback',
         meta: {
           requiresAuth: true,
