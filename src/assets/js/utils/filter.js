@@ -100,3 +100,17 @@ Vue.filter('getDoneTime', ProducePeriod => {
   const hour = ''; // 不显示具体时间
   return `预计${dayTimeStr}${hour}${str}`;
 });
+
+const { AppealList } = store.state.common;
+Vue.filter('formatAppealType', status => {
+  const t = AppealList.find(it => it.value === status);
+  if (t) return t.label;
+  return '';
+});
+
+const { FeedbackProgress } = store.state.common;
+Vue.filter('formatFeedbackProgress', status => {
+  const t = FeedbackProgress.find(it => it.value === status);
+  if (t) return t.label;
+  return '';
+});

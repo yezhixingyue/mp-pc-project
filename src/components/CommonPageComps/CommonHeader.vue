@@ -64,6 +64,10 @@
             <!-- <i class="iconfont icon-zhangdan"></i> -->
             <span>账单</span>
           </router-link>
+          <router-link class="normal-item" tag="li" to="/feedbackList">
+            <!-- <i class="iconfont icon-zhangdan"></i> -->
+            <span>问题反馈</span>
+          </router-link>
         </ul>
         <div class="customer-box" v-if="customerInfo">
           <span>
@@ -549,7 +553,7 @@ export default {
           > span {
             display: inline-block;
             margin-right: 4px;
-            max-width: 175px;
+            max-width: 95px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;

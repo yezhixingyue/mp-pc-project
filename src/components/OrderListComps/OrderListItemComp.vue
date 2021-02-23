@@ -75,8 +75,11 @@
           <div :style="wStyles[13]" class="is-font-12 gray">{{item.PayTime | format2MiddleLangTypeDate}}</div>
           <div :style="wStyles[14]" class="is-font-12 gray btn-wrap">
             <span class="span-title-blue" @click="goToDetailPage(item)">订单详情</span>
+            <span class="span-title-blue" @click="goToFeedback(item)"
+              v-if="item.AllowAfterSales">反馈</span>
+            <span class="is-cancel" :style="{paddingLeft:'6px', paddingRight:'6px'}" v-else>反馈</span>
             <span class="span-title-pink" @click="handleOrderCancel(item)"
-               v-if="[20, 30, 35, 40].includes(item.Status)">取消</span>
+              v-if="[20, 30, 35, 40].includes(item.Status)">取消</span>
             <span class="is-cancel" :style="{paddingLeft:'6px', paddingRight:'6px'}" v-else>取消</span>
           </div>
         </li>
@@ -180,6 +183,10 @@ export default {
     goToDetailPage(data) {
       this.$store.commit('order/setCurOrderDetailData', data);
       this.$router.push('/order/detail');
+    },
+    goToFeedback(item) {
+      const { OrderID, Content } = item;
+      this.$router.push({ name: 'feedback', params: { id: OrderID, desc: Content, type: 'add' } });
     },
     handleOrderCancel({ OrderID }) {
       this.messageBox.warnCancelBox({
@@ -329,7 +336,7 @@ export default {
       }
       &.btn-wrap {
         > .span-title-blue {
-          margin-right: 6px;
+          // margin-right: 6px;
         }
       }
     }
