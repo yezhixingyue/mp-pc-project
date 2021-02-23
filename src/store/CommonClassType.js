@@ -37,13 +37,13 @@ export default class ClassType {
     }
   }
 
-  static filter(obj) {
+  static filter(obj, bool = false) { // 布尔值用于判断是否保留value为0的键值对，为true时保留，为false不保留
     const _tempObj = {};
     console.log(obj);
     if (!obj) return {};
     Object.keys(obj).forEach(key => {
       if (Object.prototype.toString.call(obj[key]) !== '[object Object]') {
-        if (obj[key] && key !== 'DateType') _tempObj[key] = obj[key];
+        if ((obj[key] && key !== 'DateType') || (bool && obj[key] === 0)) _tempObj[key] = obj[key];
       } else {
         const _t = obj[key];
         Object.keys(_t).forEach(subKey => {

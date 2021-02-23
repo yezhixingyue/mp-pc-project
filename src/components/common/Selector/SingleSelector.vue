@@ -1,7 +1,7 @@
 <template>
   <section class="mp-pc-common-comps-select-comp-wrap float">
     <header class="is-bold">{{title}}：</header>
-    <el-select v-model="selectValue" :placeholder="placeholder" :multiple='multiple'>
+    <el-select v-model="selectValue" :placeholder="placeholder" :disabled='disabled' :multiple='multiple'>
       <el-option
         v-for="item in optionList"
         :key="item[defaultProps.value]"
@@ -36,6 +36,10 @@ export default {
       default: '请选择',
     },
     multiple: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },

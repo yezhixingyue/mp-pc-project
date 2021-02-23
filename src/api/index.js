@@ -264,6 +264,9 @@ const api = {
   getAfterSalesApplyList(data) { // POST /Api/AfterSales/ApplyList 获取售后申请列表
     return instance.post('/Api/AfterSales/ApplyList', data);
   },
+  getAfterSalesCancle(applyCode) { // PUT /Api/AfterSales/Cancle 取消问题反馈
+    return instance.put(`/Api/AfterSales/Cancle?applyCode=${applyCode}`);
+  },
 };
 
 export default api;

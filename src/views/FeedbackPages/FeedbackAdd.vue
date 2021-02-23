@@ -2,8 +2,12 @@
   <section class="mp-mpzj-order-feedback-add-page-wrap">
     <section class="content">
       <header>
-        <span class="blue-v-line is-bold is-black">提交问题反馈</span>
-        <span class="is-font-12"> （ 如果该订单有售后问题需要反馈，请填写该页面信息并提交 ）</span>
+        <span v-if="!canEdit" style="margin-right:20px;cursor:pointer;" @click="handleReturn">
+          <i class="el-icon-back"></i>
+          <em class="is-font-13"> 返回列表</em>
+        </span>
+        <span class="blue-v-line is-bold is-black">{{ canEdit ? '提交问题反馈' : '查看反馈详情'}}</span>
+        <span v-if="canEdit" class="is-font-12"> （ 如果该订单有售后问题需要反馈，请填写该页面信息并提交 ）</span>
       </header>
       <div>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -20,16 +24,18 @@
               v-model="ruleForm.QuestionList"
               :optionList='RejectReasonList'
               multiple
+              :disabled='!canEdit'
               placeholder="请选择售后原因"
               :defaultProps="{ label: 'Title', value: 'ID', }"
             />
           </el-form-item>
           <el-form-item label="问题描述：" prop="Remark">
-            <el-input type="textarea" v-model="ruleForm.Remark"
+            <el-input type="textarea" v-model="ruleForm.Remark" :disabled='!canEdit'
              maxlength="600" show-word-limit placeholder="请输入具体问题描述"></el-input>
           </el-form-item>
           <el-form-item label="诉求意向：" prop="AppealType" class="mp-select">
             <SingleSelector
+              :disabled='!canEdit'
               v-model="ruleForm.AppealType"
               :optionList='AppealList'
               placeholder="请选择诉求意向"
@@ -42,6 +48,7 @@
               :file-list="fileList"
               ref="upload"
               drag
+              :disabled='!canEdit'
               accept='.png,.jpeg,.jpg,.bmp'
               :multiple='true'
               :limit='4'
@@ -54,13 +61,16 @@
             <el-dialog :visible.sync="dialogVisible" top="8vh">
               <img width="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
+            <p v-if="!canEdit && fileList.length === 0">未上传照片</p>
             <p class="is-font-12 gray upload-Remark">产品有问题的，请把有问题的成品一二十份呈扇形摊开拍照，并把有问题的部分单独拍照；最多上传4张照片</p>
           </el-form-item>
           <el-form-item label="联系方式：" prop="Mobile">
-            <el-input v-model="ruleForm.Mobile" maxlength="11" show-word-limit placeholder="请输入手机号码"></el-input>
+            <el-input v-model="ruleForm.Mobile" maxlength="11" :disabled='!canEdit'
+              show-word-limit placeholder="请输入手机号码"></el-input>
           </el-form-item>
           <el-form-item label="QQ号码：" prop="QQ">
-            <el-input v-model="ruleForm.QQ" maxlength="11" show-word-limit placeholder="请输入QQ号码"></el-input>
+            <el-input v-model="ruleForm.QQ" maxlength="11" :disabled='!canEdit'
+              show-word-limit placeholder="请输入QQ号码"></el-input>
           </el-form-item>
           <el-form-item>
             <div class="btn-box">
@@ -71,8 +81,12 @@
                   <p>2、请在下单日起算一个月内申请售后，超出一个月的无法处理售后问题。</p>
                 </div>
               </div>
-              <el-button type="primary" @click="submitForm('ruleForm')">立即提交</el-button>
-              <el-button @click="resetForm('ruleForm')">重置</el-button>
+              <el-button type="primary" @click="submitForm('ruleForm')" v-if='canEdit'>立即提交</el-button>
+              <el-button @click="resetForm('ruleForm')" v-if='canEdit'>重置</el-button>
+              <el-button type="primary" @click="handleReturn" v-if='!canEdit'>
+                <i class="el-icon-d-arrow-left is-font-15"></i>
+                <em style="margin-left: 6px">返回列表</em>
+              </el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -91,13 +105,8 @@ export default {
   },
   data() {
     return {
-      RejectReasonList: [],
-      fileList: [
-        // eslint-disable-next-line max-len
-        // { url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' },
-        // eslint-disable-next-line max-len
-        // { url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' },
-      ],
+      fileList: [],
+      canEdit: true,
       ruleForm: {
         ID: 0,
         Order: {
@@ -142,7 +151,7 @@ export default {
   },
   computed: {
     ...mapState('common', ['customerInfo', 'AppealList']),
-    ...mapState('summary', ['editFeedbackData']),
+    ...mapState('summary', ['editFeedbackData', 'RejectReasonList']),
   },
   methods: {
     submitForm(formName) {
@@ -184,22 +193,29 @@ export default {
     // handllePictureUploaded(response, file, fileList) {
     //   console.log('handllePictureUploaded', response, file, fileList);
     // },
+    handleReturn() {
+      this.$router.replace('/feedbackList');
+    },
   },
   async mounted() {
     const OrderID = this.$route.params.id;
     const Content = this.$route.params.desc;
     const { type } = this.$route.params;
     if (!OrderID || !Content || !type) return;
-    if (type === 'edit') {
+    if (type === 'detail') {
+      this.canEdit = false;
       if (this.editFeedbackData) { // 仓库提前保存好的编辑数据
+        let QuestionList = [];
+        if (this.editFeedbackData.QuestionList.length > 0) {
+          QuestionList = this.editFeedbackData.QuestionList.map(it => it.ID);
+        }
         this.ruleForm = {
           ...this.ruleForm,
           ...this.editFeedbackData,
+          QuestionList,
         };
-        if (this.editFeedbackData.QuestionList.length > 0) {
-          this.editFeedbackData.QuestionList = this.editFeedbackData.QuestionList.map(it => it.ID);
-        }
-        this.fileList = this.editFeedbackData.PicList; // 可能需转换处理
+        console.log(this.editFeedbackData.QuestionList);
+        this.fileList = this.editFeedbackData.PicList.map(path => ({ url: `http://192.168.1.92:8055${path}` }));
         // this.$store.commit('summary/setEditFeedbackData', null);
       } else {
         this.$router.replace('/feedbackList');
@@ -211,8 +227,7 @@ export default {
     }
     this.ruleForm.Order.OrderID = OrderID;
     this.ruleForm.Order.Content = Content;
-    const res = await this.api.getQuestionList();
-    if (res.data.Status === 1000) this.RejectReasonList = res.data.Data;
+    this.$store.dispatch('summary/getRejectReasonList');
   },
 };
 </script>
@@ -240,16 +255,18 @@ export default {
       }
       .mp-select {
         .el-form-item__content {
-          height: 40px;
+          // height: 40px;
           > .mp-pc-common-comps-select-comp-wrap {
-            width: 200px;
+            width: 260px;
+            display: block;
             > header {
               display: none;
             }
             > .el-select {
-              width: 200px;
+              width: 260px;
+              height: auto;
               .el-input__inner {
-                width: 200px;
+                width: 260px;
                 height: 40px;
               }
               .el-input__suffix .el-input__icon::before {
@@ -257,6 +274,9 @@ export default {
               }
             }
           }
+          // .el-form-item__error {
+          //   padding-top: 0;
+          // }
         }
       }
       .btn-box {
@@ -298,6 +318,9 @@ export default {
       }
       .el-form-item__label {
         font-weight: 700;
+      }
+      .is-disabled + .el-upload {
+        display: none;
       }
     }
   }

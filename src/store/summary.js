@@ -37,6 +37,7 @@ export default {
       FieldType: 3,
     },
     editFeedbackData: null, // 问题反馈编辑信息
+    RejectReasonList: [], // 问题原因列表
   },
   getters: {
   },
@@ -69,6 +70,9 @@ export default {
     // },
     setEditFeedbackData(state, data) { // 设置问题反馈编辑信息
       state.editFeedbackData = data;
+    },
+    setRejectReasonList(state, list) { // 设置问题原因列表
+      state.RejectReasonList = list;
     },
     /* 注销及登录状态清理
     -------------------------------*/
@@ -128,6 +132,15 @@ export default {
       if (res.data.Status === 1000) {
         commit('setServiceAfterSaleList', [res.data.Data, res.data.DataNumber]);
       }
+    },
+    async getRejectReasonList({ state, commit }) { // 获取问题原因列表
+      if (state.RejectReasonList.length > 0) return state.RejectReasonList;
+      const res = await api.getQuestionList();
+      if (res.data.Status === 1000) {
+        commit('setRejectReasonList', res.data.Data);
+        return res.data.Data;
+      }
+      return [];
     },
   },
 };
