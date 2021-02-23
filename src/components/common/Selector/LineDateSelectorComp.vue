@@ -118,13 +118,13 @@ export default {
       },
       set(newVal) {
         if (this.tabValue === newVal) return;
-        // // console.log(newVal);
         if (newVal !== 'define') {
-          this.changePropsFunc([this.typeList[0], newVal]);
-          if (newVal) this.requestFunc();
+          if (newVal && newVal !== '0') {
+            this.changePropsFunc([this.typeList[0], newVal]);
+            if (newVal) this.requestFunc();
+          }
         } else {
           this.visible = true;
-          // // console.log(this.visible);
         }
       },
     },
@@ -200,6 +200,13 @@ export default {
       }
       return false;
     },
+  },
+  mounted() {
+    if (!this.$route.query.DateType && this.$route.query.First && this.$route.query.Second) {
+      this.beginTime = this.$route.query.First;
+      this.endTime = this.$route.query.Second;
+      this.key = true;
+    }
   },
 };
 </script>

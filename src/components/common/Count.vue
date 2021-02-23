@@ -81,7 +81,7 @@ export default {
   },
   data() {
     return {
-      currentPage: 1,
+      currentPage: 2,
     };
   },
   // computed: {
@@ -94,9 +94,9 @@ export default {
   //     },
   //   },
   // },
-  // mounted() {
-  //   // console.log(1);
-  // },
+  created() {
+    if (this.$route.query.Page) this.currentPage = +this.$route.query.Page;
+  },
 };
 </script>
 

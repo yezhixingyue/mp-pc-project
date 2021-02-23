@@ -42,7 +42,7 @@
       <p></p>
     </header>
     <section class="content">
-      <ListTable :dataList='dataList' @handleCancel='handleCancel' />
+      <ListTable :dataList='dataList' :dataNumber='dataNumber' @handleCancel='handleCancel' />
       <footer>
         <Count
           :watchPage='condition.Page'
@@ -95,7 +95,7 @@ export default {
   },
   computed: {
     ...mapState('common', ['FeedbackProgress']),
-    ...mapState('summary', ['RejectReasonList']),
+    ...mapState('summary', ['RejectReasonList', 'listData', 'needFetchListData', 'listDataNumber']),
     QuestionList() {
       return [{ ID: '', Title: '不限' }, ...this.RejectReasonList];
     },
@@ -118,6 +118,7 @@ export default {
       if (t) t.Status = 255;
     },
     async getListData(page = 1) {
+      console.log('getListData');
       this.condition.Page = page;
       ClassType.setDate(this.condition);
       const _obj = ClassType.filter(this.condition, true);
@@ -152,17 +153,69 @@ export default {
       };
     },
     handlePageChange(page) {
+      // console.log(1);
       this.getListData(page);
+    },
+    setPathFromCondition(newVal) {
+      console.log('setPathFromCondition', newVal.DateType);
+      const keys = Object.keys(newVal);
+      const obj = newVal;
+      const arr = keys.filter(key => {
+        if (key === 'PageSize') return false;
+        if (key !== 'Date') return obj[key] || obj[key] === 0;
+        return obj.Date.First && obj.Date.Second && !obj.DateType;
+      }).map(key => {
+        if (key !== 'Date') return `${key}=${obj[key]}`;
+        return `First=${obj.Date.First}&Second=${obj.Date.Second}`;
+      });
+      const _path = arr.join('&');
+      this.$router.push(`?${_path}`);
+    },
+    initConditionFromPath() {
+      console.log('initConditionFromPath');
+      const _obj = { ...this.$route.query };
+      if (_obj.First && _obj.Second) {
+        _obj.Date = {
+          First: _obj.First,
+          Second: _obj.Second,
+        };
+        delete _obj.First;
+        delete _obj.Second;
+        _obj.DateType = '';
+      }
+      if (_obj.Page) _obj.Page = +_obj.Page;
+      if (_obj.Status) _obj.Status = +_obj.Status;
+      if (_obj.QuestionID) _obj.QuestionID = +_obj.QuestionID;
+      if (_obj.PageSize) _obj.PageSize = +_obj.PageSize;
+      this.condition = { ...this.condition, ..._obj };
     },
   },
   watch: {
     watchConditionPartChange() {
+      // console.log('watchConditionPartChange');
       this.getListData();
     },
+    condition: {
+      handler(newVal) {
+        if (!newVal) return;
+        console.log('condition -- watch -- change');
+        this.setPathFromCondition(newVal);
+      },
+      deep: true,
+    },
   },
-  mounted() {
-    this.getListData();
+  created() {
+    this.initConditionFromPath();
+    if (!(this.listData && !this.needFetchListData)) {
+      this.getListData(this.condition.Page);
+    } else {
+      this.dataList = this.listData;
+      this.dataNumber = this.listDataNumber;
+    }
     this.$store.dispatch('summary/getRejectReasonList');
+  },
+  beforeDestroy() {
+    this.$store.commit('summary/setNeedFetchListData', true);
   },
 };
 </script>

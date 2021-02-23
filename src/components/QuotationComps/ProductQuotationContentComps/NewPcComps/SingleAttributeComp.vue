@@ -170,7 +170,7 @@ export default {
         return (!this.partID && !it.Part) || (it.Part && it.Part.ID === this.partID);
       });
       if (!t) return null;
-      console.log(t, BaseTips);
+      // console.log(t, BaseTips);
       return t;
     },
     watchTarget() {

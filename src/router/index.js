@@ -352,7 +352,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title;
   }
-  if (from.name === 'orderList') {
+  if (from.name === 'orderList' || from.name === 'feedbackList') {
     const oApp = document.getElementById('app');
     // eslint-disable-next-line no-param-reassign
     from.meta.y = oApp.scrollTop;
@@ -394,7 +394,8 @@ router.beforeEach(async (to, from, next) => {
 
 router.afterEach((to, from) => {
   const oApp = document.getElementById('app');
-  if (from.name === 'orderDetail' && to.name === 'orderList') {
+  if ((from.name === 'orderDetail' && to.name === 'orderList')
+   || (from.name === 'feedback' && to.name === 'feedbackList')) {
     setTimeout(() => {
       oApp.scrollTop = to.meta.y;
     }, 0);

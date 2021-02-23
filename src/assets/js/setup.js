@@ -19,7 +19,7 @@ let _rightOpenUrl = 'http://192.168.1.92:8057/';
 if (mode === 'production') {
   _homeUrl = 'https://newapi.mpzj.cn/';
   _domain = 'mpzj.cn';
-  _imgUrl = 'https://order.mpzj.cn:8156/';
+  _imgUrl = 'https://order.mpzj.cn:8157/';
   _productJumpUrl = 'https://newapi.mpzj.cn/';
   _agreementID = '60';
   _statementID = '61';

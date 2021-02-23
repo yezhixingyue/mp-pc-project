@@ -43,7 +43,7 @@
           </el-form-item>
           <el-form-item label="上传凭证：">
             <el-upload
-              action="http://192.168.1.92:8055/Api/Upload/Image?type=3"
+              :action="baseUrl + '/Api/Upload/Image?type=3'"
               list-type="picture-card"
               :file-list="fileList"
               ref="upload"
@@ -97,6 +97,7 @@
 
 <script>
 import SingleSelector from '@/components/common/Selector/SingleSelector.vue';
+import { imgUrl } from '@/assets/js/setup';
 import { mapState } from 'vuex';
 
 export default {
@@ -147,6 +148,7 @@ export default {
       },
       dialogImageUrl: '',
       dialogVisible: false,
+      baseUrl: imgUrl,
     };
   },
   computed: {
@@ -194,7 +196,8 @@ export default {
     //   console.log('handllePictureUploaded', response, file, fileList);
     // },
     handleReturn() {
-      this.$router.replace('/feedbackList');
+      this.$store.commit('summary/setNeedFetchListData', false);
+      this.$router.go(-1);
     },
   },
   async mounted() {
@@ -214,8 +217,8 @@ export default {
           ...this.editFeedbackData,
           QuestionList,
         };
-        console.log(this.editFeedbackData.QuestionList);
-        this.fileList = this.editFeedbackData.PicList.map(path => ({ url: `http://192.168.1.92:8055${path}` }));
+        // console.log(this.editFeedbackData.QuestionList);
+        this.fileList = this.editFeedbackData.PicList.map(path => ({ url: `${imgUrl}${path}` }));
         // this.$store.commit('summary/setEditFeedbackData', null);
       } else {
         this.$router.replace('/feedbackList');

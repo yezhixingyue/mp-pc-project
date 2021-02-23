@@ -46,6 +46,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    dataNumber: {
+      type: Number,
+      default: 0,
+    },
   },
   methods: {
     getStatusClass(status) {
@@ -70,6 +74,8 @@ export default {
       return _arr.join('、');
     },
     onDetailClick(data) {
+      this.$store.commit('summary/setListData', this.dataList);
+      this.$store.commit('summary/setListDataNumber', this.dataNumber);
       this.$store.commit('summary/setEditFeedbackData', data);
       const { OrderID, Content } = data.Order;
       this.$router.push({ name: 'feedback', params: { id: OrderID, desc: Content, type: 'detail' } });
