@@ -64,14 +64,16 @@
             <!-- <i class="iconfont icon-zhangdan"></i> -->
             <span>账单</span>
           </router-link>
-          <router-link class="normal-item" tag="li" to="/feedbackList">
+          <router-link class="normal-item" tag="li" to="/feedbackList" :class="{
+              active: $route.name === 'feedback',
+            }">
             <!-- <i class="iconfont icon-zhangdan"></i> -->
             <span>问题反馈</span>
           </router-link>
         </ul>
         <div class="customer-box" v-if="customerInfo">
           <span>
-            <span>{{customerInfo.CustomerName}} </span>
+            <span @click="handleCustomerNameDetail">{{customerInfo.CustomerName}} </span>
             <i class="title"><i class="r-5">/ </i> 余额：</i>
             <i class="price">￥{{customerBalance?customerBalance:0}}</i>
           </span>
@@ -225,6 +227,9 @@ export default {
       if (!oEl) return;
       const { scrollTop, scrollHeight, offsetHeight } = oEl;
       this.$store.commit('common/setScrollInfo', { scrollTop, scrollHeight, offsetHeight });
+    },
+    handleCustomerNameDetail() {
+      this.$router.push('/mySetting/account');
     },
     onCommand(command) {
       // console.log(command);
@@ -538,7 +543,7 @@ export default {
         float: right;
         color: #888;
         line-height: 65px;
-        max-width: 560px;
+        max-width: 484px;
         text-align: right;
         white-space: nowrap;
         > span {
@@ -553,11 +558,15 @@ export default {
           > span {
             display: inline-block;
             margin-right: 4px;
-            max-width: 95px;
+            max-width: 92px;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
             vertical-align: -44%;
+            cursor: pointer;
+            &:hover {
+              text-decoration: underline;
+            }
           }
           &::-webkit-scrollbar {
             height: 6px;
@@ -589,7 +598,7 @@ export default {
         }
         > button {
           height: 35px;
-          margin: 0 25px 1px;
+          margin: 0 20px 1px;
           padding: 9px 14px;
           background-color: #fff;
           color: #ff3769;

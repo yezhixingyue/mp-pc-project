@@ -240,7 +240,7 @@ export default {
       { label: '减款', value: 2 },
       { label: '其它', value: 255 },
     ],
-    /* 售后申请类型（诉求意向）
+    /* 售后申请处理进度
     -------------------------------*/
     FeedbackProgress: [
       { label: '已提交', value: 0 },

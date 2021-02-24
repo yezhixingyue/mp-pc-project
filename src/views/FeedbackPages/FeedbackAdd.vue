@@ -142,7 +142,7 @@ export default {
           { required: true, message: '请输入QQ号码', trigger: 'blur' },
           { pattern: /(^[1-9]\d*$)/, message: 'QQ号码必须为数字值，且不能以0开头' },
           {
-            min: 5, max: 12, message: '长度在 5 到 12 个字符', trigger: 'blur',
+            min: 5, max: 11, message: '长度在 5 到 11 个字符', trigger: 'blur',
           },
         ],
       },
@@ -180,7 +180,7 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
       if (this.customerInfo) {
-        this.ruleForm.Mobile = this.customerInfo.Mobile;
+        this.ruleForm.Mobile = this.customerInfo.Account.Mobile;
         this.ruleForm.QQ = this.customerInfo.QQ;
       }
     },
@@ -225,7 +225,7 @@ export default {
         return;
       }
     } else if (type === 'add' && this.customerInfo) {
-      this.ruleForm.Mobile = this.customerInfo.Mobile;
+      this.ruleForm.Mobile = this.customerInfo.Account.Mobile;
       this.ruleForm.QQ = this.customerInfo.QQ;
     }
     this.ruleForm.Order.OrderID = OrderID;
