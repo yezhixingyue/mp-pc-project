@@ -7,7 +7,7 @@
           <em class="is-font-13"> 返回列表</em>
         </span>
         <span class="blue-v-line is-bold is-black">{{ canEdit ? '提交问题反馈' : '查看反馈详情'}}</span>
-        <span v-if="canEdit" class="is-font-12"> （ 如果该订单有售后问题需要反馈，请填写该页面信息并提交 ）</span>
+        <span v-if="canEdit" class="is-font-12"> （ 如果该订单有售后等问题需要反馈，请填写该页面信息并提交，工作人员会在查收到后第一时间进行处理 ）</span>
       </header>
       <div>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -215,10 +215,10 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      if (this.customerInfo) {
-        this.ruleForm.Mobile = this.customerInfo.Account.Mobile;
-        this.ruleForm.QQ = this.customerInfo.QQ;
-      }
+      // if (this.customerInfo) {
+      //   this.ruleForm.Mobile = this.customerInfo.Account.Mobile;
+      //   this.ruleForm.QQ = this.customerInfo.QQ;
+      // }
     },
     // handleRemove(file, fileList) {
     //   console.log(file, fileList);
