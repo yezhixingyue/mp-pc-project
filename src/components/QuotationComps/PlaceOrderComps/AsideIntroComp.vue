@@ -253,6 +253,7 @@ export default {
             color: #aaa;
             font-size: 12px;
             padding-top: 10px;
+            display: block;
           }
         }
         &.footer-w {

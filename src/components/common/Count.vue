@@ -81,7 +81,7 @@ export default {
   },
   data() {
     return {
-      currentPage: 2,
+      currentPage: 1,
     };
   },
   // computed: {

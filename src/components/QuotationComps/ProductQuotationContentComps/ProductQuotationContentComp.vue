@@ -678,7 +678,8 @@ export default {
           > span,
           > div > span {
             margin-right: 20px;
-            white-space: nowrap;
+            // white-space: nowrap;
+            float: left;
             &.no-margin {
               margin: 0;
             }
@@ -693,6 +694,9 @@ export default {
             // display: inline-block;
             // white-space: nowrap;
             white-space: normal;
+            display: flex;
+            flex-wrap: wrap;
+            overflow: hidden;
           }
           > em {
             margin-right: 18px;

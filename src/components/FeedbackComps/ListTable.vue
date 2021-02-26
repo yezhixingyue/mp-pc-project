@@ -55,6 +55,12 @@ export default {
     getStatusClass(status) {
       let str = '';
       switch (status) {
+        case 0:
+          str = 'is-black';
+          break;
+        case 1:
+          str = 'is-cyan';
+          break;
         case 2:
           str = 'is-success';
           break;

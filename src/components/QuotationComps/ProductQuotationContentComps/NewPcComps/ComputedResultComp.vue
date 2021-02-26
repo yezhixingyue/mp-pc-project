@@ -10,7 +10,7 @@
     </span>
     <div v-if="ProductQuotationResult.OriginalCost > Cost
         || selectedCoupon || ProductQuotationResult.ProducePeriod || showExpressCost">
-      (
+      <span style="margin-right: 0">(</span>
       <!-- <em class="is-gray is-font-12">不含运费</em> -->
       <span> 原价：<i>{{ProductQuotationResult.OriginalCost}}元</i></span>
       <span v-if="promotePrice > 0">活动：<i class="is-pink">{{'-' + promotePrice}}元</i></span>
@@ -83,7 +83,8 @@ export default {
   }
   > span, > div > span {
     margin-right: 16px;
-    white-space: nowrap;
+    // white-space: nowrap;
+    float: left;
     &.no-margin {
       margin: 0;
       margin-right: 8px !important;
@@ -99,6 +100,9 @@ export default {
     // display: inline-block;
     // white-space: nowrap;
     white-space: normal;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
   }
   > em {
     margin-right: 18px;
