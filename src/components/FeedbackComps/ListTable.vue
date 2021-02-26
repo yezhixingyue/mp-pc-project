@@ -46,11 +46,21 @@ export default {
       type: Array,
       default: () => [],
     },
+    dataNumber: {
+      type: Number,
+      default: 0,
+    },
   },
   methods: {
     getStatusClass(status) {
       let str = '';
       switch (status) {
+        case 0:
+          str = 'is-black';
+          break;
+        case 1:
+          str = 'is-cyan';
+          break;
         case 2:
           str = 'is-success';
           break;
@@ -70,6 +80,8 @@ export default {
       return _arr.join('、');
     },
     onDetailClick(data) {
+      this.$store.commit('summary/setListData', this.dataList);
+      this.$store.commit('summary/setListDataNumber', this.dataNumber);
       this.$store.commit('summary/setEditFeedbackData', data);
       const { OrderID, Content } = data.Order;
       this.$router.push({ name: 'feedback', params: { id: OrderID, desc: Content, type: 'detail' } });

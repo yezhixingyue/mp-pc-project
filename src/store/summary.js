@@ -38,6 +38,9 @@ export default {
     },
     editFeedbackData: null, // 问题反馈编辑信息
     RejectReasonList: [], // 问题原因列表
+    needFetchListData: true, // 是否需要获取反馈列表信息
+    listData: null, // 反馈列表信息数据
+    listDataNumber: 0,
   },
   getters: {
   },
@@ -73,6 +76,15 @@ export default {
     },
     setRejectReasonList(state, list) { // 设置问题原因列表
       state.RejectReasonList = list;
+    },
+    setNeedFetchListData(state, bool) { // 是否需要获取反馈列表信息
+      state.needFetchListData = bool;
+    },
+    setListData(state, data) { // 反馈列表信息数据
+      state.listData = data;
+    },
+    setListDataNumber(state, num) { // 反馈列表信息数据条码数
+      state.listDataNumber = num;
     },
     /* 注销及登录状态清理
     -------------------------------*/

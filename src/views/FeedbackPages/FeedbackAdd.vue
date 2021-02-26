@@ -43,7 +43,7 @@
           </el-form-item>
           <el-form-item label="上传凭证：">
             <el-upload
-              action="http://192.168.1.92:8055/Api/Upload/Image?type=3"
+              action='/Api/Upload/Image?type=3'
               list-type="picture-card"
               :file-list="fileList"
               ref="upload"
@@ -52,13 +52,14 @@
               accept='.png,.jpeg,.jpg,.bmp'
               :multiple='true'
               :limit='4'
+              :on-success='handllePictureUploaded'
               :on-preview="handlePictureCardPreview"
               >
               <!-- :on-success='handllePictureUploaded'
               :on-remove="handleRemove" -->
               <i class="el-icon-plus"></i>
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible" top="8vh">
+            <el-dialog :visible.sync="dialogVisible" top="8vh" title="查看图片">
               <img width="100%" :src="dialogImageUrl" alt="">
             </el-dialog>
             <p v-if="!canEdit && fileList.length === 0">未上传照片</p>
@@ -71,6 +72,17 @@
           <el-form-item label="QQ号码：" prop="QQ">
             <el-input v-model="ruleForm.QQ" maxlength="11" :disabled='!canEdit'
               show-word-limit placeholder="请输入QQ号码"></el-input>
+          </el-form-item>
+          <el-form-item label="处理情况：" v-if="!canEdit" class="mp-feedback-progress-box">
+            <p>
+              <span style="margin-right:6px">处理进度：</span>
+              <span  :class="getStatusClass(ruleForm.Status)">{{ruleForm.Status | formatFeedbackProgress}}</span>
+            </p>
+            <p v-if="(ruleForm.RejectReason && ruleForm.Status === 3) || ruleForm.Remark && ruleForm.Status === 2">
+              <span style="margin-right:6px">{{ruleForm.Status === 3?'拒绝原因':'处理信息'}}：</span>
+              <span :class="ruleForm.Status === 3?'is-pink':''" class="is-font-12"
+               >{{ruleForm.Status === 3?ruleForm.RejectReason:ruleForm.Remark}}</span>
+            </p>
           </el-form-item>
           <el-form-item>
             <div class="btn-box">
@@ -97,7 +109,9 @@
 
 <script>
 import SingleSelector from '@/components/common/Selector/SingleSelector.vue';
+// import { imgUrl } from '@/assets/js/setup';
 import { mapState } from 'vuex';
+import { Message } from 'element-ui';
 
 export default {
   components: {
@@ -141,12 +155,13 @@ export default {
           { required: true, message: '请输入QQ号码', trigger: 'blur' },
           { pattern: /(^[1-9]\d*$)/, message: 'QQ号码必须为数字值，且不能以0开头' },
           {
-            min: 5, max: 12, message: '长度在 5 到 12 个字符', trigger: 'blur',
+            min: 5, max: 11, message: '长度在 5 到 11 个字符', trigger: 'blur',
           },
         ],
       },
       dialogImageUrl: '',
       dialogVisible: false,
+      // baseUrl: imgUrl,
     };
   },
   computed: {
@@ -175,10 +190,33 @@ export default {
         }
       });
     },
+    getStatusClass(status) {
+      let str = '';
+      switch (status) {
+        case 0:
+          str = 'is-black';
+          break;
+        case 1:
+          str = 'is-cyan';
+          break;
+        case 2:
+          str = 'is-success';
+          break;
+        case 3:
+          str = 'is-pink';
+          break;
+        case 255:
+          str = 'is-gray';
+          break;
+        default:
+          break;
+      }
+      return str;
+    },
     resetForm(formName) {
       this.$refs[formName].resetFields();
       if (this.customerInfo) {
-        this.ruleForm.Mobile = this.customerInfo.Mobile;
+        this.ruleForm.Mobile = this.customerInfo.Account.Mobile;
         this.ruleForm.QQ = this.customerInfo.QQ;
       }
     },
@@ -190,11 +228,21 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    // handllePictureUploaded(response, file, fileList) {
-    //   console.log('handllePictureUploaded', response, file, fileList);
-    // },
+    handllePictureUploaded(response, file, fileList) {
+      console.log('handllePictureUploaded', response, file, fileList);
+      if (response.Status !== 1000) {
+        Message({
+          showClose: true,
+          message: response.Message,
+          type: 'error',
+        });
+        // eslint-disable-next-line max-len
+        this.$refs.upload.uploadFiles = this.$refs.upload.uploadFiles.filter(it => it.response && it.response.Status === 1000);
+      }
+    },
     handleReturn() {
-      this.$router.replace('/feedbackList');
+      this.$store.commit('summary/setNeedFetchListData', false);
+      this.$router.go(-1);
     },
   },
   async mounted() {
@@ -214,15 +262,15 @@ export default {
           ...this.editFeedbackData,
           QuestionList,
         };
-        console.log(this.editFeedbackData.QuestionList);
-        this.fileList = this.editFeedbackData.PicList.map(path => ({ url: `http://192.168.1.92:8055${path}` }));
+        // console.log(this.editFeedbackData.QuestionList);
+        this.fileList = this.editFeedbackData.PicList.map(path => ({ url: `${path}` }));
         // this.$store.commit('summary/setEditFeedbackData', null);
       } else {
         this.$router.replace('/feedbackList');
         return;
       }
     } else if (type === 'add' && this.customerInfo) {
-      this.ruleForm.Mobile = this.customerInfo.Mobile;
+      this.ruleForm.Mobile = this.customerInfo.Account.Mobile;
       this.ruleForm.QQ = this.customerInfo.QQ;
     }
     this.ruleForm.Order.OrderID = OrderID;
@@ -321,6 +369,29 @@ export default {
       }
       .is-disabled + .el-upload {
         display: none;
+      }
+      .mp-feedback-progress-box {
+        padding: 20px 0;
+        margin-top: 35px;
+        border-radius: 4px;
+        border: 1px solid #eee;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.08), 0 2px 6px 0 rgba(0, 0, 0, 0.08);
+        background-color: rgb(253, 253, 253);
+      }
+      .el-form-item__content {
+        > .el-dialog__wrapper {
+          .el-dialog__header {
+            padding: 10px 20px;
+            // height: 30px;
+            .el-dialog__title {
+              font-size: 17px;
+            }
+          }
+          .el-dialog__body {
+            padding-top: 10px;
+            padding-bottom: 20px;
+          }
+        }
       }
     }
   }

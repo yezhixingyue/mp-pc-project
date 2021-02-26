@@ -94,8 +94,8 @@ export default {
   //     },
   //   },
   // },
-  mounted() {
-    console.log(1);
+  created() {
+    if (this.$route.query.Page) this.currentPage = +this.$route.query.Page;
   },
 };
 </script>

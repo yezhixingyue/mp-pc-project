@@ -344,7 +344,7 @@ export default {
           this.reportError('QQ号最小为10000');
           return false;
         }
-        if (length > 13) {
+        if (length > 11) {
           this.reportError('QQ号长度不应超过13位');
           return false;
         }
