@@ -261,6 +261,10 @@ export default {
     /** 设置客户信息
     ---------------------------------------- */
     setCustomerInfo(state, data) {
+      if (!data) {
+        state.customerInfo = null;
+        return;
+      }
       const Address = data.Address.map(it => ({ ...it, isSelected: it.IsDefault }));
       state.customerInfo = { ...data, Address };
       if (!data || !data.FundInfo) return;
@@ -406,13 +410,17 @@ export default {
     },
     async getCustomerDetail({ state, commit }, key = false) { // 获取账号基本信息
       if (state.customerInfo && !key) return;
-      const sessionCust = useCookie ? Cookie.getCookie('customerInfo') : sessionStorage.getItem('customerInfo');
-      if (sessionCust) {
-        const user = JSON.parse(sessionCust);
-        const token = Cookie.getCookie('token');
-        if (user.Account.Token === token) {
-          commit('setCustomerInfo', user);
-          return;
+      if (key) {
+        commit('setCustomerInfo', null);
+      } else {
+        const sessionCust = useCookie ? Cookie.getCookie('customerInfo') : sessionStorage.getItem('customerInfo');
+        if (sessionCust) {
+          const user = JSON.parse(sessionCust);
+          const token = Cookie.getCookie('token');
+          if (user.Account.Token === token) {
+            commit('setCustomerInfo', user);
+            return;
+          }
         }
       }
       const res = await api.getCustomerDetail();
