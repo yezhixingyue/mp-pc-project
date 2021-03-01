@@ -15,7 +15,7 @@
             <!-- <el-input v-model="ruleForm.OrderID" disabled></el-input> -->
             <p class="text">{{ruleForm.Order.OrderID}}</p>
           </el-form-item>
-          <el-form-item label="订单备注：">
+          <el-form-item label="文件内容：">
             <!-- <el-input v-model="content" disabled></el-input> -->
             <p class="text gray">{{ruleForm.Order.Content}}</p>
           </el-form-item>
