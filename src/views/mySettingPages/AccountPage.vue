@@ -358,11 +358,14 @@ export default {
       if (res.data.Status === 1000) {
         this.messageBox.successSingle({
           title: '修改成功',
-          successFunc: () => {
-            this.AuthenInfo4Submit.AllowEdit = false;
-            this.$store.commit('common/setCustomerAuthenInfo', this.AuthenInfo4Submit);
-            const { redirect } = this.$route.query;
-            if (redirect) this.$router.push(`/${redirect}`);
+          successFunc: async () => {
+            // this.AuthenInfo4Submit.AllowEdit = false;
+            // this.$store.commit('common/setCustomerAuthenInfo', this.AuthenInfo4Submit);
+            const bool = await this.$store.dispatch('common/getCustomerDetail', true);
+            if (bool) {
+              const { redirect } = this.$route.query;
+              if (redirect) this.$router.push(`/${redirect}`);
+            }
           },
         });
       }
