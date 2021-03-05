@@ -16,10 +16,10 @@
           <div  class="express-box">
             <span class="title">配送：</span>
             <el-radio-group v-model="Express.First" @change='onRadioChange'>
-              <el-radio :label="1" :disabled='radioDisabled.f'>
+              <el-radio :label="1" :disabled='radioDisabled.f' style="margin-right: 24px">
                 <span :class="radioDisabled.f?'is-cancel':''">名片之家</span>
               </el-radio>
-              <el-radio :label="3" :disabled='radioDisabled.s'>
+              <el-radio :label="3" :disabled='radioDisabled.s' style="margin-right: 24px">
                 <el-select v-model="secondExValFor3" @visible-change='onVisibleChangeFor3' :disabled='radioDisabled.s'>
                   <el-option
                     v-for="item in secondExpressList"
@@ -637,15 +637,25 @@ export default {
             margin-right: 40px;
           }
           &.express-box {
+            > .title {
+              margin-right: 6px;
+            }
             .el-input {
-              width: 110px;
+              width: 118px;
               .el-input__inner {
                 height: 30px;
                 line-height: 26px\0;
+                padding-right: 25px;
+                padding-left: 12px;
+                font-size: 13px;
               }
             }
-            .el-radio__label {
-              color: #585858;
+            .el-radio {
+              // margin-right: 24px;
+              .el-radio__label {
+                color: #585858;
+                font-size: 13px;
+              }
             }
           }
         }
