@@ -17,7 +17,7 @@
       custom-class="mp-help-tips-dialog-wrap"
     >
       <section>
-        <div class="rich-edit-content ql-editor ql-snow mp-scroll-wrap" v-html="richContent"></div>
+        <div class="rich-edit-content mce-content-body ql-editor ql-snow mp-scroll-wrap" v-html="richContent"></div>
         <footer>
           <el-button @click="handleBeforeDiaClose">关闭</el-button>
         </footer>
@@ -39,7 +39,8 @@ export default {
   computed: {
     richContent() {
       if (this.tipsData && this.tipsData.Content) {
-        const _content = this.tipsData.Content.replace('<img src="/', `<img src="${imgUrl}/`);
+        // eslint-disable-next-line max-len
+        const _content = this.tipsData.Content.replace(/<img src="\//g, `<img src="${imgUrl}/`).replace(/src="\/Image/g, `src="${imgUrl}/Image`);
         return _content;
       }
       return '';
@@ -57,7 +58,9 @@ export default {
 </script>
 
 <style lang='scss'>
-@import '@/assets/css/quill.snow.scss';
+// @import '@/assets/css/quill.snow.scss';
+@import '@/assets/css/tinymce.content.default.scss';
+@import '@/assets/css/tinymce.content.scss';
 .mp-place-order-help-tip-comp-wrap {
   width: 15px;
   height: 15px;
@@ -114,6 +117,7 @@ export default {
   > .el-dialog__body {
     font-weight:normal;
     padding-top: 4px;
+    padding-right: 6px;
     > section {
       > div {
         max-height: 620px;
@@ -124,6 +128,7 @@ export default {
           color: #000000;
           padding-right: 3px;
           font-size: 14px;
+          padding-right: 10px;
           /* font
   -------------------------*/
           .ql-font-SimSun {
@@ -181,25 +186,32 @@ export default {
 
           h1 {
             font-size: 2em;
+            font-weight: bold;
           }
           h2 {
             font-size: 1.5em;
+            font-weight: bold;
           }
           h3 {
             font-size: 1.17em;
+            font-weight: bold;
           }
           h4 {
             font-size: 1em;
+            font-weight: bold;
           }
           h5 {
             font-size: 0.83em;
+            font-weight: bold;
           }
           h6 {
             font-size: 0.67em;
+            font-weight: bold;
           }
 
           img {
             max-width: 100%;
+            object-fit: cover;
           }
         }
       }
