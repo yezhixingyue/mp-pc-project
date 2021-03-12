@@ -21,10 +21,10 @@
         <div slot-scope="scope">
           <span :class="getStatusClass(scope.row.Status)">{{ scope.row.Status | formatFeedbackProgress }}
           </span>
-          <el-tooltip effect="dark" :content="scope.row.RejectReason" placement="top"
+          <!-- <el-tooltip effect="dark" :content="scope.row.RejectReason" placement="top"
            v-if="(scope.row.Status === 3 && scope.row.RejectReason)">
             <i class="el-icon-question"></i>
-          </el-tooltip>
+          </el-tooltip> -->
         </div>
       </el-table-column>
       <el-table-column label="操作" width="160" show-overflow-tooltip>

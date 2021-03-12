@@ -334,11 +334,11 @@ export default {
       &.yellow-color {
         color: #f4a307;
       }
-      &.btn-wrap {
-        // > .span-title-blue {
-        //   // margin-right: 6px;
-        // }
-      }
+      // &.btn-wrap {
+      //   // > .span-title-blue {
+      //   //   // margin-right: 6px;
+      //   // }
+      // }
     }
   }
 }
