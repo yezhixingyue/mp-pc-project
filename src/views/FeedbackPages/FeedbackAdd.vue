@@ -355,10 +355,10 @@ export default {
       .el-upload-list__item-thumbnail {
         object-fit: cover;
       }
-      .upload-Remark {
-        // line-height: 34px;
-        // padding-bottom: 10px;
-      }
+      // .upload-Remark {
+      //   // line-height: 34px;
+      //   // padding-bottom: 10px;
+      // }
       .el-upload-dragger {
         width: 100%;
         height: 100%;
