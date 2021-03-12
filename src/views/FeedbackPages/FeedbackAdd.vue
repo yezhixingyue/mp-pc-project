@@ -6,8 +6,8 @@
           <i class="el-icon-back"></i>
           <em class="is-font-13"> 返回列表</em>
         </span>
-        <span class="blue-v-line is-bold is-black">{{ canEdit ? '提交问题反馈' : '查看反馈详情'}}</span>
-        <span v-if="canEdit" class="is-font-12"> （ 如果该订单有售后问题需要反馈，请填写该页面信息并提交 ）</span>
+        <span class="blue-v-line is-bold is-black">{{ canEdit ? '售后申请' : '查看申请详情'}}</span>
+        <span v-if="canEdit" class="is-font-12"> （ 如果该订单需要售后，请填写该页面信息并提交 ）</span>
       </header>
       <div>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -15,7 +15,7 @@
             <!-- <el-input v-model="ruleForm.OrderID" disabled></el-input> -->
             <p class="text">{{ruleForm.Order.OrderID}}</p>
           </el-form-item>
-          <el-form-item label="订单备注：">
+          <el-form-item label="文件内容：">
             <!-- <el-input v-model="content" disabled></el-input> -->
             <p class="text gray">{{ruleForm.Order.Content}}</p>
           </el-form-item>
