@@ -173,7 +173,6 @@ export default {
         height: 194px;
         background-color: #fff;
         overflow: hidden;
-        cursor: pointer;
         > p {
           height: 54px;
           padding-top: 20px;
@@ -227,7 +226,8 @@ export default {
             opacity: 0;
           }
         }
-        &:hover {
+        &:not(.no-recommended):hover {
+          cursor: pointer;
           p.tip {
             bottom: 0;
             opacity: 1;
