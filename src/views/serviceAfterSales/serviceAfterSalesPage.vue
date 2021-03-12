@@ -21,8 +21,8 @@
           <div class="table-wrap">
             <el-table stripe border
               :data="ServiceAfterSaleList" style="width: 100%" class="ft-14-table">
-              <el-table-column prop="ID" label="售后单号" width="125" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="Order.OrderID" label="订单号" width="140" show-overflow-tooltip>
+              <el-table-column prop="ID" label="售后单号" width="110" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="Order.OrderID" label="订单号" width="125" show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="产品名称" width="200" show-overflow-tooltip>
                 <span slot-scope="scope">{{ scope.row.Order.SecondLevelName +'-'+ scope.row.Order.ProductName }}</span>
@@ -34,13 +34,19 @@
                 <template slot-scope="scope"
                 >{{scope.row.Solution.Type===2?'减款':scope.row.Solution.Type===7?'补印':''}}</template>
               </el-table-column>
-              <el-table-column label="减款金额" width="135" show-overflow-tooltip>
-                <template slot-scope="scope" v-if="scope.row.Solution.Type===2"
-                >{{scope.row.Solution.RefundAmount}}元</template>
+              <el-table-column label="订单减款" width="120" show-overflow-tooltip>
+                <template slot-scope="scope" v-if="scope.row.Solution.Type===2">
+                  <i>{{scope.row.Solution.RefundAmount}}元</i>
+                </template>
+              </el-table-column>
+              <el-table-column label="运费减款" width="95" show-overflow-tooltip>
+                <template slot-scope="scope" v-if="scope.row.Solution.Type===2">
+                  <i v-if="scope.row.Solution.RefundFreightAmount > 0">{{scope.row.Solution.RefundFreightAmount}}元</i>
+                </template>
               </el-table-column>
               <el-table-column prop="RePrintOrderID" label="补印单号" width="130" show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="处理时间" show-overflow-tooltip width="240">
+              <el-table-column label="处理时间" show-overflow-tooltip width="190">
                 <span class="gray" slot-scope="scope">{{ scope.row.CreateTime | format2MiddleLangTypeDate }}</span>
               </el-table-column>
             </el-table>
