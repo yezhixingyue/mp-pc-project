@@ -4,7 +4,7 @@
       <img
         src="../../../assets/images/wen.png"
         alt="下单帮助"
-        title="点击查看帮助提示"
+        title="查看说明"
       />
     </div>
     <el-dialog

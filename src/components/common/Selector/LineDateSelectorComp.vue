@@ -96,6 +96,9 @@ export default {
         value: 'value',
       }),
     },
+    initDate: {
+      type: Object,
+    },
   },
   computed: {
     showText: {
@@ -202,6 +205,11 @@ export default {
     },
   },
   mounted() {
+    if (this.UserDefinedTimeIsActive) {
+      if (this.initDate.First) this.beginTime = this.initDate.First;
+      if (this.initDate.Second) this.endTime = this.initDate.Second;
+      this.key = true;
+    }
     if (!this.$route.query.DateType && this.$route.query.First && this.$route.query.Second) {
       this.beginTime = this.$route.query.First;
       this.endTime = this.$route.query.Second;

@@ -20,6 +20,7 @@
             :isFull="false"
             :typeList="[['DateType', ''], ['Date', 'First'], ['Date', 'Second']]"
             :dateValue='condition4OrderList.DateType'
+            :initDate='condition4OrderList.Date'
             :UserDefinedTimeIsActive='UserDefinedTimeIsActive'
             label="下单时间"
             :dateList="dateList"

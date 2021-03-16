@@ -4,50 +4,51 @@
       <ul>
         <li>
           <SingleSelector
-            v-model="condition.QuestionID"
+            v-model="QuestionID"
             :optionList='QuestionList'
             title="售后原因"
             :defaultProps="{ label: 'Title', value: 'ID', }"
           />
           <SingleSelector
-            v-model="condition.Status"
+            v-model="FeedbackStatus"
             :optionList='StatusList'
             title="售后进度"
           />
         </li>
         <li class="bottom">
           <LineDateSelectorComp
-            :changePropsFunc='setCondition'
-            :requestFunc='getListData'
+            :changePropsFunc='setCondition4Feedback'
+            :requestFunc='getListData4Feedback'
             :isFull="false"
             :typeList="[['DateType', ''], ['Date', 'First'], ['Date', 'Second']]"
-            :dateValue='condition.DateType'
+            :dateValue='condition4FeedbackList.DateType'
             :UserDefinedTimeIsActive='UserDefinedTimeIsActive'
             label="申请时间"
             :dateList="dateList"
+            :initDate='condition4FeedbackList.Date'
             dateType="date"
           />
           <search-input-comp
             title="订单号"
             placeholder="请输入订单号"
             :typeList="[['KeyWords', '']]"
-            :requestFunc="getListData"
-            :changePropsFunc="setCondition"
-            :word="condition.KeyWords"
-            @reset="clearCondition"
-            :searchWatchKey="dataList"
+            :requestFunc="getListData4Feedback"
+            :changePropsFunc="setCondition4Feedback"
+            :word="condition4FeedbackList.KeyWords"
+            @reset="clearCondition4Feedback"
+            :searchWatchKey="FeedbackList"
           />
         </li>
       </ul>
       <p></p>
     </header>
     <section class="content">
-      <ListTable :dataList='dataList' :dataNumber='dataNumber' @handleCancel='handleCancel' />
+      <ListTable :dataList='FeedbackList' :dataNumber='FeedbackDataNumber' @handleCancel='handleCancel' />
       <footer>
         <Count
-          :watchPage='condition.Page'
+          :watchPage='condition4FeedbackList.Page'
           :handlePageChange='handlePageChange'
-          :count='dataNumber'
+          :count='FeedbackDataNumber'
           :pageSize='12'
           class="float"
          />
@@ -61,8 +62,7 @@ import ListTable from '@/components/FeedbackComps/ListTable.vue';
 import SingleSelector from '@/components/common/Selector/SingleSelector.vue';
 import LineDateSelectorComp from '@/components/common/Selector/LineDateSelectorComp.vue';
 import SearchInputComp from '@/components/common/Selector/SearchInputComp.vue';
-import { mapState } from 'vuex';
-import ClassType from '@/store/CommonClassType';
+import { mapState, mapMutations, mapActions } from 'vuex';
 import Count from '@/components/common/Count.vue';
 
 export default {
@@ -75,27 +75,14 @@ export default {
   },
   data() {
     return {
-      dataList: [],
-      dataNumber: 0,
-      condition: {
-        Page: 1,
-        PageSize: 12,
-        QuestionID: '',
-        Status: '',
-        Date: {
-          First: '',
-          Second: '',
-        },
-        DateType: 'today',
-        KeyWords: '',
-      },
       // eslint-disable-next-line max-len
       dateList: [{ label: '全部', value: 'all' }, { label: '今日', value: 'today' }, { label: '昨日', value: 'yesterday' }, { label: '前日', value: 'beforeyesterday' }, { label: '本月', value: 'curMonth' }, { label: '上月', value: 'lastMonth' }],
     };
   },
   computed: {
     ...mapState('common', ['FeedbackProgress']),
-    ...mapState('summary', ['RejectReasonList', 'listData', 'needFetchListData', 'listDataNumber']),
+    // eslint-disable-next-line max-len
+    ...mapState('summary', ['RejectReasonList', 'listData', 'needFetchListData', 'listDataNumber', 'condition4FeedbackList', 'FeedbackList', 'FeedbackDataNumber']),
     QuestionList() {
       return [{ ID: '', Title: '不限' }, ...this.RejectReasonList];
     },
@@ -103,61 +90,41 @@ export default {
       return [{ value: '', label: '不限' }, ...this.FeedbackProgress];
     },
     UserDefinedTimeIsActive() {
-      return this.condition.DateType === ''
-          && !!this.condition.Date.First
-          && !!this.condition.Date.Second;
+      return this.condition4FeedbackList.DateType === ''
+          && !!this.condition4FeedbackList.Date.First
+          && !!this.condition4FeedbackList.Date.Second;
     },
     watchConditionPartChange() {
-      return `${this.condition.Status}${this.condition.QuestionID}`;
+      return `${this.condition4FeedbackList.Status}${this.condition4FeedbackList.QuestionID}`;
+    },
+    QuestionID: {
+      get() {
+        return this.condition4FeedbackList.QuestionID;
+      },
+      set(val) {
+        this.$store.commit('summary/setCondition4Feedback', [['QuestionID', ''], val]);
+      },
+    },
+    FeedbackStatus: {
+      get() {
+        return this.condition4FeedbackList.Status;
+      },
+      set(val) {
+        this.$store.commit('summary/setCondition4Feedback', [['Status', ''], val]);
+      },
     },
   },
   methods: {
+    ...mapMutations('summary', ['setCondition4Feedback', 'clearCondition4Feedback']),
+    ...mapActions('summary', ['getListData4Feedback']),
     handleCancel(id) {
       if (!id) return;
-      const t = this.dataList.find(it => it.ID === id);
-      if (t) t.Status = 255;
-    },
-    async getListData(page = 1) {
-      console.log('getListData');
-      this.condition.Page = page;
-      ClassType.setDate(this.condition);
-      const _obj = ClassType.filter(this.condition, true);
-      if (_obj.Date) {
-        _obj.ApplyTime = _obj.Date;
-        delete _obj.Date;
-      }
-      let key = true;
-      this.dataList = [];
-      const res = await this.api.getAfterSalesApplyList(_obj).catch(() => { key = false; });
-      if (key && res.data.Status === 1000) {
-        this.dataList = res.data.Data;
-        this.dataNumber = res.data.DataNumber;
-      }
-    },
-    setCondition([[key1, key2], value]) {
-      if (key2) this.condition[key1][key2] = value;
-      else this.condition[key1] = value;
-    },
-    clearCondition() {
-      this.condition = {
-        Page: 1,
-        PageSize: 12,
-        QuestionID: '',
-        Status: '',
-        Date: {
-          First: '',
-          Second: '',
-        },
-        DateType: 'today',
-        KeyWords: '',
-      };
+      this.$store.commit('summary/setListItemCancel4Feedback', id);
     },
     handlePageChange(page) {
-      // console.log(1);
-      this.getListData(page);
+      this.$store.dispatch('summary/getListData4Feedback', page);
     },
     setPathFromCondition(newVal) {
-      console.log('setPathFromCondition', newVal.DateType);
       const keys = Object.keys(newVal);
       const obj = newVal;
       const arr = keys.filter(key => {
@@ -172,7 +139,6 @@ export default {
       this.$router.push(`?${_path}`);
     },
     initConditionFromPath() {
-      console.log('initConditionFromPath');
       const _obj = { ...this.$route.query };
       if (_obj.First && _obj.Second) {
         _obj.Date = {
@@ -187,18 +153,17 @@ export default {
       if (_obj.Status) _obj.Status = +_obj.Status;
       if (_obj.QuestionID) _obj.QuestionID = +_obj.QuestionID;
       if (_obj.PageSize) _obj.PageSize = +_obj.PageSize;
-      this.condition = { ...this.condition, ..._obj };
+      const condition = { ...this.condition4FeedbackList, ..._obj };
+      this.$store.commit('summary/setFullCondition4Feedback', condition);
     },
   },
   watch: {
     watchConditionPartChange() {
-      // console.log('watchConditionPartChange');
-      this.getListData();
+      this.$store.dispatch('summary/getListData4Feedback');
     },
-    condition: {
+    condition4FeedbackList: {
       handler(newVal) {
         if (!newVal) return;
-        console.log('condition -- watch -- change');
         this.setPathFromCondition(newVal);
       },
       deep: true,
@@ -207,10 +172,9 @@ export default {
   created() {
     this.initConditionFromPath();
     if (!(this.listData && !this.needFetchListData)) {
-      this.getListData(this.condition.Page);
+      this.$store.dispatch('summary/getListData4Feedback', this.condition4FeedbackList.Page);
     } else {
-      this.dataList = this.listData;
-      this.dataNumber = this.listDataNumber;
+      this.$store.commit('summary/setFeedbackList', [this.listData, this.listDataNumber]);
     }
     this.$store.dispatch('summary/getRejectReasonList');
   },

@@ -41,6 +41,22 @@ export default {
     needFetchListData: true, // 是否需要获取反馈列表信息
     listData: null, // 反馈列表信息数据
     listDataNumber: 0,
+    /** 售后申请单页面相关（客户反馈页面）
+    ---------------------------------------- */
+    condition4FeedbackList: {
+      Page: 1,
+      PageSize: 12,
+      QuestionID: '',
+      Status: '',
+      Date: {
+        First: '',
+        Second: '',
+      },
+      DateType: 'today',
+      KeyWords: '',
+    },
+    FeedbackList: [],
+    FeedbackDataNumber: 0,
   },
   getters: {
   },
@@ -114,6 +130,52 @@ export default {
         FieldType: 3,
       };
       state.editFeedbackData = null;
+      state.condition4FeedbackList = {
+        Page: 1,
+        PageSize: 12,
+        QuestionID: '',
+        Status: '',
+        Date: {
+          First: '',
+          Second: '',
+        },
+        DateType: 'today',
+        KeyWords: '',
+      };
+      state.FeedbackList = [];
+      state.FeedbackDataNumber = 0;
+    },
+    /** 售后申请单页面相关（客户反馈页面）
+    ---------------------------------------- */
+    setFeedbackList(state, [list, count]) {
+      state.FeedbackList = list;
+      if (count || count === 0) state.FeedbackDataNumber = count;
+    },
+    setCondition4Feedback(state, [[key1, key2], value]) {
+      if (key2) state.condition4FeedbackList[key1][key2] = value;
+      else state.condition4FeedbackList[key1] = value;
+    },
+    clearCondition4Feedback(state) {
+      state.condition4FeedbackList = {
+        Page: 1,
+        PageSize: 12,
+        QuestionID: '',
+        Status: '',
+        Date: {
+          First: '',
+          Second: '',
+        },
+        DateType: 'today',
+        KeyWords: '',
+      };
+    },
+    setFullCondition4Feedback(state, obj) {
+      state.condition4FeedbackList = obj;
+    },
+    setListItemCancel4Feedback(state, id) {
+      if (!id) return;
+      const t = state.FeedbackList.find(it => it.ID === id);
+      if (t) t.Status = 255;
     },
   },
   actions: {
@@ -153,6 +215,24 @@ export default {
         return res.data.Data;
       }
       return [];
+    },
+    /** 售后申请单页面相关（客户反馈页面）
+    ---------------------------------------- */
+    async getListData4Feedback({ state, commit }, page = 1) {
+      commit('setCondition4Feedback', [['Page', ''], page]);
+      commit('setDate4ConditionDate', 'condition4FeedbackList');
+      const _obj = ClassType.filter(state.condition4FeedbackList, true);
+      if (_obj.Date) {
+        _obj.ApplyTime = _obj.Date;
+        delete _obj.Date;
+      }
+      let key = true;
+      // state.dataList = [];
+      commit('setFeedbackList', [[]]);
+      const res = await api.getAfterSalesApplyList(_obj).catch(() => { key = false; });
+      if (key && res.data.Status === 1000) {
+        commit('setFeedbackList', [res.data.Data, res.data.DataNumber]);
+      }
     },
   },
 };

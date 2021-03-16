@@ -1,11 +1,11 @@
 <template>
   <section class="mp-place-order-aside-intro-comp-wrap" :class="asideIntroData ? 'right' : ''">
     <header @click="onHomeDetailClick">
-      <el-image v-if="asideIntroData" :src="baseImgUrl + asideIntroData.Cover" fit="cover" title="点击查看详情" ></el-image>
+      <el-image v-if="asideIntroData" :src="baseImgUrl + asideIntroData.Cover" fit="cover" title="查看产品介绍" ></el-image>
       <h2 v-if="asideIntroData">{{productName}}</h2>
       <p v-if="asideIntroData">
-        <span>{{asideIntroData.Introduce.substr(0, 28)}}<i v-if="asideIntroData.Introduce.length > 28">...</i></span>
-        <em class="span-title-blue">查看详情</em>
+        <span>{{asideIntroData.Introduce.substr(0, 25)}}<i v-if="asideIntroData.Introduce.length > 25">...</i></span>
+        <em class="span-title-blue">产品介绍</em>
       </p>
       <span v-else>
         <img src="@/assets/images/empty.png" alt="">
@@ -15,14 +15,14 @@
     <section>
       <header>
         <h2>同类产品</h2>
-        <span><i></i>选择产品可快捷下单</span>
+        <span><i></i>查看同类产品介绍</span>
       </header>
       <ul v-if="asideAboutData">
         <li v-for="item in asideAboutData.AboutList" :key="item.ID" @click="onJumpProductOrder(item.ID)">
           <p>{{item.Name}}</p>
           <div>
             <el-image :src="baseImgUrl + item.Cover" fit="cover" ></el-image>
-            <p class="tip">点击下单</p>
+            <p class="tip">产品介绍</p>
           </div>
         </li>
         <li v-if="asideAboutData.AboutList.length === 0" class="no-recommended">
@@ -57,7 +57,8 @@ export default {
       this.$emit('getProductAsideIntroData');
     },
     onJumpProductOrder(id) {
-      window.open(`/#/placeOrder?id=${id}`);
+      // window.open(`/#/placeOrder?id=${id}`);id
+      window.open(`${productJumpUrl}product?productID=${id}`);
     },
   },
 };
@@ -72,35 +73,43 @@ export default {
 
   > header {
     width: 100%;
-    height: 270px;
+    height: 280px;
     margin-bottom: 25px;
     background-color: #fff;
     cursor: pointer;
     transition: box-shadow 0.25s ease-in-out;
     > div.el-image {
-      width: 255px;
-      height: 170px;
+      width: 210px;
+      height: 155px;
       overflow: hidden;
+      margin-left: 23px;
+      margin-top: 24px;
       > div {
         font-size: 12px;
       }
       > img {
         transition: transform 0.25s ease-in-out;
+        border-radius: 2px;
       }
     }
     > h2 {
-      height: 48px;
-      padding-top: 12px;
-      line-height: 36px;
+      height: 40px;
+      padding-top: 11px;
+      line-height: 33px;
       box-sizing: border-box;
       text-align: center;
       background-color: #fff;
       color: #585858;
       transition: 0.25s ease-in-out;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 200px;
+      margin-left: 27.5px;
     }
     > p {
       line-height: 21px;
-      padding: 4px 20px;
+      padding: 4px 30px;
       font-size: 12px;
       height: 52px;
       width: 100%;
@@ -108,7 +117,7 @@ export default {
       color: #888;
       background-color: #fff;
       > span {
-        margin-right: 14px;
+        margin-right: 10px;
       }
       > em {
         margin-left: -6px;
@@ -162,20 +171,20 @@ export default {
     }
     > ul {
       width: 100%;
-      max-height: 840px;
+      max-height: 927px;
       min-height: 194px;
       overflow-y: auto;
       background-color: #eee;
       > li {
         border-top: 1px dashed #eee;
         box-sizing: border-box;
-        padding: 0 15px;
-        height: 194px;
+        padding: 0 27.5px;
+        height: 224px;
         background-color: #fff;
         overflow: hidden;
         > p {
-          height: 54px;
-          padding-top: 20px;
+          height: 51px;
+          padding-top: 17px;
           padding-bottom: 10px;
           line-height: 24px;
           box-sizing: border-box;
@@ -185,7 +194,7 @@ export default {
           display: inline-block;
           width: auto;
           position: relative;
-          max-width: 225px;
+          max-width: 200px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -201,14 +210,15 @@ export default {
           }
         }
         > div {
-          height: 120px;
+          height: 150px;
           position: relative;
           overflow: hidden;
           > div {
-            height: 120px;
-            width: 100%;
+            height: 150px;
+            width: 200px;
             > img {
               transition: transform 0.3s ease-in-out;
+              border-radius: 2px;
             }
           }
           > p {
@@ -222,7 +232,7 @@ export default {
             text-align: center;
             background-color: rgba(66,141,250, 0.7);
             color: #fff;
-            transition: 0.3s ease-in-out;
+            transition: 0.2s ease-in-out;
             opacity: 0;
           }
         }

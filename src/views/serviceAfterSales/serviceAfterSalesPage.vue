@@ -9,6 +9,7 @@
           :isFull="false"
           :typeList="[['DateType', ''], ['Date', 'First'], ['Date', 'Second']]"
           :dateValue='condition4ServiceAfterSaleList.DateType'
+          :initDate='condition4ServiceAfterSaleList.Date'
           :UserDefinedTimeIsActive='UserDefinedTimeIsActive'
           label="售后时间"
           :dateList="dateList"

@@ -9,6 +9,7 @@
           :isFull="false"
           :typeList="[['DateType', ''], ['Date', 'First'], ['Date', 'Second']]"
           :dateValue='condition4FundBillList.DateType'
+          :initDate='condition4FundBillList.Date'
           :UserDefinedTimeIsActive='UserDefinedTimeIsActive'
           label="交易时间"
           :dateList="dateList"
