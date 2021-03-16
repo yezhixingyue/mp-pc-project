@@ -56,19 +56,19 @@
             <!-- <i class="iconfont icon-dingdan"></i> -->
             <span>订单</span>
           </router-link>
-          <router-link class="normal-item" tag="li" to="/feedbackList" :class="{
-              active: $route.name === 'feedback',
-            }">
+          <router-link class="normal-item" tag="li" to="/bill">
             <!-- <i class="iconfont icon-zhangdan"></i> -->
-            <span>售后申请</span>
+            <span>账单</span>
           </router-link>
           <router-link class="normal-item" tag="li" to="/serviceAfterSales">
             <!-- <i class="iconfont icon-shouhoudan"></i> -->
             <span>售后记录</span>
           </router-link>
-          <router-link class="normal-item" tag="li" to="/bill">
+          <router-link class="normal-item" tag="li" to="/feedbackList" :class="{
+              active: $route.name === 'feedback',
+            }">
             <!-- <i class="iconfont icon-zhangdan"></i> -->
-            <span>账单</span>
+            <span>售后进度</span>
           </router-link>
         </ul>
         <div class="customer-box" v-if="customerInfo">
