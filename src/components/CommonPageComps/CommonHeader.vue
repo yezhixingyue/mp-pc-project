@@ -168,6 +168,7 @@ export default {
       timer: null,
       showBoxShadow: false,
       homeUrl,
+      isloading: false,
     };
   },
   methods: {
@@ -298,6 +299,7 @@ export default {
   },
   async mounted() {
     let showLoading = true;
+    this.isloading = true;
     if (this.$route.name === 'placeOrder' && this.$route.query.id) showLoading = false;
     const loadingInstance = showLoading ? Loading.service({
       lock: true,
@@ -315,8 +317,10 @@ export default {
         this.$store.dispatch('common/getExpressList'),
       ]);
       if (showLoading) loadingInstance.close();
+      this.isloading = false;
     } catch (error) {
       if (showLoading) loadingInstance.close();
+      this.isloading = false;
     }
     this.oApp = document.getElementById('app');
     const _func = debounce(this.handleScroll, 50);

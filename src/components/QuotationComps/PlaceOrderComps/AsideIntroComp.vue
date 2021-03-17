@@ -1,11 +1,11 @@
 <template>
   <section class="mp-place-order-aside-intro-comp-wrap" :class="asideIntroData ? 'right' : ''">
     <header @click="onHomeDetailClick">
-      <el-image v-if="asideIntroData" :src="baseImgUrl + asideIntroData.Cover" fit="cover" title="查看产品介绍" ></el-image>
+      <el-image v-if="asideIntroData" :src="baseImgUrl + asideIntroData.Cover" fit="cover" title="查看产品详情" ></el-image>
       <h2 v-if="asideIntroData">{{productName}}</h2>
       <p v-if="asideIntroData">
         <span>{{asideIntroData.Introduce.substr(0, 25)}}<i v-if="asideIntroData.Introduce.length > 25">...</i></span>
-        <em class="span-title-blue">产品介绍</em>
+        <em class="span-title-blue">产品详情</em>
       </p>
       <span v-else>
         <img src="@/assets/images/empty.png" alt="">
@@ -22,7 +22,7 @@
           <p>{{item.Name}}</p>
           <div>
             <el-image :src="baseImgUrl + item.Cover" fit="cover" ></el-image>
-            <p class="tip">产品介绍</p>
+            <p class="tip">产品详情</p>
           </div>
         </li>
         <li v-if="asideAboutData.AboutList.length === 0" class="no-recommended">

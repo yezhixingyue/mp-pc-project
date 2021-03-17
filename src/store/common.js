@@ -249,6 +249,7 @@ export default {
       { label: '已拒绝', value: 3 },
       { label: '已取消', value: 255 },
     ],
+    // initLoading: false, // 初始下单页面 加载初始化信息loading展示
   },
   getters: {
   },

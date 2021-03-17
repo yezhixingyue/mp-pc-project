@@ -2,15 +2,21 @@
   <section class="mp-pc-place-order-product-classify-comp-wrap">
     <header>
       <ul class="header float">
-        <li
-          v-for="(it,i) in allProductClassify"
-          :key="it.ID"
-          @mouseenter="onMouseEnter(i)"
-          @mouseleave="onMouseLeave"
-          :class="{ active: i === index && isOpen, selected: curProduct && it.ID === curProduct.ProductClass.First }"
-        >
-          <span>{{it.ClassName}}</span>
+        <li v-if="allProductClassify.length > 0" class="loading-box">
+          <!-- <img src="@/assets/images/loading2.gif" alt=""> -->
+          <div class="is-font-12 is-gray"><img src="@/assets/images/loading.gif" alt="">加载中</div>
         </li>
+        <template v-else>
+          <li
+            v-for="(it,i) in allProductClassify"
+            :key="it.ID"
+            @mouseenter="onMouseEnter(i)"
+            @mouseleave="onMouseLeave"
+            :class="{ active: i === index && isOpen, selected: curProduct && it.ID === curProduct.ProductClass.First }"
+          >
+            <span>{{it.ClassName}}</span>
+          </li>
+        </template>
       </ul>
     </header>
     <el-popover
@@ -314,6 +320,15 @@ export default {
         }
         &:hover {
           color: #428dfa;
+        }
+        &.loading-box {
+          > div {
+            opacity: 0.5;
+            > img {
+              vertical-align: text-bottom;
+              margin-right: 6px;
+            }
+          }
         }
       }
       // border-bottom: 1px dashed #eee;

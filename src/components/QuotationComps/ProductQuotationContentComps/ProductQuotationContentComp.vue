@@ -13,7 +13,7 @@
               <span>-</span>
               <span>{{ curProductShowNameInfo[2] }}</span>
             </div>
-            <span @click="onHomeDetailClick" v-if="asideIntroData">产品介绍
+            <span @click="onHomeDetailClick" v-if="asideIntroData">产品详情
               <i class="el-icon-d-arrow-right"></i>
             </span>
           </section>
