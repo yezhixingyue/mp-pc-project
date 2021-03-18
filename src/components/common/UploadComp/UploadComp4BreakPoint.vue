@@ -43,6 +43,49 @@
           :disabled='onlyShow'
         /> -->
         <el-button slot="trigger" size="small" type="primary">{{showTitle}}</el-button>
+        <div class="upload-tips">
+          <el-popover
+            placement="top-start"
+            width="564"
+            offset='151'
+            trigger="hover">
+            <section class="mp-file-upload-tips-popover-wrap">
+              <header><i></i>文档设计标准</header>
+              <ul>
+                <li>
+                  <p>1．字体与转曲</p>
+                  <span>文档需提前进行转曲（栅格化）</span>
+                </li>
+                <li>
+                  <p>2．出血与边距</p>
+                  <span>重要图文部分距边距3mm及以上，名片出血为1mm（如名片为90x54mm，文件尺寸应为92x56mm）</span>
+                </li>
+                <li>
+                  <p>3．分辨率</p>
+                  <span>按照印刷最小分辨率要求不小于300dpi</span>
+                </li>
+                <li>
+                  <p>4．特殊效果</p>
+                  <span>特殊效果建议转位图处理</span>
+                </li>
+                <li>
+                  <p>5．最小字号及极细线</p>
+                  <span>极细线要求最细为0.076mm，最小字号为5pt</span>
+                </li>
+                <li>
+                  <p>6．颜色设置</p>
+                  <span>印刷文档要求颜色模式为CMYK；</span>
+                  <span>四色黑字及四色黑二维码请转成单黑；</span>
+                  <span>大面积实地四色黑（C100 M100 Y100 K100）建议使用C30 K100替代</span>
+                </li>
+              </ul>
+            </section>
+            <span slot="reference"
+             style="margin:4px 0; margin-right: 10px;color:#428dfa;
+             display:inline-block;height:22px; line-height: 22px">注意事项</span>
+          </el-popover>
+          <span>( 请上传cdr, jpg, jpeg, tiff, tif, rar, zip, pdf等格式的设计文件，JPG文件多面请打压缩包上传 )</span>
+        </div>
         <!-- <el-button  size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
         <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
       </el-upload>
@@ -487,6 +530,8 @@ export default { // 上传图片按钮
       // float: right;
       // width: 1063px;
       display: inline-block;
+      position: relative;
+      width: 860px;
       // margin-left: 7px;
       > .el-upload {
         vertical-align: top;
@@ -525,22 +570,32 @@ export default { // 上传图片按钮
           max-width: 620px;
         }
         position: relative;
-        &::before {
-          content: '请选择订单文件 ( 请上传cdr, jpg, jpeg, tiff, tif, rar, zip, pdf等格式的设计文件，JPG文件多面请打压缩包上传 )';
-          display: inline-block;
-          line-height: 35px;
-          color: #989898;
-          font-size: 12px;
-          // display: block;
-          position: absolute;
+        // &::before {
+        //   content: '请选择订单文件 ( 请上传cdr, jpg, jpeg, tiff, tif, rar, zip, pdf等格式的设计文件，JPG文件多面请打压缩包上传 )';
+        //   display: inline-block;
+        //   line-height: 35px;
+        //   color: #989898;
+        //   font-size: 12px;
+        //   // display: block;
+        //   position: absolute;
 
-          left: -6px;
-          // top: -30px;
-          width: 0;
-          top: -12px;
-          opacity: 0;
-          // display: block;
-        }
+        //   left: -6px;
+        //   // top: -30px;
+        //   width: 0;
+        //   top: -12px;
+        //   opacity: 0;
+        //   // display: block;
+        // }
+      }
+      > .upload-tips {
+        position: absolute;
+        left: 120px;
+        height: 35px;
+        top: 0;
+        line-height: 35px;
+        font-size: 12px;
+        color: #989898;
+        opacity: 0;
       }
       &::after {
         content: '';
@@ -550,14 +605,18 @@ export default { // 上传图片按钮
       overflow: hidden;
       height: 35px;
       &.empty {
-        > .el-upload-list {
-          width: 600px;
-          &::before {
-            top: -12px;
-            opacity: 1;
-            width: 55em;
-            animation: afterAnimate 0.4s;
-          }
+        // > .el-upload-list {
+        //   width: 600px;
+        //   &::before {
+        //     top: -12px;
+        //     opacity: 1;
+        //     width: 55em;
+        //     animation: afterAnimate 0.4s;
+        //   }
+        // }
+        > .upload-tips {
+          opacity: 1;
+          animation: afterAnimate 0.4s;
         }
       }
     }
@@ -573,6 +632,45 @@ export default { // 上传图片按钮
       content: '';
       display: block;
       clear: both;
+    }
+  }
+}
+.mp-file-upload-tips-popover-wrap {
+  margin: 0 2px;
+  > header {
+    font-size: 16px;
+    padding-left: 10px;
+    height: 32px;
+    border-bottom: 1px solid #eee;
+    padding-top: 3px;
+    padding-bottom: 1px;
+    > i {
+      width: 19px;
+      height: 18px;
+      vertical-align: text-bottom;
+      display: inline-block;
+      margin-right: 10px;
+      background: url('../../../assets/images/upload-tip.png') no-repeat center center/100% 100%;
+    }
+  }
+  > ul {
+    padding-top: 17px;
+    padding-left: 10px;
+    padding-bottom: 20px;
+    > li {
+      > p {
+        font-size: 12px;
+        color: #585858;
+        padding: 5px 0;
+        line-height: 14px;
+      }
+      > span {
+        display: block;
+        color: #888;
+        font-size: 12px;
+        line-height: 14px;
+        padding: 5px 0;
+      }
     }
   }
 }

@@ -2,7 +2,7 @@
   <section class="mp-pc-place-order-product-classify-comp-wrap">
     <header>
       <ul class="header float">
-        <li v-if="allProductClassify.length > 0" class="loading-box">
+        <li v-if="allProductClassify.length === 0" class="loading-box">
           <!-- <img src="@/assets/images/loading2.gif" alt=""> -->
           <div class="is-font-12 is-gray"><img src="@/assets/images/loading.gif" alt="">加载中</div>
         </li>
