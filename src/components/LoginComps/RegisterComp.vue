@@ -39,6 +39,8 @@
     <el-form-item prop="agreement" class="agreement">
       <el-checkbox label="" v-model="regForm.agreement">阅读并同意</el-checkbox>
       <i @click="onAgreementViewClick">《承接印品协议书》</i>
+      <i style="margin: 0">、</i>
+      <i style="margin: 0" @click="onUserAgreementViewClick">《用户协议》</i>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('regForm')" :disabled="!canGoToReg">注册</el-button>
@@ -263,6 +265,9 @@ export default {
     },
     onAgreementViewClick() {
       this.$emit('setAgreeView');
+    },
+    onUserAgreementViewClick() {
+      this.$emit('setUserAgreeView');
     },
   },
   mounted() {
