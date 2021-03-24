@@ -27,11 +27,13 @@
           <keep-alive>
             <RegisterComp v-if="activeName === 'second'"
              @setAgreeView='setAgreeView'
+             @setUserAgreeView='setUserAgreeView'
              @setPanelLoading='setPanelLoading' @changePanel='setActiveName' />
           </keep-alive>
         </div>
       </div>
       <Agreement v-model="agreementvisible" />
+      <UserAgreement v-model="userAgreementvisible" />
     </div>
   </section>
 </template>
@@ -40,12 +42,14 @@
 import LoginComp from '@/components/LoginComps/LoginComp.vue';
 import RegisterComp from '@/components/LoginComps/RegisterComp.vue';
 import Agreement from '@/components/LoginComps/Agreement.vue';
+import UserAgreement from '@/components/LoginComps/UserAgreement.vue';
 
 export default {
   components: {
     LoginComp,
     RegisterComp,
     Agreement,
+    UserAgreement,
   },
   data() {
     return {
@@ -53,6 +57,7 @@ export default {
       panelLoading: false,
       loadingText: '',
       agreementvisible: false,
+      userAgreementvisible: false,
     };
   },
   methods: {
@@ -65,6 +70,9 @@ export default {
     },
     setAgreeView() {
       this.agreementvisible = true;
+    },
+    setUserAgreeView() {
+      this.userAgreementvisible = true;
     },
   },
 };

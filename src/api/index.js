@@ -219,6 +219,9 @@ const api = {
   getCustomerOrderList4Excel(data) { // 导出客户订单列表 POST /Api/Customer/OrderExcel
     return instance.post('/Api/Customer/OrderExcel', data, { responseType: 'arraybuffer' });
   },
+  getPackageProgress(packageID) { // GET /Api/Package/Progress 通过包裹号查询包裹配送进度
+    return instance.get(`/Api/Package/Progress?packageID=${packageID}`, { closeLoading: true });
+  },
 
   /* 售后单部分 api
    ----------------------------------------------------------------------------------- */

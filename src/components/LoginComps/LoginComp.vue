@@ -144,9 +144,10 @@ export default {
         const Password = `${this.rememberInfo.Password}`;
         const obj = { Mobile, Password, Terminal: 1 };
         this.$emit('setPanelLoading', [true, '正在登录中...']);
-        const res = await this.api.getLogin(obj);
+        let key = true;
+        const res = await this.api.getLogin(obj).catch(() => { key = false; });
         this.$emit('setPanelLoading', [false, '']);
-        if (res.data.Status === 1000) {
+        if (key && res && res.data.Status === 1000) {
           this.handleSuccessLogin(res.data.Data, rememberPwd, Password);
         } else {
           this.handleFailLogin();
@@ -159,9 +160,10 @@ export default {
             const pwd = Base64.encode(Password);
             const _obj = { Mobile, Password: pwd, Terminal: 1 };
             this.$emit('setPanelLoading', [true, '正在登录中...']);
-            const res = await this.api.getLogin(_obj);
+            let key = true;
+            const res = await this.api.getLogin(_obj).catch(() => { key = false; });
             this.$emit('setPanelLoading', [false, '']);
-            if (res.data.Status === 1000) {
+            if (key && res && res.data.Status === 1000) {
               this.handleSuccessLogin(res.data.Data, rememberPwd, _obj.Password);
             } else {
               this.handleFailLogin(res.data.Status);
