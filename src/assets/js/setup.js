@@ -21,8 +21,8 @@ if (mode === 'production') {
   _domain = 'mpzj.cn';
   _imgUrl = 'https://order.mpzj.cn:8157/';
   _productJumpUrl = 'https://newapi.mpzj.cn/';
-  _agreementID = '60';
-  _statementID = '61';
+  _agreementID = '3';
+  _statementID = '4';
   _baseUrl = '/';
   _rightOpenUrl = 'https://order.mpzj.cn/';
 }

@@ -339,7 +339,7 @@ export default {
     scrollChange() {
       const { scrollTop, scrollHeight, offsetHeight } = this.ScrollInfo;
       const difference = scrollHeight - offsetHeight;
-      if (difference - 140 - scrollTop > 0) this.isFootFixed = true;
+      if (difference - 156 - scrollTop > 0) this.isFootFixed = true;
       else this.isFootFixed = false;
     },
   },
