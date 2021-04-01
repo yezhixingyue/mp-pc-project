@@ -9,10 +9,16 @@ import { useCookie, baseUrl } from '../assets/js/setup';
 let loadingInstance;
 let closeTip = false;
 let closeLoading = false;
+
+const { CancelToken } = axios;
+let source = CancelToken.source();
+
 const clearToken = () => {
   sessionStorage.removeItem('token');
   localStorage.removeItem('token');
   Cookie.removeCookie('token');
+  source.cancel(); // 跳转登录页时 清除页面其它后续请求
+  source = CancelToken.source(); // 清除后赋予axios新的取消信息
 };
 
 axios.interceptors.request.use(
@@ -62,6 +68,9 @@ axios.interceptors.request.use(
         customClass: _customClass,
       });
     }
+
+    curConfig.cancelToken = source.token;
+
     return curConfig;
   },
   (error) => {
@@ -106,8 +115,9 @@ axios.interceptors.response.use(
       clearToken();
       router.replace('/login');
       return response;
+    }
     // eslint-disable-next-line max-len
-    } if ((!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && (!closeTip) && oneCondition4NotNeedToast) || [7025, 8037].includes(response.data.Status)) {
+    if ((!_statusList2NotNeed2Toast.includes(response.data.Status) && !_list2NotNeed2Toast.includes(_url) && (!closeTip) && oneCondition4NotNeedToast) || [7025, 8037].includes(response.data.Status)) {
       const _obj = { msg: `[ ${response.data.Message} ]` };
       if ([7025, 8037].includes(response.data.Status)) {
         _obj.successFunc = () => {
@@ -136,7 +146,6 @@ axios.interceptors.response.use(
     return response;
   },
   async (error) => {
-    console.log('error', error);
     if (!store.state.common.isLoading) {
       if (loadingInstance) loadingInstance.close();
       if (error.response) {
@@ -176,7 +185,7 @@ axios.interceptors.response.use(
           message: '网络错误',
           type: 'error',
         });
-      } else if (error.message.includes('timeout')) {
+      } else if (error.message && error.message.includes('timeout')) {
         Message({
           showClose: true,
           message: '网络超时',
@@ -189,15 +198,17 @@ axios.interceptors.response.use(
           type: 'error',
         });
       } else {
-        let msg = '未知错误';
+        let msg = '';
         if (error.response && error.response.data && error.response.data.Message) {
           msg = error.response.data.Message;
         }
-        Message({
-          showClose: true,
-          message: msg,
-          type: 'error',
-        });
+        if (msg) {
+          Message({
+            showClose: true,
+            message: msg,
+            type: 'error',
+          });
+        }
       }
     }
     return Promise.reject(error);

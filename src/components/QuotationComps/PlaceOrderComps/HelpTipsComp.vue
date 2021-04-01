@@ -98,11 +98,21 @@ export default {
 }
 .mp-help-tips-dialog-wrap {
   > .el-dialog__header {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
     padding-top: 16px;
-    margin: 0 10px;
-    border-bottom: 1px solid #eee;
+    // margin: 0 10px;
+    // border-bottom: 1px solid #eee;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 10px;
+      bottom: 0;
+      right: 10px;
+      height: 1px;
+      background-color: #eee;
+    }
     > .el-dialog__title {
       color: #585858;
       font-size: 16px;
@@ -213,6 +223,19 @@ export default {
             max-width: 100%;
             object-fit: cover;
             height: auto;
+          }
+
+          a {
+            color: #0000ee;
+            &:hover {
+              text-decoration: underline;
+              cursor: pointer;
+              color: #0000ee;
+              opacity: 0.88;
+            }
+            &:active {
+              opacity: 1;
+            }
           }
         }
       }
