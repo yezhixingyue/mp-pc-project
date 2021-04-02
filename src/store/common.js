@@ -448,8 +448,9 @@ export default {
       }
     },
     async getCustomerFundBalance({ commit }) {
-      const res = await api.getCustomerFundBalance();
-      if (res.data.Status === 1000) {
+      let key = true;
+      const res = await api.getCustomerFundBalance().catch(() => { key = false; });
+      if (key && res.data.Status === 1000) {
         commit('setCustomerBalance', res.data.Data);
         return true;
       }

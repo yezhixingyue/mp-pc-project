@@ -309,13 +309,16 @@ export default {
       customClass: 'mp-general-loading-box opAnimate',
     }) : null;
     try {
-      await Promise.all([
-        this.$store.dispatch('Quotation/getProductClassify'),
-        this.$store.dispatch('common/getCustomerDetail'),
-        this.$store.dispatch('common/getCustomerFundBalance'),
-        this.$store.dispatch('common/getCraftRelationList'),
-        this.$store.dispatch('common/getExpressList'),
-      ]);
+      const bool = await this.$store.dispatch('common/getCustomerFundBalance');
+      if (bool) {
+        await Promise.all([
+          this.$store.dispatch('Quotation/getProductClassify'),
+          this.$store.dispatch('common/getCustomerDetail'),
+          // this.$store.dispatch('common/getCustomerFundBalance'),
+          this.$store.dispatch('common/getCraftRelationList'),
+          this.$store.dispatch('common/getExpressList'),
+        ]);
+      }
       if (showLoading) loadingInstance.close();
       this.isloading = false;
     } catch (error) {
