@@ -315,7 +315,7 @@ export default {
           this.$store.dispatch('Quotation/getProductClassify'),
           this.$store.dispatch('common/getCustomerDetail'),
           // this.$store.dispatch('common/getCustomerFundBalance'),
-          this.$store.dispatch('common/getCraftRelationList'),
+          // this.$store.dispatch('common/getCraftRelationList'),
           this.$store.dispatch('common/getExpressList'),
         ]);
       }
