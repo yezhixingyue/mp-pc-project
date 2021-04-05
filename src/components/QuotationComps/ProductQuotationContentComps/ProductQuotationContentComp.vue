@@ -655,285 +655,288 @@ export default {
       }
       // ------------------------------- ⬆
     }
-    > article > .coupon-calculate-price-wrap {
-      position: relative;
-      > header {
-        text-align: left;
-        // margin-top: 38px;
-        // margin-bottom: 22px;
-        position: absolute;
-        top: 0px;
-        left: 165px;
-        > .result {
-          display: inline-block;
-          margin-right: 6px;
-          line-height: 33px;
-          // white-space: nowrap;
-          white-space: normal;
+    > article {
+      // margin-top: -5px;
+      > .coupon-calculate-price-wrap {
+        position: relative;
+        > header {
+          text-align: left;
+          // margin-top: 38px;
+          // margin-bottom: 22px;
           position: absolute;
-          left: 160px;
-          top: 2px;
-          // height: 100px;
-          width: 538px;
-          > span,
-          > div > span {
-            margin-right: 20px;
-            // white-space: nowrap;
-            float: left;
-            &.no-margin {
-              margin: 0;
-            }
-            &.mg-left {
-              margin-left: -18px;
-            }
-          }
-          display: flex;
-          align-items: center;
-          flex-wrap: wrap;
-          > div {
-            // display: inline-block;
+          top: 0px;
+          left: 165px;
+          > .result {
+            display: inline-block;
+            margin-right: 6px;
+            line-height: 33px;
             // white-space: nowrap;
             white-space: normal;
-            display: flex;
-            flex-wrap: wrap;
-            overflow: hidden;
-          }
-          > em {
-            margin-right: 18px;
-          }
-          &.center::before {
-            content: "";
-            display: inline-block;
-            height: 100%;
-            vertical-align: middle;
-            margin-right: -0.25em; /* Adjusts for spacing */
-          }
-        }
-        > button {
-          position: absolute;
-          width: 120px;
-          padding: 0;
-          height: 40px;
-          line-height: 38px;
-          margin-right: 28px;
-          padding-right: 4px;
-          vertical-align: top;
-          top: 0;
-          > i {
-            font-size: 16px;
-            vertical-align: -1px;
-          }
-        }
-        .ml-0 {
-          margin-left: -12px;
-          margin-right: 12px !important;
-        }
-      }
-      > footer {
-        > .el-collapse {
-          border: none;
-          > .el-collapse-item {
-            > div {
-              &::after {
-                content: "";
-                display: block;
-                clear: both;
+            position: absolute;
+            left: 160px;
+            top: 2px;
+            // height: 100px;
+            width: 538px;
+            > span,
+            > div > span {
+              margin-right: 20px;
+              // white-space: nowrap;
+              float: left;
+              &.no-margin {
+                margin: 0;
               }
-              > .el-collapse-item__header {
-                text-align: right;
-                // justify-content: flex-end;
-                display: inline-block;
-                border: none;
-                float: left;
-                cursor: unset;
-                margin-bottom: 10px;
-                height: 66px;
-                line-height: 66px;
-                > span {
-                  display: inline;
-                  color: #888;
-                  cursor: unset;
-                }
-                > button {
-                  display: inline-block;
-                  border-radius: 5px;
-                  height: 40px;
-                  width: 120px;
-                  line-height: 28px;
-                  padding: 0;
-                  vertical-align: top;
-                  // margin-right: 28px;
-                  padding-left: 8px;
-                  > span > i {
-                    transition: 0.2s;
-                  }
-                }
-                > i {
-                  display: none;
-                }
-                &.is-active > button > span > i {
-                  transform: rotate(180deg);
-                }
+              &.mg-left {
+                margin-left: -18px;
               }
             }
-            .el-collapse-item__wrap {
-              border: none;
-              // padding-top: 35px;
-              > .el-collapse-item__content {
-                padding: 0;
-                > .coupon-wrap {
-                  > header {
-                    margin-bottom: 50px;
-                    margin-top: 35px;
-                    text-align: center;
-                    // .span-title-blue {
-                    //   display: inline-block;
-                    //   &::before {
-                    //     content: '';
-                    //     display: inline-block;
-                    //     height: 23px;
-                    //     width: 1px;
-                    //     background-color: #428dfa;
-                    //     margin: 0 15px 0px 35px;
-                    //     vertical-align: middle;
-                    //   }
-                    // }
-                    > .el-input {
-                      width: 300px;
-                      > input {
-                        height: 30px;
-                        line-height: 26px\0;
-                      }
-                    }
-                    > span {
-                      color: #888;
-                      margin-right: 6px;
-                    }
-                    > button {
-                      height: 30px;
-                      width: 70px;
-                      line-height: 28px;
-                      padding: 0;
-                      margin-left: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            > div {
+              // display: inline-block;
+              // white-space: nowrap;
+              white-space: normal;
+              display: flex;
+              flex-wrap: wrap;
+              overflow: hidden;
+            }
+            > em {
+              margin-right: 18px;
+            }
+            &.center::before {
+              content: "";
+              display: inline-block;
+              height: 100%;
+              vertical-align: middle;
+              margin-right: -0.25em; /* Adjusts for spacing */
+            }
+          }
+          > button {
+            position: absolute;
+            width: 120px;
+            padding: 0;
+            height: 40px;
+            line-height: 38px;
+            margin-right: 28px;
+            padding-right: 4px;
+            vertical-align: top;
+            top: 0;
+            > i {
+              font-size: 16px;
+              vertical-align: -1px;
+            }
+          }
+          .ml-0 {
+            margin-left: -12px;
+            margin-right: 12px !important;
+          }
+        }
+        > footer {
+          > .el-collapse {
+            border: none;
+            > .el-collapse-item {
+              > div {
+                &::after {
+                  content: "";
+                  display: block;
+                  clear: both;
+                }
+                > .el-collapse-item__header {
+                  text-align: right;
+                  // justify-content: flex-end;
+                  display: inline-block;
+                  border: none;
+                  float: left;
+                  cursor: unset;
+                  margin-bottom: 10px;
+                  height: 66px;
+                  line-height: 66px;
+                  > span {
+                    display: inline;
+                    color: #888;
+                    cursor: unset;
+                  }
+                  > button {
+                    display: inline-block;
+                    border-radius: 5px;
+                    height: 40px;
+                    width: 120px;
+                    line-height: 28px;
+                    padding: 0;
+                    vertical-align: top;
+                    // margin-right: 28px;
+                    padding-left: 8px;
+                    > span > i {
+                      transition: 0.2s;
                     }
                   }
-                  > .coupon-list {
-                    padding: 0 8px;
-                    // display: flex;
-                    max-height: 322px;
-                    overflow-y: auto;
-                    // margin-left: -26px;
-                    > li {
-                      width: 240px;
-                      height: 135px;
-                      box-shadow: 0px 5px 7px 1px rgba(238, 238, 238, 0.7);
-                      border-radius: 5px;
-                      overflow: hidden;
-                      position: relative;
-                      display: inline-block;
-                      margin: 0 18px 20px;
-                      user-select: none;
-                      cursor: pointer;
-                      > .header {
-                        width: 100%;
-                        height: 60px;
-                        background-color: #9399ff;
-                        padding: 5px 20px 0;
-                        // padding-bottom: 10px;
-                        box-sizing: border-box;
-                        color: #fff;
-                        float: left;
-                        span.is-font-12 {
-                          vertical-align: 28%;
-                          margin-left: 23px;
+                  > i {
+                    display: none;
+                  }
+                  &.is-active > button > span > i {
+                    transform: rotate(180deg);
+                  }
+                }
+              }
+              .el-collapse-item__wrap {
+                border: none;
+                // padding-top: 35px;
+                > .el-collapse-item__content {
+                  padding: 0;
+                  > .coupon-wrap {
+                    > header {
+                      margin-bottom: 50px;
+                      margin-top: 35px;
+                      text-align: center;
+                      // .span-title-blue {
+                      //   display: inline-block;
+                      //   &::before {
+                      //     content: '';
+                      //     display: inline-block;
+                      //     height: 23px;
+                      //     width: 1px;
+                      //     background-color: #428dfa;
+                      //     margin: 0 15px 0px 35px;
+                      //     vertical-align: middle;
+                      //   }
+                      // }
+                      > .el-input {
+                        width: 300px;
+                        > input {
+                          height: 30px;
+                          line-height: 26px\0;
                         }
                       }
-                      > .content {
-                        padding: 10px 20px 0;
+                      > span {
+                        color: #888;
+                        margin-right: 6px;
+                      }
+                      > button {
+                        height: 30px;
+                        width: 70px;
+                        line-height: 28px;
+                        padding: 0;
+                        margin-left: 20px;
+                      }
+                    }
+                    > .coupon-list {
+                      padding: 0 8px;
+                      // display: flex;
+                      max-height: 322px;
+                      overflow-y: auto;
+                      // margin-left: -26px;
+                      > li {
+                        width: 240px;
+                        height: 135px;
+                        box-shadow: 0px 5px 7px 1px rgba(238, 238, 238, 0.7);
+                        border-radius: 5px;
                         overflow: hidden;
-                        > p {
-                          > span {
-                            color: #888;
-                            vertical-align: top;
-                            &.product {
-                              color: #585858;
-                              max-width: 160px;
-                              display: inline-block;
-                              white-space: nowrap;
-                              overflow: hidden;
-                              text-overflow: ellipsis;
-                            }
-                          }
-                          white-space: nowrap;
-                          line-height: 27px;
-                        }
-                      }
-                      > .aside {
-                        position: absolute;
-                        top: 0;
-                        right: 0;
-                        bottom: 0;
-                        width: 40px;
-                        writing-mode: vertical-rl;
-                        padding: 28px 8px 12px 0;
-                        box-sizing: border-box;
-                        font-size: 14px;
-                        color: #fff;
-                        background-color: rgba($color: #428dfa, $alpha: 0.6);
-                        text-align: justify;
-                        text-justify: distribute-all-lines;
-                        text-align-last: justify;
-                        cursor: pointer;
-                        display: none;
+                        position: relative;
+                        display: inline-block;
+                        margin: 0 18px 20px;
                         user-select: none;
-                        z-index: 9;
-                        transition: 2s;
-                        &:hover {
-                          background-color: rgba($color: #428dfa, $alpha: 0.72);
-                        }
-                        &:active {
-                          background-color: rgba($color: #428dfa, $alpha: 0.88);
-                        }
-                      }
-                      > .icon-box {
-                        width: 40px;
-                        height: 42px;
-                        position: absolute;
-                        right: 0;
-                        bottom: 0;
-                        display: none;
                         cursor: pointer;
-                        background: url("../../../assets/images/coupon-selected.png")
-                          no-repeat right bottom / 100% 100%;
-                        &:hover {
-                          opacity: 0.75;
-                          // width: 42px;
-                          // height: 43px;
-                          // transform: scale(1.05);
+                        > .header {
+                          width: 100%;
+                          height: 60px;
+                          background-color: #9399ff;
+                          padding: 5px 20px 0;
+                          // padding-bottom: 10px;
+                          box-sizing: border-box;
+                          color: #fff;
+                          float: left;
+                          span.is-font-12 {
+                            vertical-align: 28%;
+                            margin-left: 23px;
+                          }
                         }
-                      }
-                      &:hover > .aside {
-                        display: block;
-                      }
-                      &.selected {
+                        > .content {
+                          padding: 10px 20px 0;
+                          overflow: hidden;
+                          > p {
+                            > span {
+                              color: #888;
+                              vertical-align: top;
+                              &.product {
+                                color: #585858;
+                                max-width: 160px;
+                                display: inline-block;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                              }
+                            }
+                            white-space: nowrap;
+                            line-height: 27px;
+                          }
+                        }
+                        > .aside {
+                          position: absolute;
+                          top: 0;
+                          right: 0;
+                          bottom: 0;
+                          width: 40px;
+                          writing-mode: vertical-rl;
+                          padding: 28px 8px 12px 0;
+                          box-sizing: border-box;
+                          font-size: 14px;
+                          color: #fff;
+                          background-color: rgba($color: #428dfa, $alpha: 0.6);
+                          text-align: justify;
+                          text-justify: distribute-all-lines;
+                          text-align-last: justify;
+                          cursor: pointer;
+                          display: none;
+                          user-select: none;
+                          z-index: 9;
+                          transition: 2s;
+                          &:hover {
+                            background-color: rgba($color: #428dfa, $alpha: 0.72);
+                          }
+                          &:active {
+                            background-color: rgba($color: #428dfa, $alpha: 0.88);
+                          }
+                        }
                         > .icon-box {
-                          display: block;
+                          width: 40px;
+                          height: 42px;
+                          position: absolute;
+                          right: 0;
+                          bottom: 0;
+                          display: none;
+                          cursor: pointer;
+                          background: url("../../../assets/images/coupon-selected.png")
+                            no-repeat right bottom / 100% 100%;
+                          &:hover {
+                            opacity: 0.75;
+                            // width: 42px;
+                            // height: 43px;
+                            // transform: scale(1.05);
+                          }
                         }
                         &:hover > .aside {
-                          display: none;
+                          display: block;
+                        }
+                        &.selected {
+                          > .icon-box {
+                            display: block;
+                          }
+                          &:hover > .aside {
+                            display: none;
+                          }
                         }
                       }
                     }
-                  }
-                  > footer {
-                    text-align: center;
-                    color: #989898;
-                    font-size: 13px;
-                    padding: 30px;
-                    padding-top: 10px;
-                    line-height: 20px;
-                    > .span-title-blue {
-                      margin-left: 6px;
+                    > footer {
+                      text-align: center;
+                      color: #989898;
+                      font-size: 13px;
+                      padding: 30px;
+                      padding-top: 10px;
+                      line-height: 20px;
+                      > .span-title-blue {
+                        margin-left: 6px;
+                      }
                     }
                   }
                 }

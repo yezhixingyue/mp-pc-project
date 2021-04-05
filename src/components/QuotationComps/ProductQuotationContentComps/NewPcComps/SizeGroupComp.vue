@@ -300,11 +300,12 @@ export default {
 <style lang="scss">
 // @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-comps-count-wrap {
-  height: 52px;
+  height: 30px;
   // margin-top: -22px;
-  margin-bottom: 0 !important;
-  padding-top: 22px;
+  // margin-bottom: 0 !important;
+  // padding-top: 22px;
   // overflow: hidden;
+  width: 100%;
   .count-content {
     display: inline-block;
     input {
