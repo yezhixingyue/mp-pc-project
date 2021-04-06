@@ -253,11 +253,20 @@ export default {
     };
   },
   watch: {
-    watchTarget(newVal) {
-      if (!this.shouldShow) {
-        // 属性关联类型为 其值和主属性值应该保持相同  所以此时可以隐藏该属性 在主属性修改时自动对其进行修改
-        this.$emit('changeFunc', [newVal[0], false]);
-      }
+    watchTarget: {
+      handler(newVal) {
+        if (!this.shouldShow) {
+          // 属性关联类型为 其值和主属性值应该保持相同  所以此时可以隐藏该属性 在主属性修改时自动对其进行修改
+          if (typeof newVal[0] === 'object') {
+            if (newVal[0].Compare && newVal[0].Compare === 1) {
+              this.$emit('changeFunc', [newVal[0].val, false]);
+            }
+          } else {
+            this.$emit('changeFunc', [newVal[0], false]);
+          }
+        }
+      },
+      immediate: true,
     },
     option(newVal) {
       if (!newVal) return;

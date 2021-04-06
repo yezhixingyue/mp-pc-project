@@ -84,7 +84,7 @@
     </section>
     <section class="show-empty-bg" v-else>
       <img src="../../assets/images/order-empty.png" alt="">
-      <p class="is-gray">当前您暂无任何订单，快去下单吧...</p>
+      <p class="is-gray">{{showDateText}}暂无任何订单，快去下单吧...</p>
     </section>
   </article>
 </template>
@@ -154,6 +154,20 @@ export default {
         this.$store.commit('order/setCondition4OrderList', [['Status', ''], newVal]);
         this.$store.dispatch('order/getOrderList');
       },
+    },
+    showDateText() {
+      if (this.condition4OrderList && this.condition4OrderList.DateType !== 'all') {
+        if (this.condition4OrderList.DateType) {
+          const t = this.dateList.find(it => it.value === this.condition4OrderList.DateType);
+          if (t) return t.label;
+          return '当前您';
+        }
+        if (this.condition4OrderList.Date.First && this.condition4OrderList.Date.Second) {
+          return `${this.condition4OrderList.Date.First}-${this.condition4OrderList.Date.Second}期间`;
+        }
+        return '当前您';
+      }
+      return '当前您';
     },
     UserDefinedTimeIsActive() {
       return this.condition4OrderList.DateType === ''

@@ -199,8 +199,12 @@
                     <span
                       @click="handleGoToCouponCenter"
                       class="span-title-blue"
-                      >前往领券中心查看及领取优惠券</span
+                      >前往领券中心</span
                     >
+                    <!-- <span  v-if="isOpenCouponCenter" @click="fetchCouponList">
+                      <i style="margin: 0 8px">|</i>
+                      <span class="span-title-blue">已领取优惠券</span>
+                    </span> -->
                   </footer>
                 </section>
               </el-collapse-item>
@@ -397,6 +401,7 @@ export default {
       asideAboutData: null, // 侧边栏推荐产品数据
       asideIntroData: null,
       getAboutIsError: false,
+      isOpenCouponCenter: false,
     };
   },
   methods: {
@@ -439,7 +444,7 @@ export default {
     handleChange(list, bool) {
       if (list.length === 0) return; // 关闭
       if (!bool && this.couponList.length > 0) return;
-      if (this.isCouponGet) return;
+      if (this.isCouponGet && !this.isOpenCouponCenter) return;
       const _obj = { UseStatus: 0 };
       _obj.Product = {
         ClassID: this.curProductClass.First,
@@ -452,6 +457,10 @@ export default {
         this.couponList = res.data.Data;
         this.isCouponGet = true;
       }, 200);
+    },
+    fetchCouponList() {
+      this.handleChange([1], true);
+      this.isOpenCouponCenter = false;
     },
     onBtnClick(evt) {
       let { target } = evt;
@@ -501,7 +510,9 @@ export default {
       }
     },
     handleGoToCouponCenter() {
-      this.$router.push('/mySetting/couponCenter');
+      // this.$router.push('/mySetting/couponCenter');
+      window.open('/#/mySetting/couponCenter');
+      this.isOpenCouponCenter = true;
     },
     async getProductAsideIntroData() {
       const { ProductID } = this.placeData;
@@ -930,7 +941,7 @@ export default {
                     > footer {
                       text-align: center;
                       color: #989898;
-                      font-size: 13px;
+                      font-size: 12px;
                       padding: 30px;
                       padding-top: 10px;
                       line-height: 20px;

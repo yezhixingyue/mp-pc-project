@@ -211,7 +211,7 @@ export default {
     }
     > .submit-btn-wrap {
       // text-align: right;
-      padding-bottom: 50px;
+      padding-bottom: 80px;
       margin-top: 60px;
       position: relative;
       > button {
