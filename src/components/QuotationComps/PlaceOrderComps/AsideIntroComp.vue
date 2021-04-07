@@ -5,24 +5,24 @@
       <h2 v-if="asideIntroData">{{productName}}</h2>
       <p v-if="asideIntroData">
         <span>{{asideIntroData.Introduce.substr(0, 25)}}<i v-if="asideIntroData.Introduce.length > 25">...</i></span>
-        <em class="span-title-blue">产品详情</em>
+        <em class="span-title-blue">产品说明</em>
       </p>
       <span v-else>
         <img src="@/assets/images/empty.png" alt="">
-        <i>暂无产品详情介绍</i>
+        <i>暂无产品说明</i>
       </span>
     </header>
     <section>
       <header>
         <h2>同类产品</h2>
-        <span><i></i>查看同类产品介绍</span>
+        <span><i></i>查看同类产品说明</span>
       </header>
       <ul v-if="asideAboutData">
         <li v-for="item in asideAboutData.AboutList" :key="item.ID" @click="onJumpProductOrder(item.ID)">
           <p>{{item.Name}}</p>
           <div>
             <el-image :src="baseImgUrl + item.Cover" fit="cover" ></el-image>
-            <p class="tip">产品详情</p>
+            <p class="tip">产品说明</p>
           </div>
         </li>
         <li v-if="asideAboutData.AboutList.length === 0" class="no-recommended">

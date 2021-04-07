@@ -120,13 +120,13 @@
       <section class="menu-box">
         <div class="del-btn">
           <span v-if="canDel" @click.stop="handleDelClick" class="iconfont icon-shanchu is-pink" >
-            <i class="menu-item-sm is-font-14">删除</i>
+            <i class="menu-item-sm is-font-13">删除</i>
           </span>
         </div>
         <div class="line"></div>
         <div class="add-btn">
           <span v-if="showAddBtn" @click.stop="handleAddClick">
-            <i class="span-title-blue">+添加{{data.PartName}}</i>
+            <i class="span-title-blue">+ 添加{{data.PartName}}</i>
           </span>
         </div>
       </section>
@@ -391,7 +391,14 @@ export default {
           height: 1px;
           width: 100%;
           background-color: #eee;
-          margin: 12px 0 28px 0;
+          margin: 12px 0 16px 0;
+        }
+        .del-btn > span > i {
+          margin-left: 6px;
+          vertical-align: -1px;
+        }
+        .add-btn > span > i {
+          font-size: 13px;
         }
       }
       &.part-count-material-box {

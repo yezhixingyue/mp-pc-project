@@ -48,8 +48,9 @@
         <span @click="handleGroupDel" class="iconfont icon-shanchu is-pink" >
           <i class="menu-item-sm is-font-14">删除</i>
         </span>
-        <span class="is-font-14 span-title-blue" v-show="showGroupAdd" @click="handleGroupAdd">
-          +添加
+        <span class="is-font-14 span-title-blue"
+         v-show="showGroupAdd && curUsageCount < MaxUsageCount" @click="handleGroupAdd"
+         >+ 添加
         </span>
       </section>
     </article>
@@ -108,6 +109,15 @@ export default {
       type: Boolean,
       default: false,
     },
+    MinUsageCount: { // 最小使用次数
+      type: Number,
+    },
+    MaxUsageCount: { // 最大使用次数
+      type: Number,
+    },
+    curUsageCount: { // 当前已使用次数
+      type: Number,
+    },
   },
   methods: {
     handleChange([data, type], index) {
@@ -152,6 +162,9 @@ export default {
             vertical-align: bottom;
           }
         }
+      }
+      &.group-menu-box {
+        margin-bottom: 8px;
       }
     }
   }

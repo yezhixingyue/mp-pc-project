@@ -80,7 +80,7 @@
       </div>
       <div class="show-empty-bg" v-else>
         <img src="../../assets/images/order-empty.png" alt="">
-        <p class="is-gray">当前暂无售后单信息</p>
+        <p class="is-gray">{{showDateText}}</p>
       </div>
     </section>
   </article>
@@ -127,6 +127,20 @@ export default {
         fileDate: this.condition4ServiceAfterSaleList.Date,
         downFunc: data => this.api.getServiceListData2Excel(data),
       };
+    },
+    showDateText() {
+      if (this.condition4ServiceAfterSaleList && this.condition4ServiceAfterSaleList.DateType !== 'all') {
+        if (this.condition4ServiceAfterSaleList.DateType) {
+          const t = this.dateList.find(it => it.value === this.condition4ServiceAfterSaleList.DateType);
+          if (t) return `${t.label}暂无售后单信息`;
+          return '当前暂无售后单信息';
+        }
+        if (this.condition4ServiceAfterSaleList.Date.First && this.condition4ServiceAfterSaleList.Date.Second) {
+          return '所选期间暂无售后单信息';
+        }
+        return '当前暂无售后单信息';
+      }
+      return '当前暂无售后单信息';
     },
   },
   data() {

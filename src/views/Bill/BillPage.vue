@@ -32,7 +32,7 @@
     </div>
     <div class="empty" v-else>
       <img src="../../assets/images/order-empty.png" alt="">
-      <p>当前您暂无任何账单，快去下单吧...</p>
+      <p>{{showDateText}}</p>
     </div>
   </section>
 </template>
@@ -68,6 +68,20 @@ export default {
         this.$store.commit('summary/setCondition4FundBillList', [['Type', ''], newVal]);
         this.$store.dispatch('summary/getFundBillList');
       },
+    },
+    showDateText() {
+      if (this.condition4FundBillList && this.condition4FundBillList.DateType !== 'all') {
+        if (this.condition4FundBillList.DateType) {
+          const t = this.dateList.find(it => it.value === this.condition4FundBillList.DateType);
+          if (t) return `${t.label}暂无账单，快去下单吧...`;
+          return '当前暂无账单，快去下单吧...';
+        }
+        if (this.condition4FundBillList.Date.First && this.condition4FundBillList.Date.Second) {
+          return '所选期间暂无账单，快去下单吧...';
+        }
+        return '当前暂无账单，快去下单吧...';
+      }
+      return '当前暂无账单，快去下单吧...';
     },
   },
   data() {

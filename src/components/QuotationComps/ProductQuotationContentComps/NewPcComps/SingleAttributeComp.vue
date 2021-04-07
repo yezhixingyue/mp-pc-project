@@ -37,7 +37,7 @@
     <!-- 3. 不允许自定义单选框 -->
     <el-radio-group
       v-model="inpValue" key="type-3" :disabled='disabled'
-      v-else-if="ValueType === 2 && !AllowUserDefinedOption && option.length < 6 && !isCraftUse">
+      v-else-if="ValueType === 2 && !AllowUserDefinedOption && option.length < 4 && !isCraftUse">
       <el-radio v-for="item in optionList" :key="item[defaultProps.value]"
        :label="item[defaultProps.value]">{{item[defaultProps.text]}}</el-radio>
     </el-radio-group>
@@ -291,12 +291,17 @@ export default {
 
 <style lang='scss'>
 .mp-pc-quotation-sm-comp-single-att-comp-wrap {
+  margin-right: 40px !important;
+  // margin-bottom: 8px !important;
   .select-and-white-inp {
     .el-input__suffix {
       .el-input__icon {
         line-height: 30px;
       }
     }
+  }
+  .el-radio {
+    margin-right: 20px;
   }
 }
 

@@ -5,7 +5,7 @@
     </section>
     <div class="show-empty-bg" v-else>
       <img src="../../assets/images/order-empty.png" alt="">
-      <p class="is-gray">当前您暂无任何未付款单，快去下单吧...</p>
+      <p class="is-gray">当前暂无未付款单，快去下单吧...</p>
     </div>
   </article>
 </template>

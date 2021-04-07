@@ -84,7 +84,7 @@
     </section>
     <section class="show-empty-bg" v-else>
       <img src="../../assets/images/order-empty.png" alt="">
-      <p class="is-gray">{{showDateText}}暂无任何订单，快去下单吧...</p>
+      <p class="is-gray">{{showDateText}}</p>
     </section>
   </article>
 </template>
@@ -159,15 +159,15 @@ export default {
       if (this.condition4OrderList && this.condition4OrderList.DateType !== 'all') {
         if (this.condition4OrderList.DateType) {
           const t = this.dateList.find(it => it.value === this.condition4OrderList.DateType);
-          if (t) return t.label;
-          return '当前您';
+          if (t) return `${t.label}暂无订单，快去下单吧...`;
+          return '当前暂无订单，快去下单吧...';
         }
         if (this.condition4OrderList.Date.First && this.condition4OrderList.Date.Second) {
-          return `${this.condition4OrderList.Date.First}-${this.condition4OrderList.Date.Second}期间`;
+          return '所选期间暂无订单，快去下单吧...';
         }
-        return '当前您';
+        return '当前暂无订单，快去下单吧...';
       }
-      return '当前您';
+      return '当前暂无订单，快去下单吧...';
     },
     UserDefinedTimeIsActive() {
       return this.condition4OrderList.DateType === ''
@@ -222,9 +222,9 @@ export default {
     background-color: #fff;
     // height: 120px;
     margin-bottom: 22px;
-    &.header {
-      // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-    }
+    // &.header {
+    //   // box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+    // }
     // box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.07);
     > .header-content {
       margin: 0 auto;

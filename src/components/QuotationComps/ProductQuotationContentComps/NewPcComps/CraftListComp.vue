@@ -701,7 +701,7 @@ export default {
 
 <style lang="scss">
 .mp-duotation-content-comps-craft-list-wrap {
-  margin-bottom: 17px !important;
+  margin-bottom: 13px !important;
   > .title {
     float: left;
     width: 84px;

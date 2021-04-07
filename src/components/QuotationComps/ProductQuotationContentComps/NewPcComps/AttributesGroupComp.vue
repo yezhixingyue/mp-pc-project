@@ -11,9 +11,15 @@
     <section
       v-for="(PropertyGroup, index1) in PropertyGroupList"
       :key="PropertyGroup.GroupID"
+      :class="PropertyGroup.PropertyList.length === 0 ? 'none-item':''"
     >
       <header>
         <span class="title is-bold is-black">{{ PropertyGroup.GroupName }}：</span>
+        <span
+         class="is-font-12 span-title-blue"
+         v-if="PropertyGroup.PropertyList.length === 0"
+         @click="addPropertyGroup(index1, PropertyGroup)"
+         >+ 添加{{ PropertyGroup.GroupName }}</span>
       </header>
       <ul class="content">
         <li
@@ -25,10 +31,14 @@
             :value="Property.Second"
             :showGroupMenu='PropertyGroup.AllowCustomized'
             :partID='partID'
+            :MinUsageCount='PropertyGroup.MinUsageCount'
+            :MaxUsageCount='PropertyGroup.MaxUsageCount'
+            :curUsageCount='PropertyGroup.PropertyList.length'
             @change="data => handlePropertyChange(data, index1, index2)"
             :showGroupAdd='index2 === PropertyGroup.PropertyList.length - 1'
             @handleGroupAdd='addPropertyGroup(index1, PropertyGroup)'
-            @handleGroupDel='handleAttributeDel(index1, index2, PropertyGroup.PropertyList.length)'
+            @handleGroupDel='handleAttributeDel(index1, index2,
+             PropertyGroup.PropertyList.length, PropertyGroup.MinUsageCount)'
           />
         </li>
       </ul>
@@ -75,13 +85,16 @@ export default {
       const _item = this.propertyGroupTemplateList[index1];
       this.$emit('addPropertyGroup', [index1, _item]);
     },
-    handleAttributeDel(index1, index2, len) {
-      if (len >= 2) this.$emit('delPropertyGroup', [index1, index2]);
+    handleAttributeDel(index1, index2, len, MinUsageCount) {
+      if (len > MinUsageCount) this.$emit('delPropertyGroup', [index1, index2]);
     },
   },
   mounted() {
     const _list = this.value.map(it => JSON.parse(JSON.stringify(it.PropertyList[0])));
     this.propertyGroupTemplateList = _list;
+    this.value.forEach((it, i) => {
+      if (it.MinUsageCount === 0) this.handleAttributeDel(i, 0, 1, 0);
+    });
   },
 };
 </script>
@@ -89,13 +102,16 @@ export default {
 <style lang="scss">
 .mp-duotation-content-comps-attribute-group-wrap > section {
   > header {
-    margin-top: 30px;
-    margin-bottom: 22px;
+    margin-top: 26px;
+    margin-bottom: 13px;
   }
   > ul {
     > li {
       > section {
         display: inline-block;
+        .mp-pc-quotation-sm-comp-single-att-comp-wrap {
+          margin-bottom: 8px;
+        }
         > article {
           > section {
             display: inline-block;
@@ -112,6 +128,17 @@ export default {
           margin-left: 30px;
         }
       }
+    }
+  }
+  & + section {
+    > header {
+      margin-top: 8px;
+    }
+  }
+  &.none-item + section {
+    > header {
+      margin-top: 18px;
+      margin-bottom: 20px;
     }
   }
 }

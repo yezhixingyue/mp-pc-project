@@ -13,7 +13,7 @@
               <span>-</span>
               <span>{{ curProductShowNameInfo[2] }}</span>
             </div>
-            <span @click="onHomeDetailClick" v-if="asideIntroData">产品详情
+            <span @click="onHomeDetailClick" v-if="asideIntroData" class="span-title-blue">产品说明
               <i class="el-icon-d-arrow-right"></i>
             </span>
           </section>
@@ -599,7 +599,7 @@ export default {
           margin-bottom: 30px;
           display: inline-block;
           vertical-align: top;
-          width: 750px;
+          max-width: 720px;
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
@@ -610,19 +610,21 @@ export default {
         > span {
           display: inline-block;
           vertical-align: top;
-          width: 100px;
+          // width: 80px;
+          margin-left: 15px;
           text-align: right;
-          color: #888;
-          transition: color 0.25s ease-in-out;
+          // color: #888;
+          font-size: 13px;
+          transition: color 0.05s ease-in-out;
           cursor: pointer;
           user-select: none;
           padding-top: 2px;
-          &:hover {
-            color:mix(#428dfa, #fff, 80%);
-          }
-          &:active {
-            color: #428dfa
-          }
+          // &:hover {
+          //   color:mix(#428dfa, #fff, 80%);
+          // }
+          // &:active {
+          //   color: #428dfa
+          // }
         }
       }
       > .count-model-box {
