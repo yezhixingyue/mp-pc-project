@@ -100,45 +100,55 @@ export default {
 </script>
 
 <style lang="scss">
-.mp-duotation-content-comps-attribute-group-wrap > section {
-  > header {
-    margin-top: 26px;
-    margin-bottom: 13px;
-  }
-  > ul {
-    > li {
-      > section {
-        display: inline-block;
-        .mp-pc-quotation-sm-comp-single-att-comp-wrap {
-          margin-bottom: 8px;
+.mp-duotation-content-comps-attribute-group-wrap {
+  // margin-bottom: 5px;
+  & > section {
+    > header {
+      margin-top: 26px;
+      margin-bottom: 13px;
+    }
+    > ul {
+      > li {
+        > section {
+          display: inline-block;
+          .mp-pc-quotation-sm-comp-single-att-comp-wrap {
+            margin-bottom: 8px;
+          }
+          > article {
+            > section {
+              display: inline-block;
+              margin-right: 50px;
+            }
+          }
         }
-        > article {
-          > section {
-            display: inline-block;
-            margin-right: 50px;
+        .icon-shanchu {
+          cursor: pointer;
+          > i {
+            margin-left: 8px;
+          }
+          & + span {
+            margin-left: 30px;
           }
         }
       }
-      .icon-shanchu {
-        cursor: pointer;
-        > i {
-          margin-left: 8px;
-        }
-        & + span {
-          margin-left: 30px;
-        }
+    }
+    & + section {
+      > header {
+        margin-top: 8px;
       }
     }
-  }
-  & + section {
-    > header {
-      margin-top: 8px;
-    }
-  }
-  &.none-item + section {
-    > header {
-      margin-top: 18px;
-      margin-bottom: 20px;
+    &.none-item {
+      & + section {
+        > header {
+          margin-top: 18px;
+          margin-bottom: 20px;
+        }
+      }
+      &:last-of-type {
+        > header {
+          margin-bottom: 20px;
+        }
+      }
     }
   }
 }

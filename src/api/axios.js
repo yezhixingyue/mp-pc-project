@@ -84,7 +84,9 @@ axios.interceptors.response.use(
   (response) => {
     if (loadingInstance) loadingInstance.close();
     // eslint-disable-next-line max-len
-    const _list2NotNeed2Toast = ['/Api/Calculate/ProductPrice', '/Api/Order/Create', '/Api/AfterSales/Excel', '/Api/Customer/OrderExcel'];
+    const _list2NotNeed2Toast = ['/Api/Order/Create', '/Api/AfterSales/Excel', '/Api/Customer/OrderExcel'];
+    // eslint-disable-next-line max-len
+    // const _list2NotNeed2Toast = ['/Api/Calculate/ProductPrice', '/Api/Order/Create', '/Api/AfterSales/Excel', '/Api/Customer/OrderExcel'];
 
     // IE 8-9
     if (response.data == null && response.config.responseType === 'json' && response.request.responseText != null) {
@@ -139,6 +141,7 @@ axios.interceptors.response.use(
       if (_url === '/Api/Coupon/Receive') _msg = '领取失败';
       if (_url === '/Api/Quotation/Save') _msg = '添加失败';
       if (_url === '/Api/Upload/File') _msg = '文件上传失败';
+      if (_url === '/Api/Calculate/ProductPrice') _msg = '报价失败';
 
       _obj.title = _msg;
       messageBox.failSingleError(_obj);

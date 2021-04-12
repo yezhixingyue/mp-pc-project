@@ -112,14 +112,10 @@ export default {
     handleCouponReceive({ CouponID, Receivable, Data }) {
       if (!CouponID || !Receivable || Data.TotalNumber === Data.GenerateNumber) return;
       this.receiveCoupon({ CouponID });
-      // this.messageBox.warnCancelNullMsg({
-      //   title: '确认领取该优惠券吗?',
-      //   successFunc: () => { this.receiveCoupon({ CouponID }); },
-      // });
     },
   },
   mounted() {
-    this.getCouponList();
+    // this.getCouponList();
   },
 };
 </script>

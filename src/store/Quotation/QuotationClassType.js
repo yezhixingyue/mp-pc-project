@@ -572,23 +572,23 @@ export default class QuotationClassType {
           const _rules = [
             {
               strategy: 'isNotEmpty',
-              errorMsg: `尺寸组${_name}值不能为空!`,
+              errorMsg: `尺寸${_name}值不能为空!`,
             },
             {
               strategy: 'isNotNum',
-              errorMsg: `尺寸组${_name}值必须为大于0的数字类型`,
+              errorMsg: `尺寸${_name}值必须为大于0的数字类型`,
             },
             {
               strategy: 'Minimum:0',
-              errorMsg: `尺寸组${_name}值必须为大于0的数字类型`,
+              errorMsg: `尺寸${_name}值必须为大于0的数字类型`,
             },
             {
               strategy: `Maximum:${_max}`,
-              errorMsg: `尺寸组${_name}值最大为${_max}`,
+              errorMsg: `尺寸${_name}值最大为${_max}`,
             },
             {
               strategy: `Minimum:${item.MinValue}`,
-              errorMsg: `尺寸组${_name}值最小为${item.MinValue}`,
+              errorMsg: `尺寸${_name}值最小为${item.MinValue}`,
             },
           ];
           if (!validateCheck(_value, _rules, _setErrMsg)) return false;

@@ -112,6 +112,7 @@ export default {
     },
     watchValue4CraftCondition() {
       if (this.data.ChoiceType === 2) return null;
+      if (this.data) return null; // 取消工艺自动勾选
       const _t = this.data.CraftList.filter(
         it => it.CraftCondition && it.PropertyList.length === 0,
       );
@@ -494,8 +495,6 @@ export default {
           // console.log(-12);
           const item = this.selectedArr.find(_it => _it.CraftID === craft.CraftID);
           if (!item.isSystemSelect) return;
-          // item.isSystemSelect = false;
-          // console.log(-13, item);
           // 在这里 如果前面提取条件时取的是交集的话 会有影响 需判断是否有另外一个条件已满足 此时不删除 这里和后端保持一致 只取第一个满足条件项 -- 作废 此处需处理
           const _list = craft.CraftCondition.filter(it => it.UseStatus === 2); // 必选列表
           if (_list.length === 1) {
@@ -507,7 +506,6 @@ export default {
             // })
             this.$emit('setCraftList', ['del', craft, this.handleCallBack]);
           }
-          // this.$emit('setCraftList', ['del', craft, this.handleCallBack]);
         }
         return;
       }
@@ -549,7 +547,7 @@ export default {
         this.$nextTick(() => {
           if (!newVal && newVal !== 0) return;
           if (this.craftList2CraftCondition.length === 0 || (Object.prototype.toString.call(newVal) === '[object Array]' && newVal.length === 0)) return;
-          console.log('init - watch - value', newVal);
+          // console.log('init - watch - value', newVal);
           if (newVal[0] && newVal[0].ProductAmount) {
             console.log(1);
             const { ProductAmount } = newVal[0];
@@ -602,13 +600,13 @@ export default {
               });
             });
           }
-          let _filterList = []; // 筛选 清除未变动部分工艺
-          if (!this.oldWatchValue4CraftCondition) {
-            _filterList = Object.keys(newVal);
-          } else {
-            _filterList = Object.keys(newVal).filter(filterKey => JSON.stringify(newVal[filterKey]) !== JSON.stringify(this.oldWatchValue4CraftCondition[filterKey]));
-          }
-          console.log('_filterList:', _filterList, 'old:', this.oldWatchValue4CraftCondition);
+          const _filterList = Object.keys(newVal); // 筛选 清除未变动部分工艺
+          // if (!this.oldWatchValue4CraftCondition) {
+          //   _filterList = Object.keys(newVal);
+          // } else {
+          //   _filterList = Object.keys(newVal).filter(filterKey => JSON.stringify(newVal[filterKey]) !== JSON.stringify(this.oldWatchValue4CraftCondition[filterKey]));
+          // }
+          // console.log('_filterList:', _filterList, 'old:', this.oldWatchValue4CraftCondition);
           _filterList.forEach(key => {
             // console.log(newVal[key]);
             if (newVal[key].length === 0) return; // { PropertyID: value }
@@ -622,73 +620,75 @@ export default {
               _valueFilterList = newVal[key].filter((filterItem, i) => JSON.stringify(filterItem) !== JSON.stringify(this.oldWatchValue4CraftCondition[key][i]));
             }
             // console.log(_valueFilterList, _targetCraft);
-            _valueFilterList.forEach(_newValItem => {
-              _targetCraft.CraftCondition.forEach(item => {
-                const { UseStatus, Constraint } = item;
-                const { FilterType, ItemList } = Constraint;
-                if (FilterType === 2) {
-                  // 满足任一
-                  // eslint-disable-next-line no-shadow
-                  let key = false;
-                  for (let index = 0; index < ItemList.length; index += 1) {
-                    const element = ItemList[index];
-                    const { Operator, Value } = element;
-                    if (_newValItem.PropertyType === 33 && element.PropertyType !== 33) return;
-                    if (_newValItem.PropertyType === 2 && element.PropertyType !== 2) return;
-                    if (_newValItem.PropertyType === 63 && element.PropertyType !== 63) return;
-                    if (_newValItem.PropertyType === 63 && element.PropertyType === 63 && element.PropertyID !== _newValItem.PropertyID) return;
-                    if (_newValItem.PropertyType === 66 && element.PropertyType !== 66) return;
-                    if (_newValItem.PropertyType === 66 && element.PropertyType === 66 && element.GroupID !== _newValItem.GroupID) return;
-                    // 判断是否满足条件
-                    if (
-                      this.judgeIsOrNoMeetConditions(
-                        Operator,
-                        Value,
-                        _newValItem.Value,
-                      )
-                    ) {
-                      key = true;
-                      break;
-                    }
+            const emptyItem = _valueFilterList.find(it => it.Value === '');
+            if (emptyItem) return;
+            let outsideKey1 = false;
+            let outsideKey2 = false;
+            _targetCraft.CraftCondition.forEach(item => {
+              if (outsideKey1 || outsideKey2) return;
+              const { UseStatus, Constraint } = item;
+              const { FilterType, ItemList } = Constraint;
+              if (FilterType === 2) {
+                // 满足任一
+                // eslint-disable-next-line no-shadow
+                let key = false;
+                for (let index = 0; index < ItemList.length; index += 1) {
+                  if (key) break;
+                  const element = ItemList[index];
+                  const { Operator, Value } = element;
+                  const _newValItem = _valueFilterList.find(it => {
+                    if (it.PropertyType !== element.PropertyType) return false;
+                    if (element.PropertyType === 63 && element.PropertyID !== it.PropertyID) return false;
+                    if (element.PropertyType === 66 && element.GroupID !== it.GroupID) return false;
+                    return true;
+                  });
+
+                  // 判断是否满足条件
+                  if (
+                    this.judgeIsOrNoMeetConditions(
+                      Operator,
+                      Value, // 对比值
+                      _newValItem.Value, // 输入值
+                    )
+                  ) {
+                    key = true;
+                    outsideKey1 = true;
                   }
-                  // 处理是否满足条件后的结果
-                  this.handleMeetConditionsResult(key, _targetCraft, UseStatus, 'part');
-                } else if (FilterType === 1) {
-                  console.log(_newValItem);
-                  // 满足所有
-                  // eslint-disable-next-line no-shadow
-                  let key = true;
-                  for (let index = 0; index < ItemList.length; index += 1) {
-                    const element = ItemList[index];
-                    const { Operator, Value } = element;
-                    // 判断是否满足条件
-                    if (_newValItem.PropertyType === 33 && element.PropertyType !== 33) return;
-                    if (_newValItem.PropertyType === 2 && element.PropertyType !== 2) return;
-                    if (_newValItem.PropertyType === 63 && element.PropertyType !== 63) return;
-                    if (_newValItem.PropertyType === 63 && element.PropertyType === 63 && element.PropertyID !== _newValItem.PropertyID) return;
-                    if (_newValItem.PropertyType === 66 && element.PropertyType !== 66) return;
-                    if (_newValItem.PropertyType === 66 && element.PropertyType === 66 && element.GroupID !== _newValItem.GroupID) return;
-                    // console.log(123, element.PropertyID, _newValItem.PropertyID);
-                    if (
-                      !this.judgeIsOrNoMeetConditions(
-                        Operator,
-                        Value,
-                        _newValItem.Value,
-                      )
-                    ) {
-                      key = false;
-                      break;
-                    }
-                  }
-                  console.log(key, _targetCraft, UseStatus, 'part');
-                  // 处理是否满足条件后的结果
-                  this.handleMeetConditionsResult(key, _targetCraft, UseStatus, 'part');
                 }
-              });
+                // 处理是否满足条件后的结果
+                this.handleMeetConditionsResult(key, _targetCraft, UseStatus, 'part');
+              } else if (FilterType === 1) {
+                let key2 = true;
+                // 满足所有
+                for (let index = 0; index < ItemList.length; index += 1) {
+                  const element = ItemList[index];
+                  const { Operator, Value } = element;
+                  const _newValItem = _valueFilterList.find(it => {
+                    if (it.PropertyType !== element.PropertyType) return false;
+                    if (element.PropertyType === 63 && element.PropertyID !== it.PropertyID) return false;
+                    if (element.PropertyType === 66 && element.GroupID !== it.GroupID) return false;
+                    return true;
+                  });
+
+                  // console.log(123, element.PropertyID, _newValItem.PropertyID);
+                  if (
+                    !this.judgeIsOrNoMeetConditions(
+                      Operator,
+                      Value,
+                      _newValItem.Value,
+                    )
+                  ) {
+                    key2 = false;
+                    outsideKey2 = true;
+                    break;
+                  }
+                }
+                // console.log(key2, _targetCraft, UseStatus, 'part');
+                // 处理是否满足条件后的结果
+                this.handleMeetConditionsResult(key2, _targetCraft, UseStatus, 'part');
+              }
             });
           });
-
-          this.oldWatchValue4CraftCondition = newVal;
         });
       },
       deep: true,
