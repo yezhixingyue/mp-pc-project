@@ -78,10 +78,6 @@ export default {
             const _t1 = _arr2.slice(0, i).join('');
             const _s1 = _arr2.slice(i).join('');
 
-            // const _arr = it.Name.trim().split(/\s+/);
-            // const _t = _arr[0];
-            // _arr.shift();
-            // const _s = _arr.join('');
             return { ...it, Name: [_t1, _s1] };
           }
           return { ...it, Name: [it.Name, ''] };

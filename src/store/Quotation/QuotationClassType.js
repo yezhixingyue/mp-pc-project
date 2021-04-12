@@ -149,6 +149,87 @@ function getValue(list, MasterProperty) { // 向属性中挂载关联信息 从�
   // if (_t) return _t;
 }
 
+const getVerifyValue4Craft = (data, partData) => {
+  if (data.ChoiceType === 2) return null;
+  // if (data) return null; // 取消工艺自动勾选
+  const _t = data.CraftList.filter(
+    it => it.CraftCondition && it.PropertyList.length === 0,
+  );
+  if (_t.length === 0) return null;
+  if (
+    _t[0].CraftCondition[0].type
+      && _t[0].CraftCondition[0].type === 'isMain'
+  ) {
+    return [
+      {
+        ProductAmount: this.obj2GetProductPrice.ProductParams.ProductAmount,
+      },
+    ];
+  }
+  const _obj = {};
+  _t.forEach(_it => { // 获取到每一个工艺信息
+    _obj[_it.CraftID] = [];
+
+    _it.CraftCondition.forEach(singleCraftCondition => { // 获取到每一个工艺上的每一个限制条件信息 （对其进行循环）
+      singleCraftCondition.Constraint.ItemList.forEach(_item => { // 每个限制条件信息中每一条条件  获取其属性的值，对其进行watch
+        if (_item.PropertyType === 2) { // 部件数量
+          if (_obj[_it.CraftID].some(it => it.PropertyType === 2)) return;
+          const _o = {};
+          _o.PropertyID = _item.PropertyID;
+          _o.PropertyType = 2;
+          _o.Value = partData.PartAmount.First;
+          _obj[_it.CraftID].push(_o);
+          return;
+        }
+        if (_item.PropertyType === 33) { // 物料
+          if (_obj[_it.CraftID].some(it => it.PropertyType === 33)) return;
+          const _o = {};
+          _o.PropertyID = _item.PropertyID;
+          _o.PropertyType = 33;
+          _o.Value = partData.Material.First;
+          _obj[_it.CraftID].push(_o);
+          return;
+        }
+        if (_item.PropertyType === 66) { // 属性组
+          if (_obj[_it.CraftID].some(it => it.GroupID === _item.GroupID)) return;
+          const _target = partData.PropertyGroupList.find(Group => Group.GroupID === _item.GroupID);
+          if (!_target) return;
+          const _o = {};
+          _o.GroupID = _item.GroupID;
+          _o.PropertyType = 66;
+          _o.Value = _target.PropertyList.length;
+          _obj[_it.CraftID].push(_o);
+          return;
+        }
+        if (_item.PropertyType === 63) { // 属性类
+          if (_obj[_it.CraftID].some(it => it.PropertyID === _item.PropertyID)) return;
+          let _target = partData.SizePropertyList.find(
+            _size => _size.PropertyID === _item.PropertyID,
+          ); // 判断尺寸组属性
+          if (_target) {
+            const _o = {};
+            _o.PropertyID = _item.PropertyID;
+            _o.Value = _target.CustomerInputValue;
+            _o.PropertyType = 63;
+            _obj[_it.CraftID].push(_o);
+            return;
+          }
+          // eslint-disable-next-line no-shadow
+          _target = partData.PropertyList.find(_it => _it.PropertyID === _item.PropertyID); // 判断属性
+          if (_target) {
+            const _o = {};
+            _o.PropertyID = _item.PropertyID;
+            _o.Value = _target.CustomerInputValue;
+            _o.PropertyType = 63;
+            _obj[_it.CraftID].push(_o);
+          }
+        }
+      });
+    });
+  });
+  return _obj;
+};
+
 export function getRelevanceInTargetValue(targetObj, RelevanceInformation) {
   const _arr = [];
   RelevanceInformation.forEach((Relevance) => {
@@ -518,6 +599,8 @@ export default class QuotationClassType {
       }
     }
 
+    console.log(obj.CraftList);
+
     // 部件校验
     for (let index = 0; index < PartList.length; index += 1) {
       const PartItem = PartList[index];
@@ -736,6 +819,13 @@ export default class QuotationClassType {
           }
         }
 
+        console.log(Part.CraftList);
+
+        for (let i = 0; i < Part.CraftList.length; i += 1) {
+          const CraftInfoItem = Part.CraftList[i];
+          const verifyData = getVerifyValue4Craft(CraftInfoItem, Part);
+          console.log(verifyData); // 获取到需要校验的属性值信息 其对象key值为工艺的ID
+        }
         // return true;
       }
     }

@@ -6,11 +6,15 @@
       :indexLv1="index"
       :indexLv2="i"
       :data="item"
-      :canDel="PartData.AllowChangePartNumber && PartData.PartList.length > 1"
+      :canDel="PartData.AllowChangePartNumber && PartData.PartList.length > PartData.PartList[0].MinUsePart"
       @handleAddPart="handleAddPart"
       :showAddBtn='PartData.PartList[0] && PartData.PartList[0].MaxUsePart &&
         PartData.PartList[0].MaxUsePart > PartData.PartList.length && PartData.AllowChangePartNumber'
     />
+    <div v-if="localPartData && PartData.PartList.length === 0" class="add-box">
+      <span class="header-title point is-bold">// {{localPartData.PartName}}</span>
+      <span class="is-font-12 span-title-blue" @click="handleAddPart">+ 添加{{localPartData.PartName}}</span>
+    </div>
   </article>
 </template>
 
@@ -55,5 +59,9 @@ export default {
 
 <style lang="scss">
 .mp-duotation-content-part-comps-wrap {
+  > .add-box {
+    padding: 10px 0 15px 0;
+  }
+  padding-bottom: 10px;
 }
 </style>
