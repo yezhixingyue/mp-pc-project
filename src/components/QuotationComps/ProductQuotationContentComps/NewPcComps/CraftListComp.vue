@@ -491,18 +491,23 @@ export default {
           }
         } else if (FilterType === 2) {
           if (!_arr.includes(craft.CraftID)) return;
+          // console.log(-12);
           const item = this.selectedArr.find(_it => _it.CraftID === craft.CraftID);
           if (!item.isSystemSelect) return;
+          // item.isSystemSelect = false;
+          // console.log(-13, item);
           // 在这里 如果前面提取条件时取的是交集的话 会有影响 需判断是否有另外一个条件已满足 此时不删除 这里和后端保持一致 只取第一个满足条件项 -- 作废 此处需处理
-          // console.log(craft);
           const _list = craft.CraftCondition.filter(it => it.UseStatus === 2); // 必选列表
           if (_list.length === 1) {
             this.$emit('setCraftList', ['del', craft, this.handleCallBack]);
           } else {
+            // console.log('_list++++', _list);
             // _list.some(it => {
             //   it.
             // })
+            this.$emit('setCraftList', ['del', craft, this.handleCallBack]);
           }
+          // this.$emit('setCraftList', ['del', craft, this.handleCallBack]);
         }
         return;
       }
@@ -544,9 +549,10 @@ export default {
         this.$nextTick(() => {
           if (!newVal && newVal !== 0) return;
           if (this.craftList2CraftCondition.length === 0 || (Object.prototype.toString.call(newVal) === '[object Array]' && newVal.length === 0)) return;
+          console.log('init - watch - value', newVal);
           if (newVal[0] && newVal[0].ProductAmount) {
+            console.log(1);
             const { ProductAmount } = newVal[0];
-            // console.log(newVal[0].ProductAmount, 'newVal[0].ProductAmount');
             this.craftList2CraftCondition.forEach(craft => {
               craft.CraftCondition.forEach(item => {
                 const { UseStatus, Constraint } = item;
@@ -602,9 +608,12 @@ export default {
           } else {
             _filterList = Object.keys(newVal).filter(filterKey => JSON.stringify(newVal[filterKey]) !== JSON.stringify(this.oldWatchValue4CraftCondition[filterKey]));
           }
+          console.log('_filterList:', _filterList, 'old:', this.oldWatchValue4CraftCondition);
           _filterList.forEach(key => {
+            // console.log(newVal[key]);
             if (newVal[key].length === 0) return; // { PropertyID: value }
             const _targetCraft = this.data.CraftList.find(_it => _it.CraftID === key); // 找到受影响的工艺
+            console.log('_targetCraft', _targetCraft);
             if (!_targetCraft || !_targetCraft.CraftCondition || _targetCraft.CraftCondition.length === 0) return; // 如果该工艺没有设置条件则不予处理
             let _valueFilterList = []; // 筛选 清除未变动部分属性
             if (!this.oldWatchValue4CraftCondition) {
@@ -612,6 +621,7 @@ export default {
             } else {
               _valueFilterList = newVal[key].filter((filterItem, i) => JSON.stringify(filterItem) !== JSON.stringify(this.oldWatchValue4CraftCondition[key][i]));
             }
+            // console.log(_valueFilterList, _targetCraft);
             _valueFilterList.forEach(_newValItem => {
               _targetCraft.CraftCondition.forEach(item => {
                 const { UseStatus, Constraint } = item;
@@ -644,6 +654,7 @@ export default {
                   // 处理是否满足条件后的结果
                   this.handleMeetConditionsResult(key, _targetCraft, UseStatus, 'part');
                 } else if (FilterType === 1) {
+                  console.log(_newValItem);
                   // 满足所有
                   // eslint-disable-next-line no-shadow
                   let key = true;
@@ -657,6 +668,7 @@ export default {
                     if (_newValItem.PropertyType === 63 && element.PropertyType === 63 && element.PropertyID !== _newValItem.PropertyID) return;
                     if (_newValItem.PropertyType === 66 && element.PropertyType !== 66) return;
                     if (_newValItem.PropertyType === 66 && element.PropertyType === 66 && element.GroupID !== _newValItem.GroupID) return;
+                    // console.log(123, element.PropertyID, _newValItem.PropertyID);
                     if (
                       !this.judgeIsOrNoMeetConditions(
                         Operator,
@@ -668,6 +680,7 @@ export default {
                       break;
                     }
                   }
+                  console.log(key, _targetCraft, UseStatus, 'part');
                   // 处理是否满足条件后的结果
                   this.handleMeetConditionsResult(key, _targetCraft, UseStatus, 'part');
                 }

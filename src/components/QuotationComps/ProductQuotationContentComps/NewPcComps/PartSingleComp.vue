@@ -59,6 +59,7 @@
         :disabled="!data.Size.Second"
         :SizePropertyList="data.SizePropertyList"
         :AllowCustomSize='data.AllowCustomSize'
+        :CheckedCustomSize='data.CheckedCustomSize'
         :data='data'
         :partTitle='data.PartName'
       />

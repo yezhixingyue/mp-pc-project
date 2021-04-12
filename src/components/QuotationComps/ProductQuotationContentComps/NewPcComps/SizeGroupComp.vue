@@ -43,7 +43,7 @@
     <HelpTipsComp :title="partTitle + '' + SizeGroup.GroupName" :tipsData='tipsData' />
     <check-box-single
       v-show="showCheckBox && SizeList.length > 0 && AllowCustomSize"
-      :default="defaultSelect || SizeList.length === 0 || isSelectedInp"
+      :default="CheckedCustomSize || SizeList.length === 0 || isSelectedInp"
       @change="handleCheckChange"
     /><!-- 此处change事件改变时需要清除inpVal值为空，后面添加 -->
   </section>
@@ -51,12 +51,9 @@
 
 <script>
 import CheckBoxSingle from '@/components/QuotationComps/SMComps/CheckBoxSingle.vue';
-// import BaseNumInput from "@/components/QuotationComps/SMComps/BaseNumInput.vue";
 import DropDownSelector from '@/components/QuotationComps/SMComps/DropDownSelector.vue';
-// import SectionCompHeader from '@/components/QuotationComps/SMComps/SectionCompHeader.vue';
 import { getRelevanceInTargetValue } from '@/store/Quotation/QuotationClassType';
 import { mapState } from 'vuex';
-// import { Toast } from 'vant';
 import tipEnums from '@/assets/js/utils/tipEnums';
 import HelpTipsComp from '@/components/QuotationComps/PlaceOrderComps/HelpTipsComp.vue';
 
@@ -79,7 +76,7 @@ export default {
     /**
      * 复选框默认状态属性,及 默认要展示哪个组件
      */
-    defaultSelect: {
+    CheckedCustomSize: {
       type: Boolean,
       default: false,
     },
@@ -155,7 +152,6 @@ export default {
       },
       set(newVal) {
         const _target = this.SizeList.find(it => it.SizeID === newVal);
-        // if (!_target) return Toast('系统异常，请刷新重试!');
         if (!_target) return;
         const _list = _target.ValueList.map(it => ({
           PropertyID: it.First,
@@ -178,7 +174,6 @@ export default {
       return t;
     },
     watchTarget() {
-      // if (!this.sizeData.RelevanceInformation) return null;
       const _arr = [];
       this.SizeGroup.PropertyList.forEach(it => {
         if (!it.RelevanceInformation) return;
@@ -208,7 +203,6 @@ export default {
   },
   methods: {
     handleInputChange([data, index]) {
-      // console.log(data, index, 'handleInputChange');
       this.sizeInputValueList[index] = data;
       this.$emit('changeFunc', ['', [...this.sizeInputValueList]]);
     },
@@ -244,8 +238,8 @@ export default {
     },
     init() {
       this.initSizePropertyListLen = this.SizePropertyList.length;
-      if (this.SizePropertyList.length > 0) {
-        this.sizeInputValueList = this.SizePropertyList;
+      if (this.SizePropertyList.length > 0 || this.CheckedCustomSize) {
+        if (this.SizePropertyList.length > 0) this.sizeInputValueList = this.SizePropertyList;
         if (this.value === '') this.isSelectedInp = true;
       } else {
         if (this.SizeList.length === 0) {
@@ -266,7 +260,6 @@ export default {
     watchTarget: {
       handler(newVal) {
         this.$nextTick(() => {
-          // console.log(newVal);
           if (!newVal || newVal.length === 0) return;
           const _list = [];
           newVal.forEach(it => {
@@ -277,7 +270,6 @@ export default {
             _list.push(itemData);
           });
           const arr = [..._list];
-          // // console.log(arr, this.sizeInputValueList);
           this.$emit('changeFunc', ['', arr]);
           this.sizeInputValueList = arr;
         });
@@ -298,13 +290,8 @@ export default {
 </script>
 
 <style lang="scss">
-// @import "@/assets/css/Common/var.scss";
 .mp-duotation-content-comps-count-wrap {
   height: 30px;
-  // margin-top: -22px;
-  // margin-bottom: 0 !important;
-  // padding-top: 22px;
-  // overflow: hidden;
   width: 100%;
   .count-content {
     display: inline-block;
