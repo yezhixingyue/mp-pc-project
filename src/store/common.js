@@ -261,7 +261,7 @@ export default {
     },
     /** 设置客户信息
     ---------------------------------------- */
-    setCustomerInfo(state, data) {
+    setCustomerInfo(state, [data, bool]) {
       if (!data) {
         state.customerInfo = null;
         return;
@@ -269,8 +269,10 @@ export default {
       const Address = data.Address.map(it => ({ ...it, isSelected: it.IsDefault }));
       state.customerInfo = { ...data, Address };
       if (!data || !data.FundInfo) return;
-      const { Amount } = data.FundInfo;
-      if ((Amount || Amount === 0) && Amount !== state.customerBalance) state.customerBalance = Amount;
+      if (bool) {
+        const { Amount } = data.FundInfo;
+        if ((Amount || Amount === 0) && Amount !== state.customerBalance) state.customerBalance = Amount;
+      }
     },
     SetDefaultAddress(state, AddressID) {
       if (!state.customerInfo || !state.customerInfo.Address || state.customerInfo.Address.length === 0) return;
@@ -412,21 +414,21 @@ export default {
     async getCustomerDetail({ state, commit }, key = false) { // 获取账号基本信息
       if (state.customerInfo && !key) return;
       if (key) {
-        commit('setCustomerInfo', null);
+        commit('setCustomerInfo', [null, false]);
       } else {
         const sessionCust = useCookie ? Cookie.getCookie('customerInfo') : sessionStorage.getItem('customerInfo');
         if (sessionCust) {
           const user = JSON.parse(sessionCust);
           const token = Cookie.getCookie('token');
           if (user.Account.Token === token) {
-            commit('setCustomerInfo', user);
+            commit('setCustomerInfo', [user, false]);
             return;
           }
         }
       }
       const res = await api.getCustomerDetail();
       if (res.data.Status === 1000) {
-        commit('setCustomerInfo', res.data.Data);
+        commit('setCustomerInfo', [res.data.Data, true]);
         if (useCookie) Cookie.setCookie('customerInfo', JSON.stringify(res.data.Data), 'Session');
         else sessionStorage.setItem('customerInfo', JSON.stringify(res.data.Data));
         if (res.data.Data.AuthStatus !== 2) {

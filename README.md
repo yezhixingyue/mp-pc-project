@@ -39,7 +39,6 @@ public enum ImageType : byte
 
 传TakeOrderWay值就可以了 1代客下单 2客户自助
 
-<<<<<<< HEAD
 ## 产品提示，提示类型枚举值
 
     产品提示类型
@@ -60,7 +59,6 @@ public enum ImageType : byte
 
     属性
         Property = 5
-=======
 ## 售后申请类型（诉求意向）
 
   退货退款  0
@@ -82,4 +80,3 @@ public enum ImageType : byte
   已拒绝 3
   
   已取消  255
->>>>>>> aftersales
