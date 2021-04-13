@@ -37,7 +37,8 @@
             ×
           </li>
         </template>
-        <li class="gray">{{ remark[2] }}</li>
+        <!-- <li class="gray">{{ remark[2] }}</li> -->
+        <li class="gray" v-if="remark && remark.length > 0">{{ remark[remark.length - 1] }}</li>
       </ul>
     </div>
     <HelpTipsComp :title="partTitle + '' + SizeGroup.GroupName" :tipsData='tipsData' />

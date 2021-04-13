@@ -247,18 +247,15 @@ export default {
       });
       let _key = '';
       let _ids;
+      const _targetCraftList = state.obj2GetProductPrice.ProductParams.CraftList.find(it => it.ChoiceType === 1);
 
       switch (type) {
         case 'add':
           state.obj2GetProductPrice.ProductParams.CraftList2Req.First.push(item);
           if (
-            state.obj2GetProductPrice.ProductParams.CraftList.find(
-              it => it.ChoiceType === 1,
-            ).CraftList.find(it => it.CraftID === item.CraftID)
+            _targetCraftList && _targetCraftList.CraftList.find(it => it.CraftID === item.CraftID)
           ) {
-            state.obj2GetProductPrice.ProductParams.CraftList.find(
-              it => it.ChoiceType === 1,
-            ).CraftList.find(
+            _targetCraftList.CraftList.find(
               it => it.CraftID === item.CraftID,
             ).isSystemSelect = isSystemSelect;
           }
@@ -293,13 +290,9 @@ export default {
             );
             // 下面只判断可选工艺 为其添加增加方式的状态，必选工艺未使用，不做处理 || 一个工艺不可能同时是可选和必选工艺
             if (
-              state.obj2GetProductPrice.ProductParams.CraftList.find(
-                it => it.ChoiceType === 1,
-              ).CraftList.find(it => it.CraftID === item.CraftID)
+              _targetCraftList && _targetCraftList.CraftList.find(it => it.CraftID === item.CraftID)
             ) {
-              state.obj2GetProductPrice.ProductParams.CraftList.find(
-                it => it.ChoiceType === 1,
-              ).CraftList.find(
+              _targetCraftList.CraftList.find(
                 it => it.CraftID === item.CraftID,
               ).isSystemSelect = isSystemSelect;
             }
