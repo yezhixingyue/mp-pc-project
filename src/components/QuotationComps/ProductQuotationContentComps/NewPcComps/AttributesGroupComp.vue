@@ -90,7 +90,8 @@ export default {
     },
   },
   mounted() {
-    const _list = this.value.map(it => JSON.parse(JSON.stringify(it.PropertyList[0])));
+    const _list = this.value.filter(it => it.PropertyList.length > 0)
+      .map(it => JSON.parse(JSON.stringify(it.PropertyList[0])));
     this.propertyGroupTemplateList = _list;
     this.value.forEach((it, i) => {
       if (it.MinUsageCount === 0) this.handleAttributeDel(i, 0, 1, 0);

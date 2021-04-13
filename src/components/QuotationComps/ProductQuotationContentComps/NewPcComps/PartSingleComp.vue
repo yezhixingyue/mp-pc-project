@@ -368,8 +368,8 @@ export default {
 <style lang="scss">
 .mp-duotation-content-part-comp-wrap {
   > header {
-    margin-top: 40px;
-    margin-bottom: 22px;
+    margin-top: 28px;
+    margin-bottom: 20px;
     .header-title {
       font-size: 14px;
       font-weight: 700;

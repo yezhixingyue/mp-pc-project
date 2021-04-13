@@ -13,7 +13,9 @@
     />
     <div v-if="localPartData && PartData.PartList.length === 0" class="add-box">
       <span class="header-title point is-bold">// {{localPartData.PartName}}</span>
-      <span class="is-font-12 span-title-blue" @click="handleAddPart">+ 添加{{localPartData.PartName}}</span>
+      <div class="add-btn">
+        <span class="span-title-blue" @click="handleAddPart">+ 添加{{localPartData.PartName}}</span>
+      </div>
     </div>
   </article>
 </template>
@@ -37,7 +39,7 @@ export default {
     PartSingleComp,
   },
   methods: {
-    ...mapMutations('Quotation', ['addPartProductParamsPartList']),
+    ...mapMutations('Quotation', ['addPartProductParamsPartList', 'delPartProductParamsPartList']),
     handleAddPart() {
       const _temp = {
         ...this.localPartData,
@@ -53,6 +55,9 @@ export default {
   },
   mounted() {
     this.localPartData = JSON.parse(JSON.stringify(this.PartData.PartList[0]));
+    if (this.PartData.PartList.length === 1 && this.PartData.PartList[0].MinUsePart === 0) {
+      this.delPartProductParamsPartList([this.index, 0]);
+    }
   },
 };
 </script>
@@ -60,8 +65,27 @@ export default {
 <style lang="scss">
 .mp-duotation-content-part-comps-wrap {
   > .add-box {
-    padding: 10px 0 15px 0;
+    padding: 10px 0 0px 0;
+    > .header-title {
+      padding-left: 6px;
+      color: #333;
+      display: block;
+      padding-bottom: 8px;
+    }
+    > .add-btn {
+      text-align: right;
+      border-top: 1px dashed #eee;
+      padding-top: 8px;
+      > .span-title-blue {
+        font-size: 13px;
+      }
+    }
   }
   padding-bottom: 10px;
+  &:last-of-type {
+    > .add-box {
+      padding-bottom: 30px;
+    }
+  }
 }
 </style>
