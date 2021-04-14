@@ -112,7 +112,8 @@ export default {
         level1.children = _list;
       });
       // 添加第三级产品内容
-      state.productNames.filter(it => it.AllowCustomOrder).forEach(item => level1List.forEach(leve1 => {
+      const namesList = process.env.VUE_APP_BASE_URL && process.env.VUE_APP_BASE_URL === 'test-new-product' ? state.productNames : state.productNames.filter(it => it.AllowCustomOrder);
+      namesList.forEach(item => level1List.forEach(leve1 => {
         if (item.ProductClass.First === leve1.ID) {
           leve1.children.forEach(level2 => {
             if (item.ProductClass.Second === level2.ID) {
@@ -149,13 +150,14 @@ export default {
     curCraftRelationList(state, getters, rootVal) {
       const _CraftRelationList = rootVal.common.CraftRelationList;
       if (_CraftRelationList.length === 0) return [];
-      const _ProductClass = state.obj2GetProductPrice.ProductParams.ProductClass;
-      if (!_ProductClass) return [];
-      const _list = _CraftRelationList.filter(item => {
-        const { First, Second } = item.ProductClass;
-        return First === _ProductClass.First && Second === _ProductClass.Second;
-      });
-      return _list;
+      // const _ProductClass = state.obj2GetProductPrice.ProductParams.ProductClass;
+      // if (!_ProductClass) return [];
+      // const _list = _CraftRelationList.filter(item => {
+      //   const { First, Second } = item.ProductClass;
+      //   return First === _ProductClass.First && Second === _ProductClass.Second;
+      // });
+      // return _list;
+      return _CraftRelationList;
     },
 
   },
