@@ -4,7 +4,7 @@
       <li class="text-box">
         <div>
           <div class="img-box">
-            <img src="../../assets/images/logo-white.png" alt="">
+            <img src="../../assets/images/logo-bottom-new.png" alt="">
           </div>
           <a :href="concact" target="_blank">联系我们</a>
           <a :href="statement" target="_blank">用户协议</a>
@@ -73,8 +73,8 @@ export default {
       float: left;
       box-sizing: border-box;
       > div {
-        height: 95px;
-        padding-top: 31px;
+        height: 115px;
+        padding-top: 30px;
         padding-bottom: 30px;
         line-height: 34px;
         box-sizing: border-box;
@@ -82,11 +82,13 @@ export default {
         // border-bottom: 1px solid rgba(238, 238, 238, 0.05);
         > div {
           display: inline-block;
-          height: 34px;
+          height: 66px;
           vertical-align: top;
-          width: 147px;
-          margin-right: 65px;
-          opacity: 0.8;
+          width: 168px;
+          padding-right: 95px;
+          opacity: 0.9;
+          border-right: 1px solid rgba(255, 255, 255, 0.1);
+          margin-right: 73px;
         }
         > a {
           line-height: 34px;
@@ -95,6 +97,7 @@ export default {
           cursor: pointer;
           color: #ccc;
           font-size: 16px;
+          padding: 16px 0;
           transition: color 0.25s ease-in-out;
           &:hover {
             color: #eee;
@@ -102,7 +105,7 @@ export default {
         }
       }
       > p {
-        height: 50px;
+        height: 36px;
         font-size: 14px;
         color: #888;
         line-height: 20px;
@@ -125,11 +128,11 @@ export default {
     }
     >.img-code-box {
       float: right;
-      width: 86px;
-      padding-top: 27px;
+      width: 84px;
+      padding-top: 28px;
       > div {
-        width: 86px;
-        height: 80px;
+        width: 84px;
+        height: 84px;
         background: url(../../assets/images/code.png) no-repeat right center;
       }
       > p {

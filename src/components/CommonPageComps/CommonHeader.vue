@@ -2,7 +2,7 @@
   <section class="mp-pc-common-page-header-common-wrap float" :style="oStyles">
     <header>
       <div>
-        <img @click="onImgClick" src="../../assets/images/logo-white.png" alt />
+        <img @click="onImgClick" src="../../assets/images/logo.png" alt />
         <!-- <span>会员中心</span> -->
       </div>
       <ul>
@@ -358,8 +358,8 @@ export default {
       height: 100%;
       margin-right: 78px;
       > img {
-        width: 147px;
-        height: 32px;
+        width: 157px;
+        height: 38px;
         margin-top: 13px;
         margin-right: 25px;
         vertical-align: -66%;

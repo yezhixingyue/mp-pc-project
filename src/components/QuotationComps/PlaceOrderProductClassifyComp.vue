@@ -267,6 +267,7 @@ export default {
       width: 1200px;
       margin: 0 auto;
       box-sizing: border-box;
+      white-space: nowrap;
       // z-index: 999;
       > li {
         float: left;
