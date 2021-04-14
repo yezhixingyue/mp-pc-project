@@ -150,126 +150,166 @@ function getValue(list, MasterProperty) { // 向属性中挂载关联信息 从�
 }
 
 /**
- * @description: 工艺条件判断
+ * @description: 根据 [ 系统值、关系类型、客户值 ] 获取是否满足条件的结果(bool值)
+ * @param {*} Value 系统值
+ * @param {*} Operator 关系类型
+ * @param {*} CustomerValue 客户值
+ * @return {*}
+ */
+const getJudgeResult = (Value, Operator, CustomerValue) => {
+  if (!CustomerValue && CustomerValue !== 0) return false;
+  // 判断值是否符合条件
+  let key = false;
+  switch (Operator) {
+    case 1:
+      // 等于
+      if (typeof CustomerValue === 'number' && +CustomerValue === +Value) key = true;
+      if (typeof CustomerValue === 'string' && CustomerValue === Value) key = true;
+      break;
+    case 2:
+      // 不等于
+      if (typeof CustomerValue === 'number' && +CustomerValue !== +Value) key = true;
+      if (typeof CustomerValue === 'string' && CustomerValue !== Value) key = true;
+      break;
+    case 3:
+      // 大于
+      if (+CustomerValue > +Value) key = true;
+      break;
+    case 4:
+      // 大于等于
+      if (+CustomerValue >= +Value) key = true;
+      break;
+    case 5:
+      // 小于
+      if (+CustomerValue < +Value) key = true;
+      break;
+    case 6:
+      // 小于等于
+      if (+CustomerValue <= +Value) key = true;
+      break;
+
+    default:
+      key = false;
+      break;
+  }
+  // // console.log(Operator, Value, ProductAmount, key);
+  return key;
+};
+
+/**
+ * @description: 获取工艺条件判断限制验证结果
  * @param {*} data
  * @param {*} productData
  * @return {*}
  */
-const getVerifyValue4Craft = (data, productData, PartData) => {
+const getVerifyResult4Craft = (data, productData, PartData) => {
   if (data.ChoiceType === 2) return null; // 只判断可选工艺
   const _t = data.CraftList.filter(it => it.CraftCondition && it.CraftCondition.length > 0);
   if (_t.length === 0) return null;
-  const _obj = {};
 
   for (let i = 0; i < _t.length; i += 1) {
     const craftItem = _t[i]; // 有条件限制的工艺项目 -- 根据其限制条件找到对应的值进行判断
     // console.log(`craftItem${i}:`, craftItem); // ID 工艺ID
     for (let index = 0; index < craftItem.CraftCondition.length; index += 1) {
+      // ---------------------- 单个工艺条件 与其它无关
       const singleCondition = craftItem.CraftCondition[index];
-      console.log(singleCondition); // UseStatus  1 禁选   2必选
-      const bool = singleCondition.Constraint.FilterType === 1; // Tips 错误提示  FilterType 1 满足所有  2满足任一
-      console.log(bool, productData);
+      // console.log(singleCondition); // UseStatus  1 禁选   2必选
+      let bool = singleCondition.Constraint.FilterType === 1; // Tips 错误提示  FilterType 1 满足所有  2满足任一
+      let cannotJudge = false;
       singleCondition.Constraint.ItemList.forEach(it => {
+        if (singleCondition.Constraint.FilterType === 1 && !bool) return;
+        if (singleCondition.Constraint.FilterType === 2 && bool) return;
+        if (cannotJudge) return;
+        // ------------------------------ 单个工艺条件 多个子项 ： 与其它上下子条件有关 - 值受 FilterType 值影响 （ 1 : 满足所有, 2: 满足任一）
         // console.log(it); // Operator 关系  PropertyType 属性类型 Value 值 ValueType 值类型   PartID ? PropertyID ?
+        let res = false; // 数值判断结果 -- 是否满足条件
+        let _t; // 查询属性时使用
         switch (it.PropertyType) {
           case 1: // 产品数量
-            console.log(it, '产品数量', productData.ProductAmount, singleCondition.UseStatus, bool);
+            res = getJudgeResult(it.Value, it.Operator, productData.ProductAmount);
             break;
           case 2: // 部件数量
-            console.log(it, '部件数量', PartData);
+            res = getJudgeResult(it.Value, it.Operator, PartData.PartAmount.First);
             break;
           case 33: // 物料
-            console.log(it, '物料', PartData);
-            console.log(PartData.Material);
+            res = getJudgeResult(it.Value, it.Operator, PartData.Material.First);
             break;
-          // case 34: // 实际克重 --- 判断不了?
-          //   console.log(it, '实际克重', PartData);
-          //   console.log(PartData.Material);
-          //   break;
+          case 34: // 实际克重
+            _t = PartData.MaterialList.find(_it => PartData.Material.First === _it.MaterialID);
+            res = _t ? getJudgeResult(it.Value, it.Operator, _t.Weight) : false;
+            break;
           case 62: // 印刷属性
-            console.log(it, '印刷属性', PartData);
+            _t = PartData.PrintTypeList.find(_it => it.PropertyID === _it.PropertyID);
+            res = _t ? getJudgeResult(it.Value, it.Operator, _t.CustomerInputValue) : false;
             break;
           case 63: // 部件属性 (包含尺寸组) SizePropertyList | PropertyList
-            console.log(it, '部件属性', PartData);
+            _t = PartData.PropertyList.find(_it => it.PropertyID === _it.PropertyID);
+            if (!_t) _t = PartData.SizePropertyList.find(_it => it.PropertyID === _it.PropertyID);
+            res = _t ? getJudgeResult(it.Value, it.Operator, _t.CustomerInputValue) : false;
             break;
-          case 65: // 印刷属性组
-            console.log(it, '印刷属性组', PartData);
-            break;
-          case 66: // 部件属性组
-            console.log(it, '部件属性组', PartData);
-            break;
+          // case 65: // 印刷属性组
+          //   console.log(it, '印刷属性组', PartData);
+          //   break;
+          // case 66: // 部件属性组
+          //   console.log(it, '部件属性组', PartData);
+          //   break;
           default:
-            console.log(it, '其它', PartData);
-            console.log(it.PropertyType, it.PropertyID, it.Value, it.Operator);
-            console.log(PartData.PrintTypeList);
+            // console.log(craftItem, productData, PartData);
+            cannotJudge = true; // 不在上述中 不做判断 由系统后台判断
             break;
         }
+        if (res && singleCondition.Constraint.FilterType === 2) bool = !bool; // 满足当前条件 且 满足任一
+        if (!res && singleCondition.Constraint.FilterType === 1) bool = !bool; // 不满足当前条件 且 满足所有
       });
+      // console.log('为true时即为满足该大条件:', bool); // 为true时即为满足该大条件
+      if (bool && !cannotJudge) {
+        // 找到当前部件中是否包含当前工艺
+        // console.log('找到当前部件中是否包含当前工艺:', craftItem.CraftID, PartData.PartCraftList2Req.First);
+        const t = PartData.PartCraftList2Req.First.find(it => it.CraftID === craftItem.CraftID);
+        if (!((t && singleCondition.UseStatus === 2) || (!t && singleCondition.UseStatus === 1))) {
+          // 不满足条件
+          return singleCondition.Tips;
+        }
+      }
     }
   }
+};
 
-  _t.forEach(_it => { // 获取到每一个工艺信息
-    _obj[_it.CraftID] = [];
-
-    _it.CraftCondition.forEach(singleCraftCondition => { // 获取到每一个工艺上的每一个限制条件信息 （对其进行循环）
-      singleCraftCondition.Constraint.ItemList.forEach(_item => { // 每个限制条件信息中每一条条件  获取其属性的值，对其进行watch
-        console.log(_item);
-        // if (_item.PropertyType === 2) { // 部件数量
-        //   if (_obj[_it.CraftID].some(it => it.PropertyType === 2)) return;
-        //   const _o = {};
-        //   _o.PropertyID = _item.PropertyID;
-        //   _o.PropertyType = 2;
-        //   _o.Value = partData.PartAmount.First;
-        //   _obj[_it.CraftID].push(_o);
-        //   return;
-        // }
-        // if (_item.PropertyType === 33) { // 物料
-        //   if (_obj[_it.CraftID].some(it => it.PropertyType === 33)) return;
-        //   const _o = {};
-        //   _o.PropertyID = _item.PropertyID;
-        //   _o.PropertyType = 33;
-        //   _o.Value = partData.Material.First;
-        //   _obj[_it.CraftID].push(_o);
-        //   return;
-        // }
-        // if (_item.PropertyType === 66) { // 属性组
-        //   if (_obj[_it.CraftID].some(it => it.GroupID === _item.GroupID)) return;
-        //   const _target = partData.PropertyGroupList.find(Group => Group.GroupID === _item.GroupID);
-        //   if (!_target) return;
-        //   const _o = {};
-        //   _o.GroupID = _item.GroupID;
-        //   _o.PropertyType = 66;
-        //   _o.Value = _target.PropertyList.length;
-        //   _obj[_it.CraftID].push(_o);
-        //   return;
-        // }
-        // if (_item.PropertyType === 63) { // 属性类
-        //   if (_obj[_it.CraftID].some(it => it.PropertyID === _item.PropertyID)) return;
-        //   let _target = partData.SizePropertyList.find(
-        //     _size => _size.PropertyID === _item.PropertyID,
-        //   ); // 判断尺寸组属性
-        //   if (_target) {
-        //     const _o = {};
-        //     _o.PropertyID = _item.PropertyID;
-        //     _o.Value = _target.CustomerInputValue;
-        //     _o.PropertyType = 63;
-        //     _obj[_it.CraftID].push(_o);
-        //     return;
-        //   }
-        //   // eslint-disable-next-line no-shadow
-        //   _target = partData.PropertyList.find(_it => _it.PropertyID === _item.PropertyID); // 判断属性
-        //   if (_target) {
-        //     const _o = {};
-        //     _o.PropertyID = _item.PropertyID;
-        //     _o.Value = _target.CustomerInputValue;
-        //     _o.PropertyType = 63;
-        //     _obj[_it.CraftID].push(_o);
-        //   }
-        // }
+const getVerifyResult4Craft4Product = (data, productData) => {
+  if (data.ChoiceType === 2) return null; // 只判断可选工艺
+  const _t = data.CraftList.filter(it => it.CraftCondition && it.CraftCondition.length > 0);
+  if (_t.length === 0) return null;
+  for (let i = 0; i < _t.length; i += 1) {
+    const craftItem = _t[i]; // 有条件限制的工艺项目 -- 根据其限制条件找到对应的值进行判断
+    for (let index = 0; index < craftItem.CraftCondition.length; index += 1) {
+      const singleCondition = craftItem.CraftCondition[index];
+      let bool = singleCondition.Constraint.FilterType === 1; // Tips 错误提示  FilterType 1 满足所有  2满足任一
+      let cannotJudge = false;
+      singleCondition.Constraint.ItemList.forEach(it => {
+        if (singleCondition.Constraint.FilterType === 1 && !bool) return;
+        if (singleCondition.Constraint.FilterType === 2 && bool) return;
+        if (cannotJudge) return;
+        let res = false; // 数值判断结果 -- 是否满足条件
+        switch (it.PropertyType) {
+          case 1: // 产品数量
+            res = getJudgeResult(it.Value, it.Operator, productData.ProductAmount);
+            break;
+          default:
+            cannotJudge = true; // 不在上述中 不做判断 由系统后台判断
+            break;
+        }
+        if (res && singleCondition.Constraint.FilterType === 2) bool = !bool; // 满足当前条件 且 满足任一
+        if (!res && singleCondition.Constraint.FilterType === 1) bool = !bool; // 不满足当前条件 且 满足所有
       });
-    });
-  });
-  return _obj;
+      if (bool && !cannotJudge) {
+        const t = productData.CraftList2Req.First.find(it => it.CraftID === craftItem.CraftID);
+        if (!((t && singleCondition.UseStatus === 2) || (!t && singleCondition.UseStatus === 1))) {
+          // 不满足条件
+          return singleCondition.Tips;
+        }
+      }
+    }
+  }
 };
 
 export function getRelevanceInTargetValue(targetObj, RelevanceInformation) {
@@ -641,7 +681,15 @@ export default class QuotationClassType {
       }
     }
 
-    console.log(obj.CraftList);
+    for (let i = 0; i < obj.CraftList.length; i += 1) {
+      const CraftInfoItem = obj.CraftList[i];
+      console.log(obj);
+      const verifyRes = getVerifyResult4Craft4Product(CraftInfoItem, obj); // 获取工艺条件判断限制验证结果 为字符串时即为返回的错误信息  其它则通过
+      if (verifyRes && typeof verifyRes === 'string') {
+        _setErrMsg(verifyRes);
+        return false;
+      }
+    }
 
     // 部件校验
     for (let index = 0; index < PartList.length; index += 1) {
@@ -861,26 +909,16 @@ export default class QuotationClassType {
           }
         }
 
-        // console.log(Part.CraftList);
-
+        // 工艺条件判断
         for (let i = 0; i < Part.CraftList.length; i += 1) {
           const CraftInfoItem = Part.CraftList[i];
-          const verifyData = getVerifyValue4Craft(CraftInfoItem, obj, Part);
-          console.log(verifyData); // 获取到需要校验的属性值信息 其对象key值为工艺的ID
-          // const keys = verifyData ? Object.keys(verifyData) : [];
-          // if (keys.length > 0) {
-          //   const _obj = {};
-          //   keys.forEach(key => {
-          //     if (verifyData[key] && verifyData[key].length > 0) _obj[key] = verifyData[key];
-          //   });
-          //   const restrainedKeys = Object.keys(_obj); // 受限工艺ID数组
-          //   if (restrainedKeys.length > 0) {
-          //     console.log(Part.CraftList);
-          //     console.log('单组工艺最终条件限制信息：', _obj);
-          //     console.log(Part.PartCraftList2Req);
-          //   }
-          // }
+          const verifyRes = getVerifyResult4Craft(CraftInfoItem, obj, Part); // 获取工艺条件判断限制验证结果 为字符串时即为返回的错误信息  其它则通过
+          if (verifyRes && typeof verifyRes === 'string') {
+            _setErrMsg(verifyRes);
+            return false;
+          }
         }
+
         // return true;
       }
     }
@@ -1098,7 +1136,7 @@ export default class QuotationClassType {
     if (_obj.PropertyRelevanceList.length === 0) return _obj;
     _obj.PropertyRelevanceList.forEach(Relevance => {
       // console.log(Relevance);
-      if (Relevance.Compare && Relevance.MasterProperty.PropertyID === Relevance.RelevanceProperty.PropertyID) return;
+      if (Relevance.Compare && Relevance.MasterProperty.PropertyID === Relevance.RelevanceProperty.PropertyID && Relevance.MasterProperty.PartID === Relevance.RelevanceProperty.PartID) return;
       const _t = _obj.PartList.find((item) => Relevance.RelevanceProperty.PartID === item.PartID);
       if (_t.PrintPropertyGroupList.length > 0) {
         // 印刷属性组

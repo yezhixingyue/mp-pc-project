@@ -291,7 +291,7 @@ export default {
 
 <style lang='scss'>
 .mp-pc-quotation-sm-comp-single-att-comp-wrap {
-  margin-right: 40px !important;
+  margin-right: 30px !important;
   // margin-bottom: 8px !important;
   .select-and-white-inp {
     .el-input__suffix {

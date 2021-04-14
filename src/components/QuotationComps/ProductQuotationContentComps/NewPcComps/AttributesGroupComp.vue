@@ -128,7 +128,8 @@ export default {
             margin-left: 8px;
           }
           & + span {
-            margin-left: 30px;
+            margin-left: 16px;
+            font-size: 13px;
           }
         }
       }

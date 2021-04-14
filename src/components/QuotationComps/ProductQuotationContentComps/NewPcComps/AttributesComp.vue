@@ -46,9 +46,9 @@
       </section>
       <section class="group-menu-box" v-if="showGroupMenu">
         <span @click="handleGroupDel" class="iconfont icon-shanchu is-pink" >
-          <i class="menu-item-sm is-font-14">删除</i>
+          <i class="menu-item-sm is-font-13">删除</i>
         </span>
-        <span class="is-font-14 span-title-blue"
+        <span class="is-font-13 span-title-blue"
          v-show="showGroupAdd && curUsageCount < MaxUsageCount" @click="handleGroupAdd"
          >+ 添加
         </span>
@@ -165,6 +165,13 @@ export default {
       }
       &.group-menu-box {
         margin-bottom: 8px;
+        margin-right: 0;
+        float: right;
+        &::before {
+          content: '';
+          clear: both;
+          display: block;
+        }
       }
     }
   }
