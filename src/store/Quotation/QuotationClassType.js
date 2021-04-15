@@ -52,73 +52,73 @@ function _checkCraft(_isRequireCraftList, item, _selectdCraftIdList, curCraftRel
     if (curCraftRelationList.length === 0) { // 肯定没有互斥工艺，进行报错及return
       return false;
     } // 存在有工艺关系的工艺
-    let key = true;
-    const _isRequireCraftIDsList = _isRequireCraftList.map(_it => _it.CraftID);
-    for (let _i = 0; _i < curCraftRelationList.length; _i += 1) {
-      const rule = curCraftRelationList[_i];
-      if (rule.RelationType === 1) { // 互斥工艺关系判断
-        // // console.log("1213213131231 第1种方式");
-        const _t = rule.CraftList.find(_c => _c.CraftID === item.CraftID);
-        // // console.log("1213213131231 第1种方式---2", _t, rule.CraftList, item);
-        if (_t) {
-          // // console.log("1213213131231 第1种方式---2", _t, _t.CraftName);
-          // // console.log("rule.CraftList:", rule.CraftList)
-          for (let _i2 = 0; _i2 < rule.CraftList.length; _i2 += 1) {
-            const _subC = rule.CraftList[_i2];
-            if (_subC.CraftID !== _t.CraftID) {
-              if (_selectdCraftIdList.includes(_subC.CraftID)) {
-                // 能到此处 说明： 当前已选择工艺列表中存在有【当前正在判断的未勾选的必选工艺， 即此处item变量 】的互斥工艺  所以该工艺可不选
-                key = false;
-                // // console.log("---------------------------key:", key);
-                // eslint-disable-next-line consistent-return
-                return;
-              } if (!_selectdCraftIdList.includes(_subC.CraftID) && _isRequireCraftIDsList.includes(_subC.CraftID)) {
-                return _subC.CraftNickName;
-              }
-            }
-          }
-        }
-      }
-      if (rule.RelationType === 2) {
-        // 单向依赖 分2种情况：1. 它依赖与别的工艺，别的工艺不依赖与它，此时它选不选都不影响其它工艺 所以此时其不选必不通过验证
-        //  2. 别的工艺依赖与它  此时它应当为必选
-        // 所以单向依赖时  工艺都为必选
-        // // console.log("1213213131231 第2种方式");
-      }
-      if (rule.RelationType === 3) {
-        // 双向依赖 如果其在已选择列表中没有互斥的工艺存在  则继续看其双向绑定的工艺是否在需要必选的列表中，
-        // 如果不存在则不考虑，如果存在则继续判断该依赖的工艺在已选择的列表中是否存在互斥工艺
-        const _ruleList = [...rule.CraftList, rule.MasterCraft];
-        const _ruleIdsList = _ruleList.map(_t => _t.CraftID);
-        // // console.log("1213213131231 第三种方式");
-        if (_ruleIdsList.includes(item.CraftID)) {
-          // 当前未选择的工艺存在该列表中
-          // // console.log("1213213131231 第三种方式-1");
-          for (let _ruleIndex = 0; _ruleIndex < _ruleIdsList.length; _ruleIndex += 1) {
-            const _targetRule = _ruleList[_ruleIndex];
-            // // console.log("1213213131231 第三种方式-2",  _targetRule.CraftName, _targetRule);
-            if (_targetRule.CraftID !== item.CraftID) {
-              // // console.log("1213213131231 第三种方式-3", _targetRule.CraftName);
-              if (_isRequireCraftIDsList.includes(_targetRule.CraftID)) {
-                // 说明有双向绑定的工艺存在需要选择的工艺列表中 此时进行判断
-                // // console.log("1213213131231 第三种方式-4",  _targetRule.CraftName);
-                if (!_selectdCraftIdList.includes(_targetRule.CraftID)) {
-                  // 继续判断该工艺的满足项  应当使用递归方式 下一步提取判断过程 进行循环递归调用
-                  // // console.log("1213213131231 第三种方式-5",  _targetRule.CraftName);
-                  const _tempRequireCraftList = _isRequireCraftList.filter(_it => _it.CraftID !== item.CraftID);
-                  // // console.log("调用了_checkCraft方法")
-                  return _checkCraft(_tempRequireCraftList, _targetRule, _selectdCraftIdList, curCraftRelationList);
-                }
-              }
-              // // console.log(_targetRule.CraftName, "-----------------------------!")
-            }
-          }
-        }
-      }
-    }
-    if (key) {
-      return false;
-    }
+    // let key = true;
+    // const _isRequireCraftIDsList = _isRequireCraftList.map(_it => _it.CraftID);
+    // for (let _i = 0; _i < curCraftRelationList.length; _i += 1) {
+    //   const rule = curCraftRelationList[_i];
+    //   if (rule.RelationType === 1) { // 互斥工艺关系判断
+    //     // // console.log("1213213131231 第1种方式");
+    //     const _t = rule.CraftList.find(_c => _c.CraftID === item.CraftID);
+    //     // // console.log("1213213131231 第1种方式---2", _t, rule.CraftList, item);
+    //     if (_t) {
+    //       // // console.log("1213213131231 第1种方式---2", _t, _t.CraftName);
+    //       // // console.log("rule.CraftList:", rule.CraftList)
+    //       for (let _i2 = 0; _i2 < rule.CraftList.length; _i2 += 1) {
+    //         const _subC = rule.CraftList[_i2];
+    //         if (_subC.CraftID !== _t.CraftID) {
+    //           if (_selectdCraftIdList.includes(_subC.CraftID)) {
+    //             // 能到此处 说明： 当前已选择工艺列表中存在有【当前正在判断的未勾选的必选工艺， 即此处item变量 】的互斥工艺  所以该工艺可不选
+    //             key = false;
+    //             // // console.log("---------------------------key:", key);
+    //             // eslint-disable-next-line consistent-return
+    //             return;
+    //           } if (!_selectdCraftIdList.includes(_subC.CraftID) && _isRequireCraftIDsList.includes(_subC.CraftID)) {
+    //             return _subC.CraftNickName;
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    //   if (rule.RelationType === 2) {
+    //     // 单向依赖 分2种情况：1. 它依赖与别的工艺，别的工艺不依赖与它，此时它选不选都不影响其它工艺 所以此时其不选必不通过验证
+    //     //  2. 别的工艺依赖与它  此时它应当为必选
+    //     // 所以单向依赖时  工艺都为必选
+    //     // // console.log("1213213131231 第2种方式");
+    //   }
+    //   if (rule.RelationType === 3) {
+    //     // 双向依赖 如果其在已选择列表中没有互斥的工艺存在  则继续看其双向绑定的工艺是否在需要必选的列表中，
+    //     // 如果不存在则不考虑，如果存在则继续判断该依赖的工艺在已选择的列表中是否存在互斥工艺
+    //     const _ruleList = [...rule.CraftList, rule.MasterCraft];
+    //     const _ruleIdsList = _ruleList.map(_t => _t.CraftID);
+    //     // // console.log("1213213131231 第三种方式");
+    //     if (_ruleIdsList.includes(item.CraftID)) {
+    //       // 当前未选择的工艺存在该列表中
+    //       // // console.log("1213213131231 第三种方式-1");
+    //       for (let _ruleIndex = 0; _ruleIndex < _ruleIdsList.length; _ruleIndex += 1) {
+    //         const _targetRule = _ruleList[_ruleIndex];
+    //         // // console.log("1213213131231 第三种方式-2",  _targetRule.CraftName, _targetRule);
+    //         if (_targetRule.CraftID !== item.CraftID) {
+    //           // // console.log("1213213131231 第三种方式-3", _targetRule.CraftName);
+    //           if (_isRequireCraftIDsList.includes(_targetRule.CraftID)) {
+    //             // 说明有双向绑定的工艺存在需要选择的工艺列表中 此时进行判断
+    //             // // console.log("1213213131231 第三种方式-4",  _targetRule.CraftName);
+    //             if (!_selectdCraftIdList.includes(_targetRule.CraftID)) {
+    //               // 继续判断该工艺的满足项  应当使用递归方式 下一步提取判断过程 进行循环递归调用
+    //               // // console.log("1213213131231 第三种方式-5",  _targetRule.CraftName);
+    //               const _tempRequireCraftList = _isRequireCraftList.filter(_it => _it.CraftID !== item.CraftID);
+    //               // // console.log("调用了_checkCraft方法")
+    //               return _checkCraft(_tempRequireCraftList, _targetRule, _selectdCraftIdList, curCraftRelationList);
+    //             }
+    //           }
+    //           // // console.log(_targetRule.CraftName, "-----------------------------!")
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    // if (key) {
+    //   return false;
+    // }
   }
 }
 
