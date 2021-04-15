@@ -8,8 +8,9 @@
       :data="item"
       :canDel="PartData.AllowChangePartNumber && PartData.PartList.length > PartData.PartList[0].MinUsePart"
       @handleAddPart="handleAddPart"
-      :showAddBtn='PartData.PartList[0] && PartData.PartList[0].MaxUsePart &&
-        PartData.PartList[0].MaxUsePart > PartData.PartList.length && PartData.AllowChangePartNumber'
+      :showAddBtn='PartData.PartList[0] && PartData.PartList[0].MaxUsePart
+        && (PartData.PartList[0].MaxUsePart > PartData.PartList.length || PartData.PartList[0].MaxUsePart === -1)
+        && PartData.AllowChangePartNumber'
     />
     <div v-if="localPartData && PartData.PartList.length === 0" class="add-box">
       <span class="header-title point is-bold">// {{localPartData.PartName}}</span>

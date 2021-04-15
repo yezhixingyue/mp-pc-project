@@ -568,6 +568,9 @@ export default {
       },
       immediate: true,
     },
+    curProductID() {
+      this.priceGetErrMsg = '';
+    },
   },
 };
 </script>
