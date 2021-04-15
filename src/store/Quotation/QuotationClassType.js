@@ -733,7 +733,8 @@ export default class QuotationClassType {
 
         // 尺寸组校验
         if (Part.SizeGroup && Part.SizePropertyList.length < Part.SizeGroup.PropertyList.length) {
-          _setErrMsg(`请补充部件${Part.PartName}中${Part.SizeGroup.GroupName}信息`);
+          // _setErrMsg(`请补充部件${Part.PartName}中${Part.SizeGroup.GroupName}信息`);
+          _setErrMsg(`尺寸${Part.SizeGroup.PropertyList[0].PropertyName}值不能为空!`);
           return false;
         }
         // eslint-disable-next-line no-shadow
