@@ -67,21 +67,27 @@ export default {
       },
     },
     optionObj() {
-      const _list = this.option.map(it => ({ Name: it.Name, MaterialID: it.MaterialID }))
-        .map(it => {
-          const r = /^\D+\d+\D+$/;
-          if (r.test(it.Name)) {
-            const _arr1 = it.Name.trim().split('');
-            const _arr2 = _arr1.filter(sub => !!sub);
-            const reg = /\d/;
-            const i = _arr2.findIndex(subIt => reg.test(subIt));
-            const _t1 = _arr2.slice(0, i).join('');
-            const _s1 = _arr2.slice(i).join('');
+      const _list = this.option.map(it => {
+        const { KindName } = it.Kind;
+        const Name = it.Name.replace(KindName, '');
+        return { MaterialID: it.MaterialID, Name: [KindName, Name] };
+        // return { Name, MaterialID: it.MaterialID, KindName };
+      });
+      // .map(it => {
+      //   console.log(it);
+      // const r = /^\D+\d+\D+$/;
+      // if (r.test(it.Name)) {
+      //   const _arr1 = it.Name.trim().split('');
+      //   const _arr2 = _arr1.filter(sub => !!sub);
+      //   const reg = /\d/;
+      //   const i = _arr2.findIndex(subIt => reg.test(subIt));
+      //   const _t1 = _arr2.slice(0, i).join('');
+      //   const _s1 = _arr2.slice(i).join('');
 
-            return { ...it, Name: [_t1, _s1] };
-          }
-          return { ...it, Name: [it.Name, ''] };
-        });
+      //   return { ...it, Name: [_t1, _s1] };
+      // }
+      // return { ...it, Name: [it.Name, ''] };
+      // });
       const _obj = {};
       _list.forEach(item => {
         if (!item.Name || item.Name.length !== 2) return;

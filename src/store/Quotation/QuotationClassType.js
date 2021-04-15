@@ -673,10 +673,11 @@ export default class QuotationClassType {
           if (res === false) {
             _setErrMsg(`主产品中[ ${item.CraftNickName} ]是必选工艺!`);
             return false;
-          } if (typeof res === 'string') {
-            _setErrMsg(`主产品中[ ${item.CraftNickName} ]和[ ${res} ]两种工艺需要选择其中一种!`);
-            return false;
           }
+          // if (typeof res === 'string') {
+          //   _setErrMsg(`主产品中[ ${item.CraftNickName} ]和[ ${res} ]两种工艺需要选择其中一种!`);
+          //   return false;
+          // }
         }
       }
     }
@@ -871,10 +872,11 @@ export default class QuotationClassType {
               if (res === false) {
                 _setErrMsg(`${_PartName}中[ ${item.CraftNickName} ]是必选工艺!`);
                 return false;
-              } if (typeof res === 'string') {
-                _setErrMsg(`${_PartName}中[ ${item.CraftNickName} ]和[ ${res} ]两种工艺需要选择其中一种!`);
-                return false;
               }
+              // if (typeof res === 'string') {
+              //   _setErrMsg(`${_PartName}中[ ${item.CraftNickName} ]和[ ${res} ]两种工艺需要选择其中一种!`);
+              //   return false;
+              // }
               // if (!_selectdCraftIdList.includes(item.CraftID)) {
               //   if (curCraftRelationList.length === 0) {
               //     _setErrMsg(`${Part.PartName}中${item.CraftNickName}是必选工艺!`);

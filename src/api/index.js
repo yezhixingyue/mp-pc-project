@@ -63,7 +63,7 @@ const api = {
     return instance.post('/Api/Product/ProductList', {
       FieldType: 1,
       ...data,
-      TakeOrderWay: 1,
+      // TakeOrderWay: 1,
     }, { closeLoading: true });
   },
   getProductDetail([productID, closeLoading]) { // 根据产品ID获取到产品详细信息  GET /Api/Product/GetProductDetail  productID
