@@ -1,6 +1,6 @@
 <template>
   <li class="mp-pc-size-group-single-size-comp-wrap">
-    <el-input v-model="inpVal" ref="oInp" class="size-box" @focus="onFocus" @blur="onBlur" />
+    <el-input v-model="inpVal" ref="oInp" class="size-box" @focus.stop="onFocus" @blur="onBlur" />
     <span class="gray" :class="inpVal || isFocue ? 'h' : ''">{{sizeData.PropertyName}}</span>
   </li>
 </template>

@@ -1,23 +1,25 @@
 <template>
   <section class="mp-pc-place-order-product-classify-comp-wrap">
     <header>
-      <ul class="header float">
-        <li v-if="allProductClassify.length === 0" class="loading-box">
-          <!-- <img src="@/assets/images/loading2.gif" alt=""> -->
-          <div class="is-font-12 is-gray"><img src="@/assets/images/loading.gif" alt="">加载中</div>
-        </li>
-        <template v-else>
-          <li
-            v-for="(it,i) in allProductClassify"
-            :key="it.ID"
-            @mouseenter="onMouseEnter(i)"
-            @mouseleave="onMouseLeave"
-            :class="{ active: i === index && isOpen, selected: curProduct && it.ID === curProduct.ProductClass.First }"
-          >
-            <span>{{it.ClassName}}</span>
+      <div class="product-menu-box float">
+        <ul class="header">
+          <li v-if="allProductClassify.length === 0" class="loading-box">
+            <!-- <img src="@/assets/images/loading2.gif" alt=""> -->
+            <div class="is-font-12 is-gray"><img src="@/assets/images/loading.gif" alt="">加载中</div>
           </li>
-        </template>
-      </ul>
+          <template v-else>
+            <li
+              v-for="(it,i) in allProductClassify"
+              :key="it.ID"
+              @mouseenter="onMouseEnter(i)"
+              @mouseleave="onMouseLeave"
+              :class="{ active: i === index&&isOpen, selected: curProduct && it.ID === curProduct.ProductClass.First }"
+            >
+              <span>{{it.ClassName}}</span>
+            </li>
+          </template>
+        </ul>
+      </div>
     </header>
     <el-popover
       placement="top"
@@ -262,78 +264,85 @@ export default {
     z-index: 999;
     position: relative;
     background-color: #fff;
-    > .header {
+    > .product-menu-box {
       height: 60px;
       width: 1200px;
       margin: 0 auto;
-      box-sizing: border-box;
-      white-space: nowrap;
-      // z-index: 999;
-      > li {
+      > .header {
+        height: 60px;
+        // width: 1200px;
+        // margin: 0 auto;
+        box-sizing: border-box;
+        white-space: nowrap;
         float: left;
-        height: 59px;
-        line-height: 59px;
-        text-align: center;
-        width: 80px;
-        font-size: 14px;
-        position: relative;
-        color: #333;
-        padding-right: 20px;
-        transition: 0.1s;
-        > span {
-          display: block;
-          width: 100%;
-          height: 100%;
-          user-select: none;
-          transition: 0.2s;
-        }
-        &:last-of-type{
-          padding-right: 0px;
-        }
-        &::after {
-            height: 3px;
-            content: "";
-            width: 80px;
-            position: absolute;
-            background-color: #428dfa;
-            left: 0;
-            // left: 0;
-            bottom: 0;
-            transition: 0.2s;
-            opacity: 0;
-
-          }
-        &.active {
-          color: #428dfa;
-          // font-size: 15px;
+        // z-index: 999;
+        > li {
+          // float: left;
+          display: inline-block;
+          height: 59px;
+          line-height: 59px;
+          text-align: center;
+          width: 80px;
+          font-size: 14px;
+          position: relative;
+          color: #333;
+          padding-right: 20px;
+          transition: 0.1s;
           > span {
-            background-color: rgba($color: #428dfa, $alpha: 0.1);
+            display: block;
+            width: 100%;
+            height: 100%;
+            user-select: none;
+            transition: 0.2s;
           }
-        }
-        &.selected {
-          color: #428dfa;
-          // font-weight: 600;
-          font-size: 15px;
+          &:last-of-type{
+            padding-right: 0px;
+          }
           &::after {
-            width: 80px;
-            opacity: 1;
+              height: 3px;
+              content: "";
+              width: 80px;
+              position: absolute;
+              background-color: #428dfa;
+              left: 0;
+              // left: 0;
+              bottom: 0;
+              transition: 0.2s;
+              opacity: 0;
+
+            }
+          &.active {
+            color: #428dfa;
+            // font-size: 15px;
+            > span {
+              background-color: rgba($color: #428dfa, $alpha: 0.1);
+            }
           }
-        }
-        &:hover {
-          color: #428dfa;
-        }
-        &.loading-box {
-          > div {
-            opacity: 0.5;
-            > img {
-              vertical-align: text-bottom;
-              margin-right: 6px;
+          &.selected {
+            color: #428dfa;
+            // font-weight: 600;
+            font-size: 15px;
+            &::after {
+              width: 80px;
+              opacity: 1;
+            }
+          }
+          &:hover {
+            color: #428dfa;
+          }
+          &.loading-box {
+            > div {
+              opacity: 0.5;
+              > img {
+                vertical-align: text-bottom;
+                margin-right: 6px;
+              }
             }
           }
         }
+        // border-bottom: 1px dashed #eee;
+        border-top: 1px dashed #eee;
       }
-      // border-bottom: 1px dashed #eee;
-      border-top: 1px dashed #eee;
     }
   }
   > section {
