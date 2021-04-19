@@ -17,10 +17,10 @@ let _rightOpenUrl = 'http://192.168.1.92:8057/';
  * 生产 ---- 正式环境
  */
 if (mode === 'production') {
-  _homeUrl = 'https://newapi.mpzj.cn/';
+  _homeUrl = 'https://www.mpzj.cn/';
   _domain = 'mpzj.cn';
   _imgUrl = 'https://order.mpzj.cn:8157/';
-  _productJumpUrl = 'https://newapi.mpzj.cn/';
+  _productJumpUrl = 'https://www.mpzj.cn/';
   _agreementID = '3';
   _statementID = '4';
   _baseUrl = '/';

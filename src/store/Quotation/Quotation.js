@@ -958,8 +958,10 @@ export default {
       if (state.addressInfo4PlaceOrder && state.addressInfo4PlaceOrder.Address.Address.Consignee && state.addressInfo4PlaceOrder.Address.Address.Latitude) {
         _data.Address = state.addressInfo4PlaceOrder.Address;
       }
-      const res = await api.getProductPrice(_data);
-      if (res.data.Status === 7025 || res.data.Status === 8037) return;
+      let key = true;
+      const res = await api.getProductPrice(_data).catch(() => { key = false; });
+      // if (!key) return;
+      if (!key || res.data.Status === 7025 || res.data.Status === 8037) return;
       // eslint-disable-next-line consistent-return
       if (res.data.Status !== 1000) return res.data.Message;
       if (!res.data.Data || !res.data.Data.HavePrice) {
