@@ -356,11 +356,11 @@ export default {
       display: inline-block;
       vertical-align: top;
       height: 100%;
-      margin-right: 78px;
+      margin-right: 72.5px;
       > img {
         width: 157px;
-        height: 38px;
-        margin-top: 13px;
+        height: 33px;
+        margin-top: 15px;
         margin-right: 25px;
         vertical-align: -66%;
         cursor: pointer;
@@ -382,7 +382,7 @@ export default {
         > a {
           height: 100%;
           width: 100%;
-          padding: 0 24px;
+          padding: 0 25px;
           box-sizing: border-box;
           color: #fff;
           text-decoration: unset;
@@ -390,7 +390,7 @@ export default {
           font-size: 16px;
           text-align: center;
           display: block;
-          line-height: 58px;
+          line-height: 60px;
           transition: 0.3s;
         //   &::after {
         //     height: 2px;
