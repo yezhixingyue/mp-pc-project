@@ -37,7 +37,7 @@
     <!-- 3. 不允许自定义单选框 -->
     <el-radio-group
       v-model="inpValue" key="type-3" :disabled='disabled'
-      v-else-if="ValueType === 2 && !AllowUserDefinedOption && option.length < 4 && !isCraftUse">
+      v-else-if="ValueType === 2 && !AllowUserDefinedOption && optionList.length < 4 && !isCraftUse">
       <el-radio v-for="item in optionList" :key="item[defaultProps.value]"
        :label="item[defaultProps.value]">{{item[defaultProps.text]}}</el-radio>
     </el-radio-group>
