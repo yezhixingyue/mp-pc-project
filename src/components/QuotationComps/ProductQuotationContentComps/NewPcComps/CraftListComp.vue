@@ -780,7 +780,7 @@ export default {
               }
               .el-input {
                 > input {
-                  width: 100px;
+                  width: 110px;
                   padding: 0 20px 0 8px;
                   font-size: 13.3px;
                 }
