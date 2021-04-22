@@ -17,6 +17,7 @@
         :option="SizeList"
         :disabled="disabled"
         v-model="inpValue"
+        :style="`width: ${selectInpTextLen}px`"
         :defaultProps="{ text: 'SizeName', value: 'SizeID' }"
       />
       <ul class="size-inp-wrap" v-if="AllowCustomSize && !(!isSelectedInp && SizePropertyList.length > 0)">
@@ -161,6 +162,18 @@ export default {
         this.$emit('changeFunc', [newVal, _list]);
       },
     },
+    selectInpTextLen() {
+      if (!this.value) return 155;
+      let len = 155;
+      const t = this.SizeList.find(it => it.SizeID === this.value);
+      if (t) {
+        len = t.SizeName.length * 14;
+        if (t.SizeName.length <= 5) len += 30;
+        else if (t.SizeName.length < 13) len += 22;
+        // else len += 6;
+      }
+      return len < 155 ? 155 : len;
+    },
     tipsData() {
       if (!this.obj2GetProductPrice
        || !this.obj2GetProductPrice.ProductParams || !this.obj2GetProductPrice.ProductParams.TipsDetail) return null;
@@ -297,8 +310,9 @@ export default {
   .count-content {
     display: inline-block;
     input {
-      min-width: 140px;
-      width: unset !important;
+      // min-width: 140px;
+      width: calc(100%  - 15px) !important;
+      // width: unset !important;
     }
     .size-box input{
         width: 90px !important;

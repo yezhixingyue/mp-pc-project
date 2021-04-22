@@ -548,7 +548,7 @@ export default { // 上传图片按钮
           border: none;
           border-radius: 0;
           > .el-button {
-            min-width: 100px;
+            min-width: 110px;
             height: 35px;
             padding: 0 15px;
             line-height: 33px;
