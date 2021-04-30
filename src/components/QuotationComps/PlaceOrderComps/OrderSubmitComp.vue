@@ -93,7 +93,7 @@ export default {
     };
   },
   methods: {
-    successFunc({ compiledName }) {
+    successFunc({ compiledName, FileSize }) {
       // // console.log('successFunc ---- submit comp -- this.shouldUpload', this.isSpotGoods);
       // if (this.isSpotGoods) { // 现货 不需上传
       //   return;
@@ -105,7 +105,9 @@ export default {
         };
         this.$store.dispatch('Quotation/getOrderPreCreate', { compiledName, fileContent: this.fileContent, callBack });
       } else if (this.type === 'saveCar') {
-        this.$store.dispatch('Quotation/getQuotationSave2Car', { compiledName, fileContent: this.fileContent });
+        // console.log('saveCar', FileSize);
+        // eslint-disable-next-line max-len
+        this.$store.dispatch('Quotation/getQuotationSave2Car', { compiledName, fileContent: this.fileContent, FileSize });
       }
     },
     async onSubmitOrder() {

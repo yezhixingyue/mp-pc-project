@@ -110,14 +110,14 @@ export default {
       if (this.curPayInfo2Code) this.$store.commit('Quotation/setIsShow2PayDialog', true);
       else this.$refs.UploadComp4BreakPoint.upLoadSingleFile(this.orderFile4PreCreateData);
     },
-    subMitPlaceOrder({ compiledName }) {
+    subMitPlaceOrder({ compiledName, FileSize }) {
       this.$store.commit('Quotation/setIsShow2PayDialog', true);
       const cb = () => {
         this.$store.dispatch('common/getCustomerFundBalance');
       };
       const isSpotGoods = this.obj2GetProductPrice ? this.obj2GetProductPrice.ProductParams.IsSpotGoods : false;
       // eslint-disable-next-line object-curly-newline
-      const _obj = { FilePath: compiledName, PayInFull: this.checked, cb, isSpotGoods };
+      const _obj = { FilePath: compiledName, PayInFull: this.checked, cb, isSpotGoods, FileSize };
       this.$store.dispatch('Quotation/placeOrderFromPreCreate', _obj).catch((...args) => {
         const error = args[0];
         // console.log(error);

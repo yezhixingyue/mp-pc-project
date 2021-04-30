@@ -235,7 +235,7 @@ export default { // 上传图片按钮
       }
     },
     upLoadSingleFile(file) {
-      // // console.log('upLoadSingleFile');
+      // console.log('upLoadSingleFile');
       if (!file && this.shouldUpload) return;
       if (!this.shouldUpload) {
         this.successFunc({});
@@ -276,7 +276,7 @@ export default { // 上传图片按钮
           const key = await UploadFileByBreakPoint(file, _name, onUploadProgressFunc, 100);
           if (key) {
             // 上传成功
-            this.successFunc({ compiledName: _name, initialName: this.fileName });
+            this.successFunc({ compiledName: _name, initialName: this.fileName, FileSize: file.size });
           } else {
             // 上传失败
             massage.failSingleError({ title: '文件上传失败', msg: '抱歉，文件上传失败，请重试!', failFunc: this.failFunc });
@@ -529,16 +529,12 @@ export default { // 上传图片按钮
     text-align: left;
     > span {
       line-height: 35px;
-      // float: left;
       vertical-align: top;
     }
     > .upload-box {
-      // float: right;
-      // width: 1063px;
       display: inline-block;
       position: relative;
       width: 860px;
-      // margin-left: 7px;
       > .el-upload {
         vertical-align: top;
         margin-right: 20px;
@@ -555,12 +551,8 @@ export default { // 上传图片按钮
             font-size: 13px;
           }
         }
-        // float: right;
       }
       > .el-upload-list {
-        // float: left;
-        // max-width: 800px;
-        // margin: 0;
         display: inline-block;
         > li {
           margin-top: 5px;

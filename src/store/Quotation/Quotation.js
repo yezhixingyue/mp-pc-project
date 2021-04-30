@@ -1050,11 +1050,12 @@ export default {
     },
     /* 下单 - 保存购物车
     -------------------------------*/
-    async getQuotationSave2Car({ state, commit, dispatch }, { compiledName, fileContent }) {
+    async getQuotationSave2Car({ state, commit, dispatch }, { compiledName, fileContent, FileSize }) {
       const _itemObj = {};
       _itemObj.IsOrder = false; // 预下单false  正式下单 true
       _itemObj.FilePath = compiledName;
       _itemObj.FileHaveUpload = true;
+      if (FileSize) _itemObj.FileSize = FileSize;
       if (state.addressInfo4PlaceOrder.OutPlate.Second) _itemObj.OutPlate = state.addressInfo4PlaceOrder.OutPlate;
       _itemObj.Address = {};
       _itemObj.Address.Express = state.addressInfo4PlaceOrder.Address.Express;
@@ -1112,11 +1113,12 @@ export default {
       const res = await api.getPayResult(state.curPayInfo2Code.PayCode);
       if (res.data.Status === 1000) cb(res.data.Data);
     },
-    async placeOrderFromPreCreate({ state, commit, rootState }, { FilePath, PayInFull, cb, isSpotGoods = false }) {
+    async placeOrderFromPreCreate({ state, commit, rootState }, { FilePath, PayInFull, cb, isSpotGoods = false, FileSize }) {
       const _obj = { OrderType: 2, PayInFull, List: [] };
       let item;
       if (FilePath || isSpotGoods) {
         item = { ...state.curReqObj4PreCreate, FilePath };
+        if (FileSize) item.FileSize = FileSize;
         _obj.List.push(item);
       } else {
         item = [...rootState.shoppingCar.curShoppingCarDataBeforeFirstPlace];

@@ -58,7 +58,7 @@ async function uploadFile(chunkCount, curChunkNum, {
   lastedPercentage = lastedPercentage > finalPercentage ? +finalPercentage : lastedPercentage;
   const res = await api.UploadFileBreakpointResume(file, uniqueName, beginNode, beginNode + chunkSize, data.size, (e) => _onUploadProgressFunc(e, { initPercentage, lastedPercentage, onUploadProgressFunc })); // 上传(传入header Content-Range中所需要的信息)
   // // console.log(res);
-  if (res.data.Status === 1000) await uploadFile(chunkCount - 1, beginNode + chunkSize, { data, uniqueName, onUploadProgressFunc }); // 递归调用
+  if (res && res.data && res.data.Status === 1000) await uploadFile(chunkCount - 1, beginNode + chunkSize, { data, uniqueName, onUploadProgressFunc }); // 递归调用
   else throw new Error(res.data.Message);
 }
 
@@ -74,9 +74,9 @@ async function checkIsTrue(data, uniqueName) {
   const hasUploadedInfo = await api.getUploadedProgress(uniqueName).catch(() => {
     key = false;
   });
+  if (!key) return false;
   if (hasUploadedInfo.data.Status !== 1000) return false;
   if (hasUploadedInfo.data.Data < data.size) return false;
-  if (!key) return false;
   return true;
 }
 
@@ -89,6 +89,8 @@ async function checkIsTrue(data, uniqueName) {
  * @returns 返回true或false，用于告知该函数上传结果: 成功 还是 失败
  */
 async function breakPointUpload(data, uniqueName, onUploadProgressFunc, finalPercentage = 98) {
+  // console.log(data);
+  // if (true) return false;
   let key = true;
   const hasUploadedInfo = await api.getUploadedProgress(uniqueName).catch(() => {
     key = false;
@@ -108,7 +110,7 @@ async function breakPointUpload(data, uniqueName, onUploadProgressFunc, finalPer
       key2 = false;
     }); // 上传
     if (!key2) return false;
-    if (checkIsTrue(data, uniqueName)) return true;
+    if (await checkIsTrue(data, uniqueName)) return true;
     return false;
   }
   onUploadProgressFunc(+finalPercentage);
