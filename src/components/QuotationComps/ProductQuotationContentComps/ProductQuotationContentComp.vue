@@ -702,7 +702,7 @@ export default {
                 margin: 0;
               }
               &.mg-left {
-                margin-left: -18px;
+                margin-left: -10px;
               }
             }
             display: flex;

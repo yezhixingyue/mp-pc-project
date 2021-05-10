@@ -39,7 +39,7 @@
           <span>工期时间：</span>
           <span :class="!afterPay ? 'is-pink' : ''">
             <template v-if="!afterPay">{{info4OrderSummary.ProducePeriod | getPayTime}}</template>
-            {{info4OrderSummary.ProducePeriod | getDoneTime}}</span>
+            {{info4OrderSummary.ProducePeriod | getDoneTime(true)}}</span>
         </p>
         <p>
           <span>下单时间：</span>
