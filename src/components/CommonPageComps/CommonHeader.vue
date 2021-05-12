@@ -238,10 +238,10 @@ export default {
         this.messageBox.warnCancelNullMsg({
           title: '确定退出登录吗?',
           successFunc: () => {
-            this.$router.replace('/login');
             sessionStorage.removeItem('token');
             localStorage.removeItem('token');
             Cookie.removeCookie('token');
+            this.$router.replace('/login');
             // 另外再需清除状态
           },
         });

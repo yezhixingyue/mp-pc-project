@@ -51,12 +51,14 @@
     </div>
     <footer v-if="active === 0 || active === 1">
       <el-button type="primary" @click="next">下一步</el-button>
-      <span class="span-title-blue" @click="() => this.$router.replace('/login')">返回登录界面</span>
+      <span class="span-title-blue" @click="returnLogin">返回登录界面</span>
     </footer>
   </section>
 </template>
 
 <script>
+import Cookie from '@/assets/js/Cookie';
+
 export default {
   data() {
     const validateMobile = (rule, value, callback) => {
@@ -200,6 +202,12 @@ export default {
           this.canGetCode = true;
         }
       }, 1000);
+    },
+    returnLogin() {
+      sessionStorage.removeItem('token');
+      localStorage.removeItem('token');
+      Cookie.removeCookie('token');
+      this.$router.replace('/login');
     },
   },
 };

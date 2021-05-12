@@ -37,8 +37,8 @@ export default {
       if (e.key !== 'token' || useCookie) return;
       if (!e.newValue) {
         if (this.$route.name !== 'login') {
-          this.$router.push('/login');
           sessionStorage.removeItem('token');
+          this.$router.push('/login');
         }
       } else if (e.newValue) {
         if (!this.customerInfo) return;

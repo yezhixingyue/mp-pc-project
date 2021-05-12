@@ -26,6 +26,7 @@
 <script>
 import BlueInfoFooter from '@/components/common/BlueInfoFooter.vue';
 import FindPwdComp from '@/components/LoginComps/FindPwdComp.vue';
+import Cookie from '@/assets/js/Cookie';
 
 export default {
   components: {
@@ -34,6 +35,9 @@ export default {
   },
   methods: {
     onReturnClick() {
+      sessionStorage.removeItem('token');
+      localStorage.removeItem('token');
+      Cookie.removeCookie('token');
       this.$router.replace('/login');
     },
   },

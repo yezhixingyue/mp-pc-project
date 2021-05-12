@@ -3,7 +3,6 @@ import VueRouter from 'vue-router';
 import Cookie from '@/assets/js/Cookie';
 import { useCookie } from '@/assets/js/setup';
 import CommonViewPage from '../views/Common/CommonViewPage.vue';
-// import LoginPage from '../views/Login/loginPage.vue';
 
 Vue.use(VueRouter);
 
@@ -332,7 +331,6 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
   scrollBehavior(to, from, savedPosition) {
-    // // console.log(to, savedPosition);
     if (savedPosition) {
       return savedPosition;
     }
@@ -344,7 +342,6 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  // // console.log('router.beforeEach', Cookie.getCookie('token'));
   let _auth;
   if (useCookie) _auth = Cookie.getCookie('token');
   else _auth = sessionStorage.getItem('token');
@@ -359,9 +356,9 @@ router.beforeEach(async (to, from, next) => {
   }
   // 判断该路由是否需要登录权限
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // // console.log(1, _auth, to);
     if (to.name === 'login') {
-      next();
+      if (_auth) next({ path: '/placeOrder' });
+      else next();
     } else if (to.name === 'placeOrder' && to.query.token) {
       if (!useCookie) localStorage.setItem('token', to.query.token);
       else Cookie.setItem('token', to.query.token, 24 * 60 * 60); // 该情况将不存在
@@ -370,7 +367,6 @@ router.beforeEach(async (to, from, next) => {
         query: { id: to.query.id },
       });
     } else if (to.name === 'placeOrder' && to.query.id && !_auth && !to.query.token) {
-      // sessionStorage.setItem('targetProID', to.query.id);
       next({
         path: '/login',
         query: { id: to.query.id },
@@ -384,10 +380,10 @@ router.beforeEach(async (to, from, next) => {
       });
     }
   } else {
-    // if (to.name === 'login' && to.query.source) {
-    //   sessionStorage.setItem('source', to.query.source);
-    //   next();
-    // }
+    if (_auth && to.name === 'login') {
+      next({ path: '/placeOrder' });
+      return;
+    }
     next();
   }
 });
