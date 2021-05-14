@@ -2,7 +2,7 @@
   <div class="result" v-if="ProductQuotationResult" :class="showExpressCost ? 'showExpressCost' : ''">
     <span class="no-margin">
       <template>
-        {{ProductQuotationResult.OriginalCost > Cost ? '优惠价' : '成交价'}}
+        {{ProductQuotationResult.OriginalCost > Cost ? '官网上传优惠价' : '成交价'}}
         <em class="is-gray is-font-12" v-if="showExpressCost">(不含运费)</em>：</template>
       <!-- <i class="is-pink is-font-16"></i> -->
       <i class="is-pink is-bold is-font-20">{{+(Cost.toFixed(2))}}</i>
@@ -90,7 +90,7 @@ export default {
       margin-right: 8px !important;
     }
     &.mg-left {
-      margin-left: -18px;
+      margin-left: -12px;
     }
   }
   display: flex;
