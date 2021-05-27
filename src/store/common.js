@@ -418,11 +418,18 @@ export default {
       } else {
         const sessionCust = useCookie ? Cookie.getCookie('customerInfo') : sessionStorage.getItem('customerInfo');
         if (sessionCust) {
-          const user = JSON.parse(sessionCust);
-          const token = Cookie.getCookie('token');
-          if (user.Account.Token === token) {
-            commit('setCustomerInfo', [user, false]);
-            return;
+          let user;
+          try {
+            user = JSON.parse(sessionCust);
+          // eslint-disable-next-line no-empty
+          } catch (error) {
+          }
+          if (user) {
+            const token = Cookie.getCookie('token');
+            if (user.Account.Token === token) {
+              commit('setCustomerInfo', [user, false]);
+              return;
+            }
           }
         }
       }
