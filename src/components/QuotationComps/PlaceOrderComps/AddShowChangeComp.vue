@@ -9,8 +9,15 @@
         <li>
           <div class="platform-code-box">
             <span class="title">平台单号：</span>
-            <el-input v-model.trim="outPlaceCode" maxlength="22" :class="isPlatformCodeError ? 'error': ''"
-             show-word-limit placeholder="电商(淘宝、京东、拼多多)平台单号"></el-input>
+            <el-input
+              v-model.trim="outPlaceCode"
+              maxlength="22"
+              :class="isPlatformCodeError ? 'error': ''"
+              show-word-limit
+              placeholder="电商(淘宝、京东、拼多多)平台单号"
+              @focus="onPlatformCodeInpFocus"
+              @blur="onPlatformCodeInpBlur">
+            </el-input>
             <div v-show="isPlatformCodeError" class="is-pink is-font-12">{{PlatformCodeErrorMsg}}</div>
           </div>
           <div  class="express-box">
@@ -268,11 +275,13 @@ export default {
       loadingAddValid: false,
       isPlatformCodeError: false,
       PlatformCodeErrorMsg: '平台单号长度应为13 18 19或22位',
+      initPlatformCodeValue: '',
+      reg: /(^\d{13}$)|(^\d{18}$)|(^\d{19}$)|(^\d{6}-\d{15}$)/,
     };
   },
   computed: {
     ...mapState('common', ['ExpressList', 'customerInfo']),
-    // ...mapState('Quotation', ['addressInfo4PlaceOrder']),
+    ...mapState('Quotation', ['curProductID']),
     secondExpressList() {
       if (this.ExpressList.length === 0) return [];
       return this.ExpressList.find(it => it.Type === 3).List;
@@ -324,11 +333,10 @@ export default {
       },
       set(newVal) {
         this.PlatformCode = newVal.replace(/[^0-9-]/g, '').replace(/^-/, '');
-        const reg = /(^\d{13}$)|(^\d{18}$)|(^\d{19}$)|(^\d{6}-\d{15}$)/;
         if ([0, 13, 18, 19, 22].indexOf(this.PlatformCode.length) === -1) {
           if (!this.PlatformCodeErrorMsg) this.PlatformCodeErrorMsg = '平台单号长度应为13 18 19或22位';
           this.isPlatformCodeError = true;
-        } else if (reg.test(this.PlatformCode) || this.PlatformCode.length === 0) {
+        } else if (this.reg.test(this.PlatformCode) || this.PlatformCode.length === 0) {
           this.PlatformCodeErrorMsg = '';
           this.isPlatformCodeError = false;
         } else this.PlatformCodeErrorMsg = '平台单号格式不正确';
@@ -544,6 +552,16 @@ export default {
       const address = `${RegionalName}${CityName}${CountyName}${AddressDetail}`;
       return address;
     },
+    onPlatformCodeInpFocus() {
+      this.initPlatformCodeValue = this.outPlaceCode;
+    },
+    onPlatformCodeInpBlur() {
+      if (this.initPlatformCodeValue === this.outPlaceCode || !this.outPlaceCode || this.PlatformCodeErrorMsg) return;
+      // 此处修改配送方式 --- 仅在当前配送方式为名片之家的时候
+      if (this.Express.First === 1) {
+        this.onRadioChange(3);
+      }
+    },
   },
   watch: {
     currentAddInfo() {
@@ -581,12 +599,17 @@ export default {
         this.ExpressValidList = res.data.Data;
       }
     },
+    curProductID() {
+      this.initPlatformCodeValue = '';
+      this.outPlaceCode = '';
+    },
   },
   async mounted() {
     this.$store.dispatch('common/getExpressList');
     await this.$store.dispatch('common/getCustomerDetail');
     const _i = this.customerInfo.Address.findIndex(it => it.isSelected);
     if (_i > -1) this.selectdAddress = _i;
+    else if (this.customerInfo.Address.length > 0) this.selectdAddress = 0;
     else this.selectdAddress = 'new';
     // // console.log(this.addressInfo4PlaceOrder);
     // if (this.addressInfo4PlaceOrder) {

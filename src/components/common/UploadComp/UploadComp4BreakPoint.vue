@@ -169,7 +169,7 @@ export default { // 上传图片按钮
     accept: {
       type: String,
       // default: 'image/png,image/jpeg,image/gif,image/jpg,image/bmp',
-      default: '.cdr,.jpg,.jpeg,.tiff,.tif,.rar,.zip,.pdf',
+      default: '.cdr,.jpg,.jpeg,.tiff,.tif,.rar,.zip,.pdf, .7z',
       // default: '.png,.jpeg,.gif,.jpg,.bmp',
       // default: '',
     },
