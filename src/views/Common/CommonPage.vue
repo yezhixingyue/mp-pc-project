@@ -56,11 +56,11 @@
             <li>
               <p>
                 <img src="../../assets/images/qq.png" alt="">
-                <!-- <a rel="nofollow" target="_blank"
-                 href="tencent://message/?uin=4006363006&amp;Site=名片之家&amp;Menu=yes">
-                  <span>4006363006</span>
-                </a> -->
-                <span>4006363006</span>
+                <a rel="nofollow" target="_blank"
+                 href="tencent://message/?uin=800051518&amp;Site=名片之家&amp;Menu=yes">
+                  <span>800051518</span>
+                </a>
+                <!-- <span>800051518</span> -->
               </p>
               <p>西安、石家庄、山东</p>
             </li>

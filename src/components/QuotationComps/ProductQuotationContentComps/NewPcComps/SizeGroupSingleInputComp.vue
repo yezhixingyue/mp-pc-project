@@ -1,7 +1,8 @@
 <template>
   <li class="mp-pc-size-group-single-size-comp-wrap">
     <el-input v-model="inpVal" ref="oInp" class="size-box" @focus.stop="onFocus" @blur="onBlur" />
-    <span class="gray" :class="inpVal || inpVal === 0 || isFocue ? 'h' : ''">{{sizeData.PropertyName}}</span>
+    <span class="gray" @click="onPlaceholderClick"
+     :class="inpVal || inpVal === 0 || isFocue ? 'h' : ''">{{sizeData.PropertyName}}</span>
   </li>
 </template>
 
@@ -75,6 +76,9 @@ export default {
     },
     onBlur() {
       this.isFocue = false;
+    },
+    onPlaceholderClick() {
+      this.$refs.oInp.focus();
     },
   },
 };
