@@ -217,10 +217,10 @@ export default {
       margin-top: 60px;
       position: relative;
       > button {
-        width: 150px;
-        height: 45px;
+        width: 140px;
+        height: 40px;
         padding: 0;
-        line-height: 43px;
+        line-height: 38px;
         font-size: 15px;
         > span > i {
           font-size: 19px;
@@ -230,13 +230,13 @@ export default {
           top: -3px;
         }
         & + button {
-          margin-left: 50px;
+          margin-left: 40px;
         }
       }
       > div {
        position: absolute;
        top: 0;
-       left: 390px;
+       left: 360px;
       }
     }
     // > p {

@@ -705,9 +705,9 @@ export default {
                 margin-left: -10px;
               }
             }
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
+            // display: flex;
+            // align-items: center;
+            // flex-wrap: wrap;
             > div {
               // display: inline-block;
               // white-space: nowrap;
