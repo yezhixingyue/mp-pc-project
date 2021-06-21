@@ -20,6 +20,7 @@
         {{selectedCoupon.MinPayAmount}}元减{{selectedCoupon.Amount}}元
         <i class="is-pink"> {{ couponConditionText }}</i>
       </span>
+      <span v-if="ProductQuotationResult.Weight>0"> 重量：<i>{{ProductQuotationResult.Weight}}kg</i></span>
       <span v-if="(ProductQuotationResult.ExpressCost || ProductQuotationResult.ExpressCost === 0) && showExpressCost"
        >运费：<i>{{ProductQuotationResult.ExpressCost}}元</i></span>
       <template v-if="ProductQuotationResult.ProducePeriod">

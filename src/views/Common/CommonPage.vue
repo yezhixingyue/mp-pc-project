@@ -76,11 +76,11 @@
             <li>
               <p>
                 <img src="../../assets/images/qq.png" alt="">
-                <!-- <a rel="nofollow" target="_blank"
+                <a rel="nofollow" target="_blank"
                  href="tencent://message/?uin=800050507&amp;Site=名片之家&amp;Menu=yes">
                   <span>800050507</span>
-                </a> -->
-                <span>800050507</span>
+                </a>
+                <!-- <span>800050507</span> -->
               </p>
               <p>安阳、新乡、鹤壁、濮阳、邯郸、邢台、聊城</p>
             </li>
