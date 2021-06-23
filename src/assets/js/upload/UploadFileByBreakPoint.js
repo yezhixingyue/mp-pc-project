@@ -5,7 +5,7 @@
 
 import api from '@/api';
 
-const chunkSize = 1024 * 1024 * 10;
+const chunkSize = 1024 * 1024 * 20;
 
 /**
  * 传入两个参数，用于获取其百分比

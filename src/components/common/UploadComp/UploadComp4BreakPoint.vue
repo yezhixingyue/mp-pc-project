@@ -259,7 +259,7 @@ export default { // 上传图片按钮
         const _name = `${sha1(reader.result)}.${ext}`; // 文件名称, 文件唯一标识
         this.upLoadTitle = '解析完成,开始上传';
         this.fileName = file.name;
-        if (file.size > 20 * 1024 * 1024) { // 文件大于20M显示进度条  客户端设置20M
+        if (file.size > 5 * 1024 * 1024) { // 文件大于5M显示进度条  客户端设置20M
           this.showProgress = true;
         } else {
           this.showLoading = true;

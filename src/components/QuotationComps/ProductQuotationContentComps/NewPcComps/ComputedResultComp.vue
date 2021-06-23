@@ -53,12 +53,14 @@ export default {
   computed: {
     Cost() {
       if (!this.ProductQuotationResult) return '';
-      if (!this.selectedCoupon) return this.ProductQuotationResult.CurrentCost;
+      // eslint-disable-next-line max-len
+      const _cost = this.showExpressCost ? this.ProductQuotationResult.CurrentCost + this.ProductQuotationResult.ExpressCost : this.ProductQuotationResult.CurrentCost;
+      if (!this.selectedCoupon) return _cost;
       if (this.ProductQuotationResult.CurrentCost >= this.selectedCoupon.MinPayAmount) {
         const num = +(this.ProductQuotationResult.CurrentCost - this.selectedCoupon.Amount).toFixed(2);
         return num > 0 ? num : 0;
       }
-      return this.ProductQuotationResult.CurrentCost;
+      return _cost;
     },
     // 活动价格
     promotePrice() {
