@@ -95,13 +95,17 @@ export default {
     async receiveCoupon(data) {
       const res = await this.api.getCouponReceive(data);
       if (res.data.Status === 1000) {
-        const { CouponID } = data;
-        const _t = this.couponList.find(it => it.CouponID === CouponID);
-        _t.Receivable = false;
-        // this.setSsionStorage();
+        const cb = () => {
+          const { CouponID } = data;
+          const _t = this.couponList.find(it => it.CouponID === CouponID);
+          if (_t) {
+            _t.ReceiveNumber += 1;
+            if (_t.ReceiveNumber === _t.MaxReceiveNumber) _t.Receivable = false;
+          }
+        };
         this.messageBox.successSingle({
           title: '领取成功',
-          // successFunc: () => { this.getCouponList(); },
+          successFunc: cb,
         });
       } else if (res.data.Status === 7086) {
         const { CouponID } = data;
@@ -115,7 +119,7 @@ export default {
     },
   },
   mounted() {
-    // this.getCouponList();
+    this.getCouponList();
   },
 };
 </script>
